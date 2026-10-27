@@ -16,16 +16,26 @@
     <button type="button" class="btn btn--blue" data-quick-view="{{ product.handle }}">Quick view</button>
   </div>
   <div class="card-body">
-    <p class="card-vendor">{{ product.vendor | default: 'Jettribe' }}</p>
     <h3 class="card-title"><a href="{{ product.url }}">{{ product.title }}</a></h3>
     <div class="price">{% render 'price', product: product %}</div>
-    <p class="e-stock{% unless product.available %} is-out{% endunless %}">{% if product.available %}In stock{% else %}Out of stock{% endif %}</p>
+    <label class="compare-check">
+      <input
+        type="checkbox"
+        data-compare-add
+        data-id="{{ product.id }}"
+        data-title="{{ product.title | escape }}"
+        data-price="{{ product.price }}"
+        data-img="{% if product.featured_image %}{{ product.featured_image | image_url: width: 480 }}{% endif %}"
+        data-url="{{ product.url }}"
+      >
+      <span>Compare</span>
+    </label>
     <div class="card-actions">
       {%- if product.available -%}
         {%- if product.has_only_default_variant -%}
-          <button type="button" class="btn btn--outline" data-add-variant="{{ product.selected_or_first_available_variant.id }}">Add to cart</button>
+          <button type="button" class="btn" data-add-variant="{{ product.selected_or_first_available_variant.id }}">Add to Cart</button>
         {%- else -%}
-          <a class="btn btn--outline" href="{{ product.url }}">Choose options</a>
+          <a class="btn" href="{{ product.url }}">Choose Options</a>
         {%- endif -%}
       {%- else -%}
         <span class="btn is-disabled">Out of Stock</span>

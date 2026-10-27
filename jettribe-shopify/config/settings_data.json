@@ -1,10 +1,10 @@
 {
   "current": {
-    "color_red": "#ff580d",
-    "color_black": "#2a2b2a",
-    "color_blue": "#2a2b2a",
-    "color_text": "#2a2b2a",
-    "color_heading": "#2a2b2a",
+    "color_red": "#e53d42",
+    "color_black": "#161616",
+    "color_blue": "#4153eb",
+    "color_text": "#505050",
+    "color_heading": "#161616",
     "menu_source": "jettribe",
     "menu": "main-menu",
     "show_translate": true,

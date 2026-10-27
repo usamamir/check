@@ -1,7 +1,7 @@
 {%- if product.compare_at_price > product.price -%}
   <s>{{ product.compare_at_price | money }}</s>
 {%- endif -%}
-<span>{{ product.price | money }}</span>
+<span>Now: {{ product.price | money }}</span>
 {%- if product.price_varies and product.compare_at_price <= product.price -%}
   <span class="visually-hidden">From</span>
 {%- endif -%}

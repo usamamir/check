@@ -722,3 +722,137 @@ body { top: 0 !important; }
   .cart-table thead { display: none; }
   .cart-table, .cart-table tbody, .cart-table tr, .cart-table td { display: block; width: 100%; }
 }
+
+.color-swatches { display: flex; flex-direction: column; padding: 6px 0; }
+.swatch {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 14px;
+  color: #4c4c4c;
+  font-size: 14px;
+}
+.swatch i {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--swatch, #ccc);
+  border: 1px solid rgba(0, 0, 0, 0.25);
+  flex: none;
+}
+.swatch:hover, .swatch.is-active { background: var(--red); color: #fff; }
+.swatch.is-active i { box-shadow: 0 0 0 2px #fff; }
+.price-range { padding: 12px; }
+.price-range-labels { display: flex; justify-content: space-between; font-size: 13px; font-weight: 700; color: var(--black); }
+.price-sliders { position: relative; height: 28px; margin: 6px 0 8px; }
+.price-sliders::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 12px;
+  height: 4px;
+  background: #ddd;
+  border-radius: 4px;
+}
+.price-sliders input[type="range"] {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  margin: 0;
+  background: none;
+  pointer-events: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+.price-sliders input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  pointer-events: auto;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--red);
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 1px var(--black);
+  cursor: pointer;
+}
+.price-sliders input[type="range"]::-moz-range-thumb {
+  pointer-events: auto;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--red);
+  border: 2px solid #fff;
+  cursor: pointer;
+}
+.compare-check {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  font-size: 12px;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  color: #4c4c4c;
+  cursor: pointer;
+}
+.compare-check input { accent-color: var(--red); }
+.compare-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 80;
+  background: var(--black);
+  color: #fff;
+  box-shadow: 0 -6px 18px rgba(0, 0, 0, 0.25);
+}
+.compare-bar[hidden], .compare-modal[hidden] { display: none !important; }
+.compare-bar-inner {
+  max-width: 1240px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  flex-wrap: wrap;
+}
+.compare-bar-inner p { margin: 0; font-size: 13px; text-transform: uppercase; letter-spacing: 0.4px; }
+.compare-thumbs { display: flex; gap: 8px; flex: 1; min-width: 0; flex-wrap: wrap; }
+.compare-thumb {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #fff;
+  color: var(--black);
+  border: 0;
+  max-width: 180px;
+  padding: 4px 8px 4px 4px;
+  cursor: pointer;
+  text-align: left;
+}
+.compare-thumb img { width: 36px; height: 36px; object-fit: cover; }
+.compare-thumb span { font-size: 11px; line-height: 1.2; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+.compare-clear { background: transparent; color: #fff; border: 0; text-transform: uppercase; letter-spacing: 0.4px; cursor: pointer; }
+.compare-bar .btn { min-height: 36px; }
+body.has-compare { padding-bottom: 78px; }
+.compare-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 95;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.compare-panel { background: #fff; color: var(--black); width: min(1100px, 100%); max-height: 90vh; overflow: auto; padding: 18px 18px 24px; }
+.compare-panel-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 14px; }
+.compare-panel-head h2 { font-family: Oswald, sans-serif; text-transform: uppercase; margin: 0; }
+.compare-panel-head button { background: var(--black); color: #fff; border: 0; min-height: 36px; padding: 0 14px; text-transform: uppercase; cursor: pointer; }
+.compare-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; }
+.compare-col { border: 1px solid #eee; padding: 12px; text-align: center; }
+.compare-col img { width: 100%; height: 180px; object-fit: contain; }
+.compare-col h3 { font-size: 15px; margin: 10px 0; }
+.compare-col .btn { width: 100%; margin: 8px 0; }
+.compare-col .remove-link { background: none; border: 0; color: var(--red); cursor: pointer; text-decoration: underline; }

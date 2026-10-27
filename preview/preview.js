@@ -267,4 +267,180 @@
   });
 
   paint(load());
+
+  var COMPARE_KEY = "jt_compare";
+  function esc(value) {
+    return String(value == null ? "" : value).replace(/[&<>"']/g, function (ch) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch];
+    });
+  }
+  function readCompare() {
+    try { return JSON.parse(localStorage.getItem(COMPARE_KEY) || "[]"); }
+    catch (e) { return []; }
+  }
+  function writeCompare(list) {
+    localStorage.setItem(COMPARE_KEY, JSON.stringify(list));
+    paintCompare();
+  }
+  function ensureCompare() {
+    if (qs("[data-compare-bar]")) return;
+    var bar = document.createElement("div");
+    bar.className = "compare-bar";
+    bar.setAttribute("data-compare-bar", "");
+    bar.hidden = true;
+    bar.innerHTML = '<div class="compare-bar-inner"><p data-compare-label>Compare</p><div class="compare-thumbs" data-compare-thumbs></div><button class="btn" type="button" data-compare-open>Compare</button><button class="compare-clear" type="button" data-compare-clear>Clear</button></div>';
+    var modal = document.createElement("div");
+    modal.className = "compare-modal";
+    modal.setAttribute("data-compare-modal", "");
+    modal.hidden = true;
+    modal.innerHTML = '<div class="compare-panel" role="dialog" aria-modal="true" aria-label="Compare products"><div class="compare-panel-head"><h2>Compare</h2><button type="button" data-compare-close>Close</button></div><div class="compare-grid" data-compare-grid></div></div>';
+    document.body.appendChild(bar);
+    document.body.appendChild(modal);
+  }
+  function paintCompare() {
+    ensureCompare();
+    var list = readCompare();
+    var bar = qs("[data-compare-bar]");
+    bar.hidden = list.length === 0;
+    document.body.classList.toggle("has-compare", list.length > 0);
+    var label = qs("[data-compare-label]");
+    if (label) label.textContent = list.length + " of 4 selected";
+    var thumbs = qs("[data-compare-thumbs]");
+    if (thumbs) {
+      thumbs.innerHTML = list.map(function (item) {
+        return '<button type="button" class="compare-thumb" data-compare-remove="' + esc(item.id) + '"><img src="' + esc(item.img) + '" alt=""><span>' + esc(item.title) + "</span></button>";
+      }).join("");
+    }
+    var ids = list.map(function (item) { return String(item.id); });
+    qsa("[data-compare-add]").forEach(function (input) {
+      if (input.type === "checkbox") input.checked = ids.indexOf(String(input.getAttribute("data-id"))) !== -1;
+    });
+    qsa("[data-compare-button]").forEach(function (btn) {
+      var on = ids.indexOf(String(btn.getAttribute("data-id"))) !== -1;
+      btn.textContent = on ? "Added to compare" : "Compare";
+    });
+  }
+  function itemFrom(el) {
+    return {
+      id: el.getAttribute("data-id"),
+      title: el.getAttribute("data-title") || "",
+      price: Number(el.getAttribute("data-price") || 0),
+      img: el.getAttribute("data-img") || "",
+      url: el.getAttribute("data-url") || "#"
+    };
+  }
+  function addCompare(el) {
+    var list = readCompare().filter(function (item) { return String(item.id) !== String(el.getAttribute("data-id")); });
+    if (list.length >= 4) {
+      var label = qs("[data-compare-label]");
+      ensureCompare();
+      if (qs("[data-compare-label]")) qs("[data-compare-label]").textContent = "Compare up to 4 products";
+      qs("[data-compare-bar]").hidden = false;
+      return false;
+    }
+    list.push(itemFrom(el));
+    writeCompare(list);
+    return true;
+  }
+  document.addEventListener("change", function (event) {
+    var input = event.target.closest && event.target.closest("input[data-compare-add]");
+    if (!input) return;
+    var id = input.getAttribute("data-id");
+    var list = readCompare().filter(function (item) { return String(item.id) !== String(id); });
+    if (input.checked) {
+      if (list.length >= 4) {
+        input.checked = false;
+        ensureCompare();
+        qs("[data-compare-bar]").hidden = false;
+        qs("[data-compare-label]").textContent = "Compare up to 4 products";
+        return;
+      }
+      list.push(itemFrom(input));
+    }
+    writeCompare(list);
+  });
+  document.addEventListener("click", function (event) {
+    var button = event.target.closest && event.target.closest("[data-compare-button]");
+    if (button) {
+      event.preventDefault();
+      var id = button.getAttribute("data-id");
+      var list = readCompare();
+      var exists = list.some(function (item) { return String(item.id) === String(id); });
+      if (exists) writeCompare(list.filter(function (item) { return String(item.id) !== String(id); }));
+      else addCompare(button);
+      return;
+    }
+    var remove = event.target.closest && event.target.closest("[data-compare-remove]");
+    if (remove) {
+      var rid = remove.getAttribute("data-compare-remove");
+      writeCompare(readCompare().filter(function (item) { return String(item.id) !== String(rid); }));
+      var modal = qs("[data-compare-modal]");
+      if (modal && !modal.hidden) {
+        if (readCompare().length < 2) {
+          modal.hidden = true;
+          document.body.style.overflow = "";
+        } else {
+          qs("[data-compare-open]").click();
+        }
+      }
+      return;
+    }
+    if (event.target.closest && event.target.closest("[data-compare-clear]")) {
+      writeCompare([]);
+      return;
+    }
+    if (event.target.closest && event.target.closest("[data-compare-open]")) {
+      var picked = readCompare();
+      if (picked.length < 2) {
+        qs("[data-compare-label]").textContent = "Select at least 2 products";
+        return;
+      }
+      qs("[data-compare-grid]").innerHTML = picked.map(function (item) {
+        return '<article class="compare-col"><a href="' + esc(item.url) + '"><img src="' + esc(item.img) + '" alt=""></a><h3><a href="' + esc(item.url) + '">' + esc(item.title) + '</a></h3><p class="price">Now: ' + money(Number(item.price) || 0) + '</p><a class="btn" href="' + esc(item.url) + '">View</a><button type="button" class="remove-link" data-compare-remove="' + esc(item.id) + '">Remove</button></article>';
+      }).join("");
+      qs("[data-compare-modal]").hidden = false;
+      document.body.style.overflow = "hidden";
+      return;
+    }
+    if (event.target.closest && event.target.closest("[data-compare-close]")) {
+      qs("[data-compare-modal]").hidden = true;
+      document.body.style.overflow = "";
+      return;
+    }
+    if (event.target.matches && event.target.matches("[data-compare-modal]")) {
+      event.target.hidden = true;
+      document.body.style.overflow = "";
+    }
+  });
+  document.addEventListener("catalog:rendered", function () {
+    paintCompare();
+    var box = qs("[data-price-range]");
+    if (!box || box.getAttribute("data-bound")) return;
+    box.setAttribute("data-bound", "1");
+    var minR = qs('[data-range="min"]', box);
+    var maxR = qs('[data-range="max"]', box);
+    var minN = qs("[data-price-min]", box);
+    var maxN = qs("[data-price-max]", box);
+    var minL = qs("[data-price-min-label]", box);
+    var maxL = qs("[data-price-max-label]", box);
+    function sync(which) {
+      var a = Number(minR.value);
+      var b = Number(maxR.value);
+      if (a > b) {
+        if (which === "min") { a = b; minR.value = String(a); }
+        else { b = a; maxR.value = String(b); }
+      }
+      if (minN) minN.value = String(a);
+      if (maxN) maxN.value = String(b);
+      if (minL) minL.textContent = money(a);
+      if (maxL) maxL.textContent = money(b);
+    }
+    minR.addEventListener("input", function () { sync("min"); });
+    maxR.addEventListener("input", function () { sync("max"); });
+    minR.addEventListener("change", function () { box.submit(); });
+    maxR.addEventListener("change", function () { box.submit(); });
+    if (minN) minN.addEventListener("input", function () { minR.value = minN.value || minR.min; sync("min"); });
+    if (maxN) maxN.addEventListener("input", function () { maxR.value = maxN.value || maxR.max; sync("max"); });
+  });
+  paintCompare();
 })();

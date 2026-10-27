@@ -5,8 +5,8 @@
     "announcement-bar": {
       "type": "announcement-bar",
       "settings": {
-        "line_1": "Free USA shipping now on",
-        "line_2": "Orders $400 and up ship free in the USA"
+        "line_1": "Jettribe is a true core personal watercraft brand: born in southern California",
+        "line_2": "*** Free USA Shipping on Orders $400+ ***"
       }
     },
     "header": {
@@ -17,7 +17,7 @@
     }
   },
   "order": [
-    "header",
-    "announcement-bar"
+    "announcement-bar",
+    "header"
   ]
 }

@@ -1,0 +1,17 @@
+{%- assign key = label | downcase | strip -%}
+{%- case key -%}
+  {%- when 'black' -%}#161616
+  {%- when 'blue' -%}#1d4ed8
+  {%- when 'red' -%}#e53d42
+  {%- when 'teal' -%}#0f766e
+  {%- when 'green' -%}#2f8f4e
+  {%- when 'pink' -%}#e56aa0
+  {%- when 'grey', 'gray' -%}#8a8a8a
+  {%- when 'aqua' -%}#3ec6d4
+  {%- when 'orange' -%}#f97316
+  {%- when 'white' -%}#f7f7f7
+  {%- when 'purple' -%}#7c3aed
+  {%- when 'yellow' -%}#eab308
+  {%- when 'navy' -%}#1e3a8a
+  {%- else -%}#c8c8c8
+{%- endcase -%}

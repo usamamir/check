@@ -217,7 +217,7 @@
     "featured": {
       "type": "featured-collection",
       "settings": {
-        "heading": "Trending now",
+        "heading": "Featured Products",
         "products_to_show": 8,
         "style": "light"
       }
@@ -225,9 +225,9 @@
     "new": {
       "type": "featured-collection",
       "settings": {
-        "heading": "New in",
+        "heading": "New Products",
         "products_to_show": 8,
-        "style": "light"
+        "style": "dark"
       }
     },
     "testimonials": {

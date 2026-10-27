@@ -23,31 +23,11 @@
   <button class="hero-arrow prev" type="button" data-prev aria-label="Previous slide">&#8249;</button>
   <button class="hero-arrow next" type="button" data-next aria-label="Next slide">&#8250;</button>
   <div class="hero-dots" data-dots></div>
-  <div class="hero-copy">
-    <p>{{ section.settings.kicker }}</p>
-    <h2>{{ section.settings.heading }}</h2>
-    <a class="btn" href="{{ section.settings.button_link | default: '/collections/ride-gear' }}">{{ section.settings.button_label }}</a>
-  </div>
-  <aside class="hero-finder">
-    <h3>Shop our range</h3>
-    <a href="/collections/wetsuits">Wetsuits</a>
-    <a href="/collections/jettribe-vests">Vests</a>
-    <a href="/collections/gloves">Gloves</a>
-    <a href="/collections/goggles">Goggles</a>
-    <a href="/collections/pwc-covers">PWC covers</a>
-    <a class="btn" href="{{ section.settings.button_link | default: '/collections/ride-gear' }}">{{ section.settings.button_label }}</a>
-  </aside>
 </section>
 
 {% schema %}
 {
   "name": "Hero slideshow",
-  "settings": [
-    { "type": "text", "id": "kicker", "label": "Kicker", "default": "Official PWC riding gear" },
-    { "type": "text", "id": "heading", "label": "Heading", "default": "Born in Southern California." },
-    { "type": "text", "id": "button_label", "label": "Button label", "default": "Shop ride gear" },
-    { "type": "url", "id": "button_link", "label": "Button link" }
-  ],
   "blocks": [
     {
       "type": "slide",

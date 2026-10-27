@@ -75,6 +75,22 @@
       return list;
     }
 
+    var COLORS = [
+      { name: "Black", hex: "#161616" },
+      { name: "Blue", hex: "#1d4ed8" },
+      { name: "Red", hex: "#e53d42" },
+      { name: "Teal", hex: "#0f766e" },
+      { name: "Green", hex: "#2f8f4e" },
+      { name: "Pink", hex: "#e56aa0" },
+      { name: "Grey", hex: "#8a8a8a", words: ["Grey", "Gray"] },
+      { name: "Aqua", hex: "#3ec6d4" },
+      { name: "Orange", hex: "#f97316" },
+      { name: "White", hex: "#f7f7f7" },
+      { name: "Purple", hex: "#7c3aed" },
+      { name: "Yellow", hex: "#eab308" },
+      { name: "Navy", hex: "#1e3a8a" }
+    ];
+
     function sizeValues(product) {
       var values = [];
       (product.options || []).forEach(function (option) {
@@ -83,33 +99,48 @@
       return values;
     }
 
+    function productColors(product) {
+      var blob = " " + (product.title || "");
+      (product.options || []).forEach(function (option) {
+        if (/color|colour/i.test(option.name)) blob += " " + (option.values || []).join(" ");
+      });
+      var found = [];
+      COLORS.forEach(function (color) {
+        var words = color.words || [color.name];
+        var hit = words.some(function (word) {
+          return new RegExp("\\b" + word + "\\b", "i").test(blob);
+        });
+        if (hit) found.push(color.name);
+      });
+      return found;
+    }
+
+    function compareBox(product, img, href) {
+      return '<label class="compare-check"><input type="checkbox" data-compare-add data-id="' + esc(product.handle) + '" data-title="' + esc(product.title) + '" data-price="' + product.price + '" data-img="' + esc(img) + '" data-url="' + href + '"><span>Compare</span></label>';
+    }
+
     function card(product) {
       var img = (product.images && product.images[0]) || "";
       var href = "product.html?p=" + encodeURIComponent(product.handle);
       var priced = product.compare && product.compare > product.price
-        ? "<s>" + money(product.compare) + "</s> <span>" + money(product.price) + "</span>"
-        : "<span>" + money(product.price) + "</span>";
-      var stock = product.available ? '<p class="e-stock">In stock</p>' : '<p class="e-stock is-out">Out of stock</p>';
+        ? "<s>" + money(product.compare) + "</s> <span>Now: " + money(product.price) + "</span>"
+        : "<span>Now: " + money(product.price) + "</span>";
       var action = product.available
         ? ((product.options || []).some(function (option) { return option.type === "select" && option.values && option.values.length; })
-          ? '<a class="btn btn--outline" href="' + href + '">Choose options</a>'
-          : '<button type="button" class="btn btn--outline" data-add="' + esc(product.handle) + '" data-title="' + esc(product.title) + '" data-price="' + product.price + '" data-img="' + esc(img) + '">Add to cart</button>')
-        : '<span class="btn is-disabled">Out of stock</span>';
+          ? '<a class="btn" href="' + href + '">Choose Options</a>'
+          : '<button type="button" class="btn" data-add="' + esc(product.handle) + '" data-title="' + esc(product.title) + '" data-price="' + product.price + '" data-img="' + esc(img) + '">Add to Cart</button>')
+        : '<span class="btn is-disabled">Out of Stock</span>';
       var quick = product.available
         ? '<div class="card-hover"><button type="button" class="btn btn--blue" data-quick="' + esc(product.handle) + '" data-title="' + esc(product.title) + '" data-price="' + product.price + '" data-img="' + esc(img) + '" data-url="' + href + '">Quick view</button></div>'
         : "";
       return '<article class="card"><a class="card-media" href="' + href + '"><img src="' + esc(img) + '" alt="' + esc(product.title) + '" width="500" height="659" loading="lazy"></a>' +
         quick +
-        '<div class="card-body"><p class="card-vendor">Jettribe</p><h3 class="card-title"><a href="' + href + '">' + esc(product.title) + "</a></h3>" +
-        '<div class="price">' + priced + "</div>" + stock + "<div class=\"card-actions\">" + action + "</div></div></article>";
+        '<div class="card-body"><h3 class="card-title"><a href="' + href + '">' + esc(product.title) + "</a></h3>" +
+        '<div class="price">' + priced + "</div>" + compareBox(product, img, href) +
+        '<div class="card-actions">' + action + "</div></div></article>";
     }
 
     if (home) {
-      var trending = document.getElementById("home-trending");
-      var fresh = document.getElementById("home-new");
-      var picks = products.filter(function (product) { return product.images && product.images.length && product.price > 20; });
-      if (trending) trending.innerHTML = picks.slice(0, 8).map(card).join("");
-      if (fresh) fresh.innerHTML = picks.slice(8, 16).map(card).join("");
       document.querySelectorAll(".card-title a").forEach(function (link) {
         var title = link.textContent.replace(/\s+/g, " ").trim().toLowerCase();
         var match = products.filter(function (product) {
@@ -150,6 +181,7 @@
       if (!product) {
         productMount.innerHTML = '<h1 class="page-heading" style="justify-content:flex-start;"><span>All products</span></h1><div class="product-grid">' +
           products.slice(0, 24).map(card).join("") + '</div><p><a href="collection.html">Browse every listing</a></p>';
+        document.dispatchEvent(new CustomEvent("catalog:rendered"));
         return;
       }
       document.title = product.title + " | Jettribe";
@@ -177,20 +209,22 @@
         ? "<s>" + money(product.compare) + "</s> Now: " + money(product.price)
         : "Now: " + money(product.price);
       var button = product.available
-        ? '<button class="btn btn--outline" type="submit">Add to cart</button><button class="btn btn--solid" type="submit">Buy it now</button><p class="e-stock">In stock</p>'
-        : '<button class="btn" type="button" disabled>Out of stock</button><p class="e-stock is-out">Out of stock</p>';
+        ? '<button class="btn" type="submit">Add to Cart</button>'
+        : '<button class="btn" type="button" disabled>Out of Stock</button>';
       var primary = (product.categories && product.categories[0]) || (crumbs[0] && crumbs[0].handle) || "";
       var related = productsIn(primary).filter(function (item) { return item.handle !== product.handle; }).slice(0, 4);
       productMount.innerHTML =
         '<nav class="breadcrumbs">' + crumbHtml + "</nav>" +
         '<div class="product"><div><div class="product-gallery-main"><img data-gallery-main src="' + esc(images[0]) + '" alt="' + esc(product.title) + '" width="1200" height="1200"></div><div class="thumbs">' + thumbs + "</div></div>" +
         '<div class="product-info"><p style="margin-bottom:6px;">Jettribe</p><h1 class="product-title">' + esc(product.title) + "</h1>" +
-        '<div class="product-price price">' + priceHtml.replace("Now: ", "") + "</div>" +
+        '<div class="product-price price">' + priceHtml + "</div>" +
         (product.sku ? '<p class="sku">SKU: ' + esc(product.sku) + "</p>" : "") +
         '<form data-product-add data-id="' + esc(product.handle) + '" data-title="' + esc(product.title) + '" data-price="' + product.price + '" data-img="' + esc(images[0]) + '">' +
         optionHtml +
         '<div class="qty-row"><label>Qty</label><input class="input" name="quantity" type="number" min="1" value="1"></div>' +
-        '<div class="product-actions">' + button + "</div></form>" +
+        '<div class="product-actions">' + button +
+        '<button class="btn btn--ghost" type="button" data-compare-button data-compare-add data-id="' + esc(product.handle) + '" data-title="' + esc(product.title) + '" data-price="' + product.price + '" data-img="' + esc(images[0]) + '" data-url="product.html?p=' + encodeURIComponent(product.handle) + '">Compare</button>' +
+        "</div></form>" +
         '<div class="pay-note"><p>Checkout accepts PayPal, Visa, Mastercard, American Express, and Discover. Shop Pay, Apple Pay, and Google Pay appear when Shopify Payments is on.</p>' +
         '<p>Pay over time with Klarna or <a href="financing.html">Bread financing</a>.</p>' +
         '<div class="payment-row" style="justify-content:flex-start;"><img src="../jettribe-shopify/assets/payment-ic.png" alt="PayPal, Visa, Discover, Mastercard, American Express" width="294" height="32"></div></div></div></div>' +
@@ -199,6 +233,7 @@
         '<div class="tab-panel rte" data-tab-panel="shipping"><p>Free USA shipping on orders of $400 or more. Shipping is calculated at checkout for smaller orders. Rider support: 951.246.3147, Monday through Friday, 9am to 4pm PST.</p></div>' +
         '<div class="tab-panel" data-tab-panel="reviews"><p>Reviews stay with the product record. A Shopify reviews app shows them here after the catalog import.</p></div></div>' +
         (related.length ? '<h2 class="page-heading"><span>You may also like</span></h2><div class="product-grid">' + related.map(card).join("") + "</div>" : "");
+      document.dispatchEvent(new CustomEvent("catalog:rendered"));
       return;
     }
 
@@ -213,11 +248,12 @@
       });
     }
     var selectedSizes = (query.get("size") || "").split(",").filter(Boolean);
+    var selectedColors = (query.get("color") || "").split(",").filter(Boolean);
     var min = query.get("min") ? Number(query.get("min")) : null;
     var max = query.get("max") ? Number(query.get("max")) : null;
     var stock = query.get("stock") === "1";
     var sort = query.get("sort") || "featured";
-    var filtered = source.filter(function (product) {
+    function matchesBase(product) {
       if (stock && !product.available) return false;
       if (min != null && product.price < min) return false;
       if (max != null && product.price > max) return false;
@@ -225,6 +261,14 @@
         var sizes = sizeValues(product);
         if (!sizes.length) return false;
         if (!sizes.some(function (size) { return selectedSizes.indexOf(size) !== -1; })) return false;
+      }
+      return true;
+    }
+    var filtered = source.filter(function (product) {
+      if (!matchesBase(product)) return false;
+      if (selectedColors.length) {
+        var colors = productColors(product);
+        if (!selectedColors.some(function (color) { return colors.indexOf(color) !== -1; })) return false;
       }
       return true;
     });
@@ -244,8 +288,25 @@
     document.title = title + " | Jettribe";
 
     var sizeSet = {};
-    source.forEach(function (product) { sizeValues(product).forEach(function (size) { sizeSet[size] = (sizeSet[size] || 0) + 1; }); });
+    var colorSet = {};
+    source.forEach(function (product) {
+      if (stock && !product.available) return;
+      if (min != null && product.price < min) return;
+      if (max != null && product.price > max) return;
+      var colors = productColors(product);
+      var sizes = sizeValues(product);
+      var colorOk = !selectedColors.length || selectedColors.some(function (color) { return colors.indexOf(color) !== -1; });
+      var sizeOk = !selectedSizes.length || sizes.some(function (size) { return selectedSizes.indexOf(size) !== -1; });
+      if (colorOk) sizes.forEach(function (size) { sizeSet[size] = (sizeSet[size] || 0) + 1; });
+      if (sizeOk) colors.forEach(function (color) { colorSet[color] = (colorSet[color] || 0) + 1; });
+    });
     var sizeNames = Object.keys(sizeSet);
+    var priceVals = source.map(function (product) { return Number(product.price) || 0; });
+    var priceFloor = priceVals.length ? Math.floor(Math.min.apply(null, priceVals)) : 0;
+    var priceCeil = priceVals.length ? Math.ceil(Math.max.apply(null, priceVals)) : 1;
+    if (priceCeil <= priceFloor) priceCeil = priceFloor + 1;
+    var rangeMin = min != null ? min : priceFloor;
+    var rangeMax = max != null ? max : priceCeil;
     function linkWith(changes) {
       var next = new URLSearchParams(query.toString());
       Object.keys(changes).forEach(function (key) {
@@ -264,6 +325,13 @@
       if (on) nextSizes = nextSizes.filter(function (item) { return item !== size; });
       else nextSizes.push(size);
       return '<li><a class="' + (on ? "is-active" : "") + '" href="' + linkWith({ size: nextSizes.join(",") }) + '">' + esc(size) + " (" + sizeSet[size] + ")</a></li>";
+    }).join("");
+    var colorHtml = COLORS.filter(function (color) { return colorSet[color.name]; }).map(function (color) {
+      var nextColors = selectedColors.slice();
+      var on = nextColors.indexOf(color.name) !== -1;
+      if (on) nextColors = nextColors.filter(function (item) { return item !== color.name; });
+      else nextColors.push(color.name);
+      return '<a class="swatch' + (on ? " is-active" : "") + '" href="' + linkWith({ color: nextColors.join(",") }) + '" style="--swatch:' + color.hex + '"><i></i><span>' + esc(color.name) + " (" + colorSet[color.name] + ")</span></a>";
     }).join("");
     var childHtml = childLinks.map(function (child) {
       return '<li><a href="collection.html?cat=' + encodeURIComponent(child.handle) + '">' + esc(child.name) + "</a></li>";
@@ -296,11 +364,14 @@
       '<h1 class="page-heading" style="justify-content:flex-start;"><span>' + esc(title) + "</span></h1>" +
       '<div class="collection-layout"><aside>' +
       (childHtml ? '<details class="facet" open><summary>' + esc(sideName) + "</summary><ul>" + childHtml + "</ul></details>" : "") +
+      (colorHtml ? '<details class="facet" open><summary>Color</summary><div class="color-swatches">' + colorHtml + "</div></details>" : "") +
       (sizeHtml ? '<details class="facet" open><summary>Size</summary><ul>' + sizeHtml + "</ul></details>" : "") +
-      '<details class="facet" open><summary>Price</summary><form style="padding:12px;" method="get" action="collection.html">' +
+      '<details class="facet" open><summary>Price</summary><form class="price-range" data-price-range method="get" action="collection.html">' +
       hidden(query, ["min", "max", "page"]) +
-      '<div class="field"><label>From</label><input name="min" type="number" min="0" step="0.01" value="' + esc(query.get("min") || "") + '"></div>' +
-      '<div class="field"><label>To</label><input name="max" type="number" min="0" step="0.01" value="' + esc(query.get("max") || "") + '"></div>' +
+      '<div class="price-range-labels"><span data-price-min-label>' + money(rangeMin) + "</span><span data-price-max-label>" + money(rangeMax) + "</span></div>" +
+      '<div class="price-sliders"><input type="range" min="' + priceFloor + '" max="' + priceCeil + '" step="1" value="' + rangeMin + '" data-range="min" aria-label="Minimum price"><input type="range" min="' + priceFloor + '" max="' + priceCeil + '" step="1" value="' + rangeMax + '" data-range="max" aria-label="Maximum price"></div>' +
+      '<div class="field"><label>From</label><input name="min" data-price-min type="number" min="0" step="0.01" value="' + esc(query.get("min") || "") + '"></div>' +
+      '<div class="field"><label>To</label><input name="max" data-price-max type="number" min="0" step="0.01" value="' + esc(query.get("max") || "") + '"></div>' +
       '<button class="btn" type="submit">Update</button></form></details>' +
       '<details class="facet" open><summary>Other</summary><ul><li><a class="' + (stock ? "is-active" : "") + '" href="' + linkWith({ stock: stock ? "" : "1" }) + '">In Stock</a></li></ul></details>' +
       "</aside><div><div class=\"toolbar\"><p style=\"margin:0;\">" + filtered.length + " products</p>" +
@@ -314,6 +385,7 @@
       "</select></form></div>" +
       (slice.length ? '<div class="product-grid">' + slice.map(card).join("") + "</div>" + pager : '<div class="empty-products"><p>No products match these filters.</p></div>') +
       "</div></div>";
+    document.dispatchEvent(new CustomEvent("catalog:rendered"));
   }
 
   function hidden(query, skip) {

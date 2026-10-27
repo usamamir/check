@@ -472,6 +472,167 @@
     });
   });
 
+  var COMPARE_KEY = "jt_compare";
+  function esc(value) {
+    return String(value == null ? "" : value).replace(/[&<>"']/g, function (ch) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch];
+    });
+  }
+  function readCompare() {
+    try { return JSON.parse(localStorage.getItem(COMPARE_KEY) || "[]"); }
+    catch (e) { return []; }
+  }
+  function writeCompare(list) {
+    localStorage.setItem(COMPARE_KEY, JSON.stringify(list));
+    paintCompare();
+  }
+  function paintCompare() {
+    var bar = qs("[data-compare-bar]");
+    if (!bar) return;
+    var list = readCompare();
+    bar.hidden = list.length === 0;
+    document.body.classList.toggle("has-compare", list.length > 0);
+    var label = qs("[data-compare-label]");
+    if (label) label.textContent = list.length + " of 4 selected";
+    var thumbs = qs("[data-compare-thumbs]");
+    if (thumbs) {
+      thumbs.innerHTML = list.map(function (item) {
+        return '<button type="button" class="compare-thumb" data-compare-remove="' + esc(item.id) + '"><img src="' + esc(item.img) + '" alt=""><span>' + esc(item.title) + "</span></button>";
+      }).join("");
+    }
+    var ids = list.map(function (item) { return String(item.id); });
+    qsa("input[data-compare-add]").forEach(function (input) {
+      input.checked = ids.indexOf(String(input.getAttribute("data-id"))) !== -1;
+    });
+    qsa("[data-compare-button]").forEach(function (btn) {
+      var on = ids.indexOf(String(btn.getAttribute("data-id"))) !== -1;
+      btn.textContent = on ? "Added to compare" : "Compare";
+    });
+  }
+  function itemFrom(el) {
+    return {
+      id: el.getAttribute("data-id"),
+      title: el.getAttribute("data-title") || "",
+      price: el.getAttribute("data-price") || "0",
+      img: el.getAttribute("data-img") || "",
+      url: el.getAttribute("data-url") || "#"
+    };
+  }
+  document.addEventListener("change", function (event) {
+    var input = event.target.closest && event.target.closest("input[data-compare-add]");
+    if (!input) return;
+    var id = input.getAttribute("data-id");
+    var list = readCompare().filter(function (item) { return String(item.id) !== String(id); });
+    if (input.checked) {
+      if (list.length >= 4) {
+        input.checked = false;
+        var bar = qs("[data-compare-bar]");
+        if (bar) bar.hidden = false;
+        var label = qs("[data-compare-label]");
+        if (label) label.textContent = "Compare up to 4 products";
+        return;
+      }
+      list.push(itemFrom(input));
+    }
+    writeCompare(list);
+  });
+  document.addEventListener("click", function (event) {
+    var button = event.target.closest && event.target.closest("[data-compare-button]");
+    if (button) {
+      event.preventDefault();
+      var id = button.getAttribute("data-id");
+      var list = readCompare();
+      if (list.some(function (item) { return String(item.id) === String(id); })) {
+        writeCompare(list.filter(function (item) { return String(item.id) !== String(id); }));
+      } else if (list.length >= 4) {
+        var full = qs("[data-compare-bar]");
+        if (full) full.hidden = false;
+        var note = qs("[data-compare-label]");
+        if (note) note.textContent = "Compare up to 4 products";
+      } else {
+        list.push(itemFrom(button));
+        writeCompare(list);
+      }
+      return;
+    }
+    var remove = event.target.closest && event.target.closest("[data-compare-remove]");
+    if (remove) {
+      var rid = remove.getAttribute("data-compare-remove");
+      writeCompare(readCompare().filter(function (item) { return String(item.id) !== String(rid); }));
+      var modal = qs("[data-compare-modal]");
+      if (modal && !modal.hidden && readCompare().length < 2) {
+        modal.hidden = true;
+        document.body.style.overflow = "";
+      } else if (modal && !modal.hidden) {
+        openCompare();
+      }
+      return;
+    }
+    if (event.target.closest && event.target.closest("[data-compare-clear]")) {
+      writeCompare([]);
+      var openModal = qs("[data-compare-modal]");
+      if (openModal) openModal.hidden = true;
+      document.body.style.overflow = "";
+      return;
+    }
+    if (event.target.closest && event.target.closest("[data-compare-open]")) {
+      openCompare();
+      return;
+    }
+    if (event.target.closest && event.target.closest("[data-compare-close]")) {
+      var closeModal = qs("[data-compare-modal]");
+      if (closeModal) closeModal.hidden = true;
+      document.body.style.overflow = "";
+      return;
+    }
+    if (event.target.matches && event.target.matches("[data-compare-modal]")) {
+      event.target.hidden = true;
+      document.body.style.overflow = "";
+    }
+  });
+  function openCompare() {
+    var picked = readCompare();
+    var label = qs("[data-compare-label]");
+    if (picked.length < 2) {
+      if (label) label.textContent = "Select at least 2 products";
+      return;
+    }
+    var grid = qs("[data-compare-grid]");
+    if (!grid) return;
+    grid.innerHTML = picked.map(function (item) {
+      return '<article class="compare-col"><a href="' + esc(item.url) + '"><img src="' + esc(item.img) + '" alt=""></a><h3><a href="' + esc(item.url) + '">' + esc(item.title) + '</a></h3><p class="price">Now: ' + formatMoney(Number(item.price) || 0) + '</p><a class="btn" href="' + esc(item.url) + '">View</a><button type="button" class="remove-link" data-compare-remove="' + esc(item.id) + '">Remove</button></article>';
+    }).join("");
+    qs("[data-compare-modal]").hidden = false;
+    document.body.style.overflow = "hidden";
+  }
+  paintCompare();
+
+  qsa("[data-price-range]").forEach(function (box) {
+    var minR = qs('[data-range="min"]', box);
+    var maxR = qs('[data-range="max"]', box);
+    if (!minR || !maxR) return;
+    var minN = qs("[data-price-min]", box);
+    var maxN = qs("[data-price-max]", box);
+    var minL = qs("[data-price-min-label]", box);
+    var maxL = qs("[data-price-max-label]", box);
+    function sync(which) {
+      var a = Number(minR.value);
+      var b = Number(maxR.value);
+      if (a > b) {
+        if (which === "min") { a = b; minR.value = String(a); }
+        else { b = a; maxR.value = String(b); }
+      }
+      if (minN) minN.value = String(a);
+      if (maxN) maxN.value = String(b);
+      if (minL) minL.textContent = formatMoney(a * 100);
+      if (maxL) maxL.textContent = formatMoney(b * 100);
+    }
+    minR.addEventListener("input", function () { sync("min"); });
+    maxR.addEventListener("input", function () { sync("max"); });
+    minR.addEventListener("change", function () { box.submit(); });
+    maxR.addEventListener("change", function () { box.submit(); });
+  });
+
   /* Cart page quantity posts stay native. Gallery on cart is server rendered. */
   qsa("[data-country-select]").forEach(function (country) {
     var province = qs("#" + country.getAttribute("data-province"));
