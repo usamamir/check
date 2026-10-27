@@ -87,23 +87,29 @@
       var img = (product.images && product.images[0]) || "";
       var href = "product.html?p=" + encodeURIComponent(product.handle);
       var priced = product.compare && product.compare > product.price
-        ? "<s>" + money(product.compare) + "</s> <span>Now: " + money(product.price) + "</span>"
-        : "<span>Now: " + money(product.price) + "</span>";
+        ? "<s>" + money(product.compare) + "</s> <span>" + money(product.price) + "</span>"
+        : "<span>" + money(product.price) + "</span>";
+      var stock = product.available ? '<p class="e-stock">In stock</p>' : '<p class="e-stock is-out">Out of stock</p>';
       var action = product.available
         ? ((product.options || []).some(function (option) { return option.type === "select" && option.values && option.values.length; })
-          ? '<a class="btn" href="' + href + '">Choose Options</a>'
-          : '<button type="button" class="btn" data-add="' + esc(product.handle) + '" data-title="' + esc(product.title) + '" data-price="' + product.price + '" data-img="' + esc(img) + '">Add to Cart</button>')
-        : '<span class="btn is-disabled">Out of Stock</span>';
+          ? '<a class="btn btn--outline" href="' + href + '">Choose options</a>'
+          : '<button type="button" class="btn btn--outline" data-add="' + esc(product.handle) + '" data-title="' + esc(product.title) + '" data-price="' + product.price + '" data-img="' + esc(img) + '">Add to cart</button>')
+        : '<span class="btn is-disabled">Out of stock</span>';
       var quick = product.available
         ? '<div class="card-hover"><button type="button" class="btn btn--blue" data-quick="' + esc(product.handle) + '" data-title="' + esc(product.title) + '" data-price="' + product.price + '" data-img="' + esc(img) + '" data-url="' + href + '">Quick view</button></div>'
         : "";
       return '<article class="card"><a class="card-media" href="' + href + '"><img src="' + esc(img) + '" alt="' + esc(product.title) + '" width="500" height="659" loading="lazy"></a>' +
         quick +
-        '<div class="card-body"><h3 class="card-title"><a href="' + href + '">' + esc(product.title) + "</a></h3>" +
-        '<div class="price">' + priced + "</div><div class=\"card-actions\">" + action + "</div></div></article>";
+        '<div class="card-body"><p class="card-vendor">Jettribe</p><h3 class="card-title"><a href="' + href + '">' + esc(product.title) + "</a></h3>" +
+        '<div class="price">' + priced + "</div>" + stock + "<div class=\"card-actions\">" + action + "</div></div></article>";
     }
 
     if (home) {
+      var trending = document.getElementById("home-trending");
+      var fresh = document.getElementById("home-new");
+      var picks = products.filter(function (product) { return product.images && product.images.length && product.price > 20; });
+      if (trending) trending.innerHTML = picks.slice(0, 8).map(card).join("");
+      if (fresh) fresh.innerHTML = picks.slice(8, 16).map(card).join("");
       document.querySelectorAll(".card-title a").forEach(function (link) {
         var title = link.textContent.replace(/\s+/g, " ").trim().toLowerCase();
         var match = products.filter(function (product) {
@@ -171,15 +177,15 @@
         ? "<s>" + money(product.compare) + "</s> Now: " + money(product.price)
         : "Now: " + money(product.price);
       var button = product.available
-        ? '<button class="btn" type="submit">Add to Cart</button>'
-        : '<button class="btn" type="button" disabled>Out of Stock</button>';
+        ? '<button class="btn btn--outline" type="submit">Add to cart</button><button class="btn btn--solid" type="submit">Buy it now</button><p class="e-stock">In stock</p>'
+        : '<button class="btn" type="button" disabled>Out of stock</button><p class="e-stock is-out">Out of stock</p>';
       var primary = (product.categories && product.categories[0]) || (crumbs[0] && crumbs[0].handle) || "";
       var related = productsIn(primary).filter(function (item) { return item.handle !== product.handle; }).slice(0, 4);
       productMount.innerHTML =
         '<nav class="breadcrumbs">' + crumbHtml + "</nav>" +
         '<div class="product"><div><div class="product-gallery-main"><img data-gallery-main src="' + esc(images[0]) + '" alt="' + esc(product.title) + '" width="1200" height="1200"></div><div class="thumbs">' + thumbs + "</div></div>" +
         '<div class="product-info"><p style="margin-bottom:6px;">Jettribe</p><h1 class="product-title">' + esc(product.title) + "</h1>" +
-        '<div class="product-price price">' + priceHtml + "</div>" +
+        '<div class="product-price price">' + priceHtml.replace("Now: ", "") + "</div>" +
         (product.sku ? '<p class="sku">SKU: ' + esc(product.sku) + "</p>" : "") +
         '<form data-product-add data-id="' + esc(product.handle) + '" data-title="' + esc(product.title) + '" data-price="' + product.price + '" data-img="' + esc(images[0]) + '">' +
         optionHtml +

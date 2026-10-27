@@ -16,14 +16,16 @@
     <button type="button" class="btn btn--blue" data-quick-view="{{ product.handle }}">Quick view</button>
   </div>
   <div class="card-body">
+    <p class="card-vendor">{{ product.vendor | default: 'Jettribe' }}</p>
     <h3 class="card-title"><a href="{{ product.url }}">{{ product.title }}</a></h3>
     <div class="price">{% render 'price', product: product %}</div>
+    <p class="e-stock{% unless product.available %} is-out{% endunless %}">{% if product.available %}In stock{% else %}Out of stock{% endif %}</p>
     <div class="card-actions">
       {%- if product.available -%}
         {%- if product.has_only_default_variant -%}
-          <button type="button" class="btn" data-add-variant="{{ product.selected_or_first_available_variant.id }}">Add to Cart</button>
+          <button type="button" class="btn btn--outline" data-add-variant="{{ product.selected_or_first_available_variant.id }}">Add to cart</button>
         {%- else -%}
-          <a class="btn" href="{{ product.url }}">Choose Options</a>
+          <a class="btn btn--outline" href="{{ product.url }}">Choose options</a>
         {%- endif -%}
       {%- else -%}
         <span class="btn is-disabled">Out of Stock</span>

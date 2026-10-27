@@ -45,7 +45,7 @@
           {%- if current.compare_at_price > current.price -%}
             <s>{{ current.compare_at_price | money }}</s>
           {%- endif -%}
-          Now: {{ current.price | money }}
+          {{ current.price | money }}
         </div>
         <p class="sku" data-sku>{% if current.sku != blank %}SKU: {{ current.sku }}{% endif %}</p>
 
@@ -109,9 +109,10 @@
 
           <p class="form-errors" data-product-error hidden></p>
           <div class="product-actions">
-            <button class="btn" type="submit" name="add" data-add-button {% unless product.available %}disabled{% endunless %}>
-              {%- if product.available -%}Add to Cart{%- else -%}Out of Stock{%- endif -%}
+            <button class="btn btn--outline" type="submit" name="add" data-add-button {% unless product.available %}disabled{% endunless %}>
+              {%- if product.available -%}Add to cart{%- else -%}Out of stock{%- endif -%}
             </button>
+            <p class="e-stock{% unless product.available %} is-out{% endunless %}">{% if product.available %}In stock{% else %}Out of stock{% endif %}</p>
             {{ form | payment_button }}
             <button class="btn btn--ghost" type="button" data-wish-toggle="{{ product.handle }}">Wishlist</button>
           </div>
