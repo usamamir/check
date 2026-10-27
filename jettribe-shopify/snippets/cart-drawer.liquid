@@ -1,0 +1,19 @@
+<div class="drawer-backdrop" data-cart-backdrop data-close-cart hidden></div>
+<aside class="drawer" data-cart-drawer hidden aria-label="Cart">
+  <header>
+    <h2>Cart</h2>
+    <button class="icon-btn" type="button" data-close-cart aria-label="Close cart">&times;</button>
+  </header>
+  <div class="body" data-cart-body>
+    <p>Your cart is empty.</p>
+  </div>
+  <div class="body" data-cart-foot hidden style="flex:0; border-top:1px solid #eee;">
+    <p data-ship-message></p>
+    <div class="summary-line"><strong>Subtotal</strong> <strong data-cart-total></strong></div>
+    <p class="note note--plain">Shipping, tax, and payment are completed on the secure Shopify checkout. PayPal, cards, Klarna, and wallets appear there after they are enabled.</p>
+    <a class="btn btn--full" href="{{ routes.cart_url }}">View cart</a>
+    <form action="{{ routes.cart_url }}" method="post" style="margin-top:8px;">
+      <button class="btn btn--dark btn--full" type="submit" name="checkout">Checkout</button>
+    </form>
+  </div>
+</aside>

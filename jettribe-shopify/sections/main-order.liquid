@@ -1,0 +1,43 @@
+<section class="page-wrap">
+  <div class="container">
+    <p><a href="{{ routes.account_url }}">Back to orders</a></p>
+    <h1>Order {{ order.name }}</h1>
+    <p>{{ order.created_at | date: "%B %d, %Y" }} · {{ order.financial_status_label }} · {{ order.fulfillment_status_label }}</p>
+    <table class="cart-table">
+      <thead><tr><th>Product</th><th>SKU</th><th>Qty</th><th>Total</th></tr></thead>
+      <tbody>
+        {%- for line in order.line_items -%}
+          <tr>
+            <td>
+              {{ line.title }}
+              {%- if line.fulfillment %} · {{ line.fulfillment.tracking_url | default: line.fulfillment.tracking_number }}{% endif -%}
+            </td>
+            <td>{{ line.sku }}</td>
+            <td>{{ line.quantity }}</td>
+            <td>{{ line.final_line_price | money }}</td>
+          </tr>
+        {%- endfor -%}
+      </tbody>
+    </table>
+    <div class="cart-summary" style="max-width:360px;margin-top:16px;">
+      <div class="summary-line"><span>Subtotal</span><span>{{ order.subtotal_price | money }}</span></div>
+      <div class="summary-line"><span>Shipping</span><span>{{ order.shipping_price | money }}</span></div>
+      <div class="summary-line"><span>Tax</span><span>{{ order.tax_price | money }}</span></div>
+      <div class="summary-line"><strong>Total</strong><strong>{{ order.total_price | money }}</strong></div>
+    </div>
+    <div class="finance-grid" style="margin-top:20px;">
+      <div class="finance-card">
+        <h3>Shipping address</h3>
+        {{ order.shipping_address | format_address }}
+      </div>
+      <div class="finance-card">
+        <h3>Billing address</h3>
+        {{ order.billing_address | format_address }}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{ "name": "Order", "settings": [] }
+{% endschema %}

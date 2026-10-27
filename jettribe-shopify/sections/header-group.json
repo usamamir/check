@@ -1,0 +1,23 @@
+{
+  "type": "header",
+  "name": "Header",
+  "sections": {
+    "announcement-bar": {
+      "type": "announcement-bar",
+      "settings": {
+        "line_1": "Jettribe is a true core personal watercraft brand: born in southern California",
+        "line_2": "*** Free USA Shipping on Orders $400+ ***"
+      }
+    },
+    "header": {
+      "type": "header",
+      "settings": {
+        "phone": "951 246 3147"
+      }
+    }
+  },
+  "order": [
+    "announcement-bar",
+    "header"
+  ]
+}

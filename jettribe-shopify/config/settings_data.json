@@ -1,0 +1,26 @@
+{
+  "current": {
+    "color_red": "#e53d42",
+    "color_black": "#161616",
+    "color_blue": "#4153eb",
+    "color_text": "#505050",
+    "color_heading": "#161616",
+    "menu_source": "jettribe",
+    "menu": "main-menu",
+    "show_translate": true,
+    "cart_type": "drawer",
+    "free_shipping_threshold": 400,
+    "show_payment_image": true,
+    "show_klarna_badge": true,
+    "show_bread_badge": true,
+    "show_shop_pay_badge": false,
+    "klarna_client_id": "",
+    "klarna_home_placement_id": "917c5e2c-b4aa-4e19-bc45-c5ddcff7c9c3",
+    "klarna_product_placement_id": "ce3ec05e-eac1-49cd-ba0c-d4c2f7f19683",
+    "returns_url": "https://jettribe.returnscenter.com",
+    "gift_card_link": "/products/gift-card",
+    "social_facebook": "https://www.facebook.com/JettribeRacing",
+    "social_instagram": "https://www.instagram.com/jettribe/",
+    "social_youtube": "https://www.youtube.com/user/Jettribe1"
+  }
+}

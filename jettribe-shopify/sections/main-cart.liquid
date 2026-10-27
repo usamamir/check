@@ -1,0 +1,99 @@
+<section class="page-wrap">
+  <div class="container">
+    {% render 'breadcrumbs' %}
+    <h1 class="page-heading" style="justify-content:flex-start;"><span>Cart</span></h1>
+
+    {%- if cart.item_count == 0 -%}
+      <p>Your cart is empty.</p>
+      <a class="btn" href="{{ routes.all_products_collection_url }}">Continue shopping</a>
+    {%- else -%}
+      {%- assign threshold = settings.free_shipping_threshold | times: 100 -%}
+      {%- if threshold > 0 -%}
+        {%- assign progress = cart.total_price | times: 100 | divided_by: threshold -%}
+      {%- else -%}
+        {%- assign progress = 0 -%}
+      {%- endif -%}
+      {%- if progress > 100 -%}{%- assign progress = 100 -%}{%- endif -%}
+      <div class="note note--plain">
+        {%- if cart.total_price >= threshold -%}
+          This order qualifies for free USA shipping.
+        {%- else -%}
+          Add {{ threshold | minus: cart.total_price | money }} more for free USA shipping on orders ${{ settings.free_shipping_threshold }}+.
+        {%- endif -%}
+        <div class="ship-progress"><span style="width: {{ progress }}%;"></span></div>
+      </div>
+
+      {% form 'cart', cart %}
+        <div class="cart-layout">
+          <div>
+            <table class="cart-table">
+              <thead>
+                <tr>
+                  <th>Product</th>
+                  <th>Price</th>
+                  <th>Qty</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                {%- for item in cart.items -%}
+                  <tr>
+                    <td>
+                      <div class="cart-product">
+                        <a href="{{ item.url }}">
+                          {%- if item.image -%}
+                            <img src="{{ item.image | image_url: width: 180 }}" alt="{{ item.title | escape }}" width="84" height="84">
+                          {%- endif -%}
+                        </a>
+                        <div>
+                          <a href="{{ item.url }}">{{ item.product.title }}</a>
+                          {%- unless item.product.has_only_default_variant -%}
+                            <div>{{ item.variant.title }}</div>
+                          {%- endunless -%}
+                          {%- for property in item.properties -%}
+                            {%- unless property.last == blank -%}
+                              <div>{{ property.first }}: {{ property.last }}</div>
+                            {%- endunless -%}
+                          {%- endfor -%}
+                          <a href="{{ item.url_to_remove }}">Remove</a>
+                        </div>
+                      </div>
+                    </td>
+                    <td>{{ item.final_price | money }}</td>
+                    <td>
+                      <label class="visually-hidden" for="Updates-{{ item.key }}">Quantity</label>
+                      <input class="input" id="Updates-{{ item.key }}" type="number" name="updates[]" value="{{ item.quantity }}" min="0" style="width:80px;">
+                    </td>
+                    <td>{{ item.final_line_price | money }}</td>
+                  </tr>
+                {%- endfor -%}
+              </tbody>
+            </table>
+            <button class="btn btn--ghost" type="submit" name="update" style="margin-top:12px;">Update cart</button>
+          </div>
+          <aside class="cart-summary">
+            <div class="summary-line"><span>Subtotal</span><strong>{{ cart.total_price | money }}</strong></div>
+            <div class="field">
+              <label for="CartNote">Order note</label>
+              <textarea id="CartNote" name="note">{{ cart.note }}</textarea>
+            </div>
+            <div class="field">
+              <label for="DiscountCode">Discount code</label>
+              <input id="DiscountCode" type="text" name="discount" placeholder="Code">
+            </div>
+            <p>Tax and shipping are calculated at checkout.</p>
+            <button class="btn btn--full" type="submit" name="checkout">Checkout</button>
+            <div class="additional-checkout" style="margin-top:12px;">
+              {{ content_for_additional_checkout_buttons }}
+            </div>
+            {% render 'payment-icons' %}
+          </aside>
+        </div>
+      {% endform %}
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{ "name": "Cart", "settings": [] }
+{% endschema %}

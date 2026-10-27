@@ -1,0 +1,45 @@
+<section class="hero" data-slider data-autoplay>
+  {%- for block in section.blocks -%}
+    {%- liquid
+      assign slide_src = blank
+      if block.settings.image != blank
+        assign slide_src = block.settings.image | image_url: width: 2000
+      elsif block.settings.asset != blank
+        assign slide_src = block.settings.asset | asset_url
+      endif
+    -%}
+    <div class="hero-slide{% if forloop.first %} is-active{% endif %}" data-slide {{ block.shopify_attributes }}>
+      {%- if slide_src != blank -%}
+        {%- if block.settings.link != blank -%}
+          <a href="{{ block.settings.link }}">
+            <img src="{{ slide_src }}" alt="{{ block.settings.alt | escape }}" width="1640" height="856">
+          </a>
+        {%- else -%}
+          <img src="{{ slide_src }}" alt="{{ block.settings.alt | escape }}" width="1640" height="856">
+        {%- endif -%}
+      {%- endif -%}
+    </div>
+  {%- endfor -%}
+  <button class="hero-arrow prev" type="button" data-prev aria-label="Previous slide">&#8249;</button>
+  <button class="hero-arrow next" type="button" data-next aria-label="Next slide">&#8250;</button>
+  <div class="hero-dots" data-dots></div>
+</section>
+
+{% schema %}
+{
+  "name": "Hero slideshow",
+  "blocks": [
+    {
+      "type": "slide",
+      "name": "Slide",
+      "settings": [
+        { "type": "text", "id": "asset", "label": "Theme image filename", "info": "Used until you upload a replacement. Example: slide-1.jpg" },
+        { "type": "image_picker", "id": "image", "label": "Replacement image" },
+        { "type": "text", "id": "alt", "label": "Alt text" },
+        { "type": "url", "id": "link", "label": "Link" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Hero slideshow" }]
+}
+{% endschema %}

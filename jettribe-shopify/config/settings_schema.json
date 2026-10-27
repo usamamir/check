@@ -1,0 +1,200 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Jettribe",
+    "theme_version": "1.0.0",
+    "theme_author": "Jettribe",
+    "theme_documentation_url": "https://www.jettribe.com/",
+    "theme_support_url": "https://www.jettribe.com/"
+  },
+  {
+    "name": "Colors",
+    "settings": [
+      {
+        "type": "color",
+        "id": "color_red",
+        "label": "Accent red",
+        "default": "#e53d42"
+      },
+      {
+        "type": "color",
+        "id": "color_black",
+        "label": "Black",
+        "default": "#161616"
+      },
+      {
+        "type": "color",
+        "id": "color_blue",
+        "label": "Link and price blue",
+        "default": "#4153eb"
+      },
+      {
+        "type": "color",
+        "id": "color_text",
+        "label": "Body text",
+        "default": "#505050"
+      },
+      {
+        "type": "color",
+        "id": "color_heading",
+        "label": "Headings",
+        "default": "#161616"
+      },
+      {
+        "type": "image_picker",
+        "id": "logo",
+        "label": "Logo"
+      },
+      {
+        "type": "image_picker",
+        "id": "favicon",
+        "label": "Favicon"
+      }
+    ]
+  },
+  {
+    "name": "Navigation",
+    "settings": [
+      {
+        "type": "select",
+        "id": "menu_source",
+        "label": "Main menu source",
+        "default": "jettribe",
+        "options": [
+          {
+            "value": "jettribe",
+            "label": "Jettribe menu built into the theme"
+          },
+          {
+            "value": "shopify",
+            "label": "A Shopify navigation menu"
+          }
+        ]
+      },
+      {
+        "type": "link_list",
+        "id": "menu",
+        "label": "Shopify menu",
+        "default": "main-menu"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_translate",
+        "label": "Show Google Translate",
+        "default": true
+      }
+    ]
+  },
+  {
+    "name": "Cart and shipping",
+    "settings": [
+      {
+        "type": "select",
+        "id": "cart_type",
+        "label": "Cart style",
+        "default": "drawer",
+        "options": [
+          {
+            "value": "drawer",
+            "label": "Slide-out cart"
+          },
+          {
+            "value": "page",
+            "label": "Cart page"
+          }
+        ]
+      },
+      {
+        "type": "number",
+        "id": "free_shipping_threshold",
+        "label": "Free USA shipping threshold (dollars)",
+        "default": 400
+      }
+    ]
+  },
+  {
+    "name": "Payments",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Icons are display only. Turn the real methods on in Shopify admin under Settings, Payments: Shopify Payments (Visa, Mastercard, Amex, Discover, Shop Pay, Apple Pay, Google Pay), PayPal, and Klarna. Install the Bread app for the same pay-over-time partner."
+      },
+      {
+        "type": "checkbox",
+        "id": "show_payment_image",
+        "label": "Show PayPal and card icons",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "show_klarna_badge",
+        "label": "Show Klarna badge",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "show_bread_badge",
+        "label": "Show Bread badge",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "show_shop_pay_badge",
+        "label": "Show Shop Pay badge",
+        "default": false
+      },
+      {
+        "type": "text",
+        "id": "klarna_client_id",
+        "label": "Klarna on-site messaging client id"
+      },
+      {
+        "type": "text",
+        "id": "klarna_home_placement_id",
+        "label": "Klarna homepage placement id",
+        "default": "917c5e2c-b4aa-4e19-bc45-c5ddcff7c9c3"
+      },
+      {
+        "type": "text",
+        "id": "klarna_product_placement_id",
+        "label": "Klarna product placement id",
+        "default": "ce3ec05e-eac1-49cd-ba0c-d4c2f7f19683"
+      }
+    ]
+  },
+  {
+    "name": "Links",
+    "settings": [
+      {
+        "type": "text",
+        "id": "returns_url",
+        "label": "Returns URL",
+        "default": "https://jettribe.returnscenter.com"
+      },
+      {
+        "type": "text",
+        "id": "gift_card_link",
+        "label": "Gift card link",
+        "default": "/products/gift-card"
+      },
+      {
+        "type": "text",
+        "id": "social_facebook",
+        "label": "Facebook",
+        "default": "https://www.facebook.com/JettribeRacing"
+      },
+      {
+        "type": "text",
+        "id": "social_instagram",
+        "label": "Instagram",
+        "default": "https://www.instagram.com/jettribe/"
+      },
+      {
+        "type": "text",
+        "id": "social_youtube",
+        "label": "YouTube",
+        "default": "https://www.youtube.com/user/Jettribe1"
+      }
+    ]
+  }
+]

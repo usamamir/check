@@ -1,0 +1,33 @@
+<article class="card">
+  <a class="card-media" href="{{ product.url }}">
+    {%- if product.featured_image -%}
+      <img
+        src="{{ product.featured_image | image_url: width: 600 }}"
+        alt="{{ product.featured_image.alt | escape }}"
+        width="500"
+        height="659"
+        loading="lazy"
+      >
+    {%- else -%}
+      {{ 'product-1' | placeholder_svg_tag: 'placeholder' }}
+    {%- endif -%}
+  </a>
+  <div class="card-hover">
+    <button type="button" class="btn btn--blue" data-quick-view="{{ product.handle }}">Quick view</button>
+  </div>
+  <div class="card-body">
+    <h3 class="card-title"><a href="{{ product.url }}">{{ product.title }}</a></h3>
+    <div class="price">{% render 'price', product: product %}</div>
+    <div class="card-actions">
+      {%- if product.available -%}
+        {%- if product.has_only_default_variant -%}
+          <button type="button" class="btn" data-add-variant="{{ product.selected_or_first_available_variant.id }}">Add to Cart</button>
+        {%- else -%}
+          <a class="btn" href="{{ product.url }}">Choose Options</a>
+        {%- endif -%}
+      {%- else -%}
+        <span class="btn is-disabled">Out of Stock</span>
+      {%- endif -%}
+    </div>
+  </div>
+</article>

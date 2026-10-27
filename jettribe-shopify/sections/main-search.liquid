@@ -1,0 +1,39 @@
+<section class="page-wrap">
+  <div class="container">
+    {% render 'breadcrumbs' %}
+    <h1 class="page-heading" style="justify-content:flex-start;"><span>Search</span></h1>
+    <form action="{{ routes.search_url }}" method="get" class="field" style="max-width:640px;">
+      <label class="visually-hidden" for="SearchPage">Search</label>
+      <input id="SearchPage" type="search" name="q" value="{{ search.terms | escape }}" placeholder="Search gear">
+      <input type="hidden" name="type" value="product">
+      <button class="btn" type="submit" style="margin-top:10px;">Search</button>
+    </form>
+
+    {%- if search.performed -%}
+      <p>{{ search.results_count }} results for “{{ search.terms }}”</p>
+      {% paginate search.results by 16 %}
+        <div class="product-grid">
+          {%- for item in search.results -%}
+            {%- if item.object_type == 'product' -%}
+              {% render 'product-card', product: item %}
+            {%- else -%}
+              <article class="card">
+                <div class="card-body">
+                  <h3 class="card-title"><a href="{{ item.url }}">{{ item.title }}</a></h3>
+                  <p>{{ item.object_type | capitalize }}</p>
+                </div>
+              </article>
+            {%- endif -%}
+          {%- else -%}
+            <div class="empty-products"><p>No results. Try a product name, vest, wetsuit, or cover.</p></div>
+          {%- endfor -%}
+        </div>
+        {% render 'pagination', paginate: paginate %}
+      {% endpaginate %}
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{ "name": "Search", "settings": [] }
+{% endschema %}

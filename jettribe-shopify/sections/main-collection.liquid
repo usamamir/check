@@ -1,0 +1,114 @@
+<section class="page-wrap">
+  <div class="container">
+    {% render 'breadcrumbs' %}
+    <h1 class="page-heading" style="justify-content:flex-start;"><span>{{ collection.title }}</span></h1>
+    {%- if collection.description != blank -%}
+      <div class="rte" style="margin-bottom:18px;">{{ collection.description }}</div>
+    {%- endif -%}
+
+    <div class="collection-layout">
+      <aside>
+        {%- if collection.filters.size > 0 -%}
+          {%- for filter in collection.filters -%}
+            <details class="facet" open>
+              <summary>{{ filter.label }}</summary>
+              {%- if filter.type == 'price_range' -%}
+                <form method="get" action="{{ collection.url }}" style="padding:12px;">
+                  {%- for value in collection.filters -%}
+                    {%- if value.type != 'price_range' -%}
+                      {%- for active in value.active_values -%}
+                        <input type="hidden" name="{{ active.param_name }}" value="{{ active.value }}">
+                      {%- endfor -%}
+                    {%- endif -%}
+                  {%- endfor -%}
+                  <input type="hidden" name="sort_by" value="{{ collection.sort_by }}">
+                  <div class="field">
+                    <label>From</label>
+                    <input name="{{ filter.min_value.param_name }}" type="number" placeholder="0" {% if filter.min_value.value %}value="{{ filter.min_value.value | money_without_currency | replace: ',', '' }}"{% endif %}>
+                  </div>
+                  <div class="field">
+                    <label>To</label>
+                    <input name="{{ filter.max_value.param_name }}" type="number" {% if filter.max_value.value %}value="{{ filter.max_value.value | money_without_currency | replace: ',', '' }}"{% endif %}>
+                  </div>
+                  <button class="btn" type="submit">Apply</button>
+                </form>
+              {%- else -%}
+                <ul>
+                  {%- for value in filter.values -%}
+                    <li>
+                      <a href="{% if value.active %}{{ value.url_to_remove }}{% else %}{{ value.url_to_add }}{% endif %}" class="{% if value.active %}is-active{% endif %}">
+                        {{ value.label }} ({{ value.count }})
+                      </a>
+                    </li>
+                  {%- endfor -%}
+                </ul>
+              {%- endif -%}
+            </details>
+          {%- endfor -%}
+        {%- else -%}
+          <div class="facet">
+            <div class="side-heading">Shop</div>
+            <ul>
+              {%- for link in linklists[settings.menu].links limit: 12 -%}
+                <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+              {%- else -%}
+                <li><a href="/collections/wetsuits">Wetsuits</a></li>
+                <li><a href="/collections/jettribe-vests">Vests</a></li>
+                <li><a href="/collections/accessories">Accessories</a></li>
+                <li><a href="/collections/pwc-covers">Covers</a></li>
+                <li><a href="/collections/outlet">Outlet</a></li>
+              {%- endfor -%}
+            </ul>
+          </div>
+          <p class="note note--plain">Turn on filters in Shopify Search &amp; Discovery to match the BigCommerce sidebar.</p>
+        {%- endif -%}
+      </aside>
+
+      <div>
+        {% paginate collection.products by section.settings.per_page %}
+          <div class="toolbar">
+            <p style="margin:0;">{{ collection.products_count }} products</p>
+            <form method="get">
+              {%- for filter in collection.filters -%}
+                {%- for value in filter.active_values -%}
+                  <input type="hidden" name="{{ value.param_name }}" value="{{ value.value }}">
+                {%- endfor -%}
+                {%- if filter.type == 'price_range' -%}
+                  {%- if filter.min_value.value -%}
+                    <input type="hidden" name="{{ filter.min_value.param_name }}" value="{{ filter.min_value.value }}">
+                  {%- endif -%}
+                  {%- if filter.max_value.value -%}
+                    <input type="hidden" name="{{ filter.max_value.param_name }}" value="{{ filter.max_value.value }}">
+                  {%- endif -%}
+                {%- endif -%}
+              {%- endfor -%}
+              <label class="visually-hidden" for="SortBy">Sort</label>
+              <select class="select" id="SortBy" name="sort_by" onchange="this.form.submit()">
+                {%- for option in collection.sort_options -%}
+                  <option value="{{ option.value }}" {% if option.value == collection.sort_by %}selected{% endif %}>{{ option.name }}</option>
+                {%- endfor -%}
+              </select>
+            </form>
+          </div>
+          <div class="product-grid">
+            {%- for product in collection.products -%}
+              {% render 'product-card', product: product %}
+            {%- else -%}
+              <div class="empty-products"><p>No products in this collection yet.</p></div>
+            {%- endfor -%}
+          </div>
+          {% render 'pagination', paginate: paginate %}
+        {% endpaginate %}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Collection",
+  "settings": [
+    { "type": "range", "id": "per_page", "label": "Products per page", "min": 8, "max": 32, "step": 4, "default": 16 }
+  ]
+}
+{% endschema %}

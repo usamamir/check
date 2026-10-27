@@ -1,0 +1,182 @@
+<section class="page-wrap" style="padding-top:0;">
+  <div class="container">
+    {% render 'breadcrumbs' %}
+  </div>
+  <div class="container">
+    <div class="product">
+      <div class="product-gallery">
+        {%- assign current = product.selected_or_first_available_variant -%}
+        {%- if product.featured_image -%}
+          <div class="product-gallery-main">
+            <img
+              data-gallery-main
+              src="{{ current.featured_image | default: product.featured_image | image_url: width: 1400 }}"
+              alt="{{ product.featured_image.alt | escape }}"
+              width="1200"
+              height="1200"
+            >
+          </div>
+        {%- endif -%}
+        {%- if product.media.size > 1 -%}
+          <div class="thumbs">
+            {%- for media in product.media -%}
+              {%- if media.media_type == 'image' -%}
+                <button
+                  type="button"
+                  class="thumb{% if forloop.first %} is-active{% endif %}"
+                  data-thumb
+                  data-src="{{ media | image_url: width: 1400 }}"
+                  aria-label="Show image {{ forloop.index }}"
+                >
+                  <img src="{{ media | image_url: width: 160 }}" alt="{{ media.alt | escape }}" width="74" height="74">
+                </button>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </div>
+
+      <div class="product-info">
+        {%- if product.vendor != blank -%}
+          <p style="margin-bottom:6px;">{{ product.vendor }}</p>
+        {%- endif -%}
+        <h1 class="product-title">{{ product.title }}</h1>
+        <div class="product-price price" data-product-price>
+          {%- if current.compare_at_price > current.price -%}
+            <s>{{ current.compare_at_price | money }}</s>
+          {%- endif -%}
+          Now: {{ current.price | money }}
+        </div>
+        <p class="sku" data-sku>{% if current.sku != blank %}SKU: {{ current.sku }}{% endif %}</p>
+
+        {% form 'product', product, class: 'product-form', data-product-form: 'true' %}
+          <input type="hidden" name="id" value="{{ current.id }}" data-variant-id>
+
+          {%- unless product.has_only_default_variant -%}
+            {%- for option in product.options_with_values -%}
+              <div class="option-label">{{ option.name }}</div>
+              <div class="option-values" data-option-index="{{ forloop.index0 }}">
+                {%- for value in option.values -%}
+                  <label class="{% if option.selected_value == value %}is-selected{% endif %}">
+                    <input
+                      type="radio"
+                      name="option-{{ option.position }}"
+                      value="{{ value | escape }}"
+                      data-option-input
+                      {% if option.selected_value == value %}checked{% endif %}
+                    >
+                    <span>{{ value }}</span>
+                  </label>
+                {%- endfor -%}
+              </div>
+            {%- endfor -%}
+          {%- endunless -%}
+
+          {%- if product.selling_plan_groups.size > 0 -%}
+            <div class="field">
+              <label for="SellingPlan">Purchase option</label>
+              <select id="SellingPlan" name="selling_plan">
+                <option value="">One-time purchase</option>
+                {%- for group in product.selling_plan_groups -%}
+                  {%- for plan in group.selling_plans -%}
+                    <option value="{{ plan.id }}">{{ plan.name }}</option>
+                  {%- endfor -%}
+                {%- endfor -%}
+              </select>
+            </div>
+          {%- endif -%}
+
+          {%- if section.settings.show_custom_note or product.tags contains 'custom' or product.tags contains 'customizable' -%}
+            <div class="field">
+              <label for="CustomNote">Customization notes</label>
+              <textarea id="CustomNote" name="properties[Customization]" placeholder="Colors, name, size notes"></textarea>
+            </div>
+          {%- endif -%}
+
+          <div class="qty-row">
+            <label for="Quantity">Qty</label>
+            <input class="input" id="Quantity" type="number" name="quantity" min="1" value="1">
+          </div>
+
+          <p class="form-errors" data-product-error hidden></p>
+          <div class="product-actions">
+            <button class="btn" type="submit" name="add" data-add-button {% unless product.available %}disabled{% endunless %}>
+              {%- if product.available -%}Add to Cart{%- else -%}Out of Stock{%- endif -%}
+            </button>
+            {{ form | payment_button }}
+            <button class="btn btn--ghost" type="button" data-wish-toggle="{{ product.handle }}">Wishlist</button>
+          </div>
+        {% endform %}
+
+        <div class="pay-note">
+          <p>Checkout accepts the same methods as jettribe.com once they are turned on in Shopify Payments: PayPal, Visa, Mastercard, American Express, Discover, Shop Pay, Apple Pay, and Google Pay.</p>
+          <p>Pay over time with Klarna or <a href="/pages/financing">Bread financing</a>.</p>
+          {%- if settings.klarna_client_id != blank and settings.klarna_product_placement_id != blank -%}
+            <klarna-placement
+              data-id="{{ settings.klarna_product_placement_id }}"
+              data-theme="dark"
+              data-purchase-amount="{{ current.price }}"
+            ></klarna-placement>
+          {%- endif -%}
+          {% render 'payment-icons' %}
+        </div>
+      </div>
+    </div>
+
+    <div class="product-lower">
+      <div class="tabs" role="tablist">
+        <button class="is-active" type="button" data-tab="description">Description</button>
+        <button type="button" data-tab="shipping">Shipping</button>
+        <button type="button" data-tab="reviews">Reviews</button>
+      </div>
+      <div class="tab-panel rte is-active" data-tab-panel="description">
+        {{ product.description }}
+      </div>
+      <div class="tab-panel rte" data-tab-panel="shipping">
+        {{ section.settings.shipping_text }}
+      </div>
+      <div class="tab-panel" data-tab-panel="reviews">
+        <p>Product reviews appear here after a reviews app is installed. Add the app in the Apps section under this product.</p>
+      </div>
+    </div>
+  </div>
+
+  <script type="application/json" data-product-json>{{ product | json }}</script>
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": {{ product.title | json }},
+      "description": {{ product.description | strip_html | truncate: 500 | json }},
+      "sku": {{ current.sku | json }},
+      "brand": { "@type": "Brand", "name": {{ product.vendor | default: shop.name | json }} },
+      "offers": {
+        "@type": "Offer",
+        "priceCurrency": {{ shop.currency | json }},
+        "price": "{{ current.price | divided_by: 100.0 }}",
+        "availability": "https://schema.org/{% if current.available %}InStock{% else %}OutOfStock{% endif %}",
+        "url": {{ canonical_url | json }}
+      }
+    }
+  </script>
+</section>
+
+{% schema %}
+{
+  "name": "Product",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_custom_note",
+      "label": "Show customization note on every product",
+      "default": false
+    },
+    {
+      "type": "richtext",
+      "id": "shipping_text",
+      "label": "Shipping tab",
+      "default": "<p>Free USA shipping on orders of $400 or more. Shipping cost is calculated at checkout for smaller orders. Rider support: 951.246.3147, Monday through Friday, 9am to 4pm PST.</p>"
+    }
+  ]
+}
+{% endschema %}

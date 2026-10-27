@@ -1,0 +1,19 @@
+<div class="payment-row">
+  {%- if settings.show_payment_image -%}
+    <img
+      src="{{ 'payment-ic.png' | asset_url }}"
+      alt="PayPal, Visa, Discover, Mastercard, and American Express"
+      width="294"
+      height="32"
+    >
+  {%- endif -%}
+  {%- if settings.show_klarna_badge -%}
+    <span class="pay-badge">Klarna</span>
+  {%- endif -%}
+  {%- if settings.show_bread_badge -%}
+    <span class="pay-badge">Bread</span>
+  {%- endif -%}
+  {%- if settings.show_shop_pay_badge -%}
+    <span class="pay-badge">Shop Pay</span>
+  {%- endif -%}
+</div>

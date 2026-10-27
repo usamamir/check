@@ -1,0 +1,34 @@
+# Jettribe Shopify theme
+
+Upload `jettribe-shopify-theme.zip` in Shopify admin under **Online Store → Themes → Add theme → Upload zip file**. The zip root already contains `layout`, `templates`, `sections`, `assets`, and `config`.
+
+This is a Shopify Online Store 2.0 theme matched to the live Jettribe storefront: black header, red announcement bar, blue prices, Oswald and Roboto type, the same homepage tiles and hero photos, the same menu, rider-support footer, wishlist, quick view, and the same payment marks (PayPal, Visa, Discover, Mastercard, American Express, Klarna, and Bread).
+
+BigCommerce Stencil files cannot run on Shopify. Checkout, payment processing, customer passwords, and the product catalog are store settings and data, not theme files.
+
+## Payments
+
+The theme shows the payment marks and accelerated-checkout buttons. Turn the processors on in **Settings → Payments**:
+
+- **Shopify Payments** for Visa, Mastercard, American Express, Discover, Shop Pay, Apple Pay, and Google Pay
+- **PayPal**
+- **Klarna** (paste the Klarna on-site messaging client id into **Theme settings → Payments** to restore the live placement used on jettribe.com)
+- **Bread** by installing the Bread Shopify app, then paste the application link into the Financing page section
+
+Gift cards: create a gift card product with handle `gift-card`. The header link points at `/products/gift-card`.
+
+Free USA shipping over $400 is a message in the theme. Create the matching free-shipping rate in **Settings → Shipping and delivery**.
+
+## After upload
+
+1. Publish the theme.
+2. Import products and collections. Collection links in the menu and homepage use the current BigCommerce handles, such as `wetsuits`, `jettribe-vests`, `boots-shoes`, `pwc-covers`, `for-him`, `for-her`, `swimwear-dresses`, `gear-bags`, and `vp-fuels-containers`.
+3. Create pages with these handles, then paste the current page content into them: `shipping-info`, `return-policy`, `warranty-policy`, `privacy-policy`, `culture`, `careers`, `legal-mumbo-jumbo`, `jettribe-logos`, `dropshipping`, `sponsorship`, `size-chart`, `hot-water-the-movie`.
+4. Assign the **contact**, **financing**, and **customization** templates to pages with handles `contact`, `financing`, and `jettribe-customization-form`.
+5. Create a blog with handle `news`.
+6. In **Settings → Customer accounts**, choose classic accounts if the themed sign-in, register, and order pages should be used.
+7. In **Search & Discovery**, turn on collection filters (size, price, availability) so the collection sidebar matches the current store.
+
+The built-in Jettribe menu is on by default, including the links that only appear in the mobile menu. Switch **Theme settings → Navigation** to a Shopify menu after that menu is rebuilt.
+
+Returns stay on `https://jettribe.returnscenter.com`. Wishlist is saved in the browser. Order history and saved cards move only with a separate customer and order migration.

@@ -1,0 +1,11 @@
+<section class="page-wrap">
+  <div class="container narrow" style="max-width:960px;">
+    {% render 'breadcrumbs' %}
+    <h1 class="page-heading" style="justify-content:flex-start;"><span>{{ page.title }}</span></h1>
+    <div class="rte">{{ page.content }}</div>
+  </div>
+</section>
+
+{% schema %}
+{ "name": "Page", "settings": [] }
+{% endschema %}

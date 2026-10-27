@@ -1,0 +1,35 @@
+<nav class="breadcrumbs" aria-label="Breadcrumb">
+  <a href="{{ routes.root_url }}">Home</a>
+  {%- case request.page_type -%}
+    {%- when 'product' -%}
+      {%- if collection -%}
+        <span aria-hidden="true"> / </span>
+        <a href="{{ collection.url }}">{{ collection.title }}</a>
+      {%- endif -%}
+      <span aria-hidden="true"> / </span>
+      <span>{{ product.title }}</span>
+    {%- when 'collection' -%}
+      <span aria-hidden="true"> / </span>
+      <span>{{ collection.title }}</span>
+    {%- when 'page' -%}
+      <span aria-hidden="true"> / </span>
+      <span>{{ page.title }}</span>
+    {%- when 'blog' -%}
+      <span aria-hidden="true"> / </span>
+      <span>{{ blog.title }}</span>
+    {%- when 'article' -%}
+      <span aria-hidden="true"> / </span>
+      <a href="{{ blog.url }}">{{ blog.title }}</a>
+      <span aria-hidden="true"> / </span>
+      <span>{{ article.title }}</span>
+    {%- when 'search' -%}
+      <span aria-hidden="true"> / </span>
+      <span>Search</span>
+    {%- when 'cart' -%}
+      <span aria-hidden="true"> / </span>
+      <span>Cart</span>
+    {%- when 'list-collections' -%}
+      <span aria-hidden="true"> / </span>
+      <span>Collections</span>
+  {%- endcase -%}
+</nav>

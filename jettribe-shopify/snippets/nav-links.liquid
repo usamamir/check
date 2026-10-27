@@ -1,0 +1,23 @@
+<ul class="nav-list">
+  {%- for link in menu.links -%}
+    <li class="nav-item{% if link.links.size > 0 %} has-sub{% endif %}">
+      <a href="{{ link.url }}" {% if link.current %}aria-current="page"{% endif %}>{{ link.title }}</a>
+      {%- if link.links.size > 0 -%}
+        <ul class="nav-sub">
+          {%- for child in link.links -%}
+            <li class="nav-item{% if child.links.size > 0 %} has-sub{% endif %}">
+              <a href="{{ child.url }}">{{ child.title }}</a>
+              {%- if child.links.size > 0 -%}
+                <ul class="nav-sub">
+                  {%- for grandchild in child.links -%}
+                    <li><a href="{{ grandchild.url }}">{{ grandchild.title }}</a></li>
+                  {%- endfor -%}
+                </ul>
+              {%- endif -%}
+            </li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+    </li>
+  {%- endfor -%}
+</ul>

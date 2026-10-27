@@ -1,0 +1,109 @@
+<header class="header" role="banner">
+  <div class="header-main">
+    <div class="container header-main-inner">
+      <button class="menu-toggle" type="button" data-menu-toggle aria-expanded="false" aria-controls="SiteNav">
+        <span></span>
+        <span class="visually-hidden">Menu</span>
+      </button>
+      <a class="logo" href="{{ routes.root_url }}">
+        {%- if section.settings.logo != blank -%}
+          <img src="{{ section.settings.logo | image_url: width: 560 }}" alt="{{ shop.name }}" width="319" height="72">
+        {%- elsif settings.logo != blank -%}
+          <img src="{{ settings.logo | image_url: width: 560 }}" alt="{{ shop.name }}" width="319" height="72">
+        {%- else -%}
+          <img src="{{ 'logo.png' | asset_url }}" alt="{{ shop.name }}" width="319" height="72">
+        {%- endif -%}
+      </a>
+      <a class="cart-chip mobile-cart" href="{{ routes.cart_url }}" data-open-cart>
+        <span class="visually-hidden">Cart</span>
+        <span class="cart-count" data-cart-count>{{ cart.item_count }}</span>
+      </a>
+      <div class="header-tools">
+        <div class="utility">
+          {%- if settings.show_translate -%}
+            <div id="google_translate_element"></div>
+          {%- endif -%}
+          <a href="#" data-open-wish>Wishlists <span data-wish-count></span></a>
+          <a href="{{ settings.returns_url }}">Returns</a>
+          {%- if shop.customer_accounts_enabled -%}
+            {%- if customer -%}
+              <a href="{{ routes.account_url }}">My Account</a>
+              <span class="sep">/</span>
+              <a href="{{ routes.account_logout_url }}">Log out</a>
+            {%- else -%}
+              <a href="{{ routes.account_login_url }}">Sign in</a>
+              <span class="sep">/</span>
+              <a href="{{ routes.account_register_url }}">Register</a>
+            {%- endif -%}
+          {%- endif -%}
+          <a class="gift-link" href="{{ settings.gift_card_link }}">Gift Certificates</a>
+          <a class="cart-chip" href="{{ routes.cart_url }}" data-open-cart>
+            <span>Cart</span>
+            <span class="cart-count" data-cart-count>{{ cart.item_count }}</span>
+          </a>
+        </div>
+        <div class="header-search-row">
+          <a class="call-link" href="tel:{{ section.settings.phone | replace: ' ', '' | replace: '.', '' }}">
+            <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M6.6 10.8a15.1 15.1 0 006.6 6.6l2.2-2.2a1 1 0 011-.25 11.4 11.4 0 003.6.57 1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1 11.4 11.4 0 00.57 3.6 1 1 0 01-.25 1L6.6 10.8z"/></svg>
+            {{ section.settings.phone }}
+          </a>
+          <form class="search-form" action="{{ routes.search_url }}" method="get" role="search">
+            <label class="visually-hidden" for="HeaderSearch">Search</label>
+            <input id="HeaderSearch" type="search" name="q" placeholder="Search gear" autocomplete="off" data-predictive>
+            <input type="hidden" name="type" value="product">
+            <button type="submit" aria-label="Search">
+              <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="#161616" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+            </button>
+            <div class="predictive" data-predictive-results hidden></div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <nav class="site-nav" id="SiteNav" data-site-nav aria-label="Primary">
+    <div class="container">
+      {%- if settings.menu_source == 'shopify' and linklists[settings.menu].links.size > 0 -%}
+        {% render 'nav-links', menu: linklists[settings.menu] %}
+      {%- else -%}
+        {% render 'nav-jettribe' %}
+      {%- endif -%}
+      <div class="mobile-utilities">
+        <a href="tel:{{ section.settings.phone | replace: ' ', '' | replace: '.', '' }}">{{ section.settings.phone }}</a>
+        <a href="#" data-open-wish>Wishlist</a>
+        <a href="{{ settings.returns_url }}">Returns</a>
+        <a href="{{ routes.account_login_url }}">Sign in</a>
+        <a href="{{ settings.gift_card_link }}">Gift Certificates</a>
+      </div>
+    </div>
+  </nav>
+</header>
+
+{%- if settings.show_translate -%}
+  <script>
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({ pageLanguage: 'en', autoDisplay: false }, 'google_translate_element');
+    }
+  </script>
+  <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Header",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo",
+      "info": "Leave empty to use the Jettribe logo included with the theme."
+    },
+    {
+      "type": "text",
+      "id": "phone",
+      "label": "Phone",
+      "default": "951 246 3147"
+    }
+  ]
+}
+{% endschema %}
