@@ -708,6 +708,9 @@ body { top: 0 !important; }
   .cate-grid { grid-template-columns: 1fr 1fr; }
   .product { grid-template-columns: 1fr; padding: 16px; }
   .collection-layout, .account-layout, .cart-layout, .quick-grid, .videos, .blog-card { grid-template-columns: 1fr; }
+  .collection-layout { display: flex; flex-direction: column; }
+  .collection-layout > div { order: 1; }
+  .collection-layout > aside { order: 2; }
   .footer-grid, .finance-grid { grid-template-columns: 1fr 1fr; }
 }
 @media (max-width: 640px) {

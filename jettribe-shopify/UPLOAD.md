@@ -22,8 +22,8 @@ Free USA shipping over $400 is a message in the theme. Create the matching free-
 ## After upload
 
 1. Publish the theme.
-2. Import products and collections. Collection links in the menu and homepage use the current BigCommerce handles, such as `wetsuits`, `jettribe-vests`, `boots-shoes`, `pwc-covers`, `for-him`, `for-her`, `swimwear-dresses`, `gear-bags`, and `vp-fuels-containers`.
-3. Create pages with these handles, then paste the current page content into them: `shipping-info`, `return-policy`, `warranty-policy`, `privacy-policy`, `culture`, `careers`, `legal-mumbo-jumbo`, `jettribe-logos`, `dropshipping`, `sponsorship`, `size-chart`, `hot-water-the-movie`.
+2. Import `jettribe-catalog.csv` from the repo root in **Products → Import**. It has the live titles, prices, photos, descriptions, size options, and the open text fields used for vest name plates and race numbers (stored as `text-option:` tags). Then create collections with the same handles as jettribe.com. `jettribe-collections.csv` lists which product handle belongs in each collection. Menu and homepage links already use those handles (`wetsuits`, `jettribe-vests`, `boots-shoes`, `pwc-covers`, `for-him`, `for-her`, `swimwear-dresses`, `gear-bags`, `vp-fuels-containers`, and the rest of the catalog).
+3. Create pages with these handles and leave the body empty. The theme already contains the current page copy and shows it until you paste a replacement: `shipping-info`, `return-policy`, `warranty-policy`, `privacy-policy`, `culture`, `legal-mumbo-jumbo`, `jettribe-logos`, `dropshipping`, `sponsorship`, `size-chart`, `wetsuit-return-instructions`, plus the 2025 catalog pages. `careers` and `hot-water-the-movie` still need copy pasted from the live site if you use those links.
 4. Assign the **contact**, **financing**, and **customization** templates to pages with handles `contact`, `financing`, and `jettribe-customization-form`.
 5. Create a blog with handle `news`.
 6. In **Settings → Customer accounts**, choose classic accounts if the themed sign-in, register, and order pages should be used.

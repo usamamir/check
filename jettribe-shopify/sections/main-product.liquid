@@ -92,6 +92,15 @@
               <textarea id="CustomNote" name="properties[Customization]" placeholder="Colors, name, size notes"></textarea>
             </div>
           {%- endif -%}
+          {%- for tag in product.tags -%}
+            {%- if tag contains 'text-option:' -%}
+              {%- assign option_name = tag | remove: 'text-option:' -%}
+              <div class="field">
+                <label for="TextOption-{{ forloop.index }}">{{ option_name }}</label>
+                <input class="input" id="TextOption-{{ forloop.index }}" type="text" name="properties[{{ option_name }}]">
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
 
           <div class="qty-row">
             <label for="Quantity">Qty</label>

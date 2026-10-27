@@ -171,11 +171,12 @@
       var modal = qs("[data-quick-modal]");
       var box = qs("[data-quick-body]");
       if (box) {
+        var detailsUrl = quick.getAttribute("data-url") || "product.html";
         box.innerHTML = '<div class="quick-grid"><div><img src="' + quick.getAttribute("data-img") + '" alt=""></div><div><h3>' +
           quick.getAttribute("data-title") + '</h3><div class="price">Now: ' + money(Number(quick.getAttribute("data-price"))) +
           '</div><button class="btn btn--full" type="button" data-add="' + quick.getAttribute("data-quick") + '" data-title="' +
           quick.getAttribute("data-title") + '" data-price="' + quick.getAttribute("data-price") + '" data-img="' + quick.getAttribute("data-img") +
-          '">Add to Cart</button><p style="margin-top:10px"><a href="product.html">View full details</a></p></div></div>';
+          '">Add to Cart</button><p style="margin-top:10px"><a href="' + detailsUrl + '">View full details</a></p></div></div>';
       }
       if (modal) modal.hidden = false;
       var shade = qs("[data-modal-backdrop]");
@@ -199,30 +200,31 @@
     save(items);
   });
 
-  qsa("[data-option-group]").forEach(function (group) {
-    group.addEventListener("change", function (event) {
-      qsa("label", group).forEach(function (label) { label.classList.remove("is-selected"); });
-      if (event.target.closest("label")) event.target.closest("label").classList.add("is-selected");
-    });
+  document.addEventListener("change", function (event) {
+    var group = event.target.closest("[data-option-group]");
+    if (!group) return;
+    qsa("label", group).forEach(function (label) { label.classList.remove("is-selected"); });
+    var label = event.target.closest("label");
+    if (label) label.classList.add("is-selected");
   });
 
-  qsa("[data-tab]").forEach(function (tab) {
-    tab.addEventListener("click", function () {
-      qsa("[data-tab]").forEach(function (el) { el.classList.remove("is-active"); });
-      qsa("[data-tab-panel]").forEach(function (el) { el.classList.remove("is-active"); });
+  document.addEventListener("click", function (event) {
+    var tab = event.target.closest("[data-tab]");
+    if (tab) {
+      var scope = tab.closest(".product-lower") || document;
+      qsa("[data-tab]", scope).forEach(function (el) { el.classList.remove("is-active"); });
+      qsa("[data-tab-panel]", scope).forEach(function (el) { el.classList.remove("is-active"); });
       tab.classList.add("is-active");
-      var panel = qs('[data-tab-panel="' + tab.getAttribute("data-tab") + '"]');
+      var panel = qs('[data-tab-panel="' + tab.getAttribute("data-tab") + '"]', scope);
       if (panel) panel.classList.add("is-active");
-    });
-  });
-
-  qsa("[data-thumb]").forEach(function (thumb) {
-    thumb.addEventListener("click", function () {
+    }
+    var thumb = event.target.closest("[data-thumb]");
+    if (thumb) {
       var main = qs("[data-gallery-main]");
       if (main) main.src = thumb.getAttribute("data-src");
       qsa("[data-thumb]").forEach(function (el) { el.classList.remove("is-active"); });
       thumb.classList.add("is-active");
-    });
+    }
   });
 
   var contact = qs("[data-contact]");
@@ -235,29 +237,34 @@
     });
   }
 
-  var productForm = qs("[data-product-add]");
-  if (productForm) {
-    productForm.addEventListener("submit", function (event) {
-      event.preventDefault();
-      var size = (qs("[data-option-group] input:checked") || {}).value || "L";
-      var btn = qs("[data-product-add] [data-add]");
-      if (btn) btn.setAttribute("data-option", "Size: " + size);
-      var items = load();
-      var id = "vest-multi-" + size;
-      var found = items.filter(function (item) { return item.id === id; })[0];
-      if (found) found.qty += Number((qs("#Quantity") || {}).value || 1);
-      else items.push({
-        id: id,
-        title: "RS-25P Fade Side Entry Impact Vest | Multi",
-        price: 102.89,
-        qty: Number((qs("#Quantity") || {}).value || 1),
-        img: "images/p1.jpg",
-        option: "Size: " + size
-      });
-      save(items);
-      openCart();
+  document.addEventListener("submit", function (event) {
+    var form = event.target.closest("[data-product-add]");
+    if (!form) return;
+    event.preventDefault();
+    var opts = [];
+    qsa("[data-option-group]", form).forEach(function (group) {
+      var checked = qs("input:checked", group);
+      if (checked) opts.push((group.getAttribute("data-option-name") || "Option") + ": " + checked.value);
     });
-  }
+    qsa("input[type=text], textarea", form).forEach(function (field) {
+      if (field.value) opts.push((field.name || "Note") + ": " + field.value);
+    });
+    var qty = Number((qs("[name=quantity]", form) || {}).value || 1);
+    var id = (form.getAttribute("data-id") || "item") + "|" + opts.join("|");
+    var items = load();
+    var found = items.filter(function (item) { return item.id === id; })[0];
+    if (found) found.qty += qty;
+    else items.push({
+      id: id,
+      title: form.getAttribute("data-title") || "Jettribe",
+      price: Number(form.getAttribute("data-price") || 0),
+      qty: qty,
+      img: form.getAttribute("data-img") || "",
+      option: opts.join(", ")
+    });
+    save(items);
+    openCart();
+  });
 
   paint(load());
 })();
