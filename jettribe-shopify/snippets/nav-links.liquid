@@ -3,20 +3,21 @@
     <li class="nav-item{% if link.links.size > 0 %} has-sub{% endif %}">
       <a href="{{ link.url }}" {% if link.current %}aria-current="page"{% endif %}>{{ link.title }}</a>
       {%- if link.links.size > 0 -%}
-        <ul class="nav-sub">
-          {%- for child in link.links -%}
-            <li class="nav-item{% if child.links.size > 0 %} has-sub{% endif %}">
-              <a href="{{ child.url }}">{{ child.title }}</a>
-              {%- if child.links.size > 0 -%}
-                <ul class="nav-sub">
+        <div class="nav-sub">
+          <ul class="mega-side">
+            {%- for child in link.links -%}
+              <li class="{% if child.links.size > 0 %}nav-item has-sub{% endif %}">
+                <a href="{{ child.url }}">{{ child.title }}</a>
+                <div class="mega-fly">
+                  <a class="mega-go" href="{{ child.url }}">Shop all {{ child.title }}</a>
                   {%- for grandchild in child.links -%}
-                    <li><a href="{{ grandchild.url }}">{{ grandchild.title }}</a></li>
+                    <a href="{{ grandchild.url }}">{{ grandchild.title }}</a>
                   {%- endfor -%}
-                </ul>
-              {%- endif -%}
-            </li>
-          {%- endfor -%}
-        </ul>
+                </div>
+              </li>
+            {%- endfor -%}
+          </ul>
+        </div>
       {%- endif -%}
     </li>
   {%- endfor -%}
