@@ -22,12 +22,13 @@ Free USA shipping over $400 is a message in the theme. Create the matching free-
 ## After upload
 
 1. Publish the theme.
-2. Import `jettribe-products.csv` in **Products → Import**. It has all 539 live products: titles, prices, photos, descriptions, size options, and the open text fields used for vest name plates and race numbers (stored as `text-option:` tags). The Collection column places each product in its main department, and Shopify creates that collection on import (`Wetsuits`, `Jettribe Vests`, `Accessories`, and the other homepage categories). A product CSV can name only one collection per product, so subcategory pages stay empty until those products are added in **Products → Collections**. `jettribe-collections.csv` is the full map of every category a product belongs to.
-3. Create pages with these handles and leave the body empty. The theme already contains the current page copy and shows it until you paste a replacement: `shipping-info`, `return-policy`, `warranty-policy`, `privacy-policy`, `culture`, `legal-mumbo-jumbo`, `jettribe-logos`, `dropshipping`, `sponsorship`, `size-chart`, `wetsuit-return-instructions`, plus the 2025 catalog pages. `careers` and `hot-water-the-movie` still need copy pasted from the live site if you use those links.
-4. Assign the **contact**, **financing**, and **customization** templates to pages with handles `contact`, `financing`, and `jettribe-customization-form`.
-5. Create a blog with handle `news`.
-6. In **Settings → Customer accounts**, choose classic accounts if the themed sign-in, register, and order pages should be used.
-7. In **Search & Discovery**, turn on collection filters (size, price, availability) so the collection sidebar matches the current store.
+2. Import `jettribe-products.csv` in **Products → Import**. It has the live products: titles, prices, photos, descriptions, size options, and the open text fields used for vest name plates and race numbers (stored as `text-option:` tags). Leave **Overwrite products with matching handles** unchecked the first time. If you already imported it, import it once more with overwrite unchecked so the two products added later are created and the rest are left alone.
+3. Import every file in `jettribe-category-links.zip`, in order from `01` through `20`. Shopify can put a product in only one category per import, and each file adds the next category from jettribe.com. For these files, check **Overwrite products with matching handles**. Wait for Shopify’s finished email before the next file. Prices and photos are not in these files, so they stay as they are. After the last file, Ride Gear, Outlet, Wetsuits, and the other categories list the same products as jettribe.com.
+4. Create pages with these handles and leave the body empty. The theme already contains the current page copy and shows it until you paste a replacement: `shipping-info`, `return-policy`, `warranty-policy`, `privacy-policy`, `culture`, `legal-mumbo-jumbo`, `jettribe-logos`, `dropshipping`, `sponsorship`, `size-chart`, `wetsuit-return-instructions`, plus the 2025 catalog pages. `careers` and `hot-water-the-movie` still need copy pasted from the live site if you use those links.
+5. Assign the **contact**, **financing**, and **customization** templates to pages with handles `contact`, `financing`, and `jettribe-customization-form`.
+6. Create a blog with handle `news`.
+7. In **Settings → Customer accounts**, choose classic accounts if the themed sign-in, register, and order pages should be used.
+8. In **Search & Discovery**, turn on collection filters (size, price, availability) so the collection sidebar matches the current store.
 
 The built-in Jettribe menu is on by default, including the links that only appear in the mobile menu. Switch **Theme settings → Navigation** to a Shopify menu after that menu is rebuilt.
 
