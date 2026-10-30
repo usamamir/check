@@ -5,6 +5,8 @@ Upload the theme and the product files separately. The theme zip is the only fil
 1. Theme
    Upload jettribe-shopify-theme.zip in Online Store, Themes, Add theme, Upload zip file.
    Leave the zip closed. Publish the theme.
+   Menu categories, including 2026 JTR Series, open from this theme and list the imported products.
+   A category does not have to exist in Shopify first. Color filters are circles. Size filters are buttons.
 
 2. Products
    In Products, Import, choose jettribe-products.csv.

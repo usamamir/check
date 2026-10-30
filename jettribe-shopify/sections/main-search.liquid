@@ -1,5 +1,7 @@
 <section class="page-wrap">
   <div class="container">
+    {% render 'route-boot' %}
+    <div data-jt-default>
     {% render 'breadcrumbs' %}
     <h1 class="page-heading" style="justify-content:flex-start;"><span>Search</span></h1>
     <form action="{{ routes.search_url }}" method="get" class="search-form search-form--page" style="max-width:640px;margin-bottom:18px;">
@@ -42,6 +44,7 @@
         </div>
       </div>
     {%- endif -%}
+    </div>
   </div>
 </section>
 

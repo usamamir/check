@@ -1,4 +1,6 @@
 {% case page.handle %}
+  {% when 'financing' %}{% render 'copy-financing' %}
+  {% when 'careers' %}{% render 'copy-careers' %}
   {% when 'warranty-policy' %}{% render 'copy-warranty-policy' %}
   {% when 'legal-mumbo-jumbo' %}{% render 'copy-legal-mumbo-jumbo' %}
   {% when '2025-catalog-pdf' %}{% render 'copy-2025-catalog-pdf' %}

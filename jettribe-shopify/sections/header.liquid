@@ -42,13 +42,13 @@
         <label class="visually-hidden" for="SearchDept">Department</label>
         <select id="SearchDept" data-search-dept aria-label="Department">
           <option value="">All</option>
-          <option value="/collections/collections">Collections</option>
-          <option value="/collections/ride-gear">Ride Gear</option>
-          <option value="/collections/casual-wear">Casual Wear</option>
-          <option value="/collections/accessories">Accessories</option>
-          <option value="/collections/pwc-covers">PWC Covers</option>
-          <option value="/collections/outlet">Outlet</option>
-          <option value="/collections/havasu-rain-check-sale">Havasu Sale</option>
+          <option value="/search?jtcat=collections">Collections</option>
+          <option value="/search?jtcat=ride-gear">Ride Gear</option>
+          <option value="/search?jtcat=casual-wear">Casual Wear</option>
+          <option value="/search?jtcat=accessories">Accessories</option>
+          <option value="/search?jtcat=pwc-covers">PWC Covers</option>
+          <option value="/search?jtcat=outlet">Outlet</option>
+          <option value="/search?jtcat=havasu-rain-check-sale">Havasu Sale</option>
         </select>
         <label class="visually-hidden" for="HeaderSearch">Search</label>
         <input id="HeaderSearch" type="search" name="q" placeholder="Search gear" autocomplete="off" data-predictive>
@@ -89,10 +89,10 @@
 
   <div class="service-bar">
     <div class="container service-bar-inner">
-      <a href="/pages/shipping-info"><strong>Free USA shipping</strong> over $400</a>
+      <a href="/search?jtpage=shipping-info"><strong>Free USA shipping</strong> over $400</a>
       <a href="tel:{{ section.settings.phone | replace: ' ', '' | replace: '.', '' }}"><strong>Rider support</strong> {{ section.settings.phone }}</a>
       <a href="{{ settings.returns_url }}"><strong>Hassle-free returns</strong></a>
-      <a href="/pages/financing"><strong>Pay over time</strong> with Klarna or Bread</a>
+      <a href="/search?jtpage=financing"><strong>Pay over time</strong> with Klarna or Bread</a>
     </div>
   </div>
 </header>

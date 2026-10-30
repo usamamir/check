@@ -936,6 +936,7 @@ body { top: 0 !important; }
   border-radius: 8px;
 }
 .swatch i {
+  display: block;
   width: 32px;
   height: 32px;
   border-radius: 50%;
@@ -944,9 +945,54 @@ body { top: 0 !important; }
   box-shadow: inset 0 0 0 2px #fff;
   flex: none;
 }
+.facet a.swatch,
+.facet button.swatch {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 72px;
+  padding: 4px;
+  background: transparent;
+  font-size: 12px;
+  line-height: 1.2;
+  text-align: center;
+}
+.facet a.swatch:hover,
+.facet a.swatch.is-active,
+.facet button.swatch:hover,
+.facet button.swatch.is-active {
+  background: transparent;
+  color: var(--red);
+}
+.facet a.size-chip {
+  display: inline-flex;
+  width: auto;
+  padding: 7px 10px;
+  background: #fff;
+  color: #161616;
+}
+.facet a.size-chip:hover,
+.facet a.size-chip.is-active {
+  background: #161616;
+  color: #fff;
+}
 .swatch:hover { color: var(--red); }
 .swatch.is-active { color: var(--red); font-weight: 700; }
-.swatch.is-active i { box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--red); }
+.swatch.is-active i,
+.option-values--color label.is-selected i { box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--red); }
+.option-values--color { gap: 12px 14px; }
+.option-values--color label.swatch {
+  border: 0;
+  background: transparent;
+  padding: 4px;
+  width: 72px;
+  min-width: 0;
+}
+.option-values--color label.is-selected {
+  background: transparent;
+  color: var(--red);
+  border-color: transparent;
+}
 .size-chips { display: flex; flex-wrap: wrap; gap: 8px; padding: 12px; }
 .size-chip {
   display: inline-flex;
@@ -966,6 +1012,10 @@ button.swatch, button.size-chip { font-family: inherit; cursor: pointer; }
 button.swatch { background: transparent; border: 0; }
 button.size-chip { background: #fff; }
 details[hidden] { display: none !important; }
+[data-jt-loading] { display: none; }
+.jt-routed [data-jt-default] { display: none; }
+.jt-routed [data-jt-loading] { display: flex; }
+.jt-routed.is-jt-ready [data-jt-loading] { display: none; }
 .search-form--page { display: block; background: #fff; border: 1px solid #ddd; }
 .search-form--page input[type="search"] { color: #161616; background: #fff; }
 .price-range { padding: 12px; }

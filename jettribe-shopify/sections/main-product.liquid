@@ -54,10 +54,15 @@
 
           {%- unless product.has_only_default_variant -%}
             {%- for option in product.options_with_values -%}
+              {%- assign option_key = option.name | downcase -%}
+              {%- assign option_is_color = false -%}
+              {%- if option_key contains 'color' or option_key contains 'colour' -%}
+                {%- assign option_is_color = true -%}
+              {%- endif -%}
               <div class="option-label">{{ option.name }}</div>
-              <div class="option-values" data-option-index="{{ forloop.index0 }}">
+              <div class="option-values{% if option_is_color %} option-values--color{% endif %}" data-option-index="{{ forloop.index0 }}">
                 {%- for value in option.values -%}
-                  <label class="{% if option.selected_value == value %}is-selected{% endif %}">
+                  <label class="{% if option_is_color %}swatch {% endif %}{% if option.selected_value == value %}is-selected{% endif %}">
                     <input
                       type="radio"
                       name="option-{{ option.position }}"
@@ -65,6 +70,10 @@
                       data-option-input
                       {% if option.selected_value == value %}checked{% endif %}
                     >
+                    {%- if option_is_color -%}
+                      {%- capture swatch -%}{% render 'swatch-color', label: value %}{%- endcapture -%}
+                      <i style="--swatch: {{ swatch | strip }};"></i>
+                    {%- endif -%}
                     <span>{{ value }}</span>
                   </label>
                 {%- endfor -%}
@@ -130,7 +139,7 @@
 
         <div class="pay-note">
           <p>Checkout accepts the same methods as jettribe.com once they are turned on in Shopify Payments: PayPal, Visa, Mastercard, American Express, Discover, Shop Pay, Apple Pay, and Google Pay.</p>
-          <p>Pay over time with Klarna or <a href="/pages/financing">Bread financing</a>.</p>
+          <p>Pay over time with Klarna or <a href="/search?jtpage=financing">Bread financing</a>.</p>
           {%- if settings.klarna_client_id != blank and settings.klarna_product_placement_id != blank -%}
             <klarna-placement
               data-id="{{ settings.klarna_product_placement_id }}"

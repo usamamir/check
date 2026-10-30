@@ -29,6 +29,38 @@
     qsa("[data-cart-count]").forEach(function (el) { el.textContent = count; });
   }
 
+  var swatchColors = [
+    ["black", "#161616"],
+    ["navy", "#1e3a8a"],
+    ["blue", "#1d4ed8"],
+    ["teal", "#0f766e"],
+    ["aqua", "#3ec6d4"],
+    ["green", "#2f8f4e"],
+    ["pink", "#e56aa0"],
+    ["grey", "#8a8a8a"],
+    ["gray", "#8a8a8a"],
+    ["orange", "#f97316"],
+    ["purple", "#7c3aed"],
+    ["yellow", "#eab308"],
+    ["white", "#f7f7f7"],
+    ["red", "#e53d42"]
+  ];
+  function swatchBackground(label) {
+    var key = String(label || "").toLowerCase();
+    var hits = [];
+    swatchColors.forEach(function (row) {
+      if (key.indexOf(row[0]) !== -1 && hits.indexOf(row[1]) === -1) hits.push(row[1]);
+    });
+    if (!hits.length) return "#c8c8c8";
+    if (hits.length === 1) return hits[0];
+    return "linear-gradient(135deg, " + hits[0] + " 50%, " + hits[1] + " 50%)";
+  }
+  function escapeHtml(value) {
+    return String(value).replace(/[&<>"']/g, function (ch) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch];
+    });
+  }
+
   /* Mobile nav */
   var menuToggle = qs("[data-menu-toggle]");
   var siteNav = qs("[data-site-nav]");
@@ -405,9 +437,11 @@
         prod.variants.forEach(function (variant) {
           if (values.indexOf(variant.options[index]) === -1) values.push(variant.options[index]);
         });
-        optionsHtml += '<div class="option-label">' + name + '</div><div class="option-values" data-option-index="' + index + '">';
+        var isColor = /colou?r/i.test(name);
+        optionsHtml += '<div class="option-label">' + name + '</div><div class="option-values' + (isColor ? " option-values--color" : "") + '" data-option-index="' + index + '">';
         values.forEach(function (value, valueIndex) {
-          optionsHtml += '<label class="' + (valueIndex === 0 ? "is-selected" : "") + '"><input type="radio" name="quick-option-' + index + '" value="' + value.replace(/"/g, "&quot;") + '" ' + (valueIndex === 0 ? "checked" : "") + ' data-option-input><span>' + value + '</span></label>';
+          var swatch = isColor ? '<i style="--swatch: ' + swatchBackground(value) + '"></i>' : "";
+          optionsHtml += '<label class="' + (isColor ? "swatch " : "") + (valueIndex === 0 ? "is-selected" : "") + '"><input type="radio" name="quick-option-' + index + '" value="' + value.replace(/"/g, "&quot;") + '" ' + (valueIndex === 0 ? "checked" : "") + ' data-option-input>' + swatch + '<span>' + escapeHtml(value) + '</span></label>';
         });
         optionsHtml += "</div>";
       });
@@ -680,11 +714,6 @@
     ["Yellow", "#eab308", /\byellow\b/i],
     ["Navy", "#1e3a8a", /\bnavy\b/i]
   ];
-  function escapeHtml(value) {
-    return String(value).replace(/[&<>"']/g, function (ch) {
-      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch];
-    });
-  }
   function titleColors(text) {
     return colorWords.filter(function (row) { return row[2].test(text || ""); }).map(function (row) { return row[0]; });
   }
@@ -740,6 +769,8 @@
       });
     });
   }
+
+  document.addEventListener("catalog:rendered", paintCompare);
 
   /* Cart page quantity posts stay native. Gallery on cart is server rendered. */
   qsa("[data-country-select]").forEach(function (country) {

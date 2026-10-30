@@ -3,10 +3,11 @@
 {%- assign has_size_filter = false -%}
 {%- for filter in facet_filters -%}
   {%- assign facet_label = filter.label | downcase -%}
-  {%- if facet_label contains 'olor' -%}
+  {%- assign facet_param = filter.param_name | downcase -%}
+  {%- if facet_label contains 'color' or facet_label contains 'colour' or facet_param contains 'color' or facet_param contains 'colour' or filter.presentation == 'swatch' -%}
     {%- assign has_color_filter = true -%}
   {%- endif -%}
-  {%- if facet_label contains 'ize' -%}
+  {%- if facet_label contains 'size' or facet_param contains 'size' -%}
     {%- assign has_size_filter = true -%}
   {%- endif -%}
 {%- endfor -%}
@@ -14,6 +15,15 @@
 {%- if facet_filters != blank and facet_filters.size > 0 -%}
   {%- for filter in facet_filters -%}
     {%- assign facet_label = filter.label | downcase -%}
+    {%- assign facet_param = filter.param_name | downcase -%}
+    {%- assign is_color = false -%}
+    {%- assign is_size = false -%}
+    {%- if facet_label contains 'color' or facet_label contains 'colour' or facet_param contains 'color' or facet_param contains 'colour' or filter.presentation == 'swatch' -%}
+      {%- assign is_color = true -%}
+    {%- endif -%}
+    {%- if facet_label contains 'size' or facet_param contains 'size' -%}
+      {%- assign is_size = true -%}
+    {%- endif -%}
     <details class="facet" open>
       <summary>{{ filter.label }}</summary>
       {%- if filter.type == 'price_range' -%}
@@ -61,16 +71,22 @@
           </div>
           <button class="btn" type="submit">Apply</button>
         </form>
-      {%- elsif facet_label contains 'olor' -%}
+      {%- elsif is_color -%}
         <div class="color-swatches">
           {%- for value in filter.values -%}
-            {%- capture swatch -%}{% render 'swatch-color', label: value.label %}{%- endcapture -%}
+            {%- capture swatch -%}
+              {%- if value.swatch.color != blank -%}
+                {{ value.swatch.color }}
+              {%- else -%}
+                {% render 'swatch-color', label: value.label %}
+              {%- endif -%}
+            {%- endcapture -%}
             <a class="swatch{% if value.active %} is-active{% endif %}" style="--swatch: {{ swatch | strip }};" href="{% if value.active %}{{ value.url_to_remove }}{% else %}{{ value.url_to_add }}{% endif %}" title="{{ value.label }} ({{ value.count }})">
               <i></i><span>{{ value.label }}</span>
             </a>
           {%- endfor -%}
         </div>
-      {%- elsif facet_label contains 'ize' -%}
+      {%- elsif is_size -%}
         <div class="size-chips">
           {%- for value in filter.values -%}
             <a class="size-chip{% if value.active %} is-active{% endif %}" href="{% if value.active %}{{ value.url_to_remove }}{% else %}{{ value.url_to_add }}{% endif %}">{{ value.label }}</a>
@@ -93,11 +109,11 @@
   <div class="facet">
     <div class="side-heading">Shop</div>
     <ul>
-      <li><a href="/collections/wetsuits">Wetsuits</a></li>
-      <li><a href="/collections/jettribe-vests">Vests</a></li>
-      <li><a href="/collections/accessories">Accessories</a></li>
-      <li><a href="/collections/pwc-covers">Covers</a></li>
-      <li><a href="/collections/outlet">Outlet</a></li>
+      <li><a href="/search?jtcat=wetsuits">Wetsuits</a></li>
+      <li><a href="/search?jtcat=jettribe-vests">Vests</a></li>
+      <li><a href="/search?jtcat=accessories">Accessories</a></li>
+      <li><a href="/search?jtcat=pwc-covers">Covers</a></li>
+      <li><a href="/search?jtcat=outlet">Outlet</a></li>
     </ul>
   </div>
 {%- endif -%}

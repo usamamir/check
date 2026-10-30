@@ -1,6 +1,6 @@
 # Jettribe Shopify theme
 
-Upload `jettribe-shopify-theme.zip` in Shopify admin under **Online Store → Themes → Add theme → Upload zip file**. The zip root already contains `layout`, `templates`, `sections`, `assets`, and `config`.
+Upload `jettribe-shopify-theme.zip` in Shopify admin under **Online Store → Themes → Add theme → Upload zip file**. The zip root already contains `layout`, `templates`, `sections`, `assets`, and `config`. Leave the zip closed. Publish the theme. Menu categories, including 2026 JTR Series, open from the theme and list imported products. Shopify does not have to contain that collection first. Color filters are circles.
 
 This is a Shopify Online Store 2.0 theme matched to the live Jettribe storefront: black header, red announcement bar, blue prices, Oswald and Roboto type, the same homepage tiles and hero photos, the same menu, rider-support footer, wishlist, quick view, and the same payment marks (PayPal, Visa, Discover, Mastercard, American Express, Klarna, and Bread).
 

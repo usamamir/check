@@ -53,7 +53,7 @@
       "settings": {
         "text": "Pay with PayPal or major cards. Pay over time with Klarna or Bread.",
         "link_label": "See financing",
-        "link": "/pages/financing"
+        "link": "/search?jtpage=financing"
       }
     },
     "categories": {
@@ -64,7 +64,7 @@
           "type": "category",
           "settings": {
             "title": "Wetsuits",
-            "link": "/collections/wetsuits",
+            "link": "/search?jtcat=wetsuits",
             "asset": "cat-wetsuits.jpg",
             "alt": "Wetsuits"
           }
@@ -73,7 +73,7 @@
           "type": "category",
           "settings": {
             "title": "Vests",
-            "link": "/collections/jettribe-vests",
+            "link": "/search?jtcat=jettribe-vests",
             "asset": "cat-vests.jpg",
             "alt": "Vests"
           }
@@ -82,7 +82,7 @@
           "type": "category",
           "settings": {
             "title": "Accessories",
-            "link": "/collections/accessories",
+            "link": "/search?jtcat=accessories",
             "asset": "cat-accessories.jpg",
             "alt": "Accessories"
           }
@@ -91,7 +91,7 @@
           "type": "category",
           "settings": {
             "title": "Boots & Shoes",
-            "link": "/collections/boots-shoes",
+            "link": "/search?jtcat=boots-shoes",
             "asset": "cat-boots.jpg",
             "alt": "Boots and shoes"
           }
@@ -100,7 +100,7 @@
           "type": "category",
           "settings": {
             "title": "Gloves",
-            "link": "/collections/gloves",
+            "link": "/search?jtcat=gloves",
             "asset": "cat-gloves.jpg",
             "alt": "Gloves"
           }
@@ -109,7 +109,7 @@
           "type": "category",
           "settings": {
             "title": "Goggles",
-            "link": "/collections/goggles",
+            "link": "/search?jtcat=goggles",
             "asset": "cat-goggles.jpg",
             "alt": "Goggles"
           }
@@ -118,7 +118,7 @@
           "type": "category",
           "settings": {
             "title": "Covers",
-            "link": "/collections/pwc-covers",
+            "link": "/search?jtcat=pwc-covers",
             "asset": "cat-covers.jpg",
             "alt": "PWC covers"
           }
@@ -127,7 +127,7 @@
           "type": "category",
           "settings": {
             "title": "Men's Apparel",
-            "link": "/collections/for-him",
+            "link": "/search?jtcat=for-him",
             "asset": "cat-mens.jpg",
             "alt": "Men's apparel"
           }
@@ -136,7 +136,7 @@
           "type": "category",
           "settings": {
             "title": "Ladies Apparel",
-            "link": "/collections/for-her",
+            "link": "/search?jtcat=for-her",
             "asset": "cat-ladies.jpg",
             "alt": "Ladies apparel"
           }
@@ -145,7 +145,7 @@
           "type": "category",
           "settings": {
             "title": "Swim Wear",
-            "link": "/collections/swimwear-dresses",
+            "link": "/search?jtcat=swimwear",
             "asset": "cat-swim.jpg",
             "alt": "Swim wear"
           }
@@ -154,7 +154,7 @@
           "type": "category",
           "settings": {
             "title": "Protection",
-            "link": "/collections/protective-gear",
+            "link": "/search?jtcat=protective-gear",
             "asset": "cat-protection.jpg",
             "alt": "Protection"
           }
@@ -163,7 +163,7 @@
           "type": "category",
           "settings": {
             "title": "Travel Gear",
-            "link": "/collections/gear-bags",
+            "link": "/search?jtcat=gear-bags",
             "asset": "cat-travel.jpg",
             "alt": "Travel gear"
           }
@@ -172,7 +172,7 @@
           "type": "category",
           "settings": {
             "title": "Custom Gear",
-            "link": "/collections/custom-gear",
+            "link": "/search?jtcat=customized-gear-factory",
             "asset": "cat-custom.jpg",
             "alt": "Custom gear"
           }
@@ -181,7 +181,7 @@
           "type": "category",
           "settings": {
             "title": "PWC Care",
-            "link": "/collections/pwc-care",
+            "link": "/search?jtcat=pwc-care",
             "asset": "cat-care.jpg",
             "alt": "PWC care"
           }
@@ -190,7 +190,7 @@
           "type": "category",
           "settings": {
             "title": "Hard Goods",
-            "link": "/collections/vp-fuels-containers",
+            "link": "/search?jtcat=vp-racing-containers",
             "asset": "cat-hardgoods.jpg",
             "alt": "Hard goods"
           }

@@ -1,0 +1,14 @@
+<script>
+  (function () {
+    var q = new URLSearchParams(window.location.search);
+    var path = window.location.pathname;
+    if (q.get("jtcat") || q.get("jtpage") || /\/collections\/[^/]+\/?$/.test(path) || /\/pages\/[^/]+\/?$/.test(path) || /\/blogs\/news(?:\/|$)/.test(path)) {
+      document.documentElement.classList.add("jt-routed");
+    }
+  })();
+</script>
+<div data-jt-route data-catalog="{{ 'jt-categories.json' | asset_url }}">
+  <p data-jt-loading class="page-heading" style="justify-content:flex-start;"><span>Loading…</span></p>
+  {% render 'routed-pages' %}
+  <div data-jt-category-root></div>
+</div>
