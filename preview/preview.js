@@ -99,6 +99,21 @@
         }
       });
     });
+    var menuTimer = null;
+    qsa(".nav-list > .nav-item", nav).forEach(function (item) {
+      item.addEventListener("mouseenter", function () {
+        if (window.matchMedia("(max-width: 991px)").matches) return;
+        clearTimeout(menuTimer);
+        qsa(".nav-list > .nav-item.is-mega", nav).forEach(function (other) {
+          if (other !== item) other.classList.remove("is-mega");
+        });
+        item.classList.add("is-mega");
+      });
+      item.addEventListener("mouseleave", function () {
+        if (window.matchMedia("(max-width: 991px)").matches) return;
+        menuTimer = setTimeout(function () { item.classList.remove("is-mega"); }, 320);
+      });
+    });
   }
 
   qsa("[data-slider]").forEach(function (root) {

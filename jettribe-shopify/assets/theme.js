@@ -48,6 +48,38 @@
     });
   }
 
+  /* Keep a menu panel open while the pointer travels into it. */
+  function bindMenuIntent(nav) {
+    if (!nav) return;
+    var timer = null;
+    qsa(".nav-list > .nav-item", nav).forEach(function (item) {
+      item.addEventListener("mouseenter", function () {
+        if (window.matchMedia("(max-width: 991px)").matches) return;
+        clearTimeout(timer);
+        qsa(".nav-list > .nav-item.is-mega", nav).forEach(function (other) {
+          if (other !== item) other.classList.remove("is-mega");
+        });
+        item.classList.add("is-mega");
+      });
+      item.addEventListener("mouseleave", function () {
+        if (window.matchMedia("(max-width: 991px)").matches) return;
+        timer = setTimeout(function () { item.classList.remove("is-mega"); }, 320);
+      });
+    });
+  }
+  bindMenuIntent(siteNav);
+
+  qsa(".search-form--split").forEach(function (form) {
+    form.addEventListener("submit", function (event) {
+      var dept = qs("[data-search-dept]", form);
+      var field = qs("input[name='q']", form);
+      if (!dept || !dept.value) return;
+      if (field && field.value.trim()) return;
+      event.preventDefault();
+      window.location.href = dept.value;
+    });
+  });
+
   /* Sliders */
   function setupSlider(root) {
     if (!root) return;
@@ -632,6 +664,82 @@
     minR.addEventListener("change", function () { box.submit(); });
     maxR.addEventListener("change", function () { box.submit(); });
   });
+
+  var colorWords = [
+    ["Black", "#161616", /\bblack\b/i],
+    ["Blue", "#1d4ed8", /\bblue\b/i],
+    ["Red", "#e53d42", /\bred\b/i],
+    ["Teal", "#0f766e", /\bteal\b/i],
+    ["Green", "#2f8f4e", /\bgreen\b/i],
+    ["Pink", "#e56aa0", /\bpink\b/i],
+    ["Grey", "#8a8a8a", /\bgr[ae]y\b/i],
+    ["Aqua", "#3ec6d4", /\baqua\b/i],
+    ["Orange", "#f97316", /\borange\b/i],
+    ["White", "#f7f7f7", /\bwhite\b/i],
+    ["Purple", "#7c3aed", /\bpurple\b/i],
+    ["Yellow", "#eab308", /\byellow\b/i],
+    ["Navy", "#1e3a8a", /\bnavy\b/i]
+  ];
+  function escapeHtml(value) {
+    return String(value).replace(/[&<>"']/g, function (ch) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch];
+    });
+  }
+  function titleColors(text) {
+    return colorWords.filter(function (row) { return row[2].test(text || ""); }).map(function (row) { return row[0]; });
+  }
+  var colorList = qs("[data-client-color-list]");
+  var sizeList = qs("[data-client-size-list]");
+  if (colorList || sizeList) {
+    var cards = qsa(".product-grid .card");
+    var colorCounts = {};
+    var sizeCounts = {};
+    cards.forEach(function (card) {
+      var titleEl = qs(".card-title", card);
+      titleColors(titleEl ? titleEl.textContent : "").forEach(function (name) {
+        colorCounts[name] = (colorCounts[name] || 0) + 1;
+      });
+      (card.getAttribute("data-sizes") || "").split("|").filter(Boolean).forEach(function (size) {
+        sizeCounts[size] = (sizeCounts[size] || 0) + 1;
+      });
+    });
+    var colorNames = Object.keys(colorCounts);
+    var sizeNames = Object.keys(sizeCounts);
+    if (colorList && colorNames.length) {
+      colorList.innerHTML = colorNames.map(function (name) {
+        var hex = "#c8c8c8";
+        colorWords.forEach(function (row) { if (row[0] === name) hex = row[1]; });
+        return '<button type="button" class="swatch" data-client-color="' + escapeHtml(name) + '" style="--swatch:' + hex + '"><i></i><span>' + escapeHtml(name) + "</span></button>";
+      }).join("");
+      var colorFacet = colorList.closest("[data-client-colors]");
+      if (colorFacet) colorFacet.hidden = false;
+    }
+    if (sizeList && sizeNames.length) {
+      sizeList.innerHTML = sizeNames.map(function (size) {
+        return '<button type="button" class="size-chip" data-client-size="' + escapeHtml(size) + '">' + escapeHtml(size) + "</button>";
+      }).join("");
+      var sizeFacet = sizeList.closest("[data-client-sizes]");
+      if (sizeFacet) sizeFacet.hidden = false;
+    }
+    function applyClientFacets() {
+      var colors = qsa("[data-client-color].is-active").map(function (el) { return el.getAttribute("data-client-color"); });
+      var sizes = qsa("[data-client-size].is-active").map(function (el) { return el.getAttribute("data-client-size"); });
+      cards.forEach(function (card) {
+        var titleEl = qs(".card-title", card);
+        var hasColor = titleColors(titleEl ? titleEl.textContent : "");
+        var hasSize = (card.getAttribute("data-sizes") || "").split("|").filter(Boolean);
+        var colorOk = !colors.length || colors.some(function (color) { return hasColor.indexOf(color) !== -1; });
+        var sizeOk = !sizes.length || sizes.some(function (size) { return hasSize.indexOf(size) !== -1; });
+        card.hidden = !(colorOk && sizeOk);
+      });
+    }
+    qsa("[data-client-color], [data-client-size]").forEach(function (button) {
+      button.addEventListener("click", function () {
+        button.classList.toggle("is-active");
+        applyClientFacets();
+      });
+    });
+  }
 
   /* Cart page quantity posts stay native. Gallery on cart is server rendered. */
   qsa("[data-country-select]").forEach(function (country) {

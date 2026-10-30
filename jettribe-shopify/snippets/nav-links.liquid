@@ -4,19 +4,26 @@
       <a href="{{ link.url }}" {% if link.current %}aria-current="page"{% endif %}>{{ link.title }}</a>
       {%- if link.links.size > 0 -%}
         <div class="nav-sub">
-          <ul class="mega-side">
-            {%- for child in link.links -%}
-              <li class="{% if child.links.size > 0 %}nav-item has-sub{% endif %}">
-                <a href="{{ child.url }}">{{ child.title }}</a>
-                <div class="mega-fly">
-                  <a class="mega-go" href="{{ child.url }}">Shop all {{ child.title }}</a>
-                  {%- for grandchild in child.links -%}
-                    <a href="{{ grandchild.url }}">{{ grandchild.title }}</a>
-                  {%- endfor -%}
+          <div class="container">
+            <div class="mega-grid">
+              {%- for child in link.links -%}
+                <div class="mega-col">
+                  <a class="mega-head" href="{{ child.url }}">{{ child.title }}</a>
+                  {%- if child.links.size > 0 -%}
+                    <a class="mega-all" href="{{ child.url }}">View all</a>
+                    {%- for grandchild in child.links -%}
+                      <a href="{{ grandchild.url }}">{{ grandchild.title }}</a>
+                      {%- if grandchild.links.size > 0 -%}
+                        {%- for great in grandchild.links -%}
+                          <a class="mega-nest" href="{{ great.url }}">{{ great.title }}</a>
+                        {%- endfor -%}
+                      {%- endif -%}
+                    {%- endfor -%}
+                  {%- endif -%}
                 </div>
-              </li>
-            {%- endfor -%}
-          </ul>
+              {%- endfor -%}
+            </div>
+          </div>
         </div>
       {%- endif -%}
     </li>

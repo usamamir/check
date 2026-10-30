@@ -243,8 +243,10 @@
     var source = catHandle ? productsIn(catHandle) : products.slice();
     var q = (query.get("q") || "").trim().toLowerCase();
     if (q) {
+      var words = q.split(/\s+/).filter(Boolean);
       source = (catHandle ? source : products).filter(function (product) {
-        return product.title.toLowerCase().indexOf(q) !== -1 || (product.sku || "").toLowerCase().indexOf(q) !== -1;
+        var hay = (product.title + " " + (product.sku || "")).toLowerCase();
+        return words.every(function (word) { return hay.indexOf(word) !== -1; });
       });
     }
     var selectedSizes = (query.get("size") || "").split(",").filter(Boolean);
@@ -324,14 +326,14 @@
       var on = nextSizes.indexOf(size) !== -1;
       if (on) nextSizes = nextSizes.filter(function (item) { return item !== size; });
       else nextSizes.push(size);
-      return '<li><a class="' + (on ? "is-active" : "") + '" href="' + linkWith({ size: nextSizes.join(",") }) + '">' + esc(size) + " (" + sizeSet[size] + ")</a></li>";
+      return '<a class="size-chip' + (on ? " is-active" : "") + '" href="' + linkWith({ size: nextSizes.join(",") }) + '">' + esc(size) + "</a>";
     }).join("");
     var colorHtml = COLORS.filter(function (color) { return colorSet[color.name]; }).map(function (color) {
       var nextColors = selectedColors.slice();
       var on = nextColors.indexOf(color.name) !== -1;
       if (on) nextColors = nextColors.filter(function (item) { return item !== color.name; });
       else nextColors.push(color.name);
-      return '<a class="swatch' + (on ? " is-active" : "") + '" href="' + linkWith({ color: nextColors.join(",") }) + '" style="--swatch:' + color.hex + '"><i></i><span>' + esc(color.name) + " (" + colorSet[color.name] + ")</span></a>";
+      return '<a class="swatch' + (on ? " is-active" : "") + '" href="' + linkWith({ color: nextColors.join(",") }) + '" style="--swatch:' + color.hex + '" title="' + esc(color.name) + " (" + colorSet[color.name] + ')"><i></i><span>' + esc(color.name) + "</span></a>";
     }).join("");
     var childHtml = childLinks.map(function (child) {
       return '<li><a href="collection.html?cat=' + encodeURIComponent(child.handle) + '">' + esc(child.name) + "</a></li>";
@@ -363,9 +365,9 @@
       '<nav class="breadcrumbs">' + crumbs + "</nav>" +
       '<h1 class="page-heading" style="justify-content:flex-start;"><span>' + esc(title) + "</span></h1>" +
       '<div class="collection-layout"><aside>' +
-      (childHtml ? '<details class="facet" open><summary>' + esc(sideName) + "</summary><ul>" + childHtml + "</ul></details>" : "") +
       (colorHtml ? '<details class="facet" open><summary>Color</summary><div class="color-swatches">' + colorHtml + "</div></details>" : "") +
-      (sizeHtml ? '<details class="facet" open><summary>Size</summary><ul>' + sizeHtml + "</ul></details>" : "") +
+      (sizeHtml ? '<details class="facet" open><summary>Size</summary><div class="size-chips">' + sizeHtml + "</div></details>" : "") +
+      (childHtml ? '<details class="facet" open><summary>' + esc(sideName) + "</summary><ul>" + childHtml + "</ul></details>" : "") +
       '<details class="facet" open><summary>Price</summary><form class="price-range" data-price-range method="get" action="collection.html">' +
       hidden(query, ["min", "max", "page"]) +
       '<div class="price-range-labels"><span data-price-min-label>' + money(rangeMin) + "</span><span data-price-max-label>" + money(rangeMax) + "</span></div>" +

@@ -1,4 +1,15 @@
-<article class="card">
+{%- liquid
+  assign size_bits = ''
+  for option in product.options_with_values
+    assign oname = option.name | downcase
+    if oname contains 'size' or oname contains 'combo'
+      for value in option.values
+        assign size_bits = size_bits | append: value | append: '|'
+      endfor
+    endif
+  endfor
+-%}
+<article class="card" data-sizes="{{ size_bits | escape }}">
   <a class="card-media" href="{{ product.url }}">
     {%- if product.featured_image -%}
       <img
