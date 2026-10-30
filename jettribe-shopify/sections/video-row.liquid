@@ -1,0 +1,32 @@
+<section>
+  <div class="container videos">
+    {%- for block in section.blocks -%}
+      <div {{ block.shopify_attributes }}>
+        <iframe
+          src="https://www.youtube.com/embed/{{ block.settings.youtube_id }}"
+          title="{{ block.settings.title | escape }}"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+          loading="lazy"
+        ></iframe>
+      </div>
+    {%- endfor -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Video row",
+  "blocks": [
+    {
+      "type": "video",
+      "name": "YouTube video",
+      "settings": [
+        { "type": "text", "id": "youtube_id", "label": "YouTube video id", "default": "3sN-3DLg_40" },
+        { "type": "text", "id": "title", "label": "Title", "default": "Jettribe video" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Video row" }]
+}
+{% endschema %}

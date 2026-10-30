@@ -1,0 +1,127 @@
+<div class="util-bar">
+  <div class="container util-bar-inner">
+    <a href="tel:{{ section.settings.phone | replace: ' ', '' | replace: '.', '' }}">Rider support {{ section.settings.phone }}</a>
+    <div class="util-links">
+      {%- if settings.show_translate -%}
+        <div id="google_translate_element"></div>
+      {%- endif -%}
+      <a href="#" data-open-wish>Wishlists</a>
+      <span class="sep">|</span>
+      <a href="{{ settings.returns_url }}">Returns</a>
+      <span class="sep">|</span>
+      {%- if shop.customer_accounts_enabled -%}
+        {%- if customer -%}
+          <a href="{{ routes.account_url }}">My Account</a>
+        {%- else -%}
+          <a href="{{ routes.account_login_url }}">Sign in</a>
+        {%- endif -%}
+      {%- endif -%}
+      <span class="sep">|</span>
+      <a href="{{ settings.gift_card_link }}">Gift Certificates</a>
+    </div>
+  </div>
+</div>
+
+<header class="header" role="banner">
+  <div class="header-main">
+    <div class="container header-main-inner">
+      <button class="menu-toggle" type="button" data-menu-toggle aria-expanded="false" aria-controls="SiteNav">
+        <span></span>
+        <span class="visually-hidden">Menu</span>
+      </button>
+      <a class="logo" href="{{ routes.root_url }}">
+        {%- if section.settings.logo != blank -%}
+          <img src="{{ section.settings.logo | image_url: width: 560 }}" alt="{{ shop.name }}" width="319" height="72">
+        {%- elsif settings.logo != blank -%}
+          <img src="{{ settings.logo | image_url: width: 560 }}" alt="{{ shop.name }}" width="319" height="72">
+        {%- else -%}
+          <img src="{{ 'logo.png' | asset_url }}" alt="{{ shop.name }}" width="319" height="72">
+        {%- endif -%}
+      </a>
+      <form class="search-form search-form--split" action="{{ routes.search_url }}" method="get" role="search">
+        <label class="visually-hidden" for="SearchDept">Department</label>
+        <select id="SearchDept" data-search-dept aria-label="Department">
+          <option value="">All</option>
+          <option value="/search?jtcat=collections">Collections</option>
+          <option value="/search?jtcat=ride-gear">Ride Gear</option>
+          <option value="/search?jtcat=casual-wear">Casual Wear</option>
+          <option value="/search?jtcat=accessories">Accessories</option>
+          <option value="/search?jtcat=pwc-covers">PWC Covers</option>
+          <option value="/search?jtcat=outlet">Outlet</option>
+          <option value="/search?jtcat=havasu-rain-check-sale">Havasu Sale</option>
+        </select>
+        <label class="visually-hidden" for="HeaderSearch">Search</label>
+        <input id="HeaderSearch" type="search" name="q" placeholder="Search gear" autocomplete="off" data-predictive>
+        <input type="hidden" name="type" value="product">
+        <button type="submit" aria-label="Search">
+          <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        </button>
+        <div class="predictive" data-predictive-results hidden></div>
+      </form>
+      <div class="header-icons">
+        <a class="icon-btn" href="{% if customer %}{{ routes.account_url }}{% else %}{{ routes.account_login_url }}{% endif %}" aria-label="Account">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="12" cy="8" r="3.2"/><path d="M5 19.2c1.5-3.1 3.9-4.6 7-4.6s5.5 1.5 7 4.6"/></svg>
+        </a>
+        <a class="icon-btn cart-icon" href="{{ routes.cart_url }}" data-open-cart aria-label="Cart">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M6 7h15l-1.6 9H7.2L6 7z"/><path d="M6 7L5 4H2"/><circle cx="9" cy="20" r="1.2" fill="currentColor"/><circle cx="18" cy="20" r="1.2" fill="currentColor"/></svg>
+          <span class="cart-count" data-cart-count>{{ cart.item_count }}</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <nav class="site-nav" id="SiteNav" data-site-nav aria-label="Primary">
+    <div class="container">
+      {%- if settings.menu_source == 'shopify' and linklists[settings.menu].links.size > 0 -%}
+        {% render 'nav-links', menu: linklists[settings.menu] %}
+      {%- else -%}
+        {% render 'nav-jettribe' %}
+      {%- endif -%}
+      <div class="mobile-utilities">
+        <a href="tel:{{ section.settings.phone | replace: ' ', '' | replace: '.', '' }}">{{ section.settings.phone }}</a>
+        <a href="#" data-open-wish>Wishlist</a>
+        <a href="{{ settings.returns_url }}">Returns</a>
+        <a href="{{ routes.account_login_url }}">Sign in</a>
+        <a href="{{ settings.gift_card_link }}">Gift Certificates</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="service-bar">
+    <div class="container service-bar-inner">
+      <a href="/search?jtpage=shipping-info"><strong>Free USA shipping</strong> over $400</a>
+      <a href="tel:{{ section.settings.phone | replace: ' ', '' | replace: '.', '' }}"><strong>Rider support</strong> {{ section.settings.phone }}</a>
+      <a href="{{ settings.returns_url }}"><strong>Hassle-free returns</strong></a>
+      <a href="/search?jtpage=financing"><strong>Pay over time</strong> with Klarna or Bread</a>
+    </div>
+  </div>
+</header>
+
+{%- if settings.show_translate -%}
+  <script>
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({ pageLanguage: 'en', autoDisplay: false }, 'google_translate_element');
+    }
+  </script>
+  <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Header",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo",
+      "info": "Leave empty to use the Jettribe logo included with the theme."
+    },
+    {
+      "type": "text",
+      "id": "phone",
+      "label": "Phone",
+      "default": "951 246 3147"
+    }
+  ]
+}
+{% endschema %}

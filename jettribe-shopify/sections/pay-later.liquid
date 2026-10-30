@@ -1,0 +1,37 @@
+<section class="paylater-strip">
+  <div class="container">
+    {{ section.settings.text }}
+    {%- if section.settings.link_label != blank -%}
+      <a href="{{ section.settings.link }}">{{ section.settings.link_label }}</a>
+    {%- endif -%}
+    <div class="pay-badges">
+      <span class="pay-badge">PayPal</span>
+      <span class="pay-badge">Visa</span>
+      <span class="pay-badge">Mastercard</span>
+      <span class="pay-badge">Amex</span>
+      <span class="pay-badge">Discover</span>
+      <span class="pay-badge">Klarna</span>
+      <span class="pay-badge">Bread</span>
+    </div>
+    {%- if settings.klarna_client_id != blank and settings.klarna_home_placement_id != blank -%}
+      <klarna-placement data-id="{{ settings.klarna_home_placement_id }}" data-theme="dark"></klarna-placement>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Pay later strip",
+  "settings": [
+    {
+      "type": "text",
+      "id": "text",
+      "label": "Text",
+      "default": "Pay with PayPal or major cards. Pay over time with Klarna or Bread."
+    },
+    { "type": "text", "id": "link_label", "label": "Link label", "default": "See financing" },
+    { "type": "url", "id": "link", "label": "Link" }
+  ],
+  "presets": [{ "name": "Pay later strip" }]
+}
+{% endschema %}

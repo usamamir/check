@@ -1,0 +1,38 @@
+Jettribe Shopify upload
+
+Upload the theme and the product files separately. The theme zip is the only file that goes under Online Store, Themes.
+
+1. Theme
+   Upload jettribe-shopify-theme.zip in Online Store, Themes, Add theme, Upload zip file.
+   Leave the zip closed. Publish the theme.
+   Menu categories, including 2026 JTR Series, open from this theme and list the imported products.
+   A category does not have to exist in Shopify first. Color filters are circles. Size filters are buttons.
+
+2. Products
+   In Products, Import, choose jettribe-products.csv.
+   Leave "Overwrite products with matching handles" unchecked.
+   This file has the live products, prices, photos, and size options.
+   If products are already in the store, import this file once more with overwrite unchecked. Shopify adds the two products that were missing and leaves the rest alone.
+
+3. All categories in one file
+   In Products, Import, choose jettribe-all-categories.csv.
+   Check "Overwrite products with matching handles".
+   Upload this CSV itself. Opening it in Excel and saving again removes the size columns, and Shopify then reports "Product options input is required when updating variants."
+
+   This file replaces the old 20 category sheets. Stop importing those.
+
+   Every row includes the size or option values already on the product. Prices and photos are not in this file, so they stay as they are.
+   Every jettribe.com category is written onto the product as a tag. Ride Gear uses collection:ride-gear (249 products). Outlet uses collection:outlet (254 products). Casual Wear 162, Accessories 106, Wetsuits 41, PWC Covers 62.
+
+   Shopify's product importer keeps only the first collection name in a product file. These tags are how all 159 categories fit in one upload.
+   A category page shows those products when the collection condition is "Product tag is equal to" collection:ride-gear (use the collection handle the same way for the others).
+   Categories already created by the sheets you uploaded can stay. Add that tag condition on the collection. Products already placed there remain.
+
+4. Put every product on every category page in one extra import
+   Import jettribe-category-membership.csv in the Matrixify app, and set the import type to Collections.
+   Leave this file out of Products, Import. Shopify's product importer will reject its columns.
+   Matrixify's free plan updates 10 collections per job. This file has 159 categories, which fits the Basic plan ($20 for 30 days).
+   It adds the product list from each jettribe.com category page. It does not remove products, prices, or photos.
+
+5. Pages, blog, and accounts
+   Follow jettribe-shopify/UPLOAD.md after the theme is published.

@@ -1,0 +1,26 @@
+{%- if predictive_search.performed -%}
+  <div class="predictive">
+    {%- for product in predictive_search.resources.products -%}
+      <a href="{{ product.url }}">
+        {%- if product.featured_image -%}
+          <img src="{{ product.featured_image | image_url: width: 120 }}" alt="" width="54" height="54">
+        {%- else -%}
+          <span></span>
+        {%- endif -%}
+        <span>{{ product.title }}</span>
+        <span>{{ product.price | money }}</span>
+      </a>
+    {%- endfor -%}
+    {%- for page in predictive_search.resources.pages -%}
+      <a href="{{ page.url }}"><span></span><span>{{ page.title }}</span><span>Page</span></a>
+    {%- endfor -%}
+    <a class="view-all" href="{{ routes.search_url }}?q={{ predictive_search.terms | url_encode }}&type=product">View all results</a>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Predictive search",
+  "settings": []
+}
+{% endschema %}

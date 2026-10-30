@@ -1,0 +1,56 @@
+{%- liquid
+  assign size_bits = ''
+  for option in product.options_with_values
+    assign oname = option.name | downcase
+    if oname contains 'size' or oname contains 'combo'
+      for value in option.values
+        assign size_bits = size_bits | append: value | append: '|'
+      endfor
+    endif
+  endfor
+-%}
+<article class="card" data-sizes="{{ size_bits | escape }}">
+  <a class="card-media" href="{{ product.url }}">
+    {%- if product.featured_image -%}
+      <img
+        src="{{ product.featured_image | image_url: width: 600 }}"
+        alt="{{ product.featured_image.alt | escape }}"
+        width="500"
+        height="659"
+        loading="lazy"
+      >
+    {%- else -%}
+      {{ 'product-1' | placeholder_svg_tag: 'placeholder' }}
+    {%- endif -%}
+  </a>
+  <div class="card-hover">
+    <button type="button" class="btn btn--blue" data-quick-view="{{ product.handle }}">Quick view</button>
+  </div>
+  <div class="card-body">
+    <h3 class="card-title"><a href="{{ product.url }}">{{ product.title }}</a></h3>
+    <div class="price">{% render 'price', product: product %}</div>
+    <label class="compare-check">
+      <input
+        type="checkbox"
+        data-compare-add
+        data-id="{{ product.id }}"
+        data-title="{{ product.title | escape }}"
+        data-price="{{ product.price }}"
+        data-img="{% if product.featured_image %}{{ product.featured_image | image_url: width: 480 }}{% endif %}"
+        data-url="{{ product.url }}"
+      >
+      <span>Compare</span>
+    </label>
+    <div class="card-actions">
+      {%- if product.available -%}
+        {%- if product.has_only_default_variant -%}
+          <button type="button" class="btn" data-add-variant="{{ product.selected_or_first_available_variant.id }}">Add to Cart</button>
+        {%- else -%}
+          <a class="btn" href="{{ product.url }}">Choose Options</a>
+        {%- endif -%}
+      {%- else -%}
+        <span class="btn is-disabled">Out of Stock</span>
+      {%- endif -%}
+    </div>
+  </div>
+</article>

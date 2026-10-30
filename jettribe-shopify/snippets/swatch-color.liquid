@@ -1,0 +1,58 @@
+{%- liquid
+  assign key = label | downcase | strip
+  assign found = ''
+  if key contains 'black'
+    assign found = found | append: '#161616,'
+  endif
+  if key contains 'navy'
+    assign found = found | append: '#1e3a8a,'
+  endif
+  if key contains 'blue'
+    assign found = found | append: '#1d4ed8,'
+  endif
+  if key contains 'teal'
+    assign found = found | append: '#0f766e,'
+  endif
+  if key contains 'aqua'
+    assign found = found | append: '#3ec6d4,'
+  endif
+  if key contains 'green'
+    assign found = found | append: '#2f8f4e,'
+  endif
+  if key contains 'pink'
+    assign found = found | append: '#e56aa0,'
+  endif
+  if key contains 'grey' or key contains 'gray'
+    assign found = found | append: '#8a8a8a,'
+  endif
+  if key contains 'orange'
+    assign found = found | append: '#f97316,'
+  endif
+  if key contains 'purple'
+    assign found = found | append: '#7c3aed,'
+  endif
+  if key contains 'yellow'
+    assign found = found | append: '#eab308,'
+  endif
+  if key contains 'white'
+    assign found = found | append: '#f7f7f7,'
+  endif
+  if key contains 'red'
+    assign found = found | append: '#e53d42,'
+  endif
+  assign parts = found | split: ','
+  assign count = 0
+  assign first = ''
+  assign second = ''
+  for part in parts
+    if part != blank
+      assign count = count | plus: 1
+      if count == 1
+        assign first = part
+      elsif count == 2
+        assign second = part
+      endif
+    endif
+  endfor
+-%}
+{%- if count == 0 -%}#c8c8c8{%- elsif count == 1 -%}{{ first }}{%- else -%}linear-gradient(135deg, {{ first }} 50%, {{ second }} 50%){%- endif -%}

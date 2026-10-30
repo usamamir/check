@@ -1,0 +1,25 @@
+<section class="page-wrap">
+  <div class="container narrow">
+    {% render 'breadcrumbs' %}
+    <h1 class="page-heading" style="justify-content:flex-start;"><span>{{ page.title | default: 'Customization' }}</span></h1>
+    <div class="rte">{{ page.content }}</div>
+    <p>Tell rider support what to build. This form emails the store the same way the BigCommerce customization request did.</p>
+    {% form 'contact' %}
+      {%- if form.posted_successfully? -%}
+        <p class="form-success">Request received. Jettribe will follow up.</p>
+      {%- endif -%}
+      {{ form.errors | default_errors }}
+      <div class="field"><label for="CustName">Name</label><input id="CustName" name="contact[name]" required></div>
+      <div class="field"><label for="CustEmail">Email</label><input id="CustEmail" type="email" name="contact[email]" required></div>
+      <div class="field"><label for="CustPhone">Phone</label><input id="CustPhone" type="tel" name="contact[phone]"></div>
+      <div class="field"><label for="CustProduct">Product or series</label><input id="CustProduct" name="contact[Product]"></div>
+      <div class="field"><label for="CustSize">Size</label><input id="CustSize" name="contact[Size]"></div>
+      <div class="field"><label for="CustColors">Colors and names</label><textarea id="CustColors" name="contact[body]" required placeholder="Colors, lettering, and any notes"></textarea></div>
+      <button class="btn" type="submit">Send request</button>
+    {% endform %}
+  </div>
+</section>
+
+{% schema %}
+{ "name": "Customization form", "settings": [] }
+{% endschema %}
