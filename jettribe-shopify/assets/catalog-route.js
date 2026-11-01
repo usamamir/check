@@ -10,7 +10,7 @@
     ["Red", "#e53d42", /\bred\b/i],
     ["Teal", "#0f766e", /\bteal\b/i],
     ["Green", "#2f8f4e", /\bgreen\b/i],
-    ["Pink", "#e56aa0", /\bpink\b/i],
+    ["Pink", "#e56aa0", /\b(pink|magenta|fuchsia)\b/i],
     ["Grey", "#8a8a8a", /\bgr[ae]y\b/i],
     ["Aqua", "#3ec6d4", /\baqua\b/i],
     ["Orange", "#f97316", /\borange\b/i],

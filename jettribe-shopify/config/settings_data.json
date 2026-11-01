@@ -8,6 +8,8 @@
     "menu_source": "jettribe",
     "menu": "main-menu",
     "show_translate": true,
+    "show_vip_deals": true,
+    "show_empty_menu_items": false,
     "cart_type": "drawer",
     "free_shipping_threshold": 400,
     "show_payment_image": true,

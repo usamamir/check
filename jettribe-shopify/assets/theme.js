@@ -37,6 +37,8 @@
     ["aqua", "#3ec6d4"],
     ["green", "#2f8f4e"],
     ["pink", "#e56aa0"],
+    ["magenta", "#e56aa0"],
+    ["fuchsia", "#e56aa0"],
     ["grey", "#8a8a8a"],
     ["gray", "#8a8a8a"],
     ["orange", "#f97316"],
@@ -288,11 +290,16 @@
     if (!form.matches("[data-product-form]")) return;
     var submitter = event.submitter;
     if (!submitter || !submitter.hasAttribute("data-add-button")) return;
-    event.preventDefault();
     var data = new FormData(form);
+    var hasFile = false;
+    data.forEach(function (value) {
+      if (typeof File !== "undefined" && value instanceof File && value.size > 0) hasFile = true;
+    });
+    if (hasFile) return;
+    event.preventDefault();
     var properties = {};
     data.forEach(function (value, key) {
-      if (key.indexOf("properties[") === 0 && String(value).trim()) {
+      if (key.indexOf("properties[") === 0 && String(value).trim() && !(value instanceof File)) {
         properties[key.slice(11, -1)] = value;
       }
     });
@@ -331,9 +338,94 @@
     }
 
     function findVariant(options) {
-      return product.variants.find(function (variant) {
-        return variant.options.every(function (opt, i) { return opt === options[i]; });
+      var matches = product.variants.filter(function (variant) {
+        return variant.options.every(function (opt, i) {
+          return !options[i] || opt === options[i];
+        });
       });
+      matches.sort(function (a, b) { return a.price - b.price; });
+      return matches[0];
+    }
+
+    function isAddonGroup(group) {
+      var name = group.getAttribute("data-option-name") || "";
+      if (/design|letter/i.test(name)) return false;
+      var values = qsa("input", group).map(function (input) { return input.value; }).join(" ");
+      var priced = /\$\s*\d/.test(name) || /\$\s*\d/.test(values);
+      if (!priced) return false;
+      return /add-?on|plate|sock|custom/i.test(name);
+    }
+
+    function markSelected(group) {
+      qsa("label", group).forEach(function (label) {
+        var input = qs("input", label);
+        label.classList.toggle("is-selected", !!(input && input.checked));
+      });
+    }
+
+    function chooseNone(group) {
+      var real = qsa("input", group).filter(function (input) {
+        return /^none$/i.test(String(input.value || "").trim());
+      })[0];
+      if (!real && !qs("input[data-addon-none]", group)) {
+        var sample = qs("input", group);
+        if (!sample) return;
+        var label = document.createElement("label");
+        label.innerHTML = '<input type="radio" name="' + sample.name + '" value="" data-option-input data-addon-none><span>None</span>';
+        group.insertBefore(label, group.firstChild);
+        real = qs("input[data-addon-none]", group);
+      }
+      if (!qs("[data-addon-note]", group.parentElement)) {
+        var note = document.createElement("p");
+        note.className = "addon-note";
+        note.setAttribute("data-addon-note", "");
+        note.textContent = "Choose None if you do not want this add-on.";
+        group.insertAdjacentElement("afterend", note);
+      }
+      if (!real) return;
+      qsa("input", group).forEach(function (input) { input.checked = input === real; });
+      markSelected(group);
+    }
+
+    function selectedLetter() {
+      var letter = "";
+      qsa("[data-option-index]", form).forEach(function (group) {
+        var checked = qs("input:checked", group);
+        if (!checked) return;
+        var value = String(checked.value || "").trim();
+        if (/^[A-Za-z]$/.test(value)) letter = value.toUpperCase();
+      });
+      return letter;
+    }
+
+    function showLetterImage(letter) {
+      if (!letter) return;
+      var token = new RegExp("(^|[^A-Za-z0-9])" + letter + "([^A-Za-z0-9]|$)", "i");
+      var hint = /plate|letter|design|font|custom/i;
+      var pool = qsa("[data-thumb]").map(function (thumb) {
+        return {
+          src: thumb.getAttribute("data-src") || "",
+          alt: thumb.getAttribute("data-alt") || "",
+          thumb: thumb
+        };
+      });
+      qsa(".product-lower .rte img").forEach(function (img) {
+        pool.push({ src: img.getAttribute("src") || "", alt: img.getAttribute("alt") || "", thumb: null });
+      });
+      var hit = null;
+      pool.some(function (item) {
+        var hay = item.alt + " " + item.src;
+        if (token.test(hay) && hint.test(hay)) {
+          hit = item;
+          return true;
+        }
+        return false;
+      });
+      if (!hit || !hit.src) return;
+      var main = qs("[data-gallery-main]");
+      if (main) main.src = hit.src;
+      qsa("[data-thumb]").forEach(function (el) { el.classList.remove("is-active"); });
+      if (hit.thumb) hit.thumb.classList.add("is-active");
     }
 
     function refreshAvailability() {
@@ -377,6 +469,22 @@
         var main = qs("[data-gallery-main]");
         if (main) main.src = variant.featured_image.src;
       }
+      showLetterImage(selectedLetter());
+      var noneChoice = qs("input[data-addon-none]:checked", form);
+      var noneField = qs("[data-addon-choice]", form);
+      if (noneChoice) {
+        if (!noneField) {
+          noneField = document.createElement("input");
+          noneField.type = "hidden";
+          noneField.name = "properties[Add-on choice]";
+          noneField.setAttribute("data-addon-choice", "");
+          form.appendChild(noneField);
+        }
+        noneField.disabled = false;
+        noneField.value = "None";
+      } else if (noneField) {
+        noneField.disabled = true;
+      }
       var url = new URL(window.location.href);
       url.searchParams.set("variant", variant.id);
       window.history.replaceState({}, "", url);
@@ -384,12 +492,16 @@
 
     form.addEventListener("change", function (event) {
       if (event.target.matches("[data-option-input]")) {
-        event.target.parentElement.parentElement.querySelectorAll("label").forEach(function (label) {
-          label.classList.toggle("is-selected", label.contains(event.target) && event.target.checked);
-        });
+        var group = event.target.closest("[data-option-index]");
+        if (group) markSelected(group);
         applyVariant();
       }
     });
+    if (!new URL(window.location.href).searchParams.get("variant")) {
+      qsa("[data-option-index]", form).forEach(function (group) {
+        if (isAddonGroup(group)) chooseNone(group);
+      });
+    }
     applyVariant();
 
     qsa("[data-thumb]").forEach(function (thumb) {
@@ -705,7 +817,7 @@
     ["Red", "#e53d42", /\bred\b/i],
     ["Teal", "#0f766e", /\bteal\b/i],
     ["Green", "#2f8f4e", /\bgreen\b/i],
-    ["Pink", "#e56aa0", /\bpink\b/i],
+    ["Pink", "#e56aa0", /\b(pink|magenta|fuchsia)\b/i],
     ["Grey", "#8a8a8a", /\bgr[ae]y\b/i],
     ["Aqua", "#3ec6d4", /\baqua\b/i],
     ["Orange", "#f97316", /\borange\b/i],
@@ -771,6 +883,70 @@
   }
 
   document.addEventListener("catalog:rendered", paintCompare);
+
+  function menuHandle(href) {
+    try {
+      return new URL(href, window.location.origin).searchParams.get("jtcat") || "";
+    } catch (err) {
+      return "";
+    }
+  }
+  function menuCount(data, handle) {
+    if (!handle) return null;
+    var cats = data.categories || {};
+    var key = cats[handle] ? handle : "";
+    if (!key) {
+      var lower = handle.toLowerCase();
+      Object.keys(cats).some(function (name) {
+        if (name.toLowerCase() === lower) {
+          key = name;
+          return true;
+        }
+        return false;
+      });
+    }
+    if (!key) return null;
+    return (cats[key].products || []).length;
+  }
+  function hideEmptyMenu(data) {
+    qsa(".mega-col").forEach(function (col) {
+      var links = qsa("a[href*='jtcat=']", col);
+      var stocked = false;
+      var known = 0;
+      links.forEach(function (link) {
+        var count = menuCount(data, menuHandle(link.getAttribute("href")));
+        if (count === null) stocked = true;
+        else {
+          known += 1;
+          if (count > 0) stocked = true;
+        }
+      });
+      if (known && !stocked) {
+        col.hidden = true;
+        return;
+      }
+      links.forEach(function (link) {
+        var count = menuCount(data, menuHandle(link.getAttribute("href")));
+        if (count !== 0) return;
+        if (link.classList.contains("mega-head")) return;
+        link.hidden = true;
+      });
+    });
+    qsa("a[href*='jtcat=']").forEach(function (link) {
+      if (link.closest(".mega-col")) return;
+      if (link.parentElement && link.parentElement.classList.contains("has-sub")) return;
+      if (menuCount(data, menuHandle(link.getAttribute("href"))) !== 0) return;
+      var item = link.closest("li");
+      if (item && qsa("a[href*='jtcat=']", item).length === 1 && !item.classList.contains("has-sub")) item.hidden = true;
+      else link.hidden = true;
+    });
+  }
+  if (window.Jettribe && Jettribe.catalogUrl && !Jettribe.showEmptyMenuItems) {
+    fetch(Jettribe.catalogUrl, { headers: { Accept: "application/json" } })
+      .then(function (res) { return res.ok ? res.json() : null; })
+      .then(function (data) { if (data) hideEmptyMenu(data); })
+      .catch(function () {});
+  }
 
   /* Cart page quantity posts stay native. Gallery on cart is server rendered. */
   qsa("[data-country-select]").forEach(function (country) {

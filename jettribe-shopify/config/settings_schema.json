@@ -82,6 +82,20 @@
         "id": "show_translate",
         "label": "Show Google Translate",
         "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "show_vip_deals",
+        "label": "Show VIP Deals in the menu",
+        "info": "Turn this off outside the one or two times a year VIP is open.",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "show_empty_menu_items",
+        "label": "Show menu categories that have no products",
+        "info": "Leave this off to hide empty Outlet and other menu links. Turn it on when those categories are filled.",
+        "default": false
       }
     ]
   },
