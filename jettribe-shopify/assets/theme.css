@@ -429,7 +429,7 @@ ul { margin: 0; padding: 0; list-style: none; }
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
   gap: 18px 26px;
-  max-height: min(48vh, 380px);
+  max-height: min(32vh, 280px);
   overflow: auto;
   padding: 22px 22px 8px;
 }
@@ -530,40 +530,39 @@ ul { margin: 0; padding: 0; list-style: none; }
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 12px;
-  padding: 14px 22px 20px;
+  padding: 8px 22px 18px;
 }
 .mega-promo {
-  position: relative;
   display: flex;
-  align-items: flex-end;
-  min-height: 132px;
+  flex-direction: column;
+  align-items: stretch;
+  min-height: 0;
   overflow: hidden;
   color: #fff !important;
   text-decoration: none;
-  background: #1b2026;
+  background: #161b20;
 }
 .mega-promo img {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-.mega-promo span {
-  position: relative;
-  z-index: 1;
   display: block;
   width: 100%;
-  padding: 28px 14px 12px;
-  background: linear-gradient(transparent, rgba(0,0,0,0.72));
+  height: min(34vh, 320px);
+  min-height: 210px;
+  object-fit: contain;
+  object-position: center;
+  background: #161b20;
+}
+.mega-promo span {
+  display: block;
+  width: 100%;
+  padding: 10px 14px 12px;
+  background: #161b20;
   color: #fff;
   font-size: 14px;
   line-height: 1.3;
 }
 .mega-promo strong { display: block; font-family: Oswald, sans-serif; font-size: 18px; font-weight: 600; letter-spacing: 0.3px; text-transform: uppercase; }
 .mega-promo:hover { color: #fff !important; text-decoration: none; }
-.mega-promo:hover img { transform: scale(1.04); }
-.mega-promo img { transition: transform 0.25s ease; }
+.mega-promo:hover img { opacity: 0.92; }
 .nav-drop {
   display: none;
   position: absolute;
@@ -1017,7 +1016,7 @@ body { top: 0 !important; }
   .mega-col a, .mega-head, .mega-nest, .mega-col a.mega-head { color: #fff; border-bottom-color: rgba(255,255,255,0.35); }
   .mega-all { color: #fff !important; }
   .mega-promos { grid-template-columns: 1fr; padding: 8px 18px 16px; }
-  .mega-promo { min-height: 110px; }
+  .mega-promo img { height: 220px; min-height: 0; }
   .mega-col a:hover { color: #fff; }
   .nav-drop { background: transparent; }
   .nav-drop a { color: #fff; }
