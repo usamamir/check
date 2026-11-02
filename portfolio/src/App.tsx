@@ -11,9 +11,9 @@ const BOOT_LINES = [
   'SellerOS BIOS v4.11',
   'Checking marketplace adapters………… OK',
   'Mounting catalog volume /brands………… OK',
+  'Loading Jettribe marketing profile…… OK',
   'Loading PPC kernel modules………… OK',
-  'Syncing Helium / Jungle Scout bridges… OK',
-  'Restoring session: Uzi Mir',
+  'Restoring session: Uzi Mir · Head of Marketing',
   'Desktop environment ready.',
 ]
 

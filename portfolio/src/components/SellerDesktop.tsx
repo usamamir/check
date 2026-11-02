@@ -19,6 +19,7 @@ type WinState = {
 }
 
 const TITLES: Record<WindowId, string> = {
+  resume: 'Resume_Uzi.doc — WordPad',
   about: 'About_Uzi.txt — Notepad',
   listings: 'Active Listings — Catalog Manager',
   ppc: 'PPC Command Center',
@@ -30,11 +31,12 @@ const TITLES: Record<WindowId, string> = {
 
 function initialWindows(): WinState[] {
   return [
-    { id: 'about', title: TITLES.about, x: 120, y: 40, width: 420, open: true },
+    { id: 'resume', title: TITLES.resume, x: 130, y: 36, width: 520, open: true },
+    { id: 'about', title: TITLES.about, x: 360, y: 70, width: 400, open: false },
     { id: 'listings', title: TITLES.listings, x: 200, y: 70, width: 520, open: false },
     { id: 'ppc', title: TITLES.ppc, x: 160, y: 90, width: 460, open: false },
     { id: 'research', title: TITLES.research, x: 240, y: 60, width: 440, open: false },
-    { id: 'brands', title: TITLES.brands, x: 180, y: 110, width: 520, open: false },
+    { id: 'brands', title: TITLES.brands, x: 180, y: 110, width: 540, open: false },
     { id: 'mail', title: TITLES.mail, x: 220, y: 80, width: 420, open: false },
     { id: 'update', title: TITLES.update, x: 260, y: 120, width: 400, open: false },
   ]
@@ -46,8 +48,8 @@ type Props = {
 
 export function SellerDesktop({ onEnter2026 }: Props) {
   const [windows, setWindows] = useState<WinState[]>(initialWindows)
-  const [zStack, setZStack] = useState<WindowId[]>(['about'])
-  const [selectedIcon, setSelectedIcon] = useState<string | null>('about')
+  const [zStack, setZStack] = useState<WindowId[]>(['resume'])
+  const [selectedIcon, setSelectedIcon] = useState<string | null>('resume')
   const [startOpen, setStartOpen] = useState(false)
   const [toast, setToast] = useState(true)
   const [clock, setClock] = useState('')
@@ -112,41 +114,81 @@ export function SellerDesktop({ onEnter2026 }: Props) {
 
   const renderBody = (id: WindowId) => {
     switch (id) {
+      case 'resume':
+        return (
+          <>
+            <span className="sos-badge">CURRENT ROLE · LIVE</span>
+            <h2 className="sos-h1">{profile.name}</h2>
+            <p style={{ fontWeight: 700, marginBottom: 4 }}>{profile.current.role}</p>
+            <p style={{ marginBottom: 8 }}>
+              <a href={profile.current.url} target="_blank" rel="noreferrer">
+                {profile.current.company}
+              </a>{' '}
+              · {profile.current.years} ({profile.current.tenure})
+            </p>
+            <p className="sos-muted" style={{ marginBottom: 12 }}>
+              Leading the marketing team at Jettribe — performance PWC / watersports brand covering
+              wetsuits, impact vests, apparel, and ride gear across e-commerce and marketplace channels.
+            </p>
+
+            <strong>Scope at Jettribe</strong>
+            <ul className="sos-list">
+              <li>Head of Marketing Team — strategy, brand, and growth ownership</li>
+              <li>E-commerce & marketplace performance (web + Amazon systems)</li>
+              <li>Paid media, creative direction, and campaign forecasting</li>
+              <li>Team leadership across content, listings, and acquisition</li>
+            </ul>
+
+            <p style={{ marginTop: 14 }}>
+              <strong>Education:</strong> {profile.education.degree}, {profile.education.school} (
+              {profile.education.years})
+            </p>
+            <p style={{ marginTop: 6 }}>
+              <strong>Contact:</strong> {profile.email}
+            </p>
+            <div style={{ marginTop: 14, display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+              <a className="sos-btn sos-btn--teal" href={profile.current.url} target="_blank" rel="noreferrer">
+                Open jettribe.com
+              </a>
+              <button type="button" className="sos-btn sos-btn--primary" onClick={() => openWindow('listings')}>
+                View full career listings
+              </button>
+            </div>
+          </>
+        )
       case 'about':
         return (
           <>
-            <span className="sos-badge">SELLER PROFILE</span>
+            <span className="sos-badge">OPERATOR PROFILE</span>
             <h2 className="sos-h1">{profile.name}</h2>
             <p style={{ fontWeight: 700, marginBottom: 8 }}>{profile.title}</p>
             <p className="sos-muted" style={{ marginBottom: 10 }}>
               {profile.tagline}
             </p>
-            {profile.about.slice(0, 2).map((p) => (
-              <p key={p.slice(0, 20)} style={{ marginBottom: 8 }}>
+            {profile.about.map((p) => (
+              <p key={p.slice(0, 28)} style={{ marginBottom: 8 }}>
                 {p}
               </p>
             ))}
-            <p style={{ marginTop: 12 }}>
-              <strong>Education:</strong> {profile.education.degree}, {profile.education.school} (
-              {profile.education.years})
-            </p>
-            <p style={{ marginTop: 8 }}>
-              <strong>Contact:</strong> {profile.email}
-            </p>
           </>
         )
       case 'listings':
         return (
           <>
-            <span className="sos-badge">CATALOG · LIVE SKUs</span>
+            <span className="sos-badge">CATALOG · CAREER SKUs</span>
             <p className="sos-muted" style={{ marginBottom: 10 }}>
-              Career roles rendered as active marketplace listings.
+              Roles as live listings. Current buy-box winner: Jettribe Head of Marketing.
             </p>
             {work.map((item) => (
-              <div className="sos-listing-card" key={item.id}>
+              <div
+                className="sos-listing-card"
+                key={item.id}
+                style={item.current ? { borderColor: '#ff9900', boxShadow: '0 0 0 1px #ff9900' } : undefined}
+              >
                 <div className="sos-listing-card__top">
                   <strong>
                     {item.id}. {item.company}
+                    {item.current ? ' · CURRENT' : ''}
                   </strong>
                   <span>BSR {item.rank}</span>
                 </div>
@@ -166,19 +208,22 @@ export function SellerDesktop({ onEnter2026 }: Props) {
             <div className="sos-kpi-row">
               {profile.stats.map((s) => (
                 <div className="sos-kpi" key={s.label}>
-                  <strong>{s.value}</strong>
+                  <strong>
+                    {s.value}
+                    {s.suffix}
+                  </strong>
                   <span className="sos-muted">{s.label}</span>
                 </div>
               ))}
             </div>
             <p>
-              PPC systems Uzi has run across Amazon ads, Google Ads, and multi-channel paid growth —
-              optimized for rank, conversion, and profitable scale.
+              At Jettribe, marketing leadership spans brand storytelling, paid acquisition, and
+              marketplace conversion — the same systems used across prior Amazon-heavy engagements.
             </p>
             <ul className="sos-list">
+              <li>Team-led campaign planning & creative systems</li>
               <li>Amazon Sponsored Products / Brands / Display</li>
               <li>Listing A/B tests tied to ad efficiency</li>
-              <li>Search term harvesting & negative keyword hygiene</li>
               <li>Budget forecasting across brand portfolios</li>
             </ul>
             <div style={{ marginTop: 14 }}>
@@ -210,7 +255,7 @@ export function SellerDesktop({ onEnter2026 }: Props) {
       case 'brands':
         return (
           <>
-            <span className="sos-badge">40+ BRAND COLLABORATIONS</span>
+            <span className="sos-badge">CURRENT + CAREER ROSTER</span>
             <table className="sos-table">
               <thead>
                 <tr>
@@ -218,23 +263,27 @@ export function SellerDesktop({ onEnter2026 }: Props) {
                   <th>Brand</th>
                   <th>Role</th>
                   <th>Years</th>
-                  <th>Market</th>
+                  <th>Status</th>
                 </tr>
               </thead>
               <tbody>
                 {work.map((item) => (
-                  <tr key={item.id}>
+                  <tr key={item.id} style={item.current ? { background: '#fff8e8' } : undefined}>
                     <td>{item.id}</td>
-                    <td>{item.company}</td>
+                    <td>
+                      {item.company}
+                      {item.current ? ' ★' : ''}
+                    </td>
                     <td>{item.role}</td>
                     <td>{item.years}</td>
-                    <td>{item.location}</td>
+                    <td>{item.current ? 'ACTIVE' : 'Past'}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
             <p className="sos-muted" style={{ marginTop: 10 }}>
-              Plus earlier engagements across Ghostek, Toynk (earlier term), NGSOD, Try Snow, and more.
+              Primary: Jettribe Head of Marketing Team (5 years). Prior: Toynk, SVC, EcomCircle, Cowin,
+              X-Gamer, Bastion, Ghostek, and more.
             </p>
           </>
         )
@@ -246,9 +295,9 @@ export function SellerDesktop({ onEnter2026 }: Props) {
               <label>To</label>
               <input readOnly value={profile.email} />
               <label>Subject</label>
-              <input defaultValue="Project inquiry — marketplace growth" />
+              <input defaultValue="Project inquiry — marketing leadership / marketplace growth" />
               <label>Body</label>
-              <textarea defaultValue="Hey Uzi — we need help scaling our Amazon / multi-channel catalog. Here's the brief…" />
+              <textarea defaultValue="Hey Uzi — saw your Jettribe leadership work and SellerOS portfolio. We need help with…" />
               <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
                 <a className="sos-btn sos-btn--primary" href={`mailto:${profile.email}?subject=Project%20inquiry`}>
                   Send via email client
@@ -264,14 +313,14 @@ export function SellerDesktop({ onEnter2026 }: Props) {
         return (
           <>
             <span className="sos-badge">UPDATE AVAILABLE</span>
-            <h2 className="sos-h1">SellerOS 2016 → Commerce 2026</h2>
+            <h2 className="sos-h1">SellerOS → Commerce 2026</h2>
             <p style={{ marginBottom: 10 }}>
-              A modern portfolio build is ready. Keep the classic seller desktop, or enter the 2026
-              experience — same operator, new interface.
+              Modern portfolio build ready — Jettribe leadership story, career systems, and motion-led
+              2026 experience.
             </p>
             <ul className="sos-list">
-              <li>Immersive case-study layout</li>
-              <li>Full capability stack</li>
+              <li>Immersive case-study layout with motion</li>
+              <li>Current role + full capability stack</li>
               <li>One-click return to classic desktop anytime</li>
             </ul>
             <div style={{ marginTop: 16, display: 'flex', gap: 8, flexWrap: 'wrap' }}>
@@ -298,7 +347,7 @@ export function SellerDesktop({ onEnter2026 }: Props) {
             <br />
             OS
           </div>
-          <div className="sos-watermark__sub">Marketplace Workstation · Build 2016.11</div>
+          <div className="sos-watermark__sub">Jettribe HQ · Marketing Workstation</div>
         </div>
 
         <div className="sos-icons">
@@ -315,7 +364,7 @@ export function SellerDesktop({ onEnter2026 }: Props) {
             >
               <span
                 className={`sos-icon__glyph ${
-                  icon.icon === 'trash' ? 'is-danger' : icon.icon === 'mail' ? 'is-amber' : ''
+                  icon.icon === 'trash' ? 'is-danger' : icon.id === 'resume' || icon.icon === 'mail' ? 'is-amber' : ''
                 }`}
                 aria-hidden
               >
@@ -336,11 +385,13 @@ export function SellerDesktop({ onEnter2026 }: Props) {
               y={win.y}
               width={win.width}
               status={
-                win.id === 'listings'
-                  ? `${work.length} listings · catalog synced`
-                  : win.id === 'ppc'
-                    ? 'ACoS monitor · live'
-                    : 'SellerOS ready'
+                win.id === 'resume'
+                  ? 'Jettribe · Head of Marketing · 5 yrs'
+                  : win.id === 'listings'
+                    ? `${work.length} listings · catalog synced`
+                    : win.id === 'ppc'
+                      ? 'ACoS monitor · live'
+                      : 'SellerOS ready'
               }
               onFocus={(id) => focus(id as WindowId)}
               onClose={(id) => closeWindow(id as WindowId)}
@@ -355,8 +406,8 @@ export function SellerDesktop({ onEnter2026 }: Props) {
           <div className="sos-update-toast" onClick={(e) => e.stopPropagation()}>
             <h3>Commerce System Update</h3>
             <p>
-              SellerOS detected a 2026 portfolio build. Update now for the modern Uzi Mir experience —
-              or explore the classic desktop first.
+              Resume loaded: Jettribe Head of Marketing (5 years). Update to the 2026 portfolio for the
+              full motion experience — or keep exploring SellerOS.
             </p>
             <div className="sos-update-toast__actions">
               <button
@@ -374,10 +425,10 @@ export function SellerDesktop({ onEnter2026 }: Props) {
                 className="sos-btn"
                 onClick={() => {
                   setToast(false)
-                  openWindow('update')
+                  openWindow('resume')
                 }}
               >
-                Details…
+                Open resume
               </button>
               <button type="button" className="sos-btn" onClick={() => setToast(false)}>
                 Dismiss
