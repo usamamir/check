@@ -417,57 +417,162 @@ ul { margin: 0; padding: 0; list-style: none; }
 }
 .nav-sub > .container {
   width: min(1560px, calc(100% - 28px));
-  background: #fff;
-  box-shadow: 0 12px 28px rgba(0,0,0,0.16);
-  border-top: 3px solid var(--red);
+  background: #2e353d;
+  color: #fff;
+  box-shadow: 0 16px 32px rgba(0,0,0,0.28);
+  border-top: 0;
 }
 .nav-item:hover > .nav-sub,
 .nav-item.is-mega > .nav-sub,
 .nav-item:focus-within > .nav-sub { display: block; }
 .mega-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 16px 22px;
-  max-height: min(70vh, 560px);
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 18px 26px;
+  max-height: min(48vh, 380px);
   overflow: auto;
-  padding: 18px 18px 20px;
+  padding: 22px 22px 8px;
 }
-.mega-col { min-width: 0; }
+.mega-col { min-width: 0; display: flex; flex-direction: column; align-items: stretch; }
+.mega-col > a.mega-all { order: 3; margin-top: 4px; }
 .mega-col a {
   display: block;
-  color: #3a3a3a;
+  color: #fff;
   font-family: Roboto, sans-serif;
   font-size: 13.5px;
   font-weight: 400;
-  line-height: 1.3;
+  line-height: 1.35;
   padding: 3px 0;
 }
 .mega-col a.mega-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   font-family: Oswald, sans-serif;
-  color: #161616;
+  color: #fff;
   font-size: 16px;
   font-weight: 600;
-  letter-spacing: 0.4px;
+  letter-spacing: 0.3px;
   text-transform: uppercase;
-  line-height: 1.2;
+  line-height: 1.15;
   padding: 0 0 8px;
-  margin-bottom: 4px;
-  border-bottom: 2px solid var(--red);
+  margin-bottom: 6px;
+  border-bottom: 1px solid rgba(255,255,255,0.9);
 }
-.mega-all { color: var(--red) !important; font-weight: 700; font-size: 13px; }
-.mega-subhead { font-weight: 700; margin-top: 8px; }
-.mega-nest { padding-left: 12px; color: #555; font-size: 13px; }
+.mega-col a.mega-head::before {
+  content: "";
+  width: 44px;
+  height: 44px;
+  flex: none;
+  background: #1b2026 url("cat-vests.jpg") center/cover no-repeat;
+}
+.mega-head[href$="=2026-jtr-series"]::before,
+.mega-head[href$="=2025-jtr-series"]::before,
+.mega-head[href$="=ride-gear-photo-samples"]::before,
+.mega-head[href$="=outlet-photography-samples"]::before { background-image: url("slide-1.jpg"); }
+.mega-head[href*="hot-water-the-movie"]::before { background-image: url("slide-2.jpg"); }
+.mega-head[href$="=customized-gear-factory"]::before,
+.mega-head[href$="=customized-vests-usa"]::before,
+.mega-head[href$="=graphics-kits"]::before,
+.mega-head[href$="=name-plates"]::before { background-image: url("cat-custom.jpg"); }
+.mega-head[href$="=wetsuits"]::before,
+.mega-head[href$="=wetsuits-vests-tour-coats"]::before,
+.mega-head[href$="=Circuit-Wetsuits"]::before,
+.mega-head[href$="=team-rider-wetsuits"]::before,
+.mega-head[href$="=hyper-wetsuits"]::before,
+.mega-head[href$="=pivot-wetsuit"]::before,
+.mega-head[href$="=outlet-wetsuit"]::before { background-image: url("cat-wetsuits.jpg"); }
+.mega-head[href$="=boots-shoes"]::before,
+.mega-head[href$="=outlet-footwear"]::before { background-image: url("cat-boots.jpg"); }
+.mega-head[href$="=gloves"]::before,
+.mega-head[href$="=outlet-gloves"]::before { background-image: url("cat-gloves.jpg"); }
+.mega-head[href$="=goggles"]::before,
+.mega-head[href$="=ride-gear-goggles-gloves-boots-shoes"]::before { background-image: url("cat-goggles.jpg"); }
+.mega-head[href$="=protective-gear"]::before { background-image: url("cat-protection.jpg"); }
+.mega-head[href$="=for-her"]::before,
+.mega-head[href$="=ladies-swimwear-rashguards-shirts-hoodies"]::before { background-image: url("cat-ladies.jpg"); }
+.mega-head[href$="=for-him"]::before,
+.mega-head[href$="=hoodies-sweatshirts"]::before,
+.mega-head[href$="=outlet-apparel"]::before,
+.mega-head[href$="=mens-board-shorts-rashguards-shirts-hoodies"]::before { background-image: url("cat-mens.jpg"); }
+.mega-head[href$="=swimwear"]::before,
+.mega-head[href$="=rashguards"]::before,
+.mega-head[href$="=towels"]::before { background-image: url("cat-swim.jpg"); }
+.mega-head[href$="=hats"]::before,
+.mega-head[href$="=hats-1"]::before,
+.mega-head[href$="=recreation"]::before,
+.mega-head[href$="=decals-signs"]::before,
+.mega-head[href$="=gift-cards"]::before,
+.mega-head[href$="=jewelry"]::before,
+.mega-head[href$="=keys-lanyards"]::before,
+.mega-head[href$="=replacement-parts"]::before,
+.mega-head[href$="=outlet-accessories"]::before { background-image: url("cat-accessories.jpg"); }
+.mega-head[href$="=gear-bags"]::before { background-image: url("cat-travel.jpg"); }
+.mega-head[href$="=anchors-buoys"]::before,
+.mega-head[href$="=race-site-equipment"]::before,
+.mega-head[href$="=vp-racing-containers"]::before { background-image: url("cat-hardgoods.jpg"); }
+.mega-head[href$="=clean-care"]::before,
+.mega-head[href$="=size-chart"]::before { background-image: url("cat-care.jpg"); }
+.mega-head[href$="=sea-doo"]::before,
+.mega-head[href$="=yamaha"]::before,
+.mega-head[href$="=kawasaki"]::before,
+.mega-head[href$="=vintage-covers"]::before,
+.mega-head[href$="=hydrospace"]::before,
+.mega-head[href$="=outlet-pwc-covers"]::before,
+.mega-head[href$="=trailer-accessories-1"]::before { background-image: url("cat-covers.jpg"); }
+.mega-all { color: #fff !important; font-weight: 700; font-size: 13px; }
+.mega-all::after { content: " \203A"; }
+.mega-subhead { font-weight: 700; margin-top: 8px; color: #fff; }
+.mega-nest { padding-left: 12px; color: rgba(255,255,255,0.86); font-size: 13px; }
 .mega-nest--deep { padding-left: 24px; }
-.mega-col a:hover { color: var(--red); }
+.mega-col a:hover { color: #fff; text-decoration: underline; }
+.mega-promos {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  padding: 14px 22px 20px;
+}
+.mega-promo {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  min-height: 132px;
+  overflow: hidden;
+  color: #fff !important;
+  text-decoration: none;
+  background: #1b2026;
+}
+.mega-promo img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.mega-promo span {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  padding: 28px 14px 12px;
+  background: linear-gradient(transparent, rgba(0,0,0,0.72));
+  color: #fff;
+  font-size: 14px;
+  line-height: 1.3;
+}
+.mega-promo strong { display: block; font-family: Oswald, sans-serif; font-size: 18px; font-weight: 600; letter-spacing: 0.3px; text-transform: uppercase; }
+.mega-promo:hover { color: #fff !important; text-decoration: none; }
+.mega-promo:hover img { transform: scale(1.04); }
+.mega-promo img { transition: transform 0.25s ease; }
 .nav-drop {
   display: none;
   position: absolute;
   right: 0;
   top: 100%;
   min-width: 240px;
-  background: #fff;
+  background: #2e353d;
   padding: 8px 0;
-  box-shadow: 0 8px 18px rgba(0,0,0,0.16);
+  box-shadow: 0 12px 28px rgba(0,0,0,0.28);
   z-index: 50;
 }
 .nav-item:hover > .nav-drop,
@@ -475,14 +580,14 @@ ul { margin: 0; padding: 0; list-style: none; }
 .nav-item:focus-within > .nav-drop { display: block; }
 .nav-drop a {
   display: block;
-  color: #161616;
+  color: #fff;
   font-family: Roboto, sans-serif;
   font-size: 15px;
   font-weight: 400;
   text-transform: none;
   padding: 10px 18px;
 }
-.nav-drop a:hover { background: #f6f6f6; color: var(--red); }
+.nav-drop a:hover { background: rgba(255,255,255,0.08); color: #fff; }
 
 .predictive {
   position: absolute;
@@ -910,7 +1015,9 @@ body { top: 0 !important; }
   .mega-grid { display: block; max-height: none; overflow: visible; padding: 0; }
   .mega-col { padding: 8px 18px 12px 28px; border-bottom: 1px solid rgba(255,255,255,0.08); }
   .mega-col a, .mega-head, .mega-nest, .mega-col a.mega-head { color: #fff; border-bottom-color: rgba(255,255,255,0.35); }
-  .mega-all { color: #ffd0d1 !important; }
+  .mega-all { color: #fff !important; }
+  .mega-promos { grid-template-columns: 1fr; padding: 8px 18px 16px; }
+  .mega-promo { min-height: 110px; }
   .mega-col a:hover { color: #fff; }
   .nav-drop { background: transparent; }
   .nav-drop a { color: #fff; }
