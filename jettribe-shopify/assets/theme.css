@@ -464,62 +464,69 @@ ul { margin: 0; padding: 0; list-style: none; }
   width: 44px;
   height: 44px;
   flex: none;
-  background: #1b2026 url("cat-vests.jpg") center/cover no-repeat;
+  background: #1b2026 center/cover no-repeat;
 }
-.mega-head[href$="=2026-jtr-series"]::before,
-.mega-head[href$="=2025-jtr-series"]::before,
-.mega-head[href$="=ride-gear-photo-samples"]::before,
-.mega-head[href$="=outlet-photography-samples"]::before { background-image: url("slide-1.jpg"); }
-.mega-head[href*="hot-water-the-movie"]::before { background-image: url("slide-2.jpg"); }
-.mega-head[href$="=customized-gear-factory"]::before,
-.mega-head[href$="=customized-vests-usa"]::before,
-.mega-head[href$="=graphics-kits"]::before,
-.mega-head[href$="=name-plates"]::before { background-image: url("cat-custom.jpg"); }
-.mega-head[href$="=wetsuits"]::before,
-.mega-head[href$="=wetsuits-vests-tour-coats"]::before,
-.mega-head[href$="=Circuit-Wetsuits"]::before,
-.mega-head[href$="=team-rider-wetsuits"]::before,
-.mega-head[href$="=hyper-wetsuits"]::before,
-.mega-head[href$="=pivot-wetsuit"]::before,
-.mega-head[href$="=outlet-wetsuit"]::before { background-image: url("cat-wetsuits.jpg"); }
-.mega-head[href$="=boots-shoes"]::before,
-.mega-head[href$="=outlet-footwear"]::before { background-image: url("cat-boots.jpg"); }
-.mega-head[href$="=gloves"]::before,
-.mega-head[href$="=outlet-gloves"]::before { background-image: url("cat-gloves.jpg"); }
-.mega-head[href$="=goggles"]::before,
-.mega-head[href$="=ride-gear-goggles-gloves-boots-shoes"]::before { background-image: url("cat-goggles.jpg"); }
-.mega-head[href$="=protective-gear"]::before { background-image: url("cat-protection.jpg"); }
-.mega-head[href$="=for-her"]::before,
-.mega-head[href$="=ladies-swimwear-rashguards-shirts-hoodies"]::before { background-image: url("cat-ladies.jpg"); }
-.mega-head[href$="=for-him"]::before,
-.mega-head[href$="=hoodies-sweatshirts"]::before,
-.mega-head[href$="=outlet-apparel"]::before,
-.mega-head[href$="=mens-board-shorts-rashguards-shirts-hoodies"]::before { background-image: url("cat-mens.jpg"); }
-.mega-head[href$="=swimwear"]::before,
-.mega-head[href$="=rashguards"]::before,
-.mega-head[href$="=towels"]::before { background-image: url("cat-swim.jpg"); }
-.mega-head[href$="=hats"]::before,
-.mega-head[href$="=hats-1"]::before,
-.mega-head[href$="=recreation"]::before,
-.mega-head[href$="=decals-signs"]::before,
-.mega-head[href$="=gift-cards"]::before,
-.mega-head[href$="=jewelry"]::before,
-.mega-head[href$="=keys-lanyards"]::before,
-.mega-head[href$="=replacement-parts"]::before,
-.mega-head[href$="=outlet-accessories"]::before { background-image: url("cat-accessories.jpg"); }
-.mega-head[href$="=gear-bags"]::before { background-image: url("cat-travel.jpg"); }
-.mega-head[href$="=anchors-buoys"]::before,
-.mega-head[href$="=race-site-equipment"]::before,
-.mega-head[href$="=vp-racing-containers"]::before { background-image: url("cat-hardgoods.jpg"); }
-.mega-head[href$="=clean-care"]::before,
-.mega-head[href$="=size-chart"]::before { background-image: url("cat-care.jpg"); }
-.mega-head[href$="=sea-doo"]::before,
-.mega-head[href$="=yamaha"]::before,
-.mega-head[href$="=kawasaki"]::before,
-.mega-head[href$="=vintage-covers"]::before,
-.mega-head[href$="=hydrospace"]::before,
-.mega-head[href$="=outlet-pwc-covers"]::before,
-.mega-head[href$="=trailer-accessories-1"]::before { background-image: url("cat-covers.jpg"); }
+.mega-col a.mega-head[href$="=2026-jtr-series"]::before { background-image: url("menu-2026-jtr-series.jpg"); }
+.mega-col a.mega-head[href$="=2025-jtr-series"]::before { background-image: url("menu-2025-jtr-series.jpg"); }
+.mega-col a.mega-head[href$="=customized-gear-factory"]::before { background-image: url("menu-customized-gear-factory.jpg"); }
+.mega-col a.mega-head[href$="=customized-vests-usa"]::before { background-image: url("menu-customized-vests-usa.jpg"); }
+.mega-col a.mega-head[href$="=circuit-2023"]::before { background-image: url("menu-circuit-2023.jpg"); }
+.mega-col a.mega-head[href$="=pivot"]::before { background-image: url("menu-pivot.jpg"); }
+.mega-col a.mega-head[href$="=team-rider-series"]::before { background-image: url("menu-team-rider-series.jpg"); }
+.mega-col a.mega-head[href$="=hyper-2020"]::before { background-image: url("menu-hyper-2020.jpg"); }
+.mega-col a.mega-head[href$="=hot-water-the-movie"]::before { background-image: url("menu-hot-water-the-movie.jpg"); }
+.mega-col a.mega-head[href$="=wetsuits"]::before { background-image: url("menu-wetsuits.jpg"); }
+.mega-col a.mega-head[href$="=vests-us-coast-guard"]::before { background-image: url("menu-vests-us-coast-guard.jpg"); }
+.mega-col a.mega-head[href$="=vests-competition"]::before { background-image: url("menu-vests-competition.jpg"); }
+.mega-col a.mega-head[href$="=vests-neoprene"]::before { background-image: url("menu-vests-neoprene.jpg"); }
+.mega-col a.mega-head[href$="=vests-ce-european-certified"]::before { background-image: url("menu-vests-ce-european-certified.jpg"); }
+.mega-col a.mega-head[href$="=black-out-color-kits-1"]::before { background-image: url("menu-black-out-color-kits-1.jpg"); }
+.mega-col a.mega-head[href$="=boots-shoes"]::before { background-image: url("menu-boots-shoes.jpg"); }
+.mega-col a.mega-head[href$="=jackets"]::before { background-image: url("menu-jackets.jpg"); }
+.mega-col a.mega-head[href$="=gloves"]::before { background-image: url("menu-gloves.jpg"); }
+.mega-col a.mega-head[href$="=goggles"]::before { background-image: url("menu-goggles.jpg"); }
+.mega-col a.mega-head[href$="=protective-gear"]::before { background-image: url("menu-protective-gear.jpg"); }
+.mega-col a.mega-head[href$="=rashguards"]::before { background-image: url("menu-rashguards.jpg"); }
+.mega-col a.mega-head[href$="=ride-gear-photo-samples"]::before { background-image: url("menu-ride-gear-photo-samples.jpg"); }
+.mega-col a.mega-head[href$="=size-chart"]::before { background-image: url("menu-size-chart.jpg"); }
+.mega-col a.mega-head[href$="=for-her"]::before { background-image: url("menu-for-her.jpg"); }
+.mega-col a.mega-head[href$="=for-him"]::before { background-image: url("menu-for-him.jpg"); }
+.mega-col a.mega-head[href$="=swimwear"]::before { background-image: url("menu-swimwear.jpg"); }
+.mega-col a.mega-head[href$="=hoodies-sweatshirts"]::before { background-image: url("menu-hoodies-sweatshirts.jpg"); }
+.mega-col a.mega-head[href$="=hats"]::before { background-image: url("menu-hats.jpg"); }
+.mega-col a.mega-head[href$="=recreation"]::before { background-image: url("menu-recreation.jpg"); }
+.mega-col a.mega-head[href$="=anchors-buoys"]::before { background-image: url("menu-anchors-buoys.jpg"); }
+.mega-col a.mega-head[href$="=clean-care"]::before { background-image: url("menu-clean-care.jpg"); }
+.mega-col a.mega-head[href$="=graphics-kits"]::before { background-image: url("menu-graphics-kits.jpg"); }
+.mega-col a.mega-head[href$="=decals-signs"]::before { background-image: url("menu-decals-signs.jpg"); }
+.mega-col a.mega-head[href$="=gear-bags"]::before { background-image: url("menu-gear-bags.jpg"); }
+.mega-col a.mega-head[href$="=towels"]::before { background-image: url("menu-towels.jpg"); }
+.mega-col a.mega-head[href$="=gift-cards"]::before { background-image: url("menu-gift-cards.jpg"); }
+.mega-col a.mega-head[href$="=hats-1"]::before { background-image: url("menu-hats-1.jpg"); }
+.mega-col a.mega-head[href$="=jewelry"]::before { background-image: url("menu-jewelry.jpg"); }
+.mega-col a.mega-head[href$="=keys-lanyards"]::before { background-image: url("menu-keys-lanyards.jpg"); }
+.mega-col a.mega-head[href$="=name-plates"]::before { background-image: url("menu-name-plates.jpg"); }
+.mega-col a.mega-head[href$="=race-site-equipment"]::before { background-image: url("menu-race-site-equipment.jpg"); }
+.mega-col a.mega-head[href$="=trailer-accessories-1"]::before { background-image: url("menu-trailer-accessories-1.jpg"); }
+.mega-col a.mega-head[href$="=vp-racing-containers"]::before { background-image: url("menu-vp-racing-containers.jpg"); }
+.mega-col a.mega-head[href$="=replacement-parts"]::before { background-image: url("menu-replacement-parts.jpg"); }
+.mega-col a.mega-head[href$="=sea-doo"]::before { background-image: url("menu-sea-doo.jpg"); }
+.mega-col a.mega-head[href$="=yamaha"]::before { background-image: url("menu-yamaha.jpg"); }
+.mega-col a.mega-head[href$="=kawasaki"]::before { background-image: url("menu-kawasaki.jpg"); }
+.mega-col a.mega-head[href$="=vintage-covers"]::before { background-image: url("menu-vintage-covers.jpg"); }
+.mega-col a.mega-head[href$="=hydrospace"]::before { background-image: url("menu-hydrospace.jpg"); }
+.mega-col a.mega-head[href$="=vests-under-100"]::before { background-image: url("menu-vests-under-100.jpg"); }
+.mega-col a.mega-head[href$="=all-outlet"]::before { background-image: url("menu-all-outlet.jpg"); }
+.mega-col a.mega-head[href$="=outlet-gear"]::before { background-image: url("menu-outlet-gear.jpg"); }
+.mega-col a.mega-head[href$="=outlet-apparel"]::before { background-image: url("menu-outlet-apparel.jpg"); }
+.mega-col a.mega-head[href$="=outlet-accessories"]::before { background-image: url("menu-outlet-accessories.jpg"); }
+.mega-col a.mega-head[href$="=outlet-pwc-covers"]::before { background-image: url("menu-outlet-pwc-covers.jpg"); }
+.mega-col a.mega-head[href$="=outlet-photography-samples"]::before { background-image: url("menu-outlet-photography-samples.jpg"); }
+.mega-col a.mega-head[href$="=scratch-dent"]::before { background-image: url("menu-scratch-dent.jpg"); }
+.mega-col a.mega-head[href$="=wetsuits-vests-tour-coats"]::before { background-image: url("menu-wetsuits-vests-tour-coats.jpg"); }
+.mega-col a.mega-head[href$="=mens-board-shorts-rashguards-shirts-hoodies"]::before { background-image: url("menu-mens-board-shorts-rashguards-shirts-hoodies.jpg"); }
+.mega-col a.mega-head[href$="=ladies-swimwear-rashguards-shirts-hoodies"]::before { background-image: url("menu-ladies-swimwear-rashguards-shirts-hoodies.jpg"); }
+.mega-col a.mega-head[href$="=ride-gear-goggles-gloves-boots-shoes"]::before { background-image: url("menu-ride-gear-goggles-gloves-boots-shoes.jpg"); }
 .mega-all { color: #fff !important; font-weight: 700; font-size: 13px; }
 .mega-all::after { content: " \203A"; }
 .mega-subhead { font-weight: 700; margin-top: 8px; color: #fff; }
@@ -547,9 +554,8 @@ ul { margin: 0; padding: 0; list-style: none; }
   inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  object-position: center top;
-  transform-origin: center top;
+  object-fit: contain;
+  object-position: center;
 }
 .mega-promo span {
   position: relative;
@@ -564,8 +570,6 @@ ul { margin: 0; padding: 0; list-style: none; }
 }
 .mega-promo strong { display: block; font-family: Oswald, sans-serif; font-size: 18px; font-weight: 600; letter-spacing: 0.3px; text-transform: uppercase; }
 .mega-promo:hover { color: #fff !important; text-decoration: none; }
-.mega-promo:hover img { transform: scale(1.04); }
-.mega-promo img { transition: transform 0.25s ease; }
 .nav-drop {
   display: none;
   position: absolute;
