@@ -34,7 +34,8 @@ export const work = [
     summary:
       'Directed Amazon listing systems at scale — 1000+ product variations daily — with A/B testing and PPC that lifted conversion and market presence.',
     focus: ['Bulk listings', 'A/B testing', 'Amazon PPC', 'Conversion'],
-    accent: '#F0A04B',
+    asin: 'TYNK-BULK-01',
+    rank: '#12',
   },
   {
     id: '02',
@@ -45,7 +46,8 @@ export const work = [
     summary:
       'Spearheaded account strategy across listings and high-impact PPC, using Amazon and Google Analytics to climb rankings and sustain growth.',
     focus: ['Account strategy', 'Rank growth', 'Analytics', 'PPC'],
-    accent: '#7EB8C9',
+    asin: 'SVC-LEAD-02',
+    rank: '#28',
   },
   {
     id: '03',
@@ -56,7 +58,8 @@ export const work = [
     summary:
       'Led a cross-functional listings team across platforms, shipping SEO/SERP systems and A+ content with design partners.',
     focus: ['Team leadership', 'SEO / SERP', 'A+ Content', 'Multi-channel'],
-    accent: '#E07A5F',
+    asin: 'ECRC-TEAM-03',
+    rank: '#41',
   },
   {
     id: '04',
@@ -67,7 +70,8 @@ export const work = [
     summary:
       'Owned e-commerce operations end-to-end — listings, social, PPC — and directed video/graphic storytelling in Adobe Creative Suite.',
     focus: ['Brand growth', 'PPC', 'Video', 'Creative direction'],
-    accent: '#B8A9C9',
+    asin: 'COWN-ECOM-04',
+    rank: '#63',
   },
   {
     id: '05',
@@ -78,7 +82,8 @@ export const work = [
     summary:
       'Ran multi-channel strategy across Amazon, Shopify, and Walmart with listing optimization that drove measurable sales growth.',
     focus: ['Amazon', 'Shopify', 'Walmart', 'Market positioning'],
-    accent: '#81B29A',
+    asin: 'XGMR-MULTI-05',
+    rank: '#88',
   },
   {
     id: '06',
@@ -89,7 +94,8 @@ export const work = [
     summary:
       'Optimized listings and PPC while shipping Amazon A+ Content systems that elevated brand positioning and engagement.',
     focus: ['A+ Content', 'PPC', 'Visibility', 'Brand systems'],
-    accent: '#F2CC8F',
+    asin: 'BSTN-APLUS-06',
+    rank: '#104',
   },
 ]
 
@@ -145,3 +151,15 @@ export const tools = [
   'Notion',
   'Slack',
 ]
+
+export const desktopIcons = [
+  { id: 'about', label: 'About_Uzi.txt', icon: 'doc', window: 'about' },
+  { id: 'listings', label: 'Active_Listings', icon: 'box', window: 'listings' },
+  { id: 'ppc', label: 'PPC_Command', icon: 'chart', window: 'ppc' },
+  { id: 'research', label: 'Research_Lab', icon: 'search', window: 'research' },
+  { id: 'brands', label: 'Brand_Roster.xls', icon: 'sheet', window: 'brands' },
+  { id: 'mail', label: 'Inbox', icon: 'mail', window: 'mail' },
+  { id: 'trash', label: 'Recycle_Ads', icon: 'trash', window: null },
+] as const
+
+export type WindowId = 'about' | 'listings' | 'ppc' | 'research' | 'brands' | 'mail' | 'update'

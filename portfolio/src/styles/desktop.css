@@ -1,0 +1,758 @@
+/* ——— SellerOS 2016 ——— */
+.sos {
+  --sos-teal: #146eb4;
+  --sos-teal-deep: #0f4c81;
+  --sos-amber: #ff9900;
+  --sos-amber-hot: #f0c14b;
+  --sos-chrome: #ece9d8;
+  --sos-chrome-2: #d4d0c8;
+  --sos-ink: #1a1a1a;
+  --sos-panel: #f3f3f3;
+  --sos-white: #ffffff;
+  --sos-task: #2455a5;
+  --sos-task-edge: #1a3f7a;
+  --sos-green: #2ecc71;
+  --sos-red: #c0392b;
+  --sos-font: 'Tahoma', 'Segoe UI', Geneva, Verdana, sans-serif;
+  --sos-mono: 'Courier New', Courier, monospace;
+}
+
+.sos-root {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  font-family: var(--sos-font);
+  color: var(--sos-ink);
+  user-select: none;
+}
+
+/* Boot */
+.sos-boot {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: #000;
+  color: #33ff66;
+  font-family: var(--sos-mono);
+  font-size: clamp(12px, 2.2vw, 14px);
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 0.35rem;
+}
+
+.sos-boot__logo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -60%);
+  text-align: center;
+  color: var(--sos-amber);
+}
+
+.sos-boot__mark {
+  font-size: clamp(2.5rem, 8vw, 4.5rem);
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  color: #fff;
+  text-shadow: 0 0 24px rgba(255, 153, 0, 0.45);
+}
+
+.sos-boot__mark span {
+  color: var(--sos-amber);
+}
+
+.sos-boot__sub {
+  margin-top: 0.75rem;
+  color: #8f8;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-size: 0.7rem;
+}
+
+.sos-boot__line {
+  opacity: 0;
+  animation: boot-line 0.15s forwards;
+}
+
+@keyframes boot-line {
+  to {
+    opacity: 1;
+  }
+}
+
+.sos-boot__bar {
+  margin-top: 1rem;
+  width: min(320px, 70vw);
+  height: 14px;
+  border: 1px solid #33ff66;
+  padding: 2px;
+}
+
+.sos-boot__bar > i {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: repeating-linear-gradient(
+    90deg,
+    #33ff66 0 8px,
+    transparent 8px 12px
+  );
+  animation: boot-fill 2.2s steps(18) forwards;
+}
+
+@keyframes boot-fill {
+  to {
+    width: 100%;
+  }
+}
+
+/* Desktop wallpaper */
+.sos-desktop {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(20, 110, 180, 0.18), rgba(255, 153, 0, 0.12)),
+    linear-gradient(135deg, #3a7bd5 0%, #1e4d8c 45%, #0b2d5c 100%);
+  padding: 12px 12px 52px;
+}
+
+.sos-desktop::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.15;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+  background-size: 48px 48px;
+  pointer-events: none;
+}
+
+.sos-watermark {
+  position: absolute;
+  right: 24px;
+  bottom: 64px;
+  text-align: right;
+  color: rgba(255, 255, 255, 0.22);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.sos-watermark__title {
+  font-size: clamp(2rem, 6vw, 4rem);
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  line-height: 1;
+}
+
+.sos-watermark__sub {
+  margin-top: 0.35rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+/* Icons */
+.sos-icons {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: 8px;
+  height: calc(100% - 8px);
+  max-width: 110px;
+}
+
+.sos-icon {
+  width: 86px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 4px;
+  background: transparent;
+  border: 1px solid transparent;
+  cursor: pointer;
+  color: #fff;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.65);
+}
+
+.sos-icon:hover,
+.sos-icon.is-selected {
+  background: rgba(20, 110, 180, 0.35);
+  border-color: rgba(255, 255, 255, 0.45);
+}
+
+.sos-icon__glyph {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border-radius: 4px;
+  font-size: 1.35rem;
+  background: linear-gradient(180deg, #fff 0%, #dfe7f2 100%);
+  color: var(--sos-teal-deep);
+  box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+.sos-icon__glyph.is-amber {
+  background: linear-gradient(180deg, #ffe6a8, var(--sos-amber));
+  color: #5a3a00;
+}
+
+.sos-icon__glyph.is-danger {
+  background: linear-gradient(180deg, #f5d0d0, #e74c3c);
+  color: #fff;
+}
+
+.sos-icon__label {
+  font-size: 11px;
+  text-align: center;
+  line-height: 1.2;
+  word-break: break-word;
+}
+
+/* Window chrome */
+.sos-window {
+  position: absolute;
+  z-index: 10;
+  min-width: min(320px, 92vw);
+  background: var(--sos-chrome);
+  border: 2px solid #fff;
+  border-right-color: #404040;
+  border-bottom-color: #404040;
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.35);
+  display: flex;
+  flex-direction: column;
+}
+
+.sos-window.is-active {
+  z-index: 30;
+}
+
+.sos-window__titlebar {
+  height: 28px;
+  padding: 0 4px 0 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  background: linear-gradient(90deg, var(--sos-task) 0%, #5a8fd4 100%);
+  color: #fff;
+  cursor: grab;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.sos-window.is-active .sos-window__titlebar {
+  background: linear-gradient(90deg, var(--sos-teal-deep) 0%, var(--sos-teal) 55%, #5aa0d8 100%);
+}
+
+.sos-window__titlebar:active {
+  cursor: grabbing;
+}
+
+.sos-window__controls {
+  display: flex;
+  gap: 2px;
+}
+
+.sos-window__btn {
+  width: 18px;
+  height: 18px;
+  font-size: 10px;
+  font-weight: 900;
+  line-height: 1;
+  display: grid;
+  place-items: center;
+  background: var(--sos-chrome);
+  border: 1px solid #fff;
+  border-right-color: #404040;
+  border-bottom-color: #404040;
+  color: #000;
+  padding: 0;
+}
+
+.sos-window__btn:active {
+  border: 1px solid #404040;
+  border-right-color: #fff;
+  border-bottom-color: #fff;
+}
+
+.sos-window__btn.is-close:hover {
+  background: #e74c3c;
+  color: #fff;
+}
+
+.sos-window__menubar {
+  display: flex;
+  gap: 12px;
+  padding: 2px 8px;
+  font-size: 11px;
+  background: var(--sos-chrome);
+  border-bottom: 1px solid #a0a0a0;
+}
+
+.sos-window__body {
+  background: var(--sos-white);
+  border: 2px solid;
+  border-color: #808080 #fff #fff #808080;
+  margin: 4px;
+  overflow: auto;
+  max-height: min(58vh, 520px);
+  min-height: 180px;
+  padding: 12px;
+  font-size: 13px;
+  line-height: 1.45;
+  user-select: text;
+}
+
+.sos-window__status {
+  margin: 0 4px 4px;
+  padding: 2px 6px;
+  font-size: 11px;
+  background: var(--sos-chrome);
+  border: 1px solid;
+  border-color: #808080 #fff #fff #808080;
+  color: #333;
+}
+
+/* Window content blocks */
+.sos-h1 {
+  font-size: 18px;
+  margin-bottom: 8px;
+}
+
+.sos-muted {
+  color: #555;
+}
+
+.sos-badge {
+  display: inline-block;
+  padding: 2px 6px;
+  background: var(--sos-amber-hot);
+  border: 1px solid #a87900;
+  font-size: 11px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.sos-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.sos-table th,
+.sos-table td {
+  border: 1px solid #c5c5c5;
+  padding: 6px 8px;
+  text-align: left;
+}
+
+.sos-table th {
+  background: #e8eef7;
+}
+
+.sos-table tr:nth-child(even) td {
+  background: #fafafa;
+}
+
+.sos-kpi-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  margin: 10px 0 14px;
+}
+
+.sos-kpi {
+  border: 1px solid #c5c5c5;
+  padding: 8px;
+  background: #f8fafc;
+}
+
+.sos-kpi strong {
+  display: block;
+  font-size: 20px;
+  color: var(--sos-teal-deep);
+}
+
+.sos-list {
+  margin: 8px 0 0 1.1rem;
+}
+
+.sos-list li {
+  margin-bottom: 4px;
+}
+
+.sos-listing-card {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 10px;
+  background: linear-gradient(180deg, #fff, #f7f7f7);
+}
+
+.sos-listing-card__top {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.sos-listing-card__asin {
+  font-family: var(--sos-mono);
+  font-size: 11px;
+  color: #666;
+}
+
+.sos-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 28px;
+  padding: 0 12px;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  background: linear-gradient(180deg, #fff, #ddd);
+  border: 1px solid;
+  border-color: #fff #707070 #707070 #fff;
+  color: #111;
+  cursor: pointer;
+}
+
+.sos-btn:active {
+  border-color: #707070 #fff #fff #707070;
+}
+
+.sos-btn--primary {
+  background: linear-gradient(180deg, #ffe6a8, var(--sos-amber));
+  border-color: #fff #a87900 #a87900 #fff;
+}
+
+.sos-btn--teal {
+  background: linear-gradient(180deg, #6db3e8, var(--sos-teal));
+  color: #fff;
+  border-color: #9fd0f5 #0f4c81 #0f4c81 #9fd0f5;
+}
+
+.sos-mail-compose {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sos-mail-compose label {
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.sos-mail-compose input,
+.sos-mail-compose textarea {
+  font: inherit;
+  padding: 6px 8px;
+  border: 1px solid #999;
+  background: #fff;
+}
+
+.sos-mail-compose textarea {
+  min-height: 90px;
+  resize: vertical;
+}
+
+/* Update modal / toast */
+.sos-update-toast {
+  position: absolute;
+  right: 16px;
+  bottom: 56px;
+  z-index: 40;
+  width: min(320px, calc(100vw - 32px));
+  background: #fffbea;
+  border: 2px solid var(--sos-amber);
+  box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.25);
+  padding: 12px;
+  animation: toast-in 0.45s ease;
+}
+
+@keyframes toast-in {
+  from {
+    transform: translateY(16px);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+.sos-update-toast h3 {
+  font-size: 14px;
+  margin-bottom: 6px;
+}
+
+.sos-update-toast p {
+  font-size: 12px;
+  color: #444;
+  margin-bottom: 10px;
+}
+
+.sos-update-toast__actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* Taskbar */
+.sos-taskbar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 40px;
+  z-index: 50;
+  display: flex;
+  align-items: stretch;
+  gap: 4px;
+  padding: 3px;
+  background: linear-gradient(180deg, #3a7ad0, var(--sos-task) 30%, var(--sos-task-edge));
+  border-top: 1px solid #8eb7ef;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+.sos-start {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 12px;
+  font-weight: 800;
+  font-size: 13px;
+  color: #fff;
+  background: linear-gradient(180deg, #5cb85c, #2e7d32);
+  border: 1px solid;
+  border-color: #9fdf9f #1b5e20 #1b5e20 #9fdf9f;
+  border-radius: 0 12px 12px 0;
+  cursor: pointer;
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.35);
+}
+
+.sos-start:hover {
+  filter: brightness(1.08);
+}
+
+.sos-start__orb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #fff, var(--sos-amber) 45%, #b36b00);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.25);
+}
+
+.sos-task-buttons {
+  flex: 1;
+  display: flex;
+  gap: 4px;
+  overflow: auto;
+  align-items: center;
+}
+
+.sos-task-btn {
+  min-width: 120px;
+  max-width: 180px;
+  height: 28px;
+  padding: 0 10px;
+  font-size: 11px;
+  font-weight: 700;
+  text-align: left;
+  color: #fff;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.18), rgba(0, 0, 0, 0.12));
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-bottom-color: rgba(0, 0, 0, 0.25);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+
+.sos-task-btn.is-active {
+  background: rgba(0, 0, 0, 0.22);
+  border-color: rgba(0, 0, 0, 0.35);
+}
+
+.sos-tray {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 10px;
+  background: rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.sos-tray__pulse {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--sos-green);
+  box-shadow: 0 0 0 0 rgba(46, 204, 113, 0.7);
+  animation: pulse 1.6s infinite;
+}
+
+@keyframes pulse {
+  70% {
+    box-shadow: 0 0 0 8px rgba(46, 204, 113, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(46, 204, 113, 0);
+  }
+}
+
+/* Start menu */
+.sos-start-menu {
+  position: absolute;
+  left: 3px;
+  bottom: 40px;
+  z-index: 60;
+  width: min(280px, calc(100vw - 16px));
+  background: var(--sos-chrome);
+  border: 2px solid #fff;
+  border-right-color: #404040;
+  border-bottom-color: #404040;
+  box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.3);
+  display: grid;
+  grid-template-columns: 42px 1fr;
+  overflow: hidden;
+}
+
+.sos-start-menu__spine {
+  background: linear-gradient(180deg, var(--sos-teal), var(--sos-teal-deep));
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  color: #fff;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  font-size: 13px;
+  display: grid;
+  place-items: center;
+  padding: 10px 0;
+}
+
+.sos-start-menu__list {
+  background: #fff;
+  padding: 6px 0;
+}
+
+.sos-start-menu__item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  font-size: 12px;
+  text-align: left;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.sos-start-menu__item:hover {
+  background: var(--sos-task);
+  color: #fff;
+}
+
+.sos-start-menu__item.is-accent {
+  border-top: 1px solid #ddd;
+  margin-top: 4px;
+  font-weight: 800;
+  color: #8a5a00;
+}
+
+.sos-start-menu__item.is-accent:hover {
+  background: var(--sos-amber);
+  color: #111;
+}
+
+/* Transform overlay */
+.sos-transform {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: #000;
+  color: #fff;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  padding: 2rem;
+}
+
+.sos-transform__year {
+  font-size: clamp(4rem, 18vw, 9rem);
+  font-weight: 900;
+  letter-spacing: -0.06em;
+  line-height: 0.85;
+  background: linear-gradient(90deg, #fff, var(--sos-amber), #fff);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: year-shine 1.2s ease infinite;
+}
+
+@keyframes year-shine {
+  to {
+    background-position: 200% center;
+  }
+}
+
+.sos-transform__copy {
+  margin-top: 1rem;
+  font-family: var(--sos-mono);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  color: #aaa;
+}
+
+.sos-transform__vortex {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(255, 153, 0, 0.35), transparent 35%),
+    conic-gradient(from 0deg, transparent, rgba(20, 110, 180, 0.25), transparent 40%);
+  animation: vortex 1.8s linear infinite;
+  opacity: 0.7;
+}
+
+@keyframes vortex {
+  to {
+    transform: rotate(360deg) scale(1.2);
+  }
+}
+
+@media (max-width: 720px) {
+  .sos-icons {
+    flex-direction: row;
+    flex-wrap: wrap;
+    max-width: 100%;
+    height: auto;
+  }
+
+  .sos-window {
+    left: 8px !important;
+    right: 8px;
+    width: auto !important;
+    max-width: calc(100vw - 16px);
+  }
+
+  .sos-window__body {
+    max-height: 45vh;
+  }
+}
