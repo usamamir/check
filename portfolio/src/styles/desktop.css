@@ -690,6 +690,23 @@
   place-items: center;
   text-align: center;
   padding: 2rem;
+  overflow: hidden;
+}
+
+.sos-transform3d {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.sos-transform3d canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.sos-transform__copywrap {
+  position: relative;
+  z-index: 3;
 }
 
 .sos-transform__year {

@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { Suspense, lazy, useEffect } from 'react'
 import {
   motion,
   useScroll,
@@ -9,6 +9,11 @@ import {
 import Lenis from 'lenis'
 import { capabilities, profile, tools, work } from '../data'
 import { CountUp } from './CountUp'
+import { Tilt3D } from './Tilt3D'
+
+const HeroScene = lazy(() =>
+  import('./HeroScene').then((m) => ({ default: m.HeroScene })),
+)
 
 type Props = {
   onReturnClassic: () => void
@@ -66,8 +71,11 @@ export function ModernPortfolio({ onReturnClassic }: Props) {
   const year = new Date().getFullYear()
   const { scrollYProgress } = useScroll()
   const progress = useSpring(scrollYProgress, { stiffness: 120, damping: 28 })
-  const heroY = useTransform(scrollYProgress, [0, 0.25], [0, 120])
+  const heroY = useTransform(scrollYProgress, [0, 0.25], [0, 80])
   const planeOpacity = useTransform(scrollYProgress, [0, 0.2], [1, 0.15])
+  const sceneScale = useTransform(scrollYProgress, [0, 0.2], [1, 1.18])
+  const sceneY = useTransform(scrollYProgress, [0, 0.25], [0, -60])
+  const workPersp = useTransform(scrollYProgress, [0.15, 0.45], [12, 0])
 
   useEffect(() => {
     const lenis = new Lenis({
@@ -118,6 +126,15 @@ export function ModernPortfolio({ onReturnClassic }: Props) {
 
       <main id="top">
         <section className="m26-hero">
+          <motion.div
+            className="m26-hero3d-wrap"
+            style={{ scale: sceneScale, y: sceneY }}
+            aria-hidden
+          >
+            <Suspense fallback={<div className="m26-hero3d m26-hero3d--fallback" />}>
+              <HeroScene />
+            </Suspense>
+          </motion.div>
           <motion.div className="m26-hero__plane" style={{ opacity: planeOpacity }} aria-hidden />
           <div className="m26-hero__orbs" aria-hidden>
             <span />
@@ -125,7 +142,7 @@ export function ModernPortfolio({ onReturnClassic }: Props) {
             <span />
           </div>
 
-          <motion.div style={{ y: heroY }}>
+          <motion.div className="m26-hero__content" style={{ y: heroY }}>
             <motion.p
               className="m26-kicker"
               initial={{ opacity: 0, y: 12 }}
@@ -240,55 +257,58 @@ export function ModernPortfolio({ onReturnClassic }: Props) {
             </motion.h2>
           </motion.div>
 
-          <div className="m26-wrap">
+          <motion.div
+            className="m26-wrap m26-work-stage"
+            style={{ rotateX: workPersp, transformPerspective: 1200 }}
+          >
             {work.map((item, index) => (
-              <motion.article
-                className={`m26-work-item ${item.current ? 'is-current' : ''}`}
-                key={item.id}
-                initial="hidden"
-                whileInView="show"
-                viewport={{ once: true, amount: 0.25 }}
-                variants={stagger}
-                whileHover={{ backgroundColor: 'rgba(244,239,230,0.03)' }}
-              >
-                <motion.div className="m26-work-item__id" variants={lineReveal}>
-                  {item.id}
-                </motion.div>
-                <motion.div variants={fadeUp}>
-                  <h3 className="m26-work-item__company">
-                    {item.company}
-                    {item.current && <span className="m26-live-pill">Current</span>}
-                  </h3>
-                  <p className="m26-work-item__meta">{item.location}</p>
-                  <p className="m26-work-item__role">{item.role}</p>
-                </motion.div>
-                <motion.div variants={fadeUp}>
-                  <p className="m26-work-item__summary">{item.summary}</p>
-                  <div className="m26-tags">
-                    {item.focus.map((tag) => (
-                      <span className="m26-tag" key={tag}>
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                </motion.div>
-                <motion.div
-                  className="m26-year"
-                  variants={fadeUp}
-                  transition={{ delay: index * 0.02 }}
+              <Tilt3D key={item.id} intensity={item.current ? 8 : 6} className="m26-work-tilt">
+                <motion.article
+                  className={`m26-work-item ${item.current ? 'is-current' : ''}`}
+                  initial="hidden"
+                  whileInView="show"
+                  viewport={{ once: true, amount: 0.25 }}
+                  variants={stagger}
                 >
-                  {item.years}
-                </motion.div>
-                <motion.span
-                  className="m26-work-item__bar"
-                  initial={{ scaleX: 0 }}
-                  whileInView={{ scaleX: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-                />
-              </motion.article>
+                  <motion.div className="m26-work-item__id" variants={lineReveal}>
+                    {item.id}
+                  </motion.div>
+                  <motion.div variants={fadeUp}>
+                    <h3 className="m26-work-item__company">
+                      {item.company}
+                      {item.current && <span className="m26-live-pill">Current</span>}
+                    </h3>
+                    <p className="m26-work-item__meta">{item.location}</p>
+                    <p className="m26-work-item__role">{item.role}</p>
+                  </motion.div>
+                  <motion.div variants={fadeUp}>
+                    <p className="m26-work-item__summary">{item.summary}</p>
+                    <div className="m26-tags">
+                      {item.focus.map((tag) => (
+                        <span className="m26-tag" key={tag}>
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  </motion.div>
+                  <motion.div
+                    className="m26-year"
+                    variants={fadeUp}
+                    transition={{ delay: index * 0.02 }}
+                  >
+                    {item.years}
+                  </motion.div>
+                  <motion.span
+                    className="m26-work-item__bar"
+                    initial={{ scaleX: 0 }}
+                    whileInView={{ scaleX: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+                  />
+                </motion.article>
+              </Tilt3D>
             ))}
-          </div>
+          </motion.div>
         </section>
 
         <section className="m26-section" id="capabilities">
@@ -310,36 +330,31 @@ export function ModernPortfolio({ onReturnClassic }: Props) {
           </motion.div>
 
           <motion.div
-            className="m26-wrap m26-cap-grid"
+            className="m26-wrap m26-cap-grid m26-cap-grid--3d"
             variants={stagger}
             initial="hidden"
             whileInView="show"
             viewport={{ once: true, amount: 0.2 }}
           >
-            {capabilities.map((cap, i) => (
-              <motion.div
-                className="m26-cap"
-                key={cap.group}
-                variants={fadeUp}
-                whileHover={{ y: -6, borderColor: 'rgba(240,160,75,0.35)' }}
-                transition={{ type: 'spring', stiffness: 260, damping: 20 }}
-                style={{ borderTop: i === 0 ? undefined : undefined }}
-              >
-                <h3 className="m26-cap__group">{cap.group}</h3>
-                <ul>
-                  {cap.items.map((item, idx) => (
-                    <motion.li
-                      key={item}
-                      initial={{ opacity: 0, x: -10 }}
-                      whileInView={{ opacity: 1, x: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: 0.05 * idx, duration: 0.4 }}
-                    >
-                      {item}
-                    </motion.li>
-                  ))}
-                </ul>
-              </motion.div>
+            {capabilities.map((cap) => (
+              <Tilt3D key={cap.group} intensity={12} className="m26-cap-tilt">
+                <motion.div className="m26-cap" variants={fadeUp}>
+                  <h3 className="m26-cap__group">{cap.group}</h3>
+                  <ul>
+                    {cap.items.map((item, idx) => (
+                      <motion.li
+                        key={item}
+                        initial={{ opacity: 0, x: -10 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: 0.05 * idx, duration: 0.4 }}
+                      >
+                        {item}
+                      </motion.li>
+                    ))}
+                  </ul>
+                </motion.div>
+              </Tilt3D>
             ))}
           </motion.div>
 
@@ -381,25 +396,27 @@ export function ModernPortfolio({ onReturnClassic }: Props) {
           </motion.div>
 
           <div className="m26-wrap m26-about-grid">
-            <motion.div
-              className="m26-portrait"
-              initial={{ opacity: 0, scale: 0.92, rotate: -1.5 }}
-              whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-            >
-              <span className="m26-portrait__badge">Head of Marketing</span>
+            <Tilt3D intensity={14} className="m26-portrait-tilt">
               <motion.div
-                className="m26-portrait__mono"
-                animate={{ y: [0, -8, 0] }}
-                transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
+                className="m26-portrait"
+                initial={{ opacity: 0, scale: 0.92, rotate: -1.5 }}
+                whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
               >
-                U
-                <br />
-                M
+                <span className="m26-portrait__badge">Head of Marketing</span>
+                <motion.div
+                  className="m26-portrait__mono"
+                  animate={{ y: [0, -8, 0] }}
+                  transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
+                >
+                  U
+                  <br />
+                  M
+                </motion.div>
+                <div className="m26-portrait__scan" aria-hidden />
               </motion.div>
-              <div className="m26-portrait__scan" aria-hidden />
-            </motion.div>
+            </Tilt3D>
 
             <motion.div
               className="m26-about-body"

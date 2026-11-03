@@ -1,9 +1,13 @@
-import { useEffect, useState } from 'react'
+import { Suspense, lazy, useEffect, useState } from 'react'
 import { ModernPortfolio } from './components/ModernPortfolio'
 import { SellerDesktop } from './components/SellerDesktop'
 import './index.css'
 import './styles/desktop.css'
 import './styles/modern.css'
+
+const TransformScene = lazy(() =>
+  import('./components/TransformScene').then((m) => ({ default: m.TransformScene })),
+)
 
 type Phase = 'boot' | 'desktop' | 'transform' | 'modern'
 
@@ -33,7 +37,7 @@ export default function App() {
 
   useEffect(() => {
     if (phase !== 'transform') return
-    const t = window.setTimeout(() => setPhase('modern'), 2200)
+    const t = window.setTimeout(() => setPhase('modern'), 3200)
     return () => window.clearTimeout(t)
   }, [phase])
 
@@ -68,10 +72,13 @@ export default function App() {
   if (phase === 'transform') {
     return (
       <div className="sos-transform" aria-live="polite">
+        <Suspense fallback={<div className="sos-transform__vortex" aria-hidden />}>
+          <TransformScene />
+        </Suspense>
         <div className="sos-transform__vortex" aria-hidden />
-        <div>
+        <div className="sos-transform__copywrap">
           <div className="sos-transform__year">2026</div>
-          <p className="sos-transform__copy">Loading the modern commerce web…</p>
+          <p className="sos-transform__copy">Entering the commerce vortex…</p>
         </div>
       </div>
     )
