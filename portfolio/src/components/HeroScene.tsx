@@ -1,8 +1,8 @@
 import { Canvas, useFrame } from '@react-three/fiber'
-import { Float } from '@react-three/drei'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import * as THREE from 'three'
 
+/** Lightweight hero — no drei / transmission / remote HDR (WordPress-safe). */
 function Prism() {
   const ref = useRef<THREE.Mesh>(null)
   const target = useRef({ x: 0, y: 0 })
@@ -21,35 +21,23 @@ function Prism() {
     pointer.current.x = THREE.MathUtils.lerp(pointer.current.x, target.current.x, 0.07)
     pointer.current.y = THREE.MathUtils.lerp(pointer.current.y, target.current.y, 0.07)
     if (!ref.current) return
-    ref.current.rotation.x = pointer.current.y * 0.5 + state.clock.elapsedTime * 0.12
-    ref.current.rotation.y = pointer.current.x * 0.75 + state.clock.elapsedTime * 0.18
+    const t = state.clock.elapsedTime
+    ref.current.rotation.x = pointer.current.y * 0.5 + t * 0.12
+    ref.current.rotation.y = pointer.current.x * 0.75 + t * 0.18
     ref.current.position.x = pointer.current.x * 0.45
-    ref.current.position.y = 0.2 + pointer.current.y * 0.25
+    ref.current.position.y = 0.2 + pointer.current.y * 0.25 + Math.sin(t * 1.1) * 0.08
   })
 
   return (
-    <Float speed={1.4} rotationIntensity={0.35} floatIntensity={0.55}>
-      <mesh ref={ref} scale={1.45}>
-        <octahedronGeometry args={[1.15, 0]} />
-        <meshPhysicalMaterial
-          color="#f4efe6"
-          metalness={0.15}
-          roughness={0.08}
-          transmission={0.92}
-          thickness={1.35}
-          ior={1.45}
-          transparent
-          opacity={0.95}
-          reflectivity={0.55}
-          iridescence={0.5}
-          iridescenceIOR={1.2}
-          clearcoat={1}
-          clearcoatRoughness={0.12}
-          attenuationColor="#f0a04b"
-          attenuationDistance={1.4}
-        />
-      </mesh>
-    </Float>
+    <mesh ref={ref} scale={1.45}>
+      <octahedronGeometry args={[1.15, 0]} />
+      <meshStandardMaterial
+        color="#f4efe6"
+        metalness={0.55}
+        roughness={0.22}
+        envMapIntensity={0.8}
+      />
+    </mesh>
   )
 }
 
@@ -81,8 +69,8 @@ function DriftParticles() {
   const points = useRef<THREE.Points>(null)
   const geometry = useMemo(() => {
     const geo = new THREE.BufferGeometry()
-    const arr = new Float32Array(110 * 3)
-    for (let i = 0; i < 110; i++) {
+    const arr = new Float32Array(90 * 3)
+    for (let i = 0; i < 90; i++) {
       arr[i * 3] = (Math.random() - 0.5) * 9
       arr[i * 3 + 1] = (Math.random() - 0.5) * 5.5
       arr[i * 3 + 2] = (Math.random() - 0.5) * 4.5
@@ -94,7 +82,6 @@ function DriftParticles() {
   useFrame((state) => {
     if (!points.current) return
     points.current.rotation.y = state.clock.elapsedTime * 0.04
-    points.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.12) * 0.06
   })
 
   return (
@@ -107,10 +94,10 @@ function DriftParticles() {
 function Scene() {
   return (
     <>
-      <ambientLight intensity={0.7} />
-      <directionalLight position={[4, 5, 2]} intensity={1.7} color="#fff2d8" />
-      <directionalLight position={[-3, -2, -4]} intensity={0.7} color="#7eb8c9" />
-      <pointLight position={[0, 1.2, 2]} intensity={1.1} color="#f0a04b" />
+      <ambientLight intensity={0.85} />
+      <directionalLight position={[4, 5, 2]} intensity={1.5} color="#fff2d8" />
+      <directionalLight position={[-3, -2, -4]} intensity={0.55} color="#7eb8c9" />
+      <pointLight position={[0, 1.2, 2]} intensity={0.9} color="#f0a04b" />
       <Prism />
       <OrbitRings />
       <DriftParticles />
@@ -121,14 +108,20 @@ function Scene() {
 function supportsWebGL() {
   try {
     const canvas = document.createElement('canvas')
-    return !!(canvas.getContext('webgl2') || canvas.getContext('webgl'))
+    const gl =
+      canvas.getContext('webgl2', { failIfMajorPerformanceCaveat: false }) ||
+      canvas.getContext('webgl', { failIfMajorPerformanceCaveat: false })
+    return !!gl
   } catch {
     return false
   }
 }
 
 export function HeroScene() {
-  const [ok, setOk] = useState(true)
+  const [ok, setOk] = useState(() => {
+    if (typeof window === 'undefined') return false
+    return supportsWebGL()
+  })
 
   useEffect(() => {
     if (!supportsWebGL()) setOk(false)
@@ -139,11 +132,20 @@ export function HeroScene() {
   return (
     <div className="m26-hero3d" aria-hidden>
       <Canvas
-        dpr={[1, 1.5]}
+        dpr={[1, 1.25]}
         camera={{ position: [0, 0.15, 5.4], fov: 40 }}
-        gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
+        gl={{
+          antialias: true,
+          alpha: true,
+          powerPreference: 'high-performance',
+          failIfMajorPerformanceCaveat: false,
+        }}
         onCreated={({ gl }) => {
-          gl.setClearColor(0x000000, 0)
+          try {
+            gl.setClearColor(0x000000, 0)
+          } catch {
+            setOk(false)
+          }
         }}
       >
         <Scene />
