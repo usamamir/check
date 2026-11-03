@@ -84,8 +84,8 @@ add_action('wp_enqueue_scripts', function () {
 }, 100);
 
 add_action('wp_enqueue_scripts', function () {
-  $theme_uri = get_template_directory_uri();
-  $theme_dir = get_template_directory();
+  $theme_uri = trailingslashit(get_template_directory_uri());
+  $assets_uri = $theme_uri . 'assets/';
 
   $css = '${entryCss}';
   $js  = '${entryJs}';
@@ -97,38 +97,54 @@ add_action('wp_enqueue_scripts', function () {
     null
   );
 
+  // No ?ver= on CSS/JS — version query strings can break Vite relative chunk imports
   wp_enqueue_style(
     'digivistaco-app',
-    $theme_uri . '/assets/' . $css,
+    $assets_uri . $css,
     ['digivistaco-fonts'],
-    filemtime($theme_dir . '/assets/' . $css)
+    null
   );
 
   wp_enqueue_script(
     'digivistaco-app',
-    $theme_uri . '/assets/' . $js,
+    $assets_uri . $js,
     [],
-    filemtime($theme_dir . '/assets/' . $js),
+    null,
     true
   );
+
+  // Theme root URL for Vite dynamic chunks (must end with /)
+  wp_add_inline_script(
+    'digivistaco-app',
+    'window.__DIGIVISTACO_ASSETS__=' . wp_json_encode($theme_uri) . ';',
+    'before'
+  );
+
+  wp_localize_script('digivistaco-app', 'DigivistacoTheme', [
+    'themeUrl'   => untrailingslashit($theme_uri),
+    'assetsUrl'  => $assets_uri,
+    'photo'      => untrailingslashit($theme_uri) . '/uzi-mir.jpg',
+    'photoThumb' => untrailingslashit($theme_uri) . '/uzi-mir-thumb.jpg',
+  ]);
 
   // Vite module scripts need type="module"
   add_filter('script_loader_tag', function ($tag, $handle, $src) {
     if ($handle === 'digivistaco-app') {
-      return '<script type="module" src="' . esc_url($src) . '" id="digivistaco-app-js"></script>';
+      return '<script type="module" crossorigin src="' . esc_url($src) . '" id="digivistaco-app-js"></script>' . "\n";
     }
     return $tag;
   }, 10, 3);
-
-  wp_localize_script('digivistaco-app', 'DigivistacoTheme', [
-    'themeUrl'   => $theme_uri,
-    'photo'      => $theme_uri . '/uzi-mir.jpg',
-    'photoThumb' => $theme_uri . '/uzi-mir-thumb.jpg',
-  ]);
-});
+}, 20);
 
 // Hide WP admin bar on front for clean portfolio presentation
 add_filter('show_admin_bar', '__return_false');
+
+// Help Hostinger / LiteSpeed: do not combine or defer this module bundle
+add_filter('litespeed_optimize_js_excludes', function ($excludes) {
+  $excludes[] = 'digivistaco-app';
+  $excludes[] = 'index-';
+  return $excludes;
+});
 `,
 )
 

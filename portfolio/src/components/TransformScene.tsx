@@ -1,5 +1,4 @@
 import { Canvas, useFrame } from '@react-three/fiber'
-import { MeshTransmissionMaterial } from '@react-three/drei'
 import { useRef } from 'react'
 import * as THREE from 'three'
 
@@ -23,18 +22,18 @@ function VortexCore() {
     <group ref={group}>
       <mesh scale={1.4}>
         <icosahedronGeometry args={[1, 0]} />
-        <MeshTransmissionMaterial
-          backside
-          samples={4}
-          thickness={1.4}
-          chromaticAberration={0.22}
-          distortion={0.35}
-          distortionScale={0.5}
-          temporalDistortion={0.2}
+        <meshPhysicalMaterial
           color="#ffffff"
+          metalness={0.2}
+          roughness={0.05}
+          transmission={0.9}
+          thickness={1.5}
+          ior={1.4}
+          transparent
+          opacity={0.95}
+          clearcoat={1}
           attenuationColor="#f0a04b"
-          attenuationDistance={0.9}
-          roughness={0.08}
+          attenuationDistance={1}
         />
       </mesh>
       <mesh ref={inner} scale={2.1}>
@@ -56,9 +55,11 @@ export function TransformScene() {
         dpr={[1, 1.25]}
         camera={{ position: [0, 0, 4.2], fov: 45 }}
         gl={{ antialias: true, alpha: true }}
+        onCreated={({ gl }) => gl.setClearColor(0x000000, 0)}
       >
-        <ambientLight intensity={0.7} />
-        <directionalLight position={[3, 4, 2]} intensity={1.5} />
+        <ambientLight intensity={0.8} />
+        <directionalLight position={[3, 4, 2]} intensity={1.6} />
+        <pointLight position={[-2, -1, 2]} intensity={0.8} color="#7eb8c9" />
         <VortexCore />
       </Canvas>
     </div>

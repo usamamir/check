@@ -1,4 +1,5 @@
 import { Suspense, lazy, useEffect, useState } from 'react'
+import { ErrorBoundary } from './components/ErrorBoundary'
 import { ModernPortfolio } from './components/ModernPortfolio'
 import { SellerDesktop } from './components/SellerDesktop'
 import './index.css'
@@ -6,7 +7,13 @@ import './styles/desktop.css'
 import './styles/modern.css'
 
 const TransformScene = lazy(() =>
-  import('./components/TransformScene').then((m) => ({ default: m.TransformScene })),
+  import('./components/TransformScene')
+    .then((m) => ({ default: m.TransformScene }))
+    .catch(() => ({
+      default: function TransformFallback() {
+        return <div className="sos-transform__vortex" aria-hidden />
+      },
+    })),
 )
 
 type Phase = 'boot' | 'desktop' | 'transform' | 'modern'
@@ -37,12 +44,20 @@ export default function App() {
 
   useEffect(() => {
     if (phase !== 'transform') return
-    const t = window.setTimeout(() => setPhase('modern'), 3200)
+    // Always advance to modern — never depend on 3D chunk success
+    const t = window.setTimeout(() => setPhase('modern'), 2400)
     return () => window.clearTimeout(t)
   }, [phase])
 
   useEffect(() => {
     document.body.dataset.phase = phase
+    // Ensure modern mode can scroll even if prior phase locked overflow
+    if (phase === 'modern') {
+      document.documentElement.style.overflow = ''
+      document.body.style.overflow = 'auto'
+    } else if (phase === 'desktop' || phase === 'boot' || phase === 'transform') {
+      document.body.style.overflow = 'hidden'
+    }
   }, [phase])
 
   const enter2026 = () => setPhase('transform')
@@ -72,10 +87,12 @@ export default function App() {
   if (phase === 'transform') {
     return (
       <div className="sos-transform" aria-live="polite">
-        <Suspense fallback={<div className="sos-transform__vortex" aria-hidden />}>
-          <TransformScene />
-        </Suspense>
         <div className="sos-transform__vortex" aria-hidden />
+        <ErrorBoundary fallback={<div className="sos-transform__vortex" aria-hidden />}>
+          <Suspense fallback={null}>
+            <TransformScene />
+          </Suspense>
+        </ErrorBoundary>
         <div className="sos-transform__copywrap">
           <div className="sos-transform__year">2026</div>
           <p className="sos-transform__copy">Entering the commerce vortex…</p>
@@ -85,7 +102,21 @@ export default function App() {
   }
 
   if (phase === 'modern') {
-    return <ModernPortfolio onReturnClassic={returnClassic} />
+    return (
+      <ErrorBoundary
+        fallback={
+          <div className="m26 m26-root" style={{ padding: '4rem 1.5rem', color: '#f4efe6' }}>
+            <h1 style={{ fontSize: '2rem', marginBottom: '1rem' }}>Uzi Mir</h1>
+            <p style={{ marginBottom: '1rem' }}>Head of Marketing · Jettribe</p>
+            <button type="button" onClick={returnClassic} style={{ color: '#f0a04b' }}>
+              ← Back to SellerOS
+            </button>
+          </div>
+        }
+      >
+        <ModernPortfolio onReturnClassic={returnClassic} />
+      </ErrorBoundary>
+    )
   }
 
   return <SellerDesktop onEnter2026={enter2026} />

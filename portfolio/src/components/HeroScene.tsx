@@ -1,6 +1,6 @@
 import { Canvas, useFrame } from '@react-three/fiber'
-import { Environment, Float, MeshTransmissionMaterial } from '@react-three/drei'
-import { useEffect, useMemo, useRef } from 'react'
+import { Float } from '@react-three/drei'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import * as THREE from 'three'
 
 function Prism() {
@@ -31,24 +31,22 @@ function Prism() {
     <Float speed={1.4} rotationIntensity={0.35} floatIntensity={0.55}>
       <mesh ref={ref} scale={1.45}>
         <octahedronGeometry args={[1.15, 0]} />
-        <MeshTransmissionMaterial
-          backside
-          samples={6}
-          resolution={512}
-          thickness={1.2}
-          chromaticAberration={0.14}
-          anisotropy={0.25}
-          distortion={0.22}
-          distortionScale={0.4}
-          temporalDistortion={0.12}
-          iridescence={0.45}
-          iridescenceIOR={1.2}
-          iridescenceThicknessRange={[100, 700]}
+        <meshPhysicalMaterial
           color="#f4efe6"
+          metalness={0.15}
+          roughness={0.08}
+          transmission={0.92}
+          thickness={1.35}
+          ior={1.45}
+          transparent
+          opacity={0.95}
+          reflectivity={0.55}
+          iridescence={0.5}
+          iridescenceIOR={1.2}
+          clearcoat={1}
+          clearcoatRoughness={0.12}
           attenuationColor="#f0a04b"
-          attenuationDistance={1.35}
-          roughness={0.1}
-          metalness={0.04}
+          attenuationDistance={1.4}
         />
       </mesh>
     </Float>
@@ -109,24 +107,44 @@ function DriftParticles() {
 function Scene() {
   return (
     <>
-      <ambientLight intensity={0.6} />
-      <directionalLight position={[4, 5, 2]} intensity={1.5} color="#fff2d8" />
-      <directionalLight position={[-3, -2, -4]} intensity={0.6} color="#7eb8c9" />
+      <ambientLight intensity={0.7} />
+      <directionalLight position={[4, 5, 2]} intensity={1.7} color="#fff2d8" />
+      <directionalLight position={[-3, -2, -4]} intensity={0.7} color="#7eb8c9" />
+      <pointLight position={[0, 1.2, 2]} intensity={1.1} color="#f0a04b" />
       <Prism />
       <OrbitRings />
       <DriftParticles />
-      <Environment preset="city" environmentIntensity={0.6} />
     </>
   )
 }
 
+function supportsWebGL() {
+  try {
+    const canvas = document.createElement('canvas')
+    return !!(canvas.getContext('webgl2') || canvas.getContext('webgl'))
+  } catch {
+    return false
+  }
+}
+
 export function HeroScene() {
+  const [ok, setOk] = useState(true)
+
+  useEffect(() => {
+    if (!supportsWebGL()) setOk(false)
+  }, [])
+
+  if (!ok) return <div className="m26-hero3d m26-hero3d--fallback" aria-hidden />
+
   return (
     <div className="m26-hero3d" aria-hidden>
       <Canvas
         dpr={[1, 1.5]}
         camera={{ position: [0, 0.15, 5.4], fov: 40 }}
         gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
+        onCreated={({ gl }) => {
+          gl.setClearColor(0x000000, 0)
+        }}
       >
         <Scene />
       </Canvas>

@@ -9,10 +9,17 @@ import {
 import Lenis from 'lenis'
 import { capabilities, profile, tools, work } from '../data'
 import { CountUp } from './CountUp'
+import { ErrorBoundary } from './ErrorBoundary'
 import { Tilt3D } from './Tilt3D'
 
 const HeroScene = lazy(() =>
-  import('./HeroScene').then((m) => ({ default: m.HeroScene })),
+  import('./HeroScene')
+    .then((m) => ({ default: m.HeroScene }))
+    .catch(() => ({
+      default: function HeroFallback() {
+        return <div className="m26-hero3d m26-hero3d--fallback" aria-hidden />
+      },
+    })),
 )
 
 type Props = {
@@ -78,21 +85,26 @@ export function ModernPortfolio({ onReturnClassic }: Props) {
   const workPersp = useTransform(scrollYProgress, [0.15, 0.45], [12, 0])
 
   useEffect(() => {
-    const lenis = new Lenis({
-      duration: 1.15,
-      smoothWheel: true,
-      touchMultiplier: 1.35,
-    })
     let raf = 0
-    const frame = (time: number) => {
-      lenis.raf(time)
+    let lenis: Lenis | null = null
+    try {
+      lenis = new Lenis({
+        duration: 1.15,
+        smoothWheel: true,
+        touchMultiplier: 1.35,
+      })
+      const frame = (time: number) => {
+        lenis?.raf(time)
+        raf = requestAnimationFrame(frame)
+      }
       raf = requestAnimationFrame(frame)
+      document.documentElement.classList.add('lenis', 'lenis-smooth')
+    } catch (err) {
+      console.warn('[Digivistaco] smooth scroll disabled', err)
     }
-    raf = requestAnimationFrame(frame)
-    document.documentElement.classList.add('lenis', 'lenis-smooth')
     return () => {
       cancelAnimationFrame(raf)
-      lenis.destroy()
+      lenis?.destroy()
       document.documentElement.classList.remove('lenis', 'lenis-smooth')
     }
   }, [])
@@ -131,9 +143,11 @@ export function ModernPortfolio({ onReturnClassic }: Props) {
             style={{ scale: sceneScale, y: sceneY }}
             aria-hidden
           >
-            <Suspense fallback={<div className="m26-hero3d m26-hero3d--fallback" />}>
-              <HeroScene />
-            </Suspense>
+            <ErrorBoundary fallback={<div className="m26-hero3d m26-hero3d--fallback" />}>
+              <Suspense fallback={<div className="m26-hero3d m26-hero3d--fallback" />}>
+                <HeroScene />
+              </Suspense>
+            </ErrorBoundary>
           </motion.div>
           <motion.div className="m26-hero__plane" style={{ opacity: planeOpacity }} aria-hidden />
           <div className="m26-hero__orbs" aria-hidden>
