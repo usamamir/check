@@ -130,7 +130,7 @@ add_action('wp_enqueue_scripts', function () {
   // Vite module scripts need type="module"
   add_filter('script_loader_tag', function ($tag, $handle, $src) {
     if ($handle === 'digivistaco-app') {
-      return '<script type="module" crossorigin src="' . esc_url($src) . '" id="digivistaco-app-js"></script>' . "\n";
+      return '<script type="module" crossorigin src="' . esc_url($src) . '" id="digivistaco-app-js"></script>';
     }
     return $tag;
   }, 10, 3);
