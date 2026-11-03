@@ -1,3 +1,5 @@
+const theme = typeof window !== 'undefined' ? window.DigivistacoTheme : undefined
+
 export const profile = {
   name: 'Uzi Mir',
   first: 'Uzi',
@@ -6,8 +8,8 @@ export const profile = {
   tagline:
     'Leading brand, marketplace, and growth systems for Jettribe — and scaling commerce for teams that need to win the buy box.',
   email: 'payoneerusama@gmail.com',
-  photo: './uzi-mir.jpg',
-  photoThumb: './uzi-mir-thumb.jpg',
+  photo: theme?.photo || './uzi-mir.jpg',
+  photoThumb: theme?.photoThumb || './uzi-mir-thumb.jpg',
   current: {
     company: 'Jettribe',
     url: 'https://jettribe.com',

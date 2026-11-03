@@ -6,6 +6,9 @@ export default defineConfig({
   plugins: [react()],
   // Relative base so the build works on GitHub Pages, CDNs, and tunnels alike
   base: './',
+  build: {
+    manifest: true,
+  },
   preview: {
     host: true,
     allowedHosts: true,
