@@ -118,8 +118,13 @@ export function SellerDesktop({ onEnter2026 }: Props) {
         return (
           <>
             <span className="sos-badge">CURRENT ROLE · LIVE</span>
-            <h2 className="sos-h1">{profile.name}</h2>
-            <p style={{ fontWeight: 700, marginBottom: 4 }}>{profile.current.role}</p>
+            <div className="sos-profile-head">
+              <img className="sos-avatar" src={profile.photo} alt="Uzi Mir" />
+              <div>
+                <h2 className="sos-h1">{profile.name}</h2>
+                <p style={{ fontWeight: 700, marginBottom: 4 }}>{profile.current.role}</p>
+              </div>
+            </div>
             <p style={{ marginBottom: 8 }}>
               <a href={profile.current.url} target="_blank" rel="noreferrer">
                 {profile.current.company}
@@ -160,9 +165,14 @@ export function SellerDesktop({ onEnter2026 }: Props) {
         return (
           <>
             <span className="sos-badge">OPERATOR PROFILE</span>
-            <h2 className="sos-h1">{profile.name}</h2>
-            <p style={{ fontWeight: 700, marginBottom: 8 }}>{profile.title}</p>
-            <p className="sos-muted" style={{ marginBottom: 10 }}>
+            <div className="sos-profile-head">
+              <img className="sos-avatar" src={profile.photo} alt="Uzi Mir" />
+              <div>
+                <h2 className="sos-h1">{profile.name}</h2>
+                <p style={{ fontWeight: 700, marginBottom: 0 }}>{profile.title}</p>
+              </div>
+            </div>
+            <p className="sos-muted" style={{ marginBottom: 10, marginTop: 10 }}>
               {profile.tagline}
             </p>
             {profile.about.map((p) => (

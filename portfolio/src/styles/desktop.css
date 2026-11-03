@@ -342,6 +342,24 @@
   margin-bottom: 10px;
 }
 
+.sos-profile-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.sos-avatar {
+  width: 72px;
+  height: 72px;
+  object-fit: cover;
+  object-position: center 20%;
+  border: 2px solid #fff;
+  box-shadow: 1px 1px 0 #808080;
+  background: #ddd;
+  flex-shrink: 0;
+}
+
 .sos-table {
   width: 100%;
   border-collapse: collapse;

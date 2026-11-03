@@ -104,12 +104,12 @@ export function ModernPortfolio({ onReturnClassic }: Props) {
       <header className="m26-nav">
         <a className="m26-nav__logo" href="#top">
           <motion.span
-            className="m26-nav__mark"
+            className="m26-nav__mark m26-nav__mark--photo"
             initial={{ scale: 0.6, rotate: -12, opacity: 0 }}
             animate={{ scale: 1, rotate: 0, opacity: 1 }}
             transition={{ type: 'spring', stiffness: 260, damping: 16 }}
           >
-            UM
+            <img src={profile.photoThumb} alt="" />
           </motion.span>
           <span>Uzi Mir</span>
         </a>
@@ -404,16 +404,13 @@ export function ModernPortfolio({ onReturnClassic }: Props) {
                 viewport={{ once: true }}
                 transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
               >
+                <img
+                  className="m26-portrait__photo"
+                  src={profile.photo}
+                  alt="Uzi Mir"
+                  loading="lazy"
+                />
                 <span className="m26-portrait__badge">Head of Marketing</span>
-                <motion.div
-                  className="m26-portrait__mono"
-                  animate={{ y: [0, -8, 0] }}
-                  transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
-                >
-                  U
-                  <br />
-                  M
-                </motion.div>
                 <div className="m26-portrait__scan" aria-hidden />
               </motion.div>
             </Tilt3D>

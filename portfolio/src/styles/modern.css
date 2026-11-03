@@ -97,6 +97,20 @@
   font-size: 0.7rem;
   font-weight: 800;
   border-radius: 0.45rem;
+  overflow: hidden;
+}
+
+.m26-nav__mark--photo {
+  padding: 0;
+  background: transparent;
+  border: 1px solid rgba(240, 160, 75, 0.55);
+}
+
+.m26-nav__mark--photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
 .m26-nav__links {
@@ -789,19 +803,40 @@
 .m26-portrait {
   aspect-ratio: 4 / 5;
   border: 1px solid var(--line);
-  background:
-    linear-gradient(145deg, rgba(240, 160, 75, 0.22), transparent 45%),
-    var(--ink-elevated);
+  background: var(--ink-elevated);
   display: grid;
   place-items: end start;
-  padding: 1.5rem;
+  padding: 0;
   position: relative;
+  overflow: hidden;
+}
+
+.m26-portrait__photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 18%;
+  filter: saturate(1.05) contrast(1.04);
+}
+
+.m26-portrait::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, transparent 45%, rgba(7, 8, 10, 0.72) 100%),
+    linear-gradient(145deg, rgba(240, 160, 75, 0.12), transparent 40%);
+  pointer-events: none;
+  z-index: 1;
 }
 
 .m26-portrait__badge {
   position: absolute;
   top: 1.25rem;
   right: 1.25rem;
+  z-index: 2;
   font-family: var(--font-mono);
   font-size: 0.62rem;
   letter-spacing: 0.14em;
@@ -811,23 +846,16 @@
   padding: 0.45rem 0.65rem;
 }
 
-.m26-portrait__mono {
-  font-size: clamp(4rem, 12vw, 7rem);
-  font-weight: 800;
-  letter-spacing: -0.06em;
-  line-height: 0.85;
-  opacity: 0.85;
-}
-
 .m26-portrait__scan {
   position: absolute;
   left: 0;
   right: 0;
+  z-index: 2;
   height: 28%;
   background: linear-gradient(
     180deg,
     transparent,
-    rgba(240, 160, 75, 0.12),
+    rgba(240, 160, 75, 0.14),
     transparent
   );
   animation: scan-sweep 4.5s ease-in-out infinite;
