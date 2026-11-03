@@ -1,13 +1,14 @@
-Digivistaco Portfolio — WordPress Theme
-=====================================
+Digivistaco Portfolio — WordPress Theme v1.1.0
+===============================================
 
-Install
--------
-1. WordPress Admin → Appearance → Themes → Add New → Upload Theme
+Install / Update
+----------------
+1. Appearance → Themes → Add New → Upload Theme
 2. Upload digivistaco-portfolio.zip
+   If the theme is already installed: Delete the old Digivistaco Portfolio theme first,
+   then upload this zip (or use a theme update plugin).
 3. Activate "Digivistaco Portfolio"
-4. Settings → Reading → "Your homepage displays" → A static page
-   (or keep latest posts — front-page.php / index.php still loads the app)
+4. Hard-refresh the site (Ctrl/Cmd+Shift+R) so cached JS is cleared
 
 SSL / HTTPS
 -----------
@@ -16,5 +17,5 @@ Do not upload certificate files into the theme.
 
 Notes
 -----
-This theme replaces the normal WordPress front-end with the SellerOS → 2026 portfolio app.
-Use the WP admin for hosting/SSL/domain only; the visible site is the portfolio.
+v1.1.0 fixes blank screen after "Update to 2026" (CSS-only transition,
+single JS bundle, no WebGL hang on the critical path).

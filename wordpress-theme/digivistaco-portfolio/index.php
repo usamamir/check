@@ -9,10 +9,19 @@
     html, body { margin: 0; padding: 0; background: #000; min-height: 100%; }
     #wpadminbar { display: none !important; }
     html { margin-top: 0 !important; }
+    #root { min-height: 100vh; }
   </style>
 </head>
 <body <?php body_class('digivistaco-portfolio'); ?>>
-  <div id="root"></div>
+  <div id="root">
+    <noscript>
+      <div style="color:#f4efe6;font-family:system-ui,sans-serif;padding:3rem 1.5rem;max-width:40rem">
+        <h1>Uzi Mir</h1>
+        <p>Head of Marketing · Jettribe</p>
+        <p>Enable JavaScript to load the SellerOS → Commerce 2026 portfolio.</p>
+      </div>
+    </noscript>
+  </div>
   <?php wp_footer(); ?>
 </body>
 </html>

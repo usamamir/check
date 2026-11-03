@@ -1,20 +1,10 @@
-import { Suspense, lazy, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { ErrorBoundary } from './components/ErrorBoundary'
 import { ModernPortfolio } from './components/ModernPortfolio'
 import { SellerDesktop } from './components/SellerDesktop'
 import './index.css'
 import './styles/desktop.css'
 import './styles/modern.css'
-
-const TransformScene = lazy(() =>
-  import('./components/TransformScene')
-    .then((m) => ({ default: m.TransformScene }))
-    .catch(() => ({
-      default: function TransformFallback() {
-        return <div className="sos-transform__vortex" aria-hidden />
-      },
-    })),
-)
 
 type Phase = 'boot' | 'desktop' | 'transform' | 'modern'
 
@@ -44,19 +34,27 @@ export default function App() {
 
   useEffect(() => {
     if (phase !== 'transform') return
-    // Always advance to modern — never depend on 3D chunk success
-    const t = window.setTimeout(() => setPhase('modern'), 2400)
+    // CSS-only transform — never wait on WebGL / dynamic chunks
+    const t = window.setTimeout(() => setPhase('modern'), 2200)
     return () => window.clearTimeout(t)
   }, [phase])
 
   useEffect(() => {
     document.body.dataset.phase = phase
-    // Ensure modern mode can scroll even if prior phase locked overflow
+    const root = document.getElementById('root')
     if (phase === 'modern') {
       document.documentElement.style.overflow = ''
       document.body.style.overflow = 'auto'
-    } else if (phase === 'desktop' || phase === 'boot' || phase === 'transform') {
+      if (root) {
+        root.style.height = 'auto'
+        root.style.minHeight = '100%'
+      }
+    } else {
       document.body.style.overflow = 'hidden'
+      if (root) {
+        root.style.height = '100%'
+        root.style.minHeight = '100%'
+      }
     }
   }, [phase])
 
@@ -88,11 +86,11 @@ export default function App() {
     return (
       <div className="sos-transform" aria-live="polite">
         <div className="sos-transform__vortex" aria-hidden />
-        <ErrorBoundary fallback={<div className="sos-transform__vortex" aria-hidden />}>
-          <Suspense fallback={null}>
-            <TransformScene />
-          </Suspense>
-        </ErrorBoundary>
+        <div className="sos-transform__rings" aria-hidden>
+          <span />
+          <span />
+          <span />
+        </div>
         <div className="sos-transform__copywrap">
           <div className="sos-transform__year">2026</div>
           <p className="sos-transform__copy">Entering the commerce vortex…</p>

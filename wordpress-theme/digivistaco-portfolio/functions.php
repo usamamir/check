@@ -1,6 +1,7 @@
 <?php
 /**
  * Digivistaco Portfolio theme
+ * Version: 1.1.0
  */
 
 if (!defined('ABSPATH')) {
@@ -11,11 +12,7 @@ add_action('after_setup_theme', function () {
   add_theme_support('title-tag');
 });
 
-/**
- * Remove default WP frontend chrome — this theme is a full-page app.
- */
 add_action('wp_enqueue_scripts', function () {
-  // Keep jQuery out of the way for the SPA front page
   if (!is_admin()) {
     wp_dequeue_style('wp-block-library');
     wp_dequeue_style('wp-block-library-theme');
@@ -28,8 +25,8 @@ add_action('wp_enqueue_scripts', function () {
   $theme_uri = trailingslashit(get_template_directory_uri());
   $assets_uri = $theme_uri . 'assets/';
 
-  $css = 'index-y9PLD4ZS.css';
-  $js  = 'index-Bm_-9Gfd.js';
+  $css = 'style-DZZo6RKu.css';
+  $js  = 'index-CouYhlQ_.js';
 
   wp_enqueue_style(
     'digivistaco-fonts',
@@ -38,7 +35,7 @@ add_action('wp_enqueue_scripts', function () {
     null
   );
 
-  // No ?ver= on CSS/JS — version query strings can break Vite relative chunk imports
+  // No ?ver= — query strings can break module URL resolution on some hosts
   wp_enqueue_style(
     'digivistaco-app',
     $assets_uri . $css,
@@ -54,7 +51,10 @@ add_action('wp_enqueue_scripts', function () {
     true
   );
 
-  // Theme root URL for Vite dynamic chunks (must end with /)
+  // WP 6.3+ native module support
+  wp_script_add_data('digivistaco-app', 'type', 'module');
+
+  // Absolute theme root for any remaining dynamic imports (must end with /)
   wp_add_inline_script(
     'digivistaco-app',
     'window.__DIGIVISTACO_ASSETS__=' . wp_json_encode($theme_uri) . ';',
@@ -68,21 +68,31 @@ add_action('wp_enqueue_scripts', function () {
     'photoThumb' => untrailingslashit($theme_uri) . '/uzi-mir-thumb.jpg',
   ]);
 
-  // Vite module scripts need type="module"
+  // Fallback for hosts that strip type from wp_script_add_data
   add_filter('script_loader_tag', function ($tag, $handle, $src) {
-    if ($handle === 'digivistaco-app') {
-      return '<script type="module" crossorigin src="' . esc_url($src) . '" id="digivistaco-app-js"></script>' . "
-";
+    if ($handle !== 'digivistaco-app') {
+      return $tag;
+    }
+    if (strpos($tag, 'type=') === false) {
+      $tag = str_replace(
+        '<script ',
+        '<script type="module" crossorigin ',
+        $tag
+      );
     }
     return $tag;
   }, 10, 3);
 }, 20);
 
-// Hide WP admin bar on front for clean portfolio presentation
 add_filter('show_admin_bar', '__return_false');
 
-// Help Hostinger / LiteSpeed: do not combine or defer this module bundle
 add_filter('litespeed_optimize_js_excludes', function ($excludes) {
+  $excludes[] = 'digivistaco-app';
+  $excludes[] = 'index-';
+  return $excludes;
+});
+
+add_filter('litespeed_optimize_css_excludes', function ($excludes) {
   $excludes[] = 'digivistaco-app';
   $excludes[] = 'index-';
   return $excludes;

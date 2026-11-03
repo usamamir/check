@@ -766,9 +766,56 @@
   opacity: 0.7;
 }
 
+.sos-transform__rings {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  display: grid;
+  place-items: center;
+}
+
+.sos-transform__rings span {
+  position: absolute;
+  border: 1px solid rgba(240, 160, 75, 0.45);
+  border-radius: 50%;
+  animation: ring-pulse 2.2s ease-out infinite;
+}
+
+.sos-transform__rings span:nth-child(1) {
+  width: min(28vw, 180px);
+  height: min(28vw, 180px);
+  animation-delay: 0s;
+}
+
+.sos-transform__rings span:nth-child(2) {
+  width: min(42vw, 280px);
+  height: min(42vw, 280px);
+  border-color: rgba(126, 184, 201, 0.4);
+  animation-delay: 0.35s;
+}
+
+.sos-transform__rings span:nth-child(3) {
+  width: min(58vw, 400px);
+  height: min(58vw, 400px);
+  border-color: rgba(244, 239, 230, 0.25);
+  animation-delay: 0.7s;
+}
+
 @keyframes vortex {
   to {
     transform: rotate(360deg) scale(1.2);
+  }
+}
+
+@keyframes ring-pulse {
+  0% {
+    transform: scale(0.72);
+    opacity: 0.85;
+  }
+  100% {
+    transform: scale(1.35);
+    opacity: 0;
   }
 }
 
