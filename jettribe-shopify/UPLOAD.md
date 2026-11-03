@@ -8,12 +8,14 @@ BigCommerce Stencil files cannot run on Shopify. Checkout, payment processing, c
 
 ## Payments
 
-The theme shows the payment marks and accelerated-checkout buttons. Turn the processors on in **Settings → Payments**:
+The footer, homepage, product page, and cart show the same marks as jettribe.com: PayPal, Visa, Discover, Mastercard, American Express, Klarna, and Bread. The product page also shows the PayPal Pay Later line from the messages account already on jettribe.com. These marks do not turn processing on. In **Settings → Payments**:
 
-- **Shopify Payments** for Visa, Mastercard, American Express, Discover, Shop Pay, Apple Pay, and Google Pay
+- **Shopify Payments** for Visa, Mastercard, American Express, and Discover
 - **PayPal**
-- **Klarna** (paste the Klarna on-site messaging client id into **Theme settings → Payments** to restore the live placement used on jettribe.com)
+- **Klarna**, then paste the Klarna on-site messaging client id into **Theme settings → Payments**. The Klarna mark shows before that. The pay-later sentence on the homepage and product page starts after the id is saved. Do not guess an id.
 - **Bread** by installing the Bread Shopify app, then paste the application link into the Financing page section
+
+If PayPal issues a new messages client id after the Shopify PayPal account is connected, replace the client id and merchant id under **Theme settings → Payments**. The loaded script is messages only.
 
 Gift cards: create a gift card product with handle `gift-card`. The header link points at `/products/gift-card`.
 

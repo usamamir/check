@@ -8,10 +8,10 @@
     >
   {%- endif -%}
   {%- if settings.show_klarna_badge -%}
-    <span class="pay-badge">Klarna</span>
+    <img src="{{ 'pay-klarna.png' | asset_url }}" alt="Klarna" width="79" height="32">
   {%- endif -%}
   {%- if settings.show_bread_badge -%}
-    <span class="pay-badge">Bread</span>
+    <img src="{{ 'pay-bread.png' | asset_url }}" alt="Bread" width="72" height="32">
   {%- endif -%}
   {%- if settings.show_shop_pay_badge -%}
     <span class="pay-badge">Shop Pay</span>

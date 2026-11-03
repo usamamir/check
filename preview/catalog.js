@@ -218,6 +218,7 @@
         '<div class="product"><div><div class="product-gallery-main"><img data-gallery-main src="' + esc(images[0]) + '" alt="' + esc(product.title) + '" width="1200" height="1200"></div><div class="thumbs">' + thumbs + "</div></div>" +
         '<div class="product-info"><p style="margin-bottom:6px;">Jettribe</p><h1 class="product-title">' + esc(product.title) + "</h1>" +
         '<div class="product-price price">' + priceHtml + "</div>" +
+        '<div class="paypal-message" data-pp-message data-pp-placement="product" data-pp-amount="' + Number(product.price).toFixed(2) + '"></div>' +
         (product.sku ? '<p class="sku">SKU: ' + esc(product.sku) + "</p>" : "") +
         '<form data-product-add data-id="' + esc(product.handle) + '" data-title="' + esc(product.title) + '" data-price="' + product.price + '" data-img="' + esc(images[0]) + '">' +
         optionHtml +
@@ -225,9 +226,11 @@
         '<div class="product-actions">' + button +
         '<button class="btn btn--ghost" type="button" data-compare-button data-compare-add data-id="' + esc(product.handle) + '" data-title="' + esc(product.title) + '" data-price="' + product.price + '" data-img="' + esc(images[0]) + '" data-url="product.html?p=' + encodeURIComponent(product.handle) + '">Compare</button>' +
         "</div></form>" +
-        '<div class="pay-note"><p>Checkout accepts PayPal, Visa, Mastercard, American Express, and Discover. Shop Pay, Apple Pay, and Google Pay appear when Shopify Payments is on.</p>' +
+        '<div class="pay-note"><p>Pay with PayPal, Visa, Mastercard, American Express, or Discover.</p>' +
         '<p>Pay over time with Klarna or <a href="financing.html">Bread financing</a>.</p>' +
-        '<div class="payment-row" style="justify-content:flex-start;"><img src="../jettribe-shopify/assets/payment-ic.png" alt="PayPal, Visa, Discover, Mastercard, American Express" width="294" height="32"></div></div></div></div>' +
+        '<div class="payment-row"><img src="../jettribe-shopify/assets/payment-ic.png" alt="PayPal, Visa, Discover, Mastercard, and American Express" width="294" height="32">' +
+        '<img src="../jettribe-shopify/assets/pay-klarna.png" alt="Klarna" width="79" height="32">' +
+        '<img src="../jettribe-shopify/assets/pay-bread.png" alt="Bread" width="72" height="32"></div></div></div></div>' +
         '<div class="product-lower"><div class="tabs"><button class="is-active" type="button" data-tab="description">Description</button><button type="button" data-tab="shipping">Shipping</button><button type="button" data-tab="reviews">Reviews</button></div>' +
         '<div class="tab-panel rte is-active" data-tab-panel="description">' + (product.description || "<p>No description was published for this product.</p>") + "</div>" +
         '<div class="tab-panel rte" data-tab-panel="shipping"><p>Free USA shipping on orders of $400 or more. Shipping is calculated at checkout for smaller orders. Rider support: 951.246.3147, Monday through Friday, 9am to 4pm PST.</p></div>' +

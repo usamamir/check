@@ -48,6 +48,7 @@
           {%- endif -%}
           Now: {{ current.price | money }}
         </div>
+        {% render 'paypal-message', placement: 'product', amount: current.price %}
         <p class="sku" data-sku>{% if current.sku != blank %}SKU: {{ current.sku }}{% endif %}</p>
 
         {% form 'product', product, class: 'product-form', data-product-form: 'true', enctype: 'multipart/form-data' %}
@@ -188,7 +189,7 @@
         {% endform %}
 
         <div class="pay-note">
-          <p>Checkout accepts the same methods as jettribe.com once they are turned on in Shopify Payments: PayPal, Visa, Mastercard, American Express, Discover, Shop Pay, Apple Pay, and Google Pay.</p>
+          <p>Pay with PayPal, Visa, Mastercard, American Express, or Discover.</p>
           <p>Pay over time with Klarna or <a href="/search?jtpage=financing">Bread financing</a>.</p>
           {%- if settings.klarna_client_id != blank and settings.klarna_product_placement_id != blank -%}
             <klarna-placement

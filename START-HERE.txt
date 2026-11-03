@@ -7,6 +7,9 @@ Upload the theme and the product file separately. The theme zip is the only file
    Leave the zip closed. Publish the theme.
    Menu categories, including 2026 JTR Series, open from this theme and list the imported products.
    A category does not have to exist in Shopify first. Color filters are circles. Size filters are buttons.
+   Payment marks match jettribe.com: PayPal, Visa, Discover, Mastercard, American Express, Klarna, and Bread.
+   Turn those on in Settings, Payments (Shopify Payments, PayPal, Klarna) and install the Bread app. The theme cannot switch processors on.
+   PayPal Pay Later text uses the messages account already on jettribe.com. Paste the Klarna client id in Theme settings, Payments, when Klarna sends it.
    Empty menu categories, including empty Outlet links, stay hidden. Turn them back on in Theme settings, Navigation, "Show menu categories that have no products".
    VIP Deals stays in the menu. Turn it off in Theme settings, Navigation, "Show VIP Deals in the menu" when VIP is closed.
 

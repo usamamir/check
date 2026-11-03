@@ -4,15 +4,7 @@
     {%- if section.settings.link_label != blank -%}
       <a href="{{ section.settings.link }}">{{ section.settings.link_label }}</a>
     {%- endif -%}
-    <div class="pay-badges">
-      <span class="pay-badge">PayPal</span>
-      <span class="pay-badge">Visa</span>
-      <span class="pay-badge">Mastercard</span>
-      <span class="pay-badge">Amex</span>
-      <span class="pay-badge">Discover</span>
-      <span class="pay-badge">Klarna</span>
-      <span class="pay-badge">Bread</span>
-    </div>
+    {% render 'payment-icons' %}
     {%- if settings.klarna_client_id != blank and settings.klarna_home_placement_id != blank -%}
       <klarna-placement data-id="{{ settings.klarna_home_placement_id }}" data-theme="dark"></klarna-placement>
     {%- endif -%}

@@ -458,4 +458,28 @@
     if (maxN) maxN.addEventListener("input", function () { maxR.value = maxN.value || maxR.max; sync("max"); });
   });
   paintCompare();
+
+  function mountPayPalMessages() {
+    var sdk = window.paypalMessages;
+    if (!sdk || !sdk.Messages) return;
+    qsa("[data-pp-message]").forEach(function (el) {
+      var amount = el.getAttribute("data-pp-amount") || "";
+      if (el.getAttribute("data-pp-mounted") === amount && el.childNodes.length) return;
+      el.innerHTML = "";
+      el.setAttribute("data-pp-mounted", amount);
+      var props = {
+        placement: el.getAttribute("data-pp-placement") || "product",
+        style: {
+          layout: "text",
+          logo: { type: "inline", position: "left" },
+          text: { color: "black", size: "12" }
+        }
+      };
+      if (amount) props.amount = amount;
+      sdk.Messages(props).render(el);
+    });
+  }
+  document.addEventListener("catalog:rendered", mountPayPalMessages);
+  document.addEventListener("paypal:ready", mountPayPalMessages);
+  mountPayPalMessages();
 })();

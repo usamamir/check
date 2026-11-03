@@ -76,5 +76,13 @@
       data-client-id="{{ settings.klarna_client_id | escape }}"
     ></script>
   {% endif %}
+  {% if settings.show_paypal_message and settings.paypal_client_id != blank and settings.paypal_merchant_id != blank %}
+    <script
+      defer
+      src="https://www.paypal.com/sdk/js?client-id={{ settings.paypal_client_id | url_encode }}&merchant-id={{ settings.paypal_merchant_id | url_encode }}&components=messages&currency=USD"
+      data-namespace="paypalMessages"
+      onload="document.dispatchEvent(new Event('paypal:ready'))"
+    ></script>
+  {% endif %}
 </body>
 </html>

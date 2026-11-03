@@ -4,20 +4,11 @@
     <h1 class="page-heading" style="justify-content:flex-start;"><span>{{ page.title | default: 'Financing' }}</span></h1>
     <div class="rte">{{ page.content }}</div>
     <p>Clear, transparent terms. Fair rates. No prepayment penalties.</p>
-    <div class="badge-row">
-      <span>PayPal</span>
-      <span>Visa</span>
-      <span>Mastercard</span>
-      <span>American Express</span>
-      <span>Discover</span>
-      <span>Klarna</span>
-      <span>Bread</span>
-      <span>Shop Pay</span>
-    </div>
+    <div class="finance-marks">{% render 'payment-icons' %}</div>
     <div class="finance-grid">
       <article class="finance-card">
         <h3>Cards and PayPal</h3>
-        <p>Pay at checkout with PayPal, Visa, Mastercard, American Express, or Discover. Shop Pay, Apple Pay, and Google Pay show up when those wallets are enabled.</p>
+        <p>Pay at checkout with PayPal, Visa, Mastercard, American Express, or Discover.</p>
       </article>
       <article class="finance-card">
         <h3>Klarna</h3>
@@ -35,7 +26,6 @@
     {%- else -%}
       <p class="note note--plain">Install the Bread Shopify app, then paste the application link into this section to show the Get your rate button.</p>
     {%- endif -%}
-    {% render 'payment-icons' %}
   </div>
 </section>
 

@@ -660,12 +660,20 @@ ul { margin: 0; padding: 0; list-style: none; }
 .paylater-strip a { color: #fff; text-decoration: underline; }
 .pay-badges { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 8px; }
 .pay-badge {
-  border: 1px solid rgba(255,255,255,0.4);
+  border: 1px solid #d0d0d0;
+  background: #fff;
+  color: #161616;
   padding: 4px 8px;
   font-size: 12px;
   letter-spacing: 0.4px;
   text-transform: uppercase;
 }
+.paylater-strip .pay-badge {
+  border-color: rgba(255,255,255,0.45);
+  background: transparent;
+  color: #fff;
+}
+.paypal-message { margin: 8px 0 4px; min-height: 18px; }
 
 .cate-sec { padding: 28px 0 10px; }
 .cate-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
@@ -794,6 +802,13 @@ ul { margin: 0; padding: 0; list-style: none; }
 .footer-bottom a { color: #848484; }
 .payment-row { display: flex; justify-content: center; align-items: center; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
 .payment-row img { height: 32px; width: auto; }
+.paylater-strip .payment-row { margin: 10px 0 0; }
+.pay-note .payment-row,
+.cart-summary .payment-row,
+.drawer .payment-row,
+.finance-marks .payment-row { justify-content: flex-start; }
+.drawer .payment-row { margin-top: 10px; }
+.drawer .payment-row img { height: 26px; }
 
 /* Inner pages */
 .breadcrumbs { font-size: 14px; padding: 12px 0; border-bottom: 1px solid #e5e5e5; margin-bottom: 18px; }

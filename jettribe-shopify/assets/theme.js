@@ -460,6 +460,14 @@
         html += "Now: " + formatMoney(variant.price);
         priceEl.innerHTML = html;
       }
+      var paypalNote = qs("[data-pp-message]");
+      if (paypalNote) {
+        paypalNote.setAttribute("data-pp-amount", (variant.price / 100).toFixed(2));
+        paypalNote.removeAttribute("data-pp-mounted");
+        mountPayPalMessages();
+      }
+      var klarnaNote = qs("klarna-placement");
+      if (klarnaNote) klarnaNote.setAttribute("data-purchase-amount", String(variant.price));
       if (skuEl) skuEl.textContent = variant.sku ? "SKU: " + variant.sku : "";
       if (button) {
         button.disabled = !variant.available;
@@ -947,6 +955,29 @@
       .then(function (data) { if (data) hideEmptyMenu(data); })
       .catch(function () {});
   }
+
+  function mountPayPalMessages(root) {
+    var sdk = window.paypalMessages;
+    if (!sdk || !sdk.Messages) return;
+    qsa("[data-pp-message]", root || document).forEach(function (el) {
+      var amount = el.getAttribute("data-pp-amount") || "";
+      if (el.getAttribute("data-pp-mounted") === amount && el.childNodes.length) return;
+      el.innerHTML = "";
+      el.setAttribute("data-pp-mounted", amount);
+      var props = {
+        placement: el.getAttribute("data-pp-placement") || "product",
+        style: {
+          layout: "text",
+          logo: { type: "inline", position: "left" },
+          text: { color: "black", size: "12" }
+        }
+      };
+      if (amount) props.amount = amount;
+      sdk.Messages(props).render(el);
+    });
+  }
+  document.addEventListener("paypal:ready", function () { mountPayPalMessages(); });
+  mountPayPalMessages();
 
   /* Cart page quantity posts stay native. Gallery on cart is server rendered. */
   qsa("[data-country-select]").forEach(function (country) {

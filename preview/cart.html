@@ -651,8 +651,14 @@
         <div class="field"><label for="note">Order note</label><textarea id="note"></textarea></div>
         <div class="field"><label for="code">Discount code</label><input id="code" placeholder="Code"></div>
         <p>Tax and shipping are calculated at Shopify checkout. This preview stops before payment.</p>
+        <div class="paypal-message" data-pp-message data-pp-placement="cart" data-pp-amount="155.47"></div>
         <a class="btn btn--full" href="financing.html">Checkout</a>
-        <p style="margin-top:12px;">PayPal, cards, Klarna, and Bread show as real buttons on the Shopify checkout.</p>
+        <div class="payment-row">
+          <img src="../jettribe-shopify/assets/payment-ic.png" alt="PayPal, Visa, Discover, Mastercard, and American Express" width="294" height="32">
+          <img src="../jettribe-shopify/assets/pay-klarna.png" alt="Klarna" width="79" height="32">
+          <img src="../jettribe-shopify/assets/pay-bread.png" alt="Bread" width="72" height="32">
+        </div>
+        <p style="margin-top:12px;">PayPal, Visa, Mastercard, American Express, Discover, Klarna, and Bread show on the Shopify checkout after they are turned on.</p>
       </aside>
     </div>
   </div>
@@ -709,8 +715,8 @@
       <div class="container">
         <div class="payment-row">
           <img src="../jettribe-shopify/assets/payment-ic.png" alt="PayPal, Visa, Discover, Mastercard, and American Express" width="294" height="32">
-          <span class="pay-badge">Klarna</span>
-          <span class="pay-badge">Bread</span>
+          <img src="../jettribe-shopify/assets/pay-klarna.png" alt="Klarna" width="79" height="32">
+          <img src="../jettribe-shopify/assets/pay-bread.png" alt="Bread" width="72" height="32">
         </div>
         <p>&copy; 2026 <strong>Jet Tribe</strong>, All rights Reserved.</p>
       </div>
@@ -732,6 +738,7 @@
     <header><h2>Quick view</h2><button class="icon-btn" type="button" data-close-quick aria-label="Close">&times;</button></header>
     <div class="body" data-quick-body></div>
   </div>
+  <script src="https://www.paypal.com/sdk/js?client-id=AQ3RkiNHQ53oodRlTz7z-9ETC9xQNUgOLHjVDII9sgnF19qLXJzOwShAxcFW7OT7pVEF5B9bwjIArOvE&merchant-id=99LDK244KQWAA&components=messages&currency=USD" data-namespace="paypalMessages"></script>
   <script src="preview.js"></script>
 </body>
 </html>

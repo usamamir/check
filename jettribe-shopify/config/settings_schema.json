@@ -131,7 +131,7 @@
     "settings": [
       {
         "type": "paragraph",
-        "content": "Icons are display only. Turn the real methods on in Shopify admin under Settings, Payments: Shopify Payments (Visa, Mastercard, Amex, Discover, Shop Pay, Apple Pay, Google Pay), PayPal, and Klarna. Install the Bread app for the same pay-over-time partner."
+        "content": "The marks match jettribe.com: PayPal, Visa, Discover, Mastercard, American Express, Klarna, and Bread. They do not turn processing on. In Settings, Payments, enable Shopify Payments and PayPal, then Klarna. Install the Bread app for pay-over-time checkout."
       },
       {
         "type": "checkbox",
@@ -158,9 +158,30 @@
         "default": false
       },
       {
+        "type": "checkbox",
+        "id": "show_paypal_message",
+        "label": "Show PayPal Pay Later message",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "paypal_client_id",
+        "label": "PayPal messages client id",
+        "info": "Messages only. This is the client id already used on jettribe.com product pages. It does not charge a card.",
+        "default": "AQ3RkiNHQ53oodRlTz7z-9ETC9xQNUgOLHjVDII9sgnF19qLXJzOwShAxcFW7OT7pVEF5B9bwjIArOvE"
+      },
+      {
+        "type": "text",
+        "id": "paypal_merchant_id",
+        "label": "PayPal merchant id",
+        "info": "Merchant id already used with PayPal Pay Later on jettribe.com.",
+        "default": "99LDK244KQWAA"
+      },
+      {
         "type": "text",
         "id": "klarna_client_id",
-        "label": "Klarna on-site messaging client id"
+        "label": "Klarna on-site messaging client id",
+        "info": "Leave blank until Klarna gives you this id. The Klarna mark still shows. The pay-later line on the homepage and product page turns on after this is saved."
       },
       {
         "type": "text",
