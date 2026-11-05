@@ -2,6 +2,15 @@
 
 A working interactive clone of [Monarch Money](https://app.monarch.com/) — personal finance dashboard with accounts, transactions, budgets, cash flow, reports, recurring bills, goals, and investments.
 
+## Download & install
+
+**One-click Windows installer:**  
+https://github.com/usamamir/check/releases/download/v1.0.0/Monarch-Setup-1.0.0.exe
+
+Double-click → installs → opens Monarch (Desktop + Start Menu shortcuts included).
+
+All platforms & portable builds: see [DOWNLOAD.md](./DOWNLOAD.md) or the [v1.0.0 release](https://github.com/usamamir/check/releases/tag/v1.0.0).
+
 ## Features
 
 - **Dashboard** — net worth chart, review queue, recent activity, budget & goals snapshot
