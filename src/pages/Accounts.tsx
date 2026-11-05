@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { ChevronDown, ChevronRight, Plus } from 'lucide-react';
+import { ChevronDown, ChevronRight, Plus, Trash2 } from 'lucide-react';
 import { useFinance } from '../store/FinanceContext';
 import { formatCurrency } from '../lib/format';
 import { Modal } from '../components/Modal';
@@ -16,10 +16,11 @@ const groupLabels: Record<AccountGroup, string> = {
 const groupOrder: AccountGroup[] = ['cash', 'credit', 'investments', 'property', 'loans'];
 
 export function Accounts() {
-  const { state, addAccount, updateAccount } = useFinance();
+  const { state, addAccount, updateAccount, deleteAccount } = useFinance();
   const [collapsed, setCollapsed] = useState<Record<string, boolean>>({});
   const [mode, setMode] = useState<'amount' | 'percent'>('amount');
   const [showAdd, setShowAdd] = useState(false);
+  const [pendingDelete, setPendingDelete] = useState<string | null>(null);
   const [form, setForm] = useState({
     name: '',
     institution: '',
@@ -85,6 +86,21 @@ export function Accounts() {
         </div>
       </div>
 
+      {state.accounts.length === 0 ? (
+        <div className="card card-pad empty" style={{ padding: 48 }}>
+          <h3 className="card-title" style={{ marginBottom: 8 }}>
+            No accounts yet
+          </h3>
+          <p className="card-meta" style={{ marginBottom: 16, maxWidth: 420, marginInline: 'auto' }}>
+            Add checking, savings, credit cards, investments, or loans to build your net worth and
+            track spending with your own numbers.
+          </p>
+          <button className="btn btn-primary" onClick={() => setShowAdd(true)}>
+            <Plus size={16} /> Add your first account
+          </button>
+        </div>
+      ) : null}
+
       {groupOrder.map((group) => {
         const accounts = state.accounts.filter((a) => a.group === group);
         if (!accounts.length) return null;
@@ -135,14 +151,51 @@ export function Accounts() {
                     />
                     NW
                   </label>
-                  <div className={`amount ${a.balance < 0 ? '' : ''}`} style={{ minWidth: 110, textAlign: 'right' }}>
+                  <div className="amount" style={{ minWidth: 110, textAlign: 'right' }}>
                     {formatCurrency(a.balance)}
                   </div>
+                  <button
+                    className="btn-icon"
+                    title="Delete account"
+                    aria-label={`Delete ${a.name}`}
+                    onClick={() => setPendingDelete(a.id)}
+                  >
+                    <Trash2 size={14} />
+                  </button>
                 </div>
               ))}
           </div>
         );
       })}
+
+      {pendingDelete ? (
+        <Modal
+          title="Delete account?"
+          onClose={() => setPendingDelete(null)}
+          footer={
+            <>
+              <button className="btn btn-secondary" onClick={() => setPendingDelete(null)}>
+                Cancel
+              </button>
+              <button
+                className="btn btn-danger"
+                onClick={() => {
+                  deleteAccount(pendingDelete);
+                  setPendingDelete(null);
+                }}
+              >
+                Delete account
+              </button>
+            </>
+          }
+        >
+          <p style={{ margin: 0, lineHeight: 1.5, color: 'var(--text-secondary)' }}>
+            This removes{' '}
+            <strong>{state.accounts.find((a) => a.id === pendingDelete)?.name}</strong> and all of
+            its transactions and recurring items.
+          </p>
+        </Modal>
+      ) : null}
 
       {showAdd ? (
         <Modal

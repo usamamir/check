@@ -1,9 +1,11 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Modal } from './Modal';
 import { useFinance } from '../store/FinanceContext';
 
 export function AddTransactionModal({ onClose }: { onClose: () => void }) {
   const { state, addTransaction } = useFinance();
+  const hasAccounts = state.accounts.length > 0;
   const [form, setForm] = useState({
     merchant: '',
     amount: '',
@@ -29,6 +31,30 @@ export function AddTransactionModal({ onClose }: { onClose: () => void }) {
     });
     onClose();
   };
+
+  if (!hasAccounts) {
+    return (
+      <Modal
+        title="Add an account first"
+        onClose={onClose}
+        footer={
+          <>
+            <button className="btn btn-secondary" onClick={onClose}>
+              Close
+            </button>
+            <Link to="/accounts" className="btn btn-primary" onClick={onClose}>
+              Go to Accounts
+            </Link>
+          </>
+        }
+      >
+        <p style={{ margin: 0, lineHeight: 1.5, color: 'var(--text-secondary)' }}>
+          Transactions need an account. Add a checking, savings, or credit account, then come back
+          to log spending.
+        </p>
+      </Modal>
+    );
+  }
 
   return (
     <Modal

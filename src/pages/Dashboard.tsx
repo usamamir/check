@@ -13,7 +13,7 @@ import { calcAssets, calcLiabilities, calcNetWorth } from '../data/seed';
 import { formatCurrency, shortDate } from '../lib/format';
 
 export function Dashboard() {
-  const { state, markReviewed, getCategory, getAccount } = useFinance();
+  const { state, isBlank, markReviewed, getCategory, getAccount } = useFinance();
   const netWorth = calcNetWorth(state.accounts);
   const assets = calcAssets(state.accounts);
   const liabilities = calcLiabilities(state.accounts);
@@ -30,6 +30,24 @@ export function Dashboard() {
 
   return (
     <div style={{ display: 'grid', gap: 16 }}>
+      {isBlank ? (
+        <div className="card card-pad" style={{ background: 'linear-gradient(135deg,#fff,#ffe8e2)' }}>
+          <h3 className="card-title">Start with your own money picture</h3>
+          <p className="card-meta" style={{ margin: '8px 0 14px', maxWidth: 560, lineHeight: 1.5 }}>
+            This workspace is empty. Add accounts, then transactions, set budget amounts, and create
+            goals. You can erase or reload sample data anytime in Settings.
+          </p>
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+            <Link to="/accounts" className="btn btn-primary">
+              Add accounts <ArrowRight size={14} />
+            </Link>
+            <Link to="/settings" className="btn btn-secondary">
+              Data settings
+            </Link>
+          </div>
+        </div>
+      ) : null}
+
       <div className="grid-3">
         <div className="card card-pad">
           <div className="card-meta">Net worth</div>
@@ -70,49 +88,55 @@ export function Dashboard() {
             </Link>
           </div>
           <div style={{ height: 240 }}>
-            <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={history}>
-                <defs>
-                  <linearGradient id="nw" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#ff5a36" stopOpacity={0.35} />
-                    <stop offset="100%" stopColor="#ff5a36" stopOpacity={0} />
-                  </linearGradient>
-                </defs>
-                <XAxis
-                  dataKey="date"
-                  tickFormatter={(v) =>
-                    new Date(v + 'T12:00:00').toLocaleDateString('en-US', { month: 'short' })
-                  }
-                  axisLine={false}
-                  tickLine={false}
-                  tick={{ fill: '#a8a29e', fontSize: 11 }}
-                />
-                <YAxis
-                  tickFormatter={(v) => `$${(v / 1000).toFixed(0)}k`}
-                  axisLine={false}
-                  tickLine={false}
-                  width={48}
-                  tick={{ fill: '#a8a29e', fontSize: 11 }}
-                />
-                <Tooltip
-                  contentStyle={{ background: '#1c1917', border: 0, borderRadius: 10, color: '#fff' }}
-                  formatter={(value) => [formatCurrency(Number(value ?? 0)), 'Net worth']}
-                  labelFormatter={(l) =>
-                    new Date(String(l) + 'T12:00:00').toLocaleDateString('en-US', {
-                      month: 'long',
-                      year: 'numeric',
-                    })
-                  }
-                />
-                <Area
-                  type="monotone"
-                  dataKey="netWorth"
-                  stroke="#ff5a36"
-                  strokeWidth={2.5}
-                  fill="url(#nw)"
-                />
-              </AreaChart>
-            </ResponsiveContainer>
+            {history.length > 1 ? (
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart data={history}>
+                  <defs>
+                    <linearGradient id="nw" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="#ff5a36" stopOpacity={0.35} />
+                      <stop offset="100%" stopColor="#ff5a36" stopOpacity={0} />
+                    </linearGradient>
+                  </defs>
+                  <XAxis
+                    dataKey="date"
+                    tickFormatter={(v) =>
+                      new Date(v + 'T12:00:00').toLocaleDateString('en-US', { month: 'short' })
+                    }
+                    axisLine={false}
+                    tickLine={false}
+                    tick={{ fill: '#a8a29e', fontSize: 11 }}
+                  />
+                  <YAxis
+                    tickFormatter={(v) => `$${(v / 1000).toFixed(0)}k`}
+                    axisLine={false}
+                    tickLine={false}
+                    width={48}
+                    tick={{ fill: '#a8a29e', fontSize: 11 }}
+                  />
+                  <Tooltip
+                    contentStyle={{ background: '#1c1917', border: 0, borderRadius: 10, color: '#fff' }}
+                    formatter={(value) => [formatCurrency(Number(value ?? 0)), 'Net worth']}
+                    labelFormatter={(l) =>
+                      new Date(String(l) + 'T12:00:00').toLocaleDateString('en-US', {
+                        month: 'long',
+                        year: 'numeric',
+                      })
+                    }
+                  />
+                  <Area
+                    type="monotone"
+                    dataKey="netWorth"
+                    stroke="#ff5a36"
+                    strokeWidth={2.5}
+                    fill="url(#nw)"
+                  />
+                </AreaChart>
+              </ResponsiveContainer>
+            ) : (
+              <div className="empty" style={{ height: '100%', display: 'grid', placeItems: 'center' }}>
+                Net worth history appears as you add accounts over time.
+              </div>
+            )}
           </div>
         </div>
 
@@ -211,22 +235,26 @@ export function Dashboard() {
                 Manage
               </Link>
             </div>
-            {state.goals.map((g) => {
-              const pct = Math.min(100, (g.currentAmount / g.targetAmount) * 100);
-              return (
-                <div key={g.id} style={{ marginBottom: 14 }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
-                    <span style={{ fontWeight: 650 }}>
-                      {g.emoji} {g.name}
-                    </span>
-                    <span className="card-meta">{Math.round(pct)}%</span>
+            {state.goals.length === 0 ? (
+              <div className="card-meta">No goals yet — create one from the Goals page.</div>
+            ) : (
+              state.goals.map((g) => {
+                const pct = Math.min(100, (g.currentAmount / g.targetAmount) * 100);
+                return (
+                  <div key={g.id} style={{ marginBottom: 14 }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
+                      <span style={{ fontWeight: 650 }}>
+                        {g.emoji} {g.name}
+                      </span>
+                      <span className="card-meta">{Math.round(pct)}%</span>
+                    </div>
+                    <div className="progress">
+                      <span style={{ width: `${pct}%` }} />
+                    </div>
                   </div>
-                  <div className="progress">
-                    <span style={{ width: `${pct}%` }} />
-                  </div>
-                </div>
-              );
-            })}
+                );
+              })
+            )}
           </div>
 
           <div className="card card-pad">

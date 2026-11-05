@@ -1,7 +1,7 @@
 {
   "name": "monarch",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Monarch — track, budget, plan, and manage money in one place",
   "author": "Monarch <hello@monarch.local>",
   "type": "module",
@@ -62,7 +62,6 @@
       ],
       "category": "Office;Finance",
       "icon": "build/icon.png",
-      "desktopName": "monarch",
       "artifactName": "Monarch-${version}-${os}.${ext}"
     },
     "win": {

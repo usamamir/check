@@ -1,4 +1,4 @@
-import type { FinanceState } from '../types';
+import type { AppUser, BudgetCategory, Category, FinanceState } from '../types';
 
 const today = new Date();
 const iso = (d: Date) => d.toISOString().slice(0, 10);
@@ -19,6 +19,88 @@ const monthsAgo = (n: number) => {
   return iso(d);
 };
 
+export const defaultCategories: Category[] = [
+  { id: 'c-salary', name: 'Paychecks', group: 'Income', emoji: '💰', type: 'income' },
+  { id: 'c-interest', name: 'Interest', group: 'Income', emoji: '📈', type: 'income' },
+  { id: 'c-other-income', name: 'Other Income', group: 'Income', emoji: '✨', type: 'income' },
+  { id: 'c-rent', name: 'Rent / Mortgage', group: 'Housing', emoji: '🏠', type: 'expense' },
+  { id: 'c-utilities', name: 'Utilities', group: 'Housing', emoji: '💡', type: 'expense' },
+  { id: 'c-internet', name: 'Internet', group: 'Housing', emoji: '📶', type: 'expense' },
+  { id: 'c-groceries', name: 'Groceries', group: 'Food', emoji: '🛒', type: 'expense' },
+  { id: 'c-restaurants', name: 'Restaurants', group: 'Food', emoji: '🍽️', type: 'expense' },
+  { id: 'c-coffee', name: 'Coffee Shops', group: 'Food', emoji: '☕', type: 'expense' },
+  { id: 'c-gas', name: 'Gas', group: 'Transport', emoji: '⛽', type: 'expense' },
+  { id: 'c-transit', name: 'Public Transit', group: 'Transport', emoji: '🚇', type: 'expense' },
+  { id: 'c-auto', name: 'Auto Payment', group: 'Transport', emoji: '🚗', type: 'expense' },
+  { id: 'c-shopping', name: 'Shopping', group: 'Lifestyle', emoji: '🛍️', type: 'expense' },
+  { id: 'c-entertainment', name: 'Entertainment', group: 'Lifestyle', emoji: '🎬', type: 'expense' },
+  { id: 'c-streaming', name: 'Streaming', group: 'Lifestyle', emoji: '📺', type: 'expense' },
+  { id: 'c-gym', name: 'Fitness', group: 'Lifestyle', emoji: '🏋️', type: 'expense' },
+  { id: 'c-travel', name: 'Travel', group: 'Lifestyle', emoji: '✈️', type: 'expense' },
+  { id: 'c-health', name: 'Medical', group: 'Health', emoji: '🩺', type: 'expense' },
+  { id: 'c-insurance', name: 'Insurance', group: 'Health', emoji: '🛡️', type: 'expense' },
+  { id: 'c-subscriptions', name: 'Software', group: 'Lifestyle', emoji: '💻', type: 'expense' },
+  { id: 'c-personal', name: 'Personal Care', group: 'Lifestyle', emoji: '💅', type: 'expense' },
+  { id: 'c-gifts', name: 'Gifts & Donations', group: 'Giving', emoji: '🎁', type: 'expense' },
+  { id: 'c-transfer', name: 'Transfer', group: 'Transfers', emoji: '🔄', type: 'transfer' },
+  { id: 'c-cc-payment', name: 'Credit Card Payment', group: 'Transfers', emoji: '💳', type: 'transfer' },
+  { id: 'c-uncategorized', name: 'Uncategorized', group: 'Other', emoji: '❓', type: 'expense' },
+];
+
+/** Empty budget template — categories ready, amounts zeroed for your own plan */
+export const blankBudgetTemplate: BudgetCategory[] = [
+  { categoryId: 'c-salary', planned: 0, rollover: false, section: 'income' },
+  { categoryId: 'c-interest', planned: 0, rollover: false, section: 'income' },
+  { categoryId: 'c-rent', planned: 0, rollover: false, section: 'fixed' },
+  { categoryId: 'c-utilities', planned: 0, rollover: false, section: 'fixed' },
+  { categoryId: 'c-internet', planned: 0, rollover: false, section: 'fixed' },
+  { categoryId: 'c-auto', planned: 0, rollover: false, section: 'fixed' },
+  { categoryId: 'c-insurance', planned: 0, rollover: false, section: 'fixed' },
+  { categoryId: 'c-streaming', planned: 0, rollover: false, section: 'fixed' },
+  { categoryId: 'c-gym', planned: 0, rollover: false, section: 'fixed' },
+  { categoryId: 'c-subscriptions', planned: 0, rollover: false, section: 'fixed' },
+  { categoryId: 'c-groceries', planned: 0, rollover: false, section: 'flexible' },
+  { categoryId: 'c-restaurants', planned: 0, rollover: false, section: 'flexible' },
+  { categoryId: 'c-coffee', planned: 0, rollover: false, section: 'flexible' },
+  { categoryId: 'c-gas', planned: 0, rollover: false, section: 'flexible' },
+  { categoryId: 'c-shopping', planned: 0, rollover: false, section: 'flexible' },
+  { categoryId: 'c-entertainment', planned: 0, rollover: false, section: 'flexible' },
+  { categoryId: 'c-personal', planned: 0, rollover: false, section: 'flexible' },
+  { categoryId: 'c-travel', planned: 0, rollover: true, section: 'non_monthly' },
+  { categoryId: 'c-gifts', planned: 0, rollover: true, section: 'non_monthly' },
+  { categoryId: 'c-health', planned: 0, rollover: true, section: 'non_monthly' },
+];
+
+export function createBlankState(user?: Partial<AppUser>): FinanceState {
+  const name = user?.name?.trim() || '';
+  const initials =
+    user?.initials ||
+    (name
+      ? name
+          .split(/\s+/)
+          .map((p) => p[0])
+          .join('')
+          .slice(0, 2)
+          .toUpperCase()
+      : '?');
+  return {
+    user: {
+      name,
+      email: user?.email?.trim() || '',
+      initials,
+      partnerName: user?.partnerName ?? '',
+    },
+    budgetMode: 'flex',
+    categories: structuredClone(defaultCategories),
+    accounts: [],
+    transactions: [],
+    budgets: structuredClone(blankBudgetTemplate),
+    goals: [],
+    recurring: [],
+    netWorthHistory: [],
+  };
+}
+
 export const seedState: FinanceState = {
   user: {
     name: 'Alex Rivera',
@@ -27,33 +109,7 @@ export const seedState: FinanceState = {
     partnerName: 'Jordan',
   },
   budgetMode: 'flex',
-  categories: [
-    { id: 'c-salary', name: 'Paychecks', group: 'Income', emoji: '💰', type: 'income' },
-    { id: 'c-interest', name: 'Interest', group: 'Income', emoji: '📈', type: 'income' },
-    { id: 'c-other-income', name: 'Other Income', group: 'Income', emoji: '✨', type: 'income' },
-    { id: 'c-rent', name: 'Rent / Mortgage', group: 'Housing', emoji: '🏠', type: 'expense' },
-    { id: 'c-utilities', name: 'Utilities', group: 'Housing', emoji: '💡', type: 'expense' },
-    { id: 'c-internet', name: 'Internet', group: 'Housing', emoji: '📶', type: 'expense' },
-    { id: 'c-groceries', name: 'Groceries', group: 'Food', emoji: '🛒', type: 'expense' },
-    { id: 'c-restaurants', name: 'Restaurants', group: 'Food', emoji: '🍽️', type: 'expense' },
-    { id: 'c-coffee', name: 'Coffee Shops', group: 'Food', emoji: '☕', type: 'expense' },
-    { id: 'c-gas', name: 'Gas', group: 'Transport', emoji: '⛽', type: 'expense' },
-    { id: 'c-transit', name: 'Public Transit', group: 'Transport', emoji: '🚇', type: 'expense' },
-    { id: 'c-auto', name: 'Auto Payment', group: 'Transport', emoji: '🚗', type: 'expense' },
-    { id: 'c-shopping', name: 'Shopping', group: 'Lifestyle', emoji: '🛍️', type: 'expense' },
-    { id: 'c-entertainment', name: 'Entertainment', group: 'Lifestyle', emoji: '🎬', type: 'expense' },
-    { id: 'c-streaming', name: 'Streaming', group: 'Lifestyle', emoji: '📺', type: 'expense' },
-    { id: 'c-gym', name: 'Fitness', group: 'Lifestyle', emoji: '🏋️', type: 'expense' },
-    { id: 'c-travel', name: 'Travel', group: 'Lifestyle', emoji: '✈️', type: 'expense' },
-    { id: 'c-health', name: 'Medical', group: 'Health', emoji: '🩺', type: 'expense' },
-    { id: 'c-insurance', name: 'Insurance', group: 'Health', emoji: '🛡️', type: 'expense' },
-    { id: 'c-subscriptions', name: 'Software', group: 'Lifestyle', emoji: '💻', type: 'expense' },
-    { id: 'c-personal', name: 'Personal Care', group: 'Lifestyle', emoji: '💅', type: 'expense' },
-    { id: 'c-gifts', name: 'Gifts & Donations', group: 'Giving', emoji: '🎁', type: 'expense' },
-    { id: 'c-transfer', name: 'Transfer', group: 'Transfers', emoji: '🔄', type: 'transfer' },
-    { id: 'c-cc-payment', name: 'Credit Card Payment', group: 'Transfers', emoji: '💳', type: 'transfer' },
-    { id: 'c-uncategorized', name: 'Uncategorized', group: 'Other', emoji: '❓', type: 'expense' },
-  ],
+  categories: structuredClone(defaultCategories),
   accounts: [
     {
       id: 'a-chase-checking',

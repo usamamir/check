@@ -5,11 +5,13 @@ A working interactive clone of [Monarch Money](https://app.monarch.com/) — per
 ## Download & install
 
 **One-click Windows installer:**  
-https://github.com/usamamir/check/releases/download/v1.0.0/Monarch-Setup-1.0.0.exe
+https://github.com/usamamir/check/releases/download/v1.0.1/Monarch-Setup-1.0.1.exe
 
 Double-click → installs → opens Monarch (Desktop + Start Menu shortcuts included).
 
-All platforms & portable builds: see [DOWNLOAD.md](./DOWNLOAD.md) or the [v1.0.0 release](https://github.com/usamamir/check/releases/tag/v1.0.0).
+All platforms & portable builds: see [DOWNLOAD.md](./DOWNLOAD.md) or the [v1.0.1 release](https://github.com/usamamir/check/releases/tag/v1.0.1).
+
+**Your own data:** Settings → **Erase all data & start from scratch**, or choose **Start from scratch** on login.
 
 ## Features
 

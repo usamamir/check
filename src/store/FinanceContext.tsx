@@ -7,9 +7,10 @@ import {
   useState,
   type ReactNode,
 } from 'react';
-import { seedState } from '../data/seed';
+import { createBlankState, seedState } from '../data/seed';
 import type {
   Account,
+  AppUser,
   BudgetCategory,
   FinanceState,
   Goal,
@@ -17,19 +18,26 @@ import type {
   Transaction,
 } from '../types';
 
-const STORAGE_KEY = 'monarch-clone-state-v1';
+const STORAGE_KEY = 'monarch-clone-state-v2';
 const AUTH_KEY = 'monarch-clone-authed';
+const LEGACY_STORAGE_KEY = 'monarch-clone-state-v1';
 
 interface FinanceContextValue {
   state: FinanceState;
   authed: boolean;
+  isBlank: boolean;
   login: () => void;
   logout: () => void;
-  resetDemo: () => void;
+  /** Wipe everything and start empty so you can enter your own data */
+  startFresh: (user?: Partial<AppUser>) => void;
+  /** Restore the built-in sample household */
+  loadSampleData: () => void;
+  updateUser: (patch: Partial<AppUser>) => void;
   updateTransaction: (id: string, patch: Partial<Transaction>) => void;
   markReviewed: (ids: string[], reviewed?: boolean) => void;
   addTransaction: (tx: Omit<Transaction, 'id'>) => void;
   deleteTransaction: (id: string) => void;
+  deleteAllTransactions: () => void;
   updateBudget: (categoryId: string, planned: number) => void;
   setBudgetMode: (mode: 'flex' | 'category') => void;
   updateGoal: (id: string, patch: Partial<Goal>) => void;
@@ -37,20 +45,45 @@ interface FinanceContextValue {
   deleteGoal: (id: string) => void;
   updateAccount: (id: string, patch: Partial<Account>) => void;
   addAccount: (account: Omit<Account, 'id' | 'lastSynced'>) => void;
+  deleteAccount: (id: string) => void;
   toggleRecurring: (id: string) => void;
   updateRecurring: (id: string, patch: Partial<RecurringItem>) => void;
+  deleteRecurring: (id: string) => void;
+  addRecurring: (item: Omit<RecurringItem, 'id'>) => void;
   getCategory: (id: string) => FinanceState['categories'][number] | undefined;
   getAccount: (id: string) => Account | undefined;
 }
 
 const FinanceContext = createContext<FinanceContextValue | null>(null);
 
+function isValidState(value: unknown): value is FinanceState {
+  if (!value || typeof value !== 'object') return false;
+  const s = value as FinanceState;
+  return (
+    Array.isArray(s.accounts) &&
+    Array.isArray(s.transactions) &&
+    Array.isArray(s.categories) &&
+    Array.isArray(s.budgets) &&
+    Array.isArray(s.goals) &&
+    Array.isArray(s.recurring) &&
+    Array.isArray(s.netWorthHistory) &&
+    !!s.user &&
+    typeof s.user === 'object'
+  );
+}
+
 function loadState(): FinanceState {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
+    const raw = localStorage.getItem(STORAGE_KEY) ?? localStorage.getItem(LEGACY_STORAGE_KEY);
     if (raw) {
-      const parsed = JSON.parse(raw) as FinanceState;
-      if (parsed?.accounts?.length && parsed?.transactions?.length) return parsed;
+      const parsed = JSON.parse(raw) as unknown;
+      // Accept empty arrays — previously we required sample data and could never clear it
+      if (isValidState(parsed)) {
+        if (!localStorage.getItem(STORAGE_KEY)) {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(parsed));
+        }
+        return parsed;
+      }
     }
   } catch {
     /* ignore */
@@ -58,13 +91,24 @@ function loadState(): FinanceState {
   return structuredClone(seedState);
 }
 
+function persist(state: FinanceState) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  localStorage.removeItem(LEGACY_STORAGE_KEY);
+}
+
 export function FinanceProvider({ children }: { children: ReactNode }) {
   const [state, setState] = useState<FinanceState>(() => loadState());
   const [authed, setAuthed] = useState(() => localStorage.getItem(AUTH_KEY) === '1');
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    persist(state);
   }, [state]);
+
+  const isBlank =
+    state.accounts.length === 0 &&
+    state.transactions.length === 0 &&
+    state.goals.length === 0 &&
+    state.recurring.length === 0;
 
   const login = useCallback(() => {
     localStorage.setItem(AUTH_KEY, '1');
@@ -76,10 +120,33 @@ export function FinanceProvider({ children }: { children: ReactNode }) {
     setAuthed(false);
   }, []);
 
-  const resetDemo = useCallback(() => {
+  const startFresh = useCallback((user?: Partial<AppUser>) => {
+    const blank = createBlankState(user ?? { name: '', email: '', initials: '?' });
+    setState(blank);
+    persist(blank);
+  }, []);
+
+  const loadSampleData = useCallback(() => {
     const fresh = structuredClone(seedState);
     setState(fresh);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(fresh));
+    persist(fresh);
+  }, []);
+
+  const updateUser = useCallback((patch: Partial<AppUser>) => {
+    setState((s) => {
+      const nextUser = { ...s.user, ...patch };
+      if (patch.name !== undefined && !patch.initials) {
+        const parts = nextUser.name.trim().split(/\s+/).filter(Boolean);
+        nextUser.initials = parts.length
+          ? parts
+              .map((p) => p[0])
+              .join('')
+              .slice(0, 2)
+              .toUpperCase()
+          : '?';
+      }
+      return { ...s, user: nextUser };
+    });
   }, []);
 
   const updateTransaction = useCallback((id: string, patch: Partial<Transaction>) => {
@@ -120,6 +187,10 @@ export function FinanceProvider({ children }: { children: ReactNode }) {
         ),
       };
     });
+  }, []);
+
+  const deleteAllTransactions = useCallback(() => {
+    setState((s) => ({ ...s, transactions: [] }));
   }, []);
 
   const updateBudget = useCallback((categoryId: string, planned: number) => {
@@ -172,6 +243,16 @@ export function FinanceProvider({ children }: { children: ReactNode }) {
     }));
   }, []);
 
+  const deleteAccount = useCallback((id: string) => {
+    setState((s) => ({
+      ...s,
+      accounts: s.accounts.filter((a) => a.id !== id),
+      transactions: s.transactions.filter((t) => t.accountId !== id),
+      recurring: s.recurring.filter((r) => r.accountId !== id),
+      goals: s.goals.map((g) => (g.accountId === id ? { ...g, accountId: undefined } : g)),
+    }));
+  }, []);
+
   const toggleRecurring = useCallback((id: string) => {
     setState((s) => ({
       ...s,
@@ -183,6 +264,17 @@ export function FinanceProvider({ children }: { children: ReactNode }) {
     setState((s) => ({
       ...s,
       recurring: s.recurring.map((r) => (r.id === id ? { ...r, ...patch } : r)),
+    }));
+  }, []);
+
+  const deleteRecurring = useCallback((id: string) => {
+    setState((s) => ({ ...s, recurring: s.recurring.filter((r) => r.id !== id) }));
+  }, []);
+
+  const addRecurring = useCallback((item: Omit<RecurringItem, 'id'>) => {
+    setState((s) => ({
+      ...s,
+      recurring: [...s.recurring, { ...item, id: `r-${Date.now()}` }],
     }));
   }, []);
 
@@ -200,13 +292,17 @@ export function FinanceProvider({ children }: { children: ReactNode }) {
     () => ({
       state,
       authed,
+      isBlank,
       login,
       logout,
-      resetDemo,
+      startFresh,
+      loadSampleData,
+      updateUser,
       updateTransaction,
       markReviewed,
       addTransaction,
       deleteTransaction,
+      deleteAllTransactions,
       updateBudget,
       setBudgetMode,
       updateGoal,
@@ -214,21 +310,28 @@ export function FinanceProvider({ children }: { children: ReactNode }) {
       deleteGoal,
       updateAccount,
       addAccount,
+      deleteAccount,
       toggleRecurring,
       updateRecurring,
+      deleteRecurring,
+      addRecurring,
       getCategory,
       getAccount,
     }),
     [
       state,
       authed,
+      isBlank,
       login,
       logout,
-      resetDemo,
+      startFresh,
+      loadSampleData,
+      updateUser,
       updateTransaction,
       markReviewed,
       addTransaction,
       deleteTransaction,
+      deleteAllTransactions,
       updateBudget,
       setBudgetMode,
       updateGoal,
@@ -236,8 +339,11 @@ export function FinanceProvider({ children }: { children: ReactNode }) {
       deleteGoal,
       updateAccount,
       addAccount,
+      deleteAccount,
       toggleRecurring,
       updateRecurring,
+      deleteRecurring,
+      addRecurring,
       getCategory,
       getAccount,
     ],
