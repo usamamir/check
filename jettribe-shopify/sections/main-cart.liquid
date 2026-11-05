@@ -77,13 +77,9 @@
               <label for="CartNote">Order note</label>
               <textarea id="CartNote" name="note">{{ cart.note }}</textarea>
             </div>
-            <div class="field">
-              <label for="DiscountCode">Discount code</label>
-              <input id="DiscountCode" type="text" name="discount" placeholder="Code">
-            </div>
-            <p>Tax and shipping are calculated at checkout.</p>
+            <p>Tax and shipping are calculated at checkout. A discount code is entered on that page.</p>
             {% render 'paypal-message', placement: 'cart', amount: cart.total_price %}
-            <button class="btn btn--full" type="submit" name="checkout">Checkout</button>
+            <a class="btn btn--full" href="/checkout">Checkout</a>
             <div class="additional-checkout" style="margin-top:12px;">
               {{ content_for_additional_checkout_buttons }}
             </div>
