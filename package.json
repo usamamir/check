@@ -1,0 +1,69 @@
+{
+  "name": "repwise",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Repwise — original strength training app with workouts and exercise demos",
+  "author": "Repwise",
+  "type": "module",
+  "main": "electron/main.cjs",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "electron:dev": "electron .",
+    "icon": "node scripts/make-icon.mjs",
+    "dist:win": "npm run icon && npm run build && electron-builder --win nsis --x64 --publish never"
+  },
+  "build": {
+    "appId": "app.repwise.desktop",
+    "productName": "Repwise",
+    "copyright": "Repwise",
+    "directories": {
+      "output": "release",
+      "buildResources": "build-resources"
+    },
+    "files": [
+      "dist/**/*",
+      "electron/**/*",
+      "package.json",
+      "!node_modules/**/*",
+      "!**/node_modules/**/*"
+    ],
+    "asar": true,
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64"]
+        }
+      ],
+      "icon": "build-resources/icon.png"
+    },
+    "nsis": {
+      "oneClick": true,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": false,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Repwise",
+      "uninstallDisplayName": "Repwise",
+      "artifactName": "Repwise-Setup.exe",
+      "deleteAppDataOnUninstall": false,
+      "runAfterFinish": true
+    }
+  },
+  "dependencies": {
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-router-dom": "^7.9.4"
+  },
+  "devDependencies": {
+    "@types/react": "^19.1.2",
+    "@types/react-dom": "^19.1.2",
+    "@vitejs/plugin-react": "^4.4.1",
+    "electron": "^36.4.0",
+    "electron-builder": "^26.18.0",
+    "typescript": "~5.8.3",
+    "vite": "^6.3.5"
+  }
+}
