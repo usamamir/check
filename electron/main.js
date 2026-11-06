@@ -1,6 +1,9 @@
-const { app, BrowserWindow, ipcMain, Notification, Tray, Menu, nativeImage } = require('electron');
+const { app, BrowserWindow, ipcMain, Notification } = require('electron');
 const path = require('path');
 const Store = require('electron-store');
+
+// Avoid blank/crash startup if GPU drivers are flaky on some Windows machines
+app.disableHardwareAcceleration();
 
 const store = new Store({
   name: 'streakly-data',
@@ -17,7 +20,6 @@ const store = new Store({
 });
 
 let mainWindow = null;
-let tray = null;
 let reminderInterval = null;
 
 function createWindow() {
@@ -29,7 +31,6 @@ function createWindow() {
     maxWidth: 560,
     backgroundColor: '#1a1a1a',
     title: 'Streakly',
-    titleBarStyle: process.platform === 'darwin' ? 'hiddenInset' : 'default',
     autoHideMenuBar: true,
     show: false,
     webPreferences: {
@@ -44,44 +45,15 @@ function createWindow() {
 
   mainWindow.once('ready-to-show', () => {
     mainWindow.show();
+    mainWindow.focus();
   });
 
-  mainWindow.on('close', (event) => {
-    if (process.platform === 'win32' && !app.isQuitting) {
-      event.preventDefault();
-      mainWindow.hide();
-    }
+  mainWindow.webContents.on('did-fail-load', (_e, code, desc, url) => {
+    console.error('Failed to load', code, desc, url);
   });
-}
 
-function createTray() {
-  const icon = nativeImage.createEmpty();
-  tray = new Tray(icon);
-  tray.setToolTip('Streakly');
-  const contextMenu = Menu.buildFromTemplate([
-    {
-      label: 'Show Streakly',
-      click: () => {
-        if (mainWindow) {
-          mainWindow.show();
-          mainWindow.focus();
-        }
-      },
-    },
-    {
-      label: 'Quit',
-      click: () => {
-        app.isQuitting = true;
-        app.quit();
-      },
-    },
-  ]);
-  tray.setContextMenu(contextMenu);
-  tray.on('double-click', () => {
-    if (mainWindow) {
-      mainWindow.show();
-      mainWindow.focus();
-    }
+  mainWindow.on('closed', () => {
+    mainWindow = null;
   });
 }
 
@@ -127,31 +99,35 @@ function startReminderLoop() {
   }, 60 * 1000);
 }
 
-app.whenReady().then(() => {
-  setupIpc();
-  createWindow();
-  if (process.platform === 'win32') {
-    try {
-      createTray();
-    } catch (_) {
-      /* tray optional */
+const gotLock = app.requestSingleInstanceLock();
+if (!gotLock) {
+  app.quit();
+} else {
+  app.on('second-instance', () => {
+    if (mainWindow) {
+      if (mainWindow.isMinimized()) mainWindow.restore();
+      mainWindow.show();
+      mainWindow.focus();
     }
-  }
-  startReminderLoop();
-
-  app.on('activate', () => {
-    if (BrowserWindow.getAllWindows().length === 0) createWindow();
-    else if (mainWindow) mainWindow.show();
   });
-});
+
+  app.whenReady().then(() => {
+    setupIpc();
+    createWindow();
+    startReminderLoop();
+
+    app.on('activate', () => {
+      if (BrowserWindow.getAllWindows().length === 0) createWindow();
+      else if (mainWindow) mainWindow.show();
+    });
+  });
+}
 
 app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
-    if (reminderInterval) clearInterval(reminderInterval);
-    app.quit();
-  }
+  if (reminderInterval) clearInterval(reminderInterval);
+  if (process.platform !== 'darwin') app.quit();
 });
 
 app.on('before-quit', () => {
-  app.isQuitting = true;
+  if (reminderInterval) clearInterval(reminderInterval);
 });

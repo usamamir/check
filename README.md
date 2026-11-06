@@ -4,11 +4,16 @@ A Windows desktop habit tracker inspired by [Streaks](https://streaks.app/). Bui
 
 ## Windows download (runnable)
 
-**Portable EXE (no installer):** `Streakly-Windows-1.0.0-x64.exe`
+**Recommended:** `Streakly-Windows.exe` (portable, no install)
 
 1. Download the `.exe`
-2. Double-click to launch (Windows may show SmartScreen on first run — choose *More info* → *Run anyway*)
-3. Habits are saved locally on your PC
+2. Double-click to launch
+3. If SmartScreen appears: **More info → Run anyway**
+4. First launch can take a few seconds while it unpacks
+
+**If the .exe does not open:** use `Streakly-Windows-1.0.1-x64.zip` instead — extract the folder, then run `Streakly.exe` inside it.
+
+Needs Windows 10/11 (64-bit). Habits are saved locally on your PC.
 
 Rebuild anytime:
 
@@ -16,8 +21,6 @@ Rebuild anytime:
 npm install
 npm run pack:win
 ```
-
-Output lands in `dist/Streakly-Windows-1.0.0-x64.exe`.
 
 ## Features
 
