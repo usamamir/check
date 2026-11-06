@@ -2,22 +2,19 @@
 
 Unofficial visual recreation of [fitbod.me](https://fitbod.me/) — React/Vite web app + Windows installer.
 
-## Windows install (recommended)
+## Windows install
 
-1. Download **`FitbodClone-Setup.exe`**
-2. Double-click it
-3. If SmartScreen appears: **More info → Run anyway**
-4. The app installs and opens automatically (desktop + Start Menu shortcuts)
+**Download the installer:**
+https://github.com/usamamir/check/raw/cursor/fitbod-homepage-clone-a8b2/downloads/FitbodClone-Setup.exe
 
-### Backup (no installer)
+1. Double-click `FitbodClone-Setup.exe`
+2. If SmartScreen appears: **More info → Run anyway**
+3. App installs and opens (Desktop + Start Menu shortcuts)
 
-Download **`FitbodClone-Windows.zip`**, unzip, then double-click **`FitbodClone.exe`**.
+Requires 64-bit Windows 10/11.
 
-Rebuild:
-```bash
-npm install
-npm run dist:win
-```
+File also listed here:
+https://github.com/usamamir/check/blob/cursor/fitbod-homepage-clone-a8b2/downloads/FitbodClone-Setup.exe
 
 ## Browser
 
