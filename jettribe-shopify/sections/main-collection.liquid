@@ -1,0 +1,62 @@
+<section class="page-wrap">
+  <div class="container">
+    {% render 'breadcrumbs' %}
+    <h1 class="page-heading" style="justify-content:flex-start;"><span>{{ collection.title }}</span></h1>
+    {%- if collection.description != blank -%}
+      <div class="rte" style="margin-bottom:18px;">{{ collection.description }}</div>
+    {%- endif -%}
+
+    <div class="collection-layout">
+      <aside>
+        {% render 'filter-list', filters: collection.filters, form_action: collection.url, sort_by: collection.sort_by, show_shop_fallback: false %}
+        {% render 'collection-tree' %}
+      </aside>
+
+      <div>
+        {% paginate collection.products by section.settings.per_page %}
+          <div class="toolbar">
+            <p style="margin:0;">{{ collection.products_count }} products</p>
+            <form method="get">
+              {%- for filter in collection.filters -%}
+                {%- for value in filter.active_values -%}
+                  <input type="hidden" name="{{ value.param_name }}" value="{{ value.value }}">
+                {%- endfor -%}
+                {%- if filter.type == 'price_range' -%}
+                  {%- if filter.min_value.value -%}
+                    <input type="hidden" name="{{ filter.min_value.param_name }}" value="{{ filter.min_value.value }}">
+                  {%- endif -%}
+                  {%- if filter.max_value.value -%}
+                    <input type="hidden" name="{{ filter.max_value.param_name }}" value="{{ filter.max_value.value }}">
+                  {%- endif -%}
+                {%- endif -%}
+              {%- endfor -%}
+              <label class="visually-hidden" for="SortBy">Sort</label>
+              <select class="select" id="SortBy" name="sort_by" onchange="this.form.submit()">
+                {%- for option in collection.sort_options -%}
+                  <option value="{{ option.value }}" {% if option.value == collection.sort_by %}selected{% endif %}>{{ option.name }}</option>
+                {%- endfor -%}
+              </select>
+            </form>
+          </div>
+          <div class="product-grid">
+            {%- for product in collection.products -%}
+              {% render 'product-card', product: product %}
+            {%- else -%}
+              <div class="empty-products"><p>No products in this collection yet.</p></div>
+            {%- endfor -%}
+          </div>
+          {% render 'pagination', paginate: paginate %}
+        {% endpaginate %}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Collection",
+  "settings": [
+    { "type": "range", "id": "per_page", "label": "Products per page", "min": 8, "max": 32, "step": 4, "default": 16 }
+  ]
+}
+{% endschema %}

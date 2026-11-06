@@ -1,0 +1,15 @@
+<section class="page-wrap">
+  <div class="container narrow">
+    <h1>Reset password</h1>
+    {% form 'reset_customer_password' %}
+      {{ form.errors | default_errors }}
+      <div class="field"><label for="Password">New password</label><input id="Password" type="password" name="customer[password]" required></div>
+      <div class="field"><label for="PasswordConfirm">Confirm password</label><input id="PasswordConfirm" type="password" name="customer[password_confirmation]" required></div>
+      <button class="btn" type="submit">Save password</button>
+    {% endform %}
+  </div>
+</section>
+
+{% schema %}
+{ "name": "Reset password", "settings": [] }
+{% endschema %}

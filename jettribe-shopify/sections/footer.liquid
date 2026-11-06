@@ -1,0 +1,113 @@
+<footer class="footer" role="contentinfo">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <h5 class="footer-heading">Categories</h5>
+        <ul>
+          <li><a href="/search?jtcat=wetsuits">Wetsuits</a></li>
+          <li><a href="/search?jtcat=jettribe-vests">Vests</a></li>
+          <li><a href="/search?jtcat=accessories">Accessories</a></li>
+          <li><a href="/search?jtcat=boots-shoes">Boots &amp; Shoes</a></li>
+          <li><a href="/search?jtcat=gloves">Gloves</a></li>
+          <li><a href="/search?jtcat=goggles">Goggles</a></li>
+          <li><a href="/search?jtcat=pwc-covers">Covers</a></li>
+          <li><a href="/search?jtcat=for-him">Men's Apparel</a></li>
+          <li><a href="/search?jtcat=for-her">Ladies Apparel</a></li>
+          <li><a href="/search?jtcat=swimwear">Swim Wear</a></li>
+          <li><a href="/search?jtcat=protective-gear">Protection</a></li>
+          <li><a href="/search?jtcat=gear-bags">Travel Gear</a></li>
+          <li><a href="/search?jtcat=customized-gear-factory">Custom Gear</a></li>
+          <li><a href="/search?jtcat=pwc-care">PWC Care</a></li>
+          <li><a href="/search?jtcat=vp-racing-containers">Hard Goods</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5 class="footer-heading">Rider Support</h5>
+        <ul>
+          <li><a href="{{ routes.account_url }}">Order Status</a></li>
+          <li><a href="/search?jtpage=shipping-info">Shipping Info</a></li>
+          <li><a href="/search?jtpage=return-policy">Return Policy</a></li>
+          <li><a href="/search?jtpage=warranty-policy">Warranty Policy</a></li>
+          <li><a href="/search?jtpage=financing">Financing</a></li>
+          <li><a href="/search?jtpage=privacy-policy">Privacy Policy</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5 class="footer-heading">Rider Resources</h5>
+        <ul>
+          <li><a href="/search?jtpage=culture">Culture</a></li>
+          <li><a href="/search?jtpage=careers">Jettribe Careers</a></li>
+          <li><a href="/search?jtpage=blog">Blog</a></li>
+          <li><a href="{{ settings.gift_card_link }}">Gift Certificates</a></li>
+          <li><a href="/search?jtpage=legal-mumbo-jumbo">Legal</a></li>
+          <li><a href="/search?jtpage=jettribe-logos">Logo Download</a></li>
+          <li><a href="/search?jtpage=dropshipping">Reseller Dropshipping</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5 class="footer-heading">Contact Us</h5>
+        <div class="contact-block">
+          <p><strong>Contact Jettribe Rider Support</strong><br>
+            <a href="tel:9512463147">{{ section.settings.phone }}</a><br>
+            {{ section.settings.hours }}
+          </p>
+          <p><a href="mailto:{{ section.settings.email }}">{{ section.settings.email }}</a></p>
+          <p><strong>Jettribe Shipping Distribution</strong><br>{{ section.settings.shipping_address | newline_to_br }}</p>
+          <p><strong>Jettribe Corporate California</strong><br>{{ section.settings.corporate_address | newline_to_br }}</p>
+        </div>
+      </div>
+      <div>
+        <h5 class="footer-heading">VIP List Sign-up</h5>
+        <p>Enroll to be notified of special deals &amp; newsletters</p>
+        {% form 'customer', id: 'FooterNewsletter' %}
+          <input type="hidden" name="contact[tags]" value="newsletter">
+          {%- if form.posted_successfully? -%}
+            <p class="form-success">You are on the list.</p>
+          {%- endif -%}
+          {{ form.errors | default_errors }}
+          <div class="newsletter-form">
+            <label class="visually-hidden" for="NewsletterEmail">Email</label>
+            <input id="NewsletterEmail" type="email" name="contact[email]" placeholder="Email address" required value="{% if customer %}{{ customer.email }}{% endif %}">
+            <button class="btn" type="submit">Subscribe</button>
+          </div>
+        {% endform %}
+      </div>
+    </div>
+
+    <div class="footer-social">
+      {%- if settings.social_facebook != blank -%}
+        <a href="{{ settings.social_facebook }}" aria-label="Facebook" target="_blank" rel="noopener"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M14 9h3V6h-3c-2.2 0-4 1.8-4 4v2H8v3h2v7h3v-7h2.6l.4-3H13v-2c0-.6.4-1 1-1z"/></svg></a>
+      {%- endif -%}
+      {%- if settings.social_instagram != blank -%}
+        <a href="{{ settings.social_instagram }}" aria-label="Instagram" target="_blank" rel="noopener"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="4"/><circle cx="12" cy="12" r="3.5"/><circle cx="17.5" cy="6.5" r="0.8" fill="currentColor" stroke="none"/></svg></a>
+      {%- endif -%}
+      {%- if settings.social_youtube != blank -%}
+        <a href="{{ settings.social_youtube }}" aria-label="YouTube" target="_blank" rel="noopener"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23 12.2s0-3.2-.4-4.6c-.2-.9-.9-1.6-1.8-1.8C19.2 5.4 12 5.4 12 5.4s-7.2 0-8.8.4c-.9.2-1.6.9-1.8 1.8C1 9 1 12.2 1 12.2s0 3.2.4 4.6c.2.9.9 1.6 1.8 1.8 1.6.4 8.8.4 8.8.4s7.2 0 8.8-.4c.9-.2 1.6-.9 1.8-1.8.4-1.4.4-4.6.4-4.6zM9.8 15.5v-6.6l6.2 3.3-6.2 3.3z"/></svg></a>
+      {%- endif -%}
+    </div>
+    <div class="footer-logo">
+      <a href="{{ routes.root_url }}">
+        <img src="{{ 'footer-logo.png' | asset_url }}" alt="{{ shop.name }}" width="319" height="62">
+      </a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="container">
+      {% render 'payment-icons' %}
+      <p>&copy; {{ 'now' | date: '%Y' }} <strong>Jet Tribe</strong>, All rights Reserved.</p>
+    </div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Footer",
+  "settings": [
+    { "type": "text", "id": "phone", "label": "Phone", "default": "951.246.3147" },
+    { "type": "text", "id": "hours", "label": "Hours", "default": "Mon - Fri, 9am - 4pm PST" },
+    { "type": "text", "id": "email", "label": "Email", "default": "ridersupport@jettribe.com" },
+    { "type": "textarea", "id": "shipping_address", "label": "Shipping address", "default": "1120 Como Street South\nSulphur Springs, Texas 75482" },
+    { "type": "textarea", "id": "corporate_address", "label": "Corporate address", "default": "(No Products at this Location)\nTemecula, California\nOffice By Appointment Only" }
+  ]
+}
+{% endschema %}

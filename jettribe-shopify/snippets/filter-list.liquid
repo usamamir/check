@@ -1,0 +1,132 @@
+{%- assign facet_filters = filters -%}
+{%- assign has_color_filter = false -%}
+{%- assign has_size_filter = false -%}
+{%- for filter in facet_filters -%}
+  {%- assign facet_label = filter.label | downcase -%}
+  {%- assign facet_param = filter.param_name | downcase -%}
+  {%- if facet_label contains 'color' or facet_label contains 'colour' or facet_param contains 'color' or facet_param contains 'colour' or filter.presentation == 'swatch' -%}
+    {%- assign has_color_filter = true -%}
+  {%- endif -%}
+  {%- if facet_label contains 'size' or facet_param contains 'size' -%}
+    {%- assign has_size_filter = true -%}
+  {%- endif -%}
+{%- endfor -%}
+
+{%- if facet_filters != blank and facet_filters.size > 0 -%}
+  {%- for filter in facet_filters -%}
+    {%- assign facet_label = filter.label | downcase -%}
+    {%- assign facet_param = filter.param_name | downcase -%}
+    {%- assign is_color = false -%}
+    {%- assign is_size = false -%}
+    {%- if facet_label contains 'color' or facet_label contains 'colour' or facet_param contains 'color' or facet_param contains 'colour' or filter.presentation == 'swatch' -%}
+      {%- assign is_color = true -%}
+    {%- endif -%}
+    {%- if facet_label contains 'size' or facet_param contains 'size' -%}
+      {%- assign is_size = true -%}
+    {%- endif -%}
+    <details class="facet" open>
+      <summary>{{ filter.label }}</summary>
+      {%- if filter.type == 'price_range' -%}
+        {%- assign price_ceil = filter.range_max | divided_by: 100.0 | ceil -%}
+        {%- assign price_min_now = 0 -%}
+        {%- assign price_max_now = price_ceil -%}
+        {%- if filter.min_value.value -%}
+          {%- assign price_min_now = filter.min_value.value | divided_by: 100.0 | floor -%}
+        {%- endif -%}
+        {%- if filter.max_value.value -%}
+          {%- assign price_max_now = filter.max_value.value | divided_by: 100.0 | ceil -%}
+        {%- endif -%}
+        <form class="price-range" data-price-range method="get" action="{{ form_action }}">
+          {%- if terms != blank -%}
+            <input type="hidden" name="q" value="{{ terms | escape }}">
+            <input type="hidden" name="type" value="product">
+          {%- endif -%}
+          {%- for value in facet_filters -%}
+            {%- if value.type != 'price_range' -%}
+              {%- for active in value.active_values -%}
+                <input type="hidden" name="{{ active.param_name }}" value="{{ active.value }}">
+              {%- endfor -%}
+            {%- endif -%}
+          {%- endfor -%}
+          {%- if sort_by != blank -%}
+            <input type="hidden" name="sort_by" value="{{ sort_by }}">
+          {%- endif -%}
+          <div class="price-range-labels">
+            <span data-price-min-label>{{ price_min_now | times: 100 | money }}</span>
+            <span data-price-max-label>{{ price_max_now | times: 100 | money }}</span>
+          </div>
+          {%- if price_ceil > 0 -%}
+            <div class="price-sliders">
+              <input type="range" min="0" max="{{ price_ceil }}" step="1" value="{{ price_min_now }}" data-range="min" aria-label="Minimum price">
+              <input type="range" min="0" max="{{ price_ceil }}" step="1" value="{{ price_max_now }}" data-range="max" aria-label="Maximum price">
+            </div>
+          {%- endif -%}
+          <div class="field">
+            <label>From</label>
+            <input name="{{ filter.min_value.param_name }}" data-price-min type="number" placeholder="0" {% if filter.min_value.value %}value="{{ filter.min_value.value | money_without_currency | replace: ',', '' }}"{% endif %}>
+          </div>
+          <div class="field">
+            <label>To</label>
+            <input name="{{ filter.max_value.param_name }}" data-price-max type="number" {% if filter.max_value.value %}value="{{ filter.max_value.value | money_without_currency | replace: ',', '' }}"{% endif %}>
+          </div>
+          <button class="btn" type="submit">Apply</button>
+        </form>
+      {%- elsif is_color -%}
+        <div class="color-swatches">
+          {%- for value in filter.values -%}
+            {%- capture swatch -%}
+              {%- if value.swatch.color != blank -%}
+                {{ value.swatch.color }}
+              {%- else -%}
+                {% render 'swatch-color', label: value.label %}
+              {%- endif -%}
+            {%- endcapture -%}
+            <a class="swatch{% if value.active %} is-active{% endif %}" style="--swatch: {{ swatch | strip }};" href="{% if value.active %}{{ value.url_to_remove }}{% else %}{{ value.url_to_add }}{% endif %}" title="{{ value.label }} ({{ value.count }})">
+              <i></i><span>{{ value.label }}</span>
+            </a>
+          {%- endfor -%}
+        </div>
+      {%- elsif is_size -%}
+        <div class="size-chips">
+          {%- for value in filter.values -%}
+            <a class="size-chip{% if value.active %} is-active{% endif %}" href="{% if value.active %}{{ value.url_to_remove }}{% else %}{{ value.url_to_add }}{% endif %}">{{ value.label }}</a>
+          {%- endfor -%}
+        </div>
+      {%- else -%}
+        <ul>
+          {%- for value in filter.values -%}
+            <li>
+              <a href="{% if value.active %}{{ value.url_to_remove }}{% else %}{{ value.url_to_add }}{% endif %}" class="{% if value.active %}is-active{% endif %}">
+                {{ value.label }} ({{ value.count }})
+              </a>
+            </li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+    </details>
+  {%- endfor -%}
+{%- elsif show_shop_fallback -%}
+  <div class="facet">
+    <div class="side-heading">Shop</div>
+    <ul>
+      <li><a href="/search?jtcat=wetsuits">Wetsuits</a></li>
+      <li><a href="/search?jtcat=jettribe-vests">Vests</a></li>
+      <li><a href="/search?jtcat=accessories">Accessories</a></li>
+      <li><a href="/search?jtcat=pwc-covers">Covers</a></li>
+      <li><a href="/search?jtcat=outlet">Outlet</a></li>
+    </ul>
+  </div>
+{%- endif -%}
+
+{%- unless has_color_filter -%}
+  <details class="facet" open data-client-colors hidden>
+    <summary>Color</summary>
+    <div class="color-swatches" data-client-color-list></div>
+  </details>
+{%- endunless -%}
+{%- unless has_size_filter -%}
+  <details class="facet" open data-client-sizes hidden>
+    <summary>Size</summary>
+    <div class="size-chips" data-client-size-list></div>
+  </details>
+{%- endunless -%}

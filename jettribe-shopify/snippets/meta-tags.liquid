@@ -1,0 +1,19 @@
+<meta property="og:site_name" content="{{ shop.name }}">
+<meta property="og:url" content="{{ canonical_url }}">
+<meta property="og:title" content="{{ page_title | escape }}">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+{%- if page_description -%}
+  <meta property="og:description" content="{{ page_description | escape }}">
+  <meta name="twitter:description" content="{{ page_description | escape }}">
+{%- endif -%}
+{%- if request.page_type == 'product' and product.featured_image -%}
+  <meta property="og:image" content="{{ product.featured_image | image_url: width: 1200 }}">
+  <meta name="twitter:image" content="{{ product.featured_image | image_url: width: 1200 }}">
+{%- elsif request.page_type == 'article' and article.image -%}
+  <meta property="og:image" content="{{ article.image | image_url: width: 1200 }}">
+{%- elsif settings.logo != blank -%}
+  <meta property="og:image" content="{{ settings.logo | image_url: width: 1200 }}">
+{%- else -%}
+  <meta property="og:image" content="{{ 'logo.png' | asset_url }}">
+{%- endif -%}

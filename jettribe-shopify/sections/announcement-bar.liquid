@@ -1,0 +1,30 @@
+{%- if section.settings.line_1 != blank or section.settings.line_2 != blank -%}
+  <div class="announcement">
+    {%- if section.settings.line_1 != blank -%}
+      <p><strong>{{ section.settings.line_1 }}</strong></p>
+    {%- endif -%}
+    {%- if section.settings.line_2 != blank -%}
+      <p><strong>{{ section.settings.line_2 }}</strong></p>
+    {%- endif -%}
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Announcement bar",
+  "settings": [
+    {
+      "type": "text",
+      "id": "line_1",
+      "label": "Line 1",
+      "default": "Jettribe is a true core personal watercraft brand: born in southern California"
+    },
+    {
+      "type": "text",
+      "id": "line_2",
+      "label": "Line 2",
+      "default": "*** Free USA Shipping on Orders $400+ ***"
+    }
+  ]
+}
+{% endschema %}

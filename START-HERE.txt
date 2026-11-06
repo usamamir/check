@@ -1,0 +1,29 @@
+Jettribe Shopify upload
+
+Upload the theme and the product file separately. The theme zip is the only file that goes under Online Store, Themes.
+
+1. Theme
+   Upload jettribe-shopify-theme.zip in Online Store, Themes, Add theme, Upload zip file.
+   Leave the zip closed. Publish the theme.
+   Menu categories, including 2026 JTR Series, open from this theme and list the imported products.
+   A category does not have to exist in Shopify first. Color filters are circles. Size filters are buttons.
+   Payment marks match jettribe.com: PayPal, Visa, Discover, Mastercard, American Express, Klarna, and Bread.
+   Turn those on in Settings, Payments (Shopify Payments, PayPal, Klarna) and install the Bread app. The theme cannot switch processors on.
+   PayPal Pay Later text uses the messages account already on jettribe.com. Paste the Klarna client id in Theme settings, Payments, when Klarna sends it.
+   Empty menu categories, including empty Outlet links, stay hidden. Turn them back on in Theme settings, Navigation, "Show menu categories that have no products".
+   VIP Deals stays in the menu. Turn it off in Theme settings, Navigation, "Show VIP Deals in the menu" when VIP is closed.
+
+2. Products, categories, and add-on prices — one file
+   In Products, Import, choose jettribe-products.csv.
+   Check "Overwrite products with matching handles".
+   Upload this CSV itself. Do not open it in Excel and do not save a copy. Excel removes the size columns, and Shopify then reports "Product options input is required when updating variants."
+
+   This one file replaces the old product file, the 20 category sheets, the all-categories file, and the add-on price file. Do not import those again.
+
+   It has all 541 products, their photos, prices, and size options.
+   Every jettribe.com category is on the product as a tag, including Ride Gear (249), Outlet (255), Casual Wear (163), Accessories (106), Wetsuits (41), and PWC Covers (62). There are 159 category tags.
+   Plate, name-plate, and sock choices include None. A blank plate is +$25, a custom plate is +$60, the $40 name plate is included, and Lycra socks are +$36.99.
+   None and other variants that had a blank SKU now use that product's SKU (for example JTG 20450GN). Re-import this file with Overwrite checked so those SKUs are saved on the variants.
+
+3. Pages, blog, and accounts
+   Follow jettribe-shopify/UPLOAD.md after the theme is published.

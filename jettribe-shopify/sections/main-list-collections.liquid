@@ -1,0 +1,22 @@
+<section class="page-wrap">
+  <div class="container">
+    {% render 'breadcrumbs' %}
+    <h1 class="page-heading"><span>Collections</span></h1>
+    <div class="cate-grid">
+      {%- for collection in collections -%}
+        <a class="cate-box" href="{{ collection.url }}">
+          {%- if collection.image -%}
+            <img src="{{ collection.image | image_url: width: 800 }}" alt="{{ collection.title | escape }}" width="800" height="800">
+          {%- else -%}
+            <img src="{{ 'cat-wetsuits.jpg' | asset_url }}" alt="" width="800" height="800">
+          {%- endif -%}
+          <span class="cate-title">{{ collection.title }}</span>
+        </a>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{ "name": "Collection list", "settings": [] }
+{% endschema %}

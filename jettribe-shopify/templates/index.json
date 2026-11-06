@@ -1,0 +1,307 @@
+{
+  "sections": {
+    "hero": {
+      "type": "hero",
+      "settings": {},
+      "blocks": {
+        "slide-1": {
+          "type": "slide",
+          "settings": {
+            "asset": "slide-1.jpg",
+            "alt": "Jettribe slide 1"
+          }
+        },
+        "slide-2": {
+          "type": "slide",
+          "settings": {
+            "asset": "slide-2.jpg",
+            "alt": "Jettribe slide 2"
+          }
+        },
+        "slide-3": {
+          "type": "slide",
+          "settings": {
+            "asset": "slide-3.jpg",
+            "alt": "Jettribe slide 3"
+          }
+        },
+        "slide-4": {
+          "type": "slide",
+          "settings": {
+            "asset": "slide-4.jpg",
+            "alt": "Jettribe slide 4"
+          }
+        },
+        "slide-5": {
+          "type": "slide",
+          "settings": {
+            "asset": "slide-5.jpg",
+            "alt": "Jettribe slide 5"
+          }
+        }
+      },
+      "block_order": [
+        "slide-1",
+        "slide-2",
+        "slide-3",
+        "slide-4",
+        "slide-5"
+      ]
+    },
+    "pay-later": {
+      "type": "pay-later",
+      "settings": {
+        "text": "Pay with PayPal or major cards. Pay over time with Klarna or Bread.",
+        "link_label": "See financing",
+        "link": "/search?jtpage=financing"
+      }
+    },
+    "categories": {
+      "type": "category-grid",
+      "settings": {},
+      "blocks": {
+        "cat-1": {
+          "type": "category",
+          "settings": {
+            "title": "Wetsuits",
+            "link": "/search?jtcat=wetsuits",
+            "asset": "cat-wetsuits.jpg",
+            "alt": "Wetsuits"
+          }
+        },
+        "cat-2": {
+          "type": "category",
+          "settings": {
+            "title": "Vests",
+            "link": "/search?jtcat=jettribe-vests",
+            "asset": "cat-vests.jpg",
+            "alt": "Vests"
+          }
+        },
+        "cat-3": {
+          "type": "category",
+          "settings": {
+            "title": "Accessories",
+            "link": "/search?jtcat=accessories",
+            "asset": "cat-accessories.jpg",
+            "alt": "Accessories"
+          }
+        },
+        "cat-4": {
+          "type": "category",
+          "settings": {
+            "title": "Boots & Shoes",
+            "link": "/search?jtcat=boots-shoes",
+            "asset": "cat-boots.jpg",
+            "alt": "Boots and shoes"
+          }
+        },
+        "cat-5": {
+          "type": "category",
+          "settings": {
+            "title": "Gloves",
+            "link": "/search?jtcat=gloves",
+            "asset": "cat-gloves.jpg",
+            "alt": "Gloves"
+          }
+        },
+        "cat-6": {
+          "type": "category",
+          "settings": {
+            "title": "Goggles",
+            "link": "/search?jtcat=goggles",
+            "asset": "cat-goggles.jpg",
+            "alt": "Goggles"
+          }
+        },
+        "cat-7": {
+          "type": "category",
+          "settings": {
+            "title": "Covers",
+            "link": "/search?jtcat=pwc-covers",
+            "asset": "cat-covers.jpg",
+            "alt": "PWC covers"
+          }
+        },
+        "cat-8": {
+          "type": "category",
+          "settings": {
+            "title": "Men's Apparel",
+            "link": "/search?jtcat=for-him",
+            "asset": "cat-mens.jpg",
+            "alt": "Men's apparel"
+          }
+        },
+        "cat-9": {
+          "type": "category",
+          "settings": {
+            "title": "Ladies Apparel",
+            "link": "/search?jtcat=for-her",
+            "asset": "cat-ladies.jpg",
+            "alt": "Ladies apparel"
+          }
+        },
+        "cat-10": {
+          "type": "category",
+          "settings": {
+            "title": "Swim Wear",
+            "link": "/search?jtcat=swimwear",
+            "asset": "cat-swim.jpg",
+            "alt": "Swim wear"
+          }
+        },
+        "cat-11": {
+          "type": "category",
+          "settings": {
+            "title": "Protection",
+            "link": "/search?jtcat=protective-gear",
+            "asset": "cat-protection.jpg",
+            "alt": "Protection"
+          }
+        },
+        "cat-12": {
+          "type": "category",
+          "settings": {
+            "title": "Travel Gear",
+            "link": "/search?jtcat=gear-bags",
+            "asset": "cat-travel.jpg",
+            "alt": "Travel gear"
+          }
+        },
+        "cat-13": {
+          "type": "category",
+          "settings": {
+            "title": "Custom Gear",
+            "link": "/search?jtcat=customized-gear-factory",
+            "asset": "cat-custom.jpg",
+            "alt": "Custom gear"
+          }
+        },
+        "cat-14": {
+          "type": "category",
+          "settings": {
+            "title": "PWC Care",
+            "link": "/search?jtcat=pwc-care",
+            "asset": "cat-care.jpg",
+            "alt": "PWC care"
+          }
+        },
+        "cat-15": {
+          "type": "category",
+          "settings": {
+            "title": "Hard Goods",
+            "link": "/search?jtcat=vp-racing-containers",
+            "asset": "cat-hardgoods.jpg",
+            "alt": "Hard goods"
+          }
+        }
+      },
+      "block_order": [
+        "cat-1",
+        "cat-2",
+        "cat-3",
+        "cat-4",
+        "cat-5",
+        "cat-6",
+        "cat-7",
+        "cat-8",
+        "cat-9",
+        "cat-10",
+        "cat-11",
+        "cat-12",
+        "cat-13",
+        "cat-14",
+        "cat-15"
+      ]
+    },
+    "featured": {
+      "type": "featured-collection",
+      "settings": {
+        "heading": "Featured Products",
+        "products_to_show": 8,
+        "style": "light"
+      }
+    },
+    "new": {
+      "type": "featured-collection",
+      "settings": {
+        "heading": "New Products",
+        "products_to_show": 8,
+        "style": "dark"
+      }
+    },
+    "testimonials": {
+      "type": "testimonials",
+      "settings": {},
+      "blocks": {
+        "q1": {
+          "type": "quote",
+          "settings": {
+            "quote": "I am very happy with the excellent support from Jettribe.",
+            "author": "Yohei Yamamoto"
+          }
+        },
+        "q2": {
+          "type": "quote",
+          "settings": {
+            "quote": "I'm loving the color combination and how every comes together.",
+            "author": "Michael Bernhardt"
+          }
+        },
+        "q3": {
+          "type": "quote",
+          "settings": {
+            "quote": "We have purchased a number of items (suits and beachwear). The suits are really sharp and great quality. I would give them a 6/5 if I could. You really can\u2019t get better than this!",
+            "author": "Derek Corell"
+          }
+        },
+        "q4": {
+          "type": "quote",
+          "settings": {
+            "quote": "You went above and beyond. The gear looks and feels amazing, and the best customer service!",
+            "author": "Jonathan K Espey"
+          }
+        }
+      },
+      "block_order": [
+        "q1",
+        "q2",
+        "q3",
+        "q4"
+      ]
+    },
+    "videos": {
+      "type": "video-row",
+      "settings": {},
+      "blocks": {
+        "vid-1": {
+          "type": "video",
+          "settings": {
+            "youtube_id": "3sN-3DLg_40",
+            "title": "Jettribe video"
+          }
+        },
+        "vid-2": {
+          "type": "video",
+          "settings": {
+            "youtube_id": "sddYe-4t1Lc",
+            "title": "Jettribe video"
+          }
+        }
+      },
+      "block_order": [
+        "vid-1",
+        "vid-2"
+      ]
+    }
+  },
+  "order": [
+    "hero",
+    "pay-later",
+    "categories",
+    "featured",
+    "new",
+    "testimonials",
+    "videos"
+  ]
+}
