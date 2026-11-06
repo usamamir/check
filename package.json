@@ -11,37 +11,50 @@
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
     "electron:dev": "electron .",
-    "pack:win": "npm run icon && npm run build && electron-packager . FitbodClone --platform=win32 --arch=x64 --out=release --overwrite --asar --prune=true --ignore=\"^/(src|release|\\\\.git)$\" --icon=build-resources/icon.png",
-    "dist:win": "npm run icon && npm run build && electron-builder --win portable --x64 --publish never",
-    "icon": "mkdir -p build-resources && ffmpeg -y -i public/assets/app-icon.jpg build-resources/icon.png"
+    "icon": "mkdir -p build-resources && ffmpeg -y -i public/assets/app-icon.jpg build-resources/icon.png",
+    "dist:win": "npm run icon && npm run build && electron-builder --win nsis zip --x64 --publish never"
   },
   "build": {
     "appId": "me.fitbod.clone",
     "productName": "FitbodClone",
+    "copyright": "Unofficial demo clone",
     "directories": {
-      "output": "release"
+      "output": "release",
+      "buildResources": "build-resources"
     },
     "files": [
       "dist/**/*",
       "electron/**/*",
-      "public/assets/app-icon.jpg",
-      "package.json"
+      "package.json",
+      "!node_modules/**/*",
+      "!**/node_modules/**/*"
     ],
     "asar": true,
     "win": {
       "target": [
         {
-          "target": "portable",
-          "arch": [
-            "x64"
-          ]
+          "target": "nsis",
+          "arch": ["x64"]
+        },
+        {
+          "target": "zip",
+          "arch": ["x64"]
         }
       ],
       "icon": "build-resources/icon.png",
-      "artifactName": "FitbodClone-${version}-portable.exe"
+      "artifactName": "FitbodClone-Setup-${version}.${ext}"
     },
-    "portable": {
-      "artifactName": "FitbodClone-portable.exe"
+    "nsis": {
+      "oneClick": true,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": false,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Fitbod Clone",
+      "uninstallDisplayName": "Fitbod Clone",
+      "artifactName": "FitbodClone-Setup.exe",
+      "deleteAppDataOnUninstall": true,
+      "runAfterFinish": true
     }
   },
   "dependencies": {
@@ -49,7 +62,6 @@
     "react-dom": "^19.1.0"
   },
   "devDependencies": {
-    "@electron/packager": "^20.3.0",
     "@types/react": "^19.1.2",
     "@types/react-dom": "^19.1.2",
     "@vitejs/plugin-react": "^4.4.1",

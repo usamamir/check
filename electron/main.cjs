@@ -11,8 +11,8 @@ function createWindow() {
     minHeight: 640,
     backgroundColor: '#0e1016',
     autoHideMenuBar: true,
-    title: 'Fitbod',
-    icon: path.join(__dirname, '..', 'public', 'assets', 'app-icon.jpg'),
+    show: false,
+    title: 'Fitbod Clone',
     webPreferences: {
       preload: path.join(__dirname, 'preload.cjs'),
       contextIsolation: true,
@@ -21,15 +21,31 @@ function createWindow() {
     },
   })
 
+  win.once('ready-to-show', () => win.show())
+
+  const indexHtml = path.join(__dirname, '..', 'dist', 'index.html')
+
   if (isDev) {
     win.loadURL(process.env.VITE_DEV_SERVER_URL || 'http://127.0.0.1:5173')
   } else {
-    win.loadFile(path.join(__dirname, '..', 'dist', 'index.html'))
+    win.loadFile(indexHtml).catch((err) => {
+      console.error('Failed to load app UI', indexHtml, err)
+    })
   }
 
   win.webContents.setWindowOpenHandler(({ url }) => {
     shell.openExternal(url)
     return { action: 'deny' }
+  })
+
+  // Keep external https links in the system browser
+  win.webContents.on('will-navigate', (event, url) => {
+    if (url.startsWith('http://') || url.startsWith('https://')) {
+      if (!url.startsWith('file://') && !url.includes('127.0.0.1')) {
+        event.preventDefault()
+        shell.openExternal(url)
+      }
+    }
   })
 }
 
