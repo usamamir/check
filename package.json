@@ -2,20 +2,56 @@
   "name": "fitbod-clone",
   "private": true,
   "version": "1.0.0",
+  "description": "Unofficial Fitbod homepage clone desktop app",
+  "author": "Fitbod Clone",
   "type": "module",
+  "main": "electron/main.cjs",
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "electron:dev": "electron .",
+    "pack:win": "npm run build && electron-packager . FitbodClone --platform=win32 --arch=x64 --out=release --overwrite --asar --prune=true --ignore=\"^/src$|^/release$|^/\\\\.git$\" --icon=public/assets/app-icon.jpg",
+    "dist:win": "npm run build && electron-builder --win portable --x64 --publish never"
+  },
+  "build": {
+    "appId": "me.fitbod.clone",
+    "productName": "FitbodClone",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "electron/**/*",
+      "public/assets/app-icon.jpg",
+      "package.json"
+    ],
+    "asar": true,
+    "win": {
+      "target": [
+        {
+          "target": "portable",
+          "arch": ["x64"]
+        }
+      ],
+      "icon": "build-resources/icon.png",
+      "artifactName": "FitbodClone-${version}-portable.exe"
+    },
+    "portable": {
+      "artifactName": "FitbodClone-portable.exe"
+    }
   },
   "dependencies": {
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
   },
   "devDependencies": {
+    "@electron/packager": "^20.3.0",
     "@types/react": "^19.1.2",
     "@types/react-dom": "^19.1.2",
     "@vitejs/plugin-react": "^4.4.1",
+    "electron": "^36.4.0",
+    "electron-builder": "^26.18.0",
     "typescript": "~5.8.3",
     "vite": "^6.3.5"
   }
