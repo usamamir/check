@@ -11,8 +11,9 @@
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
     "electron:dev": "electron .",
-    "pack:win": "npm run build && electron-packager . FitbodClone --platform=win32 --arch=x64 --out=release --overwrite --asar --prune=true --ignore=\"^/src$|^/release$|^/\\\\.git$\" --icon=public/assets/app-icon.jpg",
-    "dist:win": "npm run build && electron-builder --win portable --x64 --publish never"
+    "pack:win": "npm run icon && npm run build && electron-packager . FitbodClone --platform=win32 --arch=x64 --out=release --overwrite --asar --prune=true --ignore=\"^/(src|release|\\\\.git)$\" --icon=build-resources/icon.png",
+    "dist:win": "npm run icon && npm run build && electron-builder --win portable --x64 --publish never",
+    "icon": "mkdir -p build-resources && ffmpeg -y -i public/assets/app-icon.jpg build-resources/icon.png"
   },
   "build": {
     "appId": "me.fitbod.clone",
@@ -31,7 +32,9 @@
       "target": [
         {
           "target": "portable",
-          "arch": ["x64"]
+          "arch": [
+            "x64"
+          ]
         }
       ],
       "icon": "build-resources/icon.png",
