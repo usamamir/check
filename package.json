@@ -7,7 +7,7 @@
   "license": "MIT",
   "scripts": {
     "start": "electron .",
-    "pack:win": "electron-builder --win portable zip --x64 --publish never",
+    "pack:win": "electron-builder --win nsis portable zip --x64 --publish never",
     "pack:win:dir": "electron-builder --win dir --x64 --publish never",
     "pack:linux": "electron-builder --linux AppImage --x64 --publish never"
   },
@@ -27,12 +27,16 @@
     "win": {
       "target": [
         {
-          "target": "portable",
-          "arch": ["x64"]
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
         },
         {
-          "target": "zip",
-          "arch": ["x64"]
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
         }
       ],
       "artifactName": "Streakly-Windows-${version}-x64.${ext}",
@@ -43,8 +47,19 @@
       "artifactName": "Streakly-Windows-${version}-x64.exe"
     },
     "linux": {
-      "target": ["AppImage"],
+      "target": [
+        "AppImage"
+      ],
       "category": "Utility"
+    },
+    "nsis": {
+      "oneClick": true,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": false,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Streakly",
+      "artifactName": "Streakly-Setup-${version}-x64.${ext}"
     }
   },
   "devDependencies": {
