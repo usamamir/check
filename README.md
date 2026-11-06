@@ -1,24 +1,25 @@
-# Fitbod Homepage Clone
+# Repwise
 
-Unofficial visual recreation of [fitbod.me](https://fitbod.me/) — React/Vite web app + Windows installer.
+Original strength training app (not affiliated with Fitbod). Create an account, get today’s workout, watch YouTube form demos, and log sets.
 
 ## Windows install
 
-**Download the installer:**
-https://github.com/usamamir/check/raw/cursor/fitbod-homepage-clone-a8b2/downloads/FitbodClone-Setup.exe
+Download: https://github.com/usamamir/check/raw/cursor/repwise-workout-app-a8b2/downloads/Repwise-Setup.exe
 
-1. Double-click `FitbodClone-Setup.exe`
+1. Double-click `Repwise-Setup.exe`
 2. If SmartScreen appears: **More info → Run anyway**
-3. App installs and opens (Desktop + Start Menu shortcuts)
+3. Sign up → set your goal/equipment → start training
 
-Requires 64-bit Windows 10/11.
-
-File also listed here:
-https://github.com/usamamir/check/blob/cursor/fitbod-homepage-clone-a8b2/downloads/FitbodClone-Setup.exe
-
-## Browser
+## Web
 
 ```bash
 npm install
 npm run dev
+```
+
+## Build Windows installer
+
+```bash
+npm install
+npm run dist:win
 ```
