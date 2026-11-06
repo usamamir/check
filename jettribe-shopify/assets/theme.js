@@ -468,7 +468,10 @@
       }
       var klarnaNote = qs("klarna-placement");
       if (klarnaNote) klarnaNote.setAttribute("data-purchase-amount", String(variant.price));
-      if (skuEl) skuEl.textContent = variant.sku ? "SKU: " + variant.sku : "";
+      if (skuEl) {
+        var sku = variant.sku || skuEl.getAttribute("data-fallback-sku") || "";
+        skuEl.textContent = sku ? "SKU: " + sku : "";
+      }
       if (button) {
         button.disabled = !variant.available;
         button.textContent = variant.available ? "Add to Cart" : "Out of Stock";
@@ -532,6 +535,34 @@
     });
   }
 
+  function optionLabel(option) {
+    if (option && typeof option === "object") return option.name || option.label || "";
+    return option == null ? "" : String(option);
+  }
+  function isNoneValue(value) {
+    return /^none$/i.test(String(value || "").trim());
+  }
+  function isAddonLabel(label, values) {
+    if (/design|letter/i.test(label)) return false;
+    var blob = label + " " + (values || []).join(" ");
+    return /\$\s*\d/.test(blob) && /add-?on|plate|sock|custom/i.test(blob);
+  }
+  function canonicalSize(value) {
+    return String(value || "").trim().replace(/\s*\/\s*/g, "/");
+  }
+  function productSku(prod, variant) {
+    if (variant && variant.sku) return variant.sku;
+    var best = "";
+    (prod.variants || []).forEach(function (item) {
+      if (!item.sku) return;
+      if (!best || String(item.sku).length < best.length) best = item.sku;
+    });
+    return best;
+  }
+  function displayOption(label, value) {
+    return /size/i.test(label || "") ? canonicalSize(value) : String(value == null ? "" : value);
+  }
+
   /* Quick view */
   var quickModal = qs("[data-quick-modal]");
   var modalBackdrop = qs("[data-modal-backdrop]");
@@ -551,31 +582,54 @@
       var body = qs("[data-quick-body]");
       if (!body) return;
       var optionsHtml = "";
-      var realOptions = (prod.options || []).filter(function (name) { return name !== "Title"; });
-      realOptions.forEach(function (name, index) {
+      var picked = [];
+      (prod.options || []).forEach(function (option, index) {
+        var label = optionLabel(option);
+        if (!label || label === "Title") return;
         var values = [];
-        prod.variants.forEach(function (variant) {
-          if (values.indexOf(variant.options[index]) === -1) values.push(variant.options[index]);
+        (prod.variants || []).forEach(function (variant) {
+          var value = (variant.options || [])[index];
+          if (value && values.indexOf(value) === -1) values.push(value);
         });
-        var isColor = /colou?r/i.test(name);
-        optionsHtml += '<div class="option-label">' + name + '</div><div class="option-values' + (isColor ? " option-values--color" : "") + '" data-option-index="' + index + '">';
+        if (!values.length) return;
+        var addon = isAddonLabel(label, values);
+        var noneAt = -1;
+        values.forEach(function (value, valueIndex) {
+          if (noneAt === -1 && isNoneValue(value)) noneAt = valueIndex;
+        });
+        var checkedAt = addon && noneAt !== -1 ? noneAt : 0;
+        picked[index] = values[checkedAt];
+        var isColor = /colou?r/i.test(label);
+        optionsHtml += '<div class="option-label">' + escapeHtml(label) + '</div><div class="option-values' + (isColor ? " option-values--color" : "") + '" data-option-index="' + index + '" data-option-name="' + escapeHtml(label) + '">';
         values.forEach(function (value, valueIndex) {
           var swatch = isColor ? '<i style="--swatch: ' + swatchBackground(value) + '"></i>' : "";
-          optionsHtml += '<label class="' + (isColor ? "swatch " : "") + (valueIndex === 0 ? "is-selected" : "") + '"><input type="radio" name="quick-option-' + index + '" value="' + value.replace(/"/g, "&quot;") + '" ' + (valueIndex === 0 ? "checked" : "") + ' data-option-input>' + swatch + '<span>' + escapeHtml(value) + '</span></label>';
+          var on = valueIndex === checkedAt;
+          optionsHtml += '<label class="' + (isColor ? "swatch " : "") + (on ? "is-selected" : "") + '"><input type="radio" name="quick-option-' + index + '" value="' + escapeHtml(value) + '"' + (on ? " checked" : "") + ' data-option-input>' + swatch + '<span>' + escapeHtml(displayOption(label, value)) + "</span></label>";
         });
         optionsHtml += "</div>";
       });
-      var variant = prod.variants.find(function (v) { return v.available; }) || prod.variants[0];
+      var variant = (prod.variants || []).filter(function (item) {
+        return (item.options || []).every(function (opt, i) { return picked[i] == null || opt === picked[i]; });
+      }).sort(function (a, b) {
+        if (a.available !== b.available) return a.available ? -1 : 1;
+        return a.price - b.price;
+      })[0] || (prod.variants || [])[0];
+      if (!variant) return;
+      var sku = productSku(prod, variant);
+      var image = prod.featured_image || "";
+      if (image && typeof image === "object") image = image.src || image.url || "";
       body.innerHTML =
-        '<div class="quick-grid"><div><img src="' + (prod.featured_image || "") + '" alt=""></div><div>' +
-        "<h3>" + prod.title + "</h3>" +
+        '<div class="quick-grid"><div><img src="' + escapeHtml(image) + '" alt=""></div><div>' +
+        "<h3>" + escapeHtml(prod.title) + "</h3>" +
         '<div class="price" data-product-price>Now: ' + formatMoney(variant.price) + "</div>" +
+        (sku ? '<p class="sku" data-sku>SKU: ' + escapeHtml(sku) + "</p>" : '<p class="sku" data-sku></p>') +
         '<form data-product-form><input type="hidden" name="id" value="' + variant.id + '" data-variant-id>' +
         optionsHtml +
         '<div class="qty-row"><label for="quick-qty">Qty</label><input class="input" id="quick-qty" name="quantity" type="number" min="1" value="1"></div>' +
         '<p class="form-errors" data-product-error hidden></p>' +
         '<button class="btn btn--full" type="submit" data-add-button>' + (variant.available ? "Add to Cart" : "Out of Stock") + "</button>" +
-        '<p style="margin-top:10px"><a href="' + prod.url + '">View full details</a></p>' +
+        '<a class="btn btn--dark btn--full" href="/checkout" style="margin-top:8px;">Checkout</a>' +
+        '<p style="margin-top:10px"><a href="' + escapeHtml(prod.url) + '">View full details</a></p>' +
         "</form></div></div>";
       body.dataset.product = JSON.stringify(prod);
       if (quickModal) quickModal.hidden = false;
@@ -584,20 +638,29 @@
 
       var qForm = qs("[data-product-form]", body);
       function sync() {
-        var options = qsa("[data-option-index]", qForm).map(function (group) {
+        var options = [];
+        qsa("[data-option-index]", qForm).forEach(function (group) {
           var checked = qs("input:checked", group);
-          return checked ? checked.value : "";
+          options[Number(group.getAttribute("data-option-index"))] = checked ? checked.value : "";
+          qsa("label", group).forEach(function (label) {
+            var input = qs("input", label);
+            label.classList.toggle("is-selected", !!(input && input.checked));
+          });
         });
-        var match = prod.variants.find(function (v) {
-          return v.options.every(function (opt, i) { return opt === options[i]; });
-        });
+        var matches = (prod.variants || []).filter(function (item) {
+          return (item.options || []).every(function (opt, i) { return options[i] == null || options[i] === "" || opt === options[i]; });
+        }).sort(function (a, b) { return a.price - b.price; });
+        var match = matches[0];
         if (!match) return;
         qs("[data-variant-id]", qForm).value = match.id;
         qs("[data-product-price]", body).textContent = "Now: " + formatMoney(match.price);
+        var skuEl = qs("[data-sku]", body);
+        var nextSku = productSku(prod, match);
+        if (skuEl) skuEl.textContent = nextSku ? "SKU: " + nextSku : "";
         var btn = qs("[data-add-button]", qForm);
         btn.disabled = !match.available;
         btn.textContent = match.available ? "Add to Cart" : "Out of Stock";
-        if (match.featured_image) qs("img", body).src = match.featured_image.src;
+        if (match.featured_image && match.featured_image.src) qs("img", body).src = match.featured_image.src;
       }
       qForm.addEventListener("change", sync);
     }).catch(function () { window.location.href = "/products/" + handle; });
@@ -849,7 +912,8 @@
         colorCounts[name] = (colorCounts[name] || 0) + 1;
       });
       (card.getAttribute("data-sizes") || "").split("|").filter(Boolean).forEach(function (size) {
-        sizeCounts[size] = (sizeCounts[size] || 0) + 1;
+        var key = canonicalSize(size);
+        sizeCounts[key] = (sizeCounts[key] || 0) + 1;
       });
     });
     var colorNames = Object.keys(colorCounts);
@@ -876,9 +940,9 @@
       cards.forEach(function (card) {
         var titleEl = qs(".card-title", card);
         var hasColor = titleColors(titleEl ? titleEl.textContent : "");
-        var hasSize = (card.getAttribute("data-sizes") || "").split("|").filter(Boolean);
+        var hasSize = (card.getAttribute("data-sizes") || "").split("|").filter(Boolean).map(canonicalSize);
         var colorOk = !colors.length || colors.some(function (color) { return hasColor.indexOf(color) !== -1; });
-        var sizeOk = !sizes.length || sizes.some(function (size) { return hasSize.indexOf(size) !== -1; });
+        var sizeOk = !sizes.length || sizes.some(function (size) { return hasSize.indexOf(canonicalSize(size)) !== -1; });
         card.hidden = !(colorOk && sizeOk);
       });
     }

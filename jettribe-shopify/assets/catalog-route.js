@@ -48,6 +48,20 @@
   function titleColors(text) {
     return COLORS.filter(function (row) { return row[2].test(text || ""); }).map(function (row) { return row[0]; });
   }
+  function canonicalSize(value) {
+    return String(value || "").trim().replace(/\s*\/\s*/g, "/");
+  }
+  function canonicalSizes(list) {
+    var seen = {};
+    var out = [];
+    (list || []).forEach(function (size) {
+      var key = canonicalSize(size);
+      if (!key || seen[key]) return;
+      seen[key] = true;
+      out.push(key);
+    });
+    return out;
+  }
   function safeHandle(handle) {
     return /^[A-Za-z0-9_-]+$/.test(handle || "");
   }
@@ -123,7 +137,8 @@
       if (!/size|combo/i.test(optionName(option))) return;
       (prod.variants || []).forEach(function (variant) {
         var value = variant["option" + (index + 1)] || (variant.options || [])[index];
-        if (value && sizes.indexOf(value) === -1) sizes.push(value);
+        var key = canonicalSize(value);
+        if (key && sizes.indexOf(key) === -1) sizes.push(key);
       });
     });
     var variant = (prod.variants || []).filter(function (item) { return item.available; })[0] || (prod.variants || [])[0] || {};
@@ -140,7 +155,7 @@
       available: !!prod.available,
       onlyDefault: onlyDefault,
       variantId: variant.id || "",
-      sizes: sizes.length ? sizes : meta.sizes
+      sizes: sizes.length ? sizes : canonicalSizes(meta.sizes)
     });
   }
   function cardFromCatalog(meta) {
@@ -155,7 +170,7 @@
       available: meta.available !== false,
       onlyDefault: false,
       variantId: "",
-      sizes: meta.sizes || []
+      sizes: canonicalSizes(meta.sizes)
     });
   }
   function renderCategory(mount, data, handle) {
@@ -163,7 +178,7 @@
     var params = new URLSearchParams(window.location.search);
     var sort = params.get("sort") || "featured";
     var selectedColors = (params.get("color") || "").split(",").filter(Boolean);
-    var selectedSizes = (params.get("size") || "").split(",").filter(Boolean);
+    var selectedSizes = canonicalSizes((params.get("size") || "").split(","));
     var min = params.get("min") === null || params.get("min") === "" ? null : Number(params.get("min"));
     var max = params.get("max") === null || params.get("max") === "" ? null : Number(params.get("max"));
     var page = Math.max(1, Number(params.get("page") || 1));
@@ -175,7 +190,7 @@
         title: row.title || productHandle,
         price: row.price || 0,
         compare: row.compare || 0,
-        sizes: row.sizes || [],
+        sizes: canonicalSizes(row.sizes),
         available: row.available !== false
       };
     });
@@ -184,7 +199,7 @@
         var colors = titleColors(meta.title);
         if (!selectedColors.some(function (color) { return colors.indexOf(color) !== -1; })) return false;
       }
-      if (ignore !== "size" && selectedSizes.length && !selectedSizes.some(function (size) { return meta.sizes.indexOf(size) !== -1; })) return false;
+      if (ignore !== "size" && selectedSizes.length && !selectedSizes.some(function (size) { return meta.sizes.indexOf(canonicalSize(size)) !== -1; })) return false;
       if (ignore !== "price" && min != null && !isNaN(min) && meta.price < min * 100) return false;
       if (ignore !== "price" && max != null && !isNaN(max) && meta.price > max * 100) return false;
       return true;
@@ -200,7 +215,7 @@
     var pages = Math.max(1, Math.ceil(filtered.length / per) || 1);
     if (page > pages) page = pages;
     var slice = filtered.slice((page - 1) * per, page * per);
-    function href(changes) {
+    function href(changes, nextHandle) {
       var state = {
         sort: sort === "featured" ? "" : sort,
         color: selectedColors.join(","),
@@ -214,7 +229,7 @@
       });
       if (!changes || !("page" in changes)) state.page = "";
       var next = new URLSearchParams();
-      next.set("jtcat", handle);
+      next.set("jtcat", nextHandle || handle);
       ["sort", "color", "size", "min", "max", "page"].forEach(function (key) {
         if (state[key]) next.set(key, state[key]);
       });
@@ -232,7 +247,7 @@
     }
     var crumbs = '<a href="' + esc(homeHref()) + '">Home</a>';
     chain.forEach(function (item) {
-      crumbs += ' <span>/</span> <a href="' + esc(searchBase() + "?jtcat=" + encodeURIComponent(item.handle)) + '">' + esc(item.name) + "</a>";
+      crumbs += ' <span>/</span> <a href="' + esc(href({}, item.handle)) + '">' + esc(item.name) + "</a>";
     });
     crumbs += " <span>/</span> <span>" + esc(cat.name) + "</span>";
     var colorSet = {};
@@ -252,7 +267,15 @@
       else nextColors.push(row[0]);
       return '<a class="swatch' + (on ? " is-active" : "") + '" href="' + esc(href({ color: nextColors.join(",") })) + '" style="--swatch:' + row[1] + '" title="' + esc(row[0]) + " (" + colorSet[row[0]] + ')"><i></i><span>' + esc(row[0]) + "</span></a>";
     }).join("");
-    var sizeHtml = Object.keys(sizeSet).map(function (size) {
+    var sizeOrder = ["XXS", "XS", "S", "M", "L", "XL", "XXL", "2XL", "3XL", "4XL", "5XL", "XXXL", "XXXXL", "XXS/XS", "XS/S", "S/M", "M/L", "L/XL", "XL/XXL", "XXL/XXXL", "XXL/XXXXL", "2XL/3XL"];
+    var sizeHtml = Object.keys(sizeSet).sort(function (a, b) {
+      var ia = sizeOrder.indexOf(canonicalSize(a).toUpperCase());
+      var ib = sizeOrder.indexOf(canonicalSize(b).toUpperCase());
+      if (ia === -1) ia = 500;
+      if (ib === -1) ib = 500;
+      if (ia !== ib) return ia - ib;
+      return a.localeCompare(b);
+    }).map(function (size) {
       var nextSizes = selectedSizes.slice();
       var on = nextSizes.indexOf(size) !== -1;
       if (on) nextSizes = nextSizes.filter(function (item) { return item !== size; });
@@ -260,7 +283,7 @@
       return '<a class="size-chip' + (on ? " is-active" : "") + '" href="' + esc(href({ size: nextSizes.join(",") })) + '">' + esc(size) + "</a>";
     }).join("");
     var childHtml = (cat.children || []).map(function (child) {
-      return '<li><a href="' + esc(searchBase() + "?jtcat=" + encodeURIComponent(child.handle)) + '">' + esc(child.name) + "</a></li>";
+      return '<li><a href="' + esc(href({}, child.handle)) + '">' + esc(child.name) + "</a></li>";
     }).join("");
     var prices = metas.filter(function (meta) { return passes(meta, "price"); }).map(function (meta) { return meta.price; });
     var floor = prices.length ? Math.floor(Math.min.apply(null, prices) / 100) : 0;
@@ -293,7 +316,11 @@
       (colorHtml ? '<details class="facet" open><summary>Color</summary><div class="color-swatches">' + colorHtml + "</div></details>" : "") +
       (sizeHtml ? '<details class="facet" open><summary>Size</summary><div class="size-chips">' + sizeHtml + "</div></details>" : "") +
       (childHtml ? '<details class="facet" open><summary>' + esc(cat.name) + "</summary><ul>" + childHtml + "</ul></details>" : "") +
-      (prices.length ? '<details class="facet" open><summary>Price</summary><form class="price-range" data-jt-price>' +
+      (prices.length ? '<details class="facet" open><summary>Price</summary><form class="price-range" data-jt-price method="get" action="' + esc(searchBase()) + '">' +
+        '<input type="hidden" name="jtcat" value="' + esc(handle) + '">' +
+        (selectedColors.length ? '<input type="hidden" name="color" value="' + esc(selectedColors.join(",")) + '">' : "") +
+        (selectedSizes.length ? '<input type="hidden" name="size" value="' + esc(selectedSizes.join(",")) + '">' : "") +
+        (sort !== "featured" ? '<input type="hidden" name="sort" value="' + esc(sort) + '">' : "") +
         '<div class="field"><label>From</label><input name="min" type="number" min="0" step="1" value="' + esc(params.get("min") || "") + '" placeholder="' + floor + '"></div>' +
         '<div class="field"><label>To</label><input name="max" type="number" min="0" step="1" value="' + esc(params.get("max") || "") + '" placeholder="' + ceil + '"></div>' +
         '<button class="btn" type="submit">Apply</button></form></details>' : "") +

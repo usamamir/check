@@ -91,10 +91,21 @@
       { name: "Navy", hex: "#1e3a8a" }
     ];
 
+    function canonicalSize(value) {
+      return String(value || "").trim().replace(/\s*\/\s*/g, "/");
+    }
     function sizeValues(product) {
       var values = [];
+      var seen = {};
       (product.options || []).forEach(function (option) {
-        if (option.type === "select" && /size/i.test(option.name)) values = values.concat(option.values || []);
+        if (option.type === "select" && /size/i.test(option.name)) {
+          (option.values || []).forEach(function (value) {
+            var key = canonicalSize(value);
+            if (!key || seen[key]) return;
+            seen[key] = true;
+            values.push(key);
+          });
+        }
       });
       return values;
     }
@@ -131,7 +142,7 @@
           : '<button type="button" class="btn" data-add="' + esc(product.handle) + '" data-title="' + esc(product.title) + '" data-price="' + product.price + '" data-img="' + esc(img) + '">Add to Cart</button>')
         : '<span class="btn is-disabled">Out of Stock</span>';
       var quick = product.available
-        ? '<div class="card-hover"><button type="button" class="btn btn--blue" data-quick="' + esc(product.handle) + '" data-title="' + esc(product.title) + '" data-price="' + product.price + '" data-img="' + esc(img) + '" data-url="' + href + '">Quick view</button></div>'
+        ? '<div class="card-hover"><button type="button" class="btn btn--blue" data-quick="' + esc(product.handle) + '" data-title="' + esc(product.title) + '" data-price="' + product.price + '" data-img="' + esc(img) + '" data-url="' + href + '" data-sku="' + esc(product.sku || "") + '">Quick view</button></div>'
         : "";
       return '<article class="card"><a class="card-media" href="' + href + '"><img src="' + esc(img) + '" alt="' + esc(product.title) + '" width="500" height="659" loading="lazy"></a>' +
         quick +
@@ -197,9 +208,17 @@
       }).join("");
       var optionHtml = (product.options || []).map(function (option) {
         if (option.type === "select") {
+          var addon = !/design|letter/i.test(option.name) && /\$\s*\d/.test(option.name + " " + (option.values || []).join(" ")) && /add-?on|plate|sock|custom/i.test(option.name);
+          var noneAt = (option.values || []).findIndex(function (value) { return /^none$/i.test(String(value || "").trim()); });
+          if (addon && noneAt === -1) {
+            option = { name: option.name, type: option.type, values: ["None"].concat(option.values || []) };
+            noneAt = 0;
+          }
+          var checkedAt = addon && noneAt !== -1 ? noneAt : 0;
           return '<div class="option-label">' + esc(option.name) + '</div><div class="option-values" data-option-group data-option-name="' + esc(option.name) + '">' +
             option.values.map(function (value, index) {
-              return '<label class="' + (index === 0 ? "is-selected" : "") + '"><input type="radio" name="opt-' + esc(option.name) + '" value="' + esc(value) + '"' + (index === 0 ? " checked" : "") + "><span>" + esc(value) + "</span></label>";
+              var shown = /size/i.test(option.name) ? String(value).trim().replace(/\s*\/\s*/g, "/") : value;
+              return '<label class="' + (index === checkedAt ? "is-selected" : "") + '"><input type="radio" name="opt-' + esc(option.name) + '" value="' + esc(value) + '"' + (index === checkedAt ? " checked" : "") + "><span>" + esc(shown) + "</span></label>";
             }).join("") + "</div>";
         }
         var field = option.type === "file" ? "file" : "text";
@@ -219,11 +238,12 @@
         '<div class="product-info"><p style="margin-bottom:6px;">Jettribe</p><h1 class="product-title">' + esc(product.title) + "</h1>" +
         '<div class="product-price price">' + priceHtml + "</div>" +
         '<div class="paypal-message" data-pp-message data-pp-placement="product" data-pp-amount="' + Number(product.price).toFixed(2) + '"></div>' +
-        (product.sku ? '<p class="sku">SKU: ' + esc(product.sku) + "</p>" : "") +
+        (product.sku ? '<p class="sku">SKU: ' + esc(product.sku) + "</p>" : '<p class="sku">SKU: </p>') +
         '<form data-product-add data-id="' + esc(product.handle) + '" data-title="' + esc(product.title) + '" data-price="' + product.price + '" data-img="' + esc(images[0]) + '">' +
         optionHtml +
         '<div class="qty-row"><label>Qty</label><input class="input" name="quantity" type="number" min="1" value="1"></div>' +
         '<div class="product-actions">' + button +
+        '<a class="btn btn--dark" href="cart.html">Checkout</a>' +
         '<button class="btn btn--ghost" type="button" data-compare-button data-compare-add data-id="' + esc(product.handle) + '" data-title="' + esc(product.title) + '" data-price="' + product.price + '" data-img="' + esc(images[0]) + '" data-url="product.html?p=' + encodeURIComponent(product.handle) + '">Compare</button>' +
         "</div></form>" +
         '<div class="pay-note"><p>Pay with PayPal, Visa, Mastercard, American Express, or Discover.</p>' +
@@ -252,7 +272,7 @@
         return words.every(function (word) { return hay.indexOf(word) !== -1; });
       });
     }
-    var selectedSizes = (query.get("size") || "").split(",").filter(Boolean);
+    var selectedSizes = (query.get("size") || "").split(",").filter(Boolean).map(function (size) { return size.trim().replace(/\s*\/\s*/g, "/"); });
     var selectedColors = (query.get("color") || "").split(",").filter(Boolean);
     var min = query.get("min") ? Number(query.get("min")) : null;
     var max = query.get("max") ? Number(query.get("max")) : null;
@@ -339,7 +359,7 @@
       return '<a class="swatch' + (on ? " is-active" : "") + '" href="' + linkWith({ color: nextColors.join(",") }) + '" style="--swatch:' + color.hex + '" title="' + esc(color.name) + " (" + colorSet[color.name] + ')"><i></i><span>' + esc(color.name) + "</span></a>";
     }).join("");
     var childHtml = childLinks.map(function (child) {
-      return '<li><a href="collection.html?cat=' + encodeURIComponent(child.handle) + '">' + esc(child.name) + "</a></li>";
+      return '<li><a href="' + linkWith({ cat: child.handle }) + '">' + esc(child.name) + "</a></li>";
     }).join("");
     var crumbs = '<a href="index.html">Home</a>';
     if (category) {
@@ -352,7 +372,7 @@
         guard += 1;
       }
       chain.forEach(function (item) {
-        crumbs += ' <span>/</span> <a href="collection.html?cat=' + encodeURIComponent(item.handle) + '">' + esc(item.name) + "</a>";
+        crumbs += ' <span>/</span> <a href="' + linkWith({ cat: item.handle }) + '">' + esc(item.name) + "</a>";
       });
       crumbs += " <span>/</span> <span>" + esc(category.name) + "</span>";
     } else crumbs += " <span>/</span> <span>" + esc(title) + "</span>";

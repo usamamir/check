@@ -23,6 +23,7 @@ Upload the theme and the product file separately. The theme zip is the only file
    It has all 541 products, their photos, prices, and size options.
    Every jettribe.com category is on the product as a tag, including Ride Gear (249), Outlet (255), Casual Wear (163), Accessories (106), Wetsuits (41), and PWC Covers (62). There are 159 category tags.
    Plate, name-plate, and sock choices include None. A blank plate is +$25, a custom plate is +$60, the $40 name plate is included, and Lycra socks are +$36.99.
+   None and other variants that had a blank SKU now use that product's SKU (for example JTG 20450GN). Re-import this file with Overwrite checked so those SKUs are saved on the variants.
 
 3. Pages, blog, and accounts
    Follow jettribe-shopify/UPLOAD.md after the theme is published.

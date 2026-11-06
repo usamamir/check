@@ -187,11 +187,13 @@
       var box = qs("[data-quick-body]");
       if (box) {
         var detailsUrl = quick.getAttribute("data-url") || "product.html";
+        var sku = quick.getAttribute("data-sku") || "";
         box.innerHTML = '<div class="quick-grid"><div><img src="' + quick.getAttribute("data-img") + '" alt=""></div><div><h3>' +
           quick.getAttribute("data-title") + '</h3><div class="price">Now: ' + money(Number(quick.getAttribute("data-price"))) +
-          '</div><button class="btn btn--full" type="button" data-add="' + quick.getAttribute("data-quick") + '" data-title="' +
+          '</div>' + (sku ? '<p class="sku">SKU: ' + sku + '</p>' : '') +
+          '<button class="btn btn--full" type="button" data-add="' + quick.getAttribute("data-quick") + '" data-title="' +
           quick.getAttribute("data-title") + '" data-price="' + quick.getAttribute("data-price") + '" data-img="' + quick.getAttribute("data-img") +
-          '">Add to Cart</button><p style="margin-top:10px"><a href="' + detailsUrl + '">View full details</a></p></div></div>';
+          '">Add to Cart</button><a class="btn btn--dark btn--full" href="cart.html" style="margin-top:8px;">Checkout</a><p style="margin-top:10px"><a href="' + detailsUrl + '">View full details</a></p></div></div>';
       }
       if (modal) modal.hidden = false;
       var shade = qs("[data-modal-backdrop]");

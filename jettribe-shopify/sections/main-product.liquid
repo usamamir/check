@@ -49,7 +49,21 @@
           Now: {{ current.price | money }}
         </div>
         {% render 'paypal-message', placement: 'product', amount: current.price %}
-        <p class="sku" data-sku>{% if current.sku != blank %}SKU: {{ current.sku }}{% endif %}</p>
+        {%- liquid
+          assign jt_fallback_sku = ''
+          for variant in product.variants
+            if variant.sku != blank
+              if jt_fallback_sku == blank or variant.sku.size < jt_fallback_sku.size
+                assign jt_fallback_sku = variant.sku
+              endif
+            endif
+          endfor
+          assign jt_sku = current.sku
+          if jt_sku == blank
+            assign jt_sku = jt_fallback_sku
+          endif
+        -%}
+        <p class="sku" data-sku data-fallback-sku="{{ jt_fallback_sku | escape }}">{% if jt_sku != blank %}SKU: {{ jt_sku }}{% endif %}</p>
 
         {% form 'product', product, class: 'product-form', data-product-form: 'true', enctype: 'multipart/form-data' %}
           <input type="hidden" name="id" value="{{ current.id }}" data-variant-id>
@@ -76,7 +90,7 @@
                       {%- capture swatch -%}{% render 'swatch-color', label: value %}{%- endcapture -%}
                       <i style="--swatch: {{ swatch | strip }};"></i>
                     {%- endif -%}
-                    <span>{{ value }}</span>
+                    <span>{% if option_key contains 'size' %}{{ value | replace: ' / ', '/' | replace: '/ ', '/' | replace: ' /', '/' }}{% else %}{{ value }}{% endif %}</span>
                   </label>
                 {%- endfor -%}
               </div>
@@ -172,6 +186,7 @@
             <button class="btn" type="submit" name="add" data-add-button {% unless product.available %}disabled{% endunless %}>
               {%- if product.available -%}Add to Cart{%- else -%}Out of Stock{%- endif -%}
             </button>
+            <a class="btn btn--dark" href="/checkout">Checkout</a>
             {{ form | payment_button }}
             <button class="btn btn--ghost" type="button" data-wish-toggle="{{ product.handle }}">Wishlist</button>
             <button
