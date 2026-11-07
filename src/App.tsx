@@ -11,7 +11,8 @@ export default function App() {
       <Routes>
         <Route path="/" element={<EquipmentPage />} />
         <Route path="/muscles" element={<MusclesPage />} />
-        <Route path="/exercises" element={<ExerciseBrowse />} />
+        <Route path="/exercises" element={<Navigate to="/muscles" replace />} />
+        <Route path="/exercises/:muscleId" element={<ExerciseBrowse />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Router>

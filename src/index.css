@@ -130,6 +130,13 @@ input {
   margin: 0.35rem 0 0.6rem;
 }
 
+.equip-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.85rem;
+}
+
 .equip-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
@@ -358,5 +365,205 @@ input {
 
   .ex-list {
     max-height: 240px;
+  }
+}
+
+.flow-page.wide {
+  max-width: 1200px;
+  width: min(100% - 1.5rem, 1200px);
+}
+
+.anatomy-wrap {
+  display: grid;
+  gap: 1rem;
+}
+
+.anatomy-stage {
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: #07100e;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+}
+
+.anatomy-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  user-select: none;
+}
+
+.hotspot {
+  position: absolute;
+  border: 2px solid color-mix(in srgb, var(--hs, var(--accent)) 55%, transparent);
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--hs, var(--accent)) 18%, transparent);
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+  display: grid;
+  place-items: end center;
+  padding: 0.2rem;
+}
+
+.hotspot:hover {
+  background: color-mix(in srgb, var(--hs, var(--accent)) 34%, transparent);
+  border-color: var(--hs, var(--accent));
+  transform: scale(1.02);
+  z-index: 2;
+}
+
+.hotspot.on {
+  background: color-mix(in srgb, var(--hs, var(--accent)) 42%, transparent);
+  border-color: var(--hs, var(--accent));
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--hs, var(--accent)) 45%, transparent),
+    inset 0 0 24px color-mix(in srgb, var(--hs, var(--accent)) 25%, transparent);
+  z-index: 3;
+}
+
+.hotspot-label {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: #fff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.75);
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  pointer-events: none;
+  background: rgba(0, 0, 0, 0.45);
+  border-radius: 999px;
+  padding: 0.15rem 0.45rem;
+  white-space: nowrap;
+}
+
+.hotspot:hover .hotspot-label,
+.hotspot.on .hotspot-label {
+  opacity: 1;
+}
+
+.anatomy-legend {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.legend-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.legend-chip {
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--hs, #fff) 35%, rgba(255, 255, 255, 0.12));
+  background: #0f1714;
+  color: var(--text);
+  padding: 0.45rem 0.85rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.legend-swatch {
+  width: 0.65rem;
+  height: 0.65rem;
+  border-radius: 50%;
+  background: var(--hs, var(--accent));
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--hs, var(--accent)) 30%, transparent);
+}
+
+.legend-chip.on {
+  border-color: var(--hs, var(--accent));
+  background: color-mix(in srgb, var(--hs, var(--accent)) 18%, #0f1714);
+  color: #fff;
+  font-weight: 700;
+}
+
+.muscle-guide-card,
+.muscle-guide-inline {
+  margin-top: 1rem;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 1rem 1.1rem;
+}
+
+.muscle-guide-card ul {
+  margin-top: 0.55rem;
+  padding-left: 1.1rem;
+  color: var(--muted);
+}
+
+.muscle-guide-inline p {
+  color: var(--muted);
+  margin: 0.35rem 0 0.55rem;
+}
+
+.tip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.tip-row span {
+  font-size: 0.82rem;
+  color: #d5e6db;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  padding: 0.3rem 0.65rem;
+}
+
+.browse-controls {
+  display: grid;
+  gap: 0.7rem;
+  margin-bottom: 1rem;
+}
+
+.browse-controls .search {
+  margin-bottom: 0;
+}
+
+.ex-row {
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.ex-row em {
+  font-style: normal;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: rgba(184, 255, 60, 0.12);
+  color: var(--accent);
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.detail-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  align-items: start;
+  margin-bottom: 0.75rem;
+}
+
+.detail-nav {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.cues-title {
+  margin-top: 1rem;
+  margin-bottom: 0.35rem;
+  font-size: 1rem;
+}
+
+@media (max-width: 860px) {
+  .hotspot {
+    border-width: 1px;
   }
 }

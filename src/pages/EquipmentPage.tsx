@@ -7,11 +7,15 @@ export function EquipmentPage() {
   const navigate = useNavigate()
   const [selected, setSelected] = useState<Equipment[]>(() => {
     const saved = getEquipment()
-    return saved.length ? saved : ['dumbbell', 'bodyweight']
+    return saved.length ? saved : [...allEquipment]
   })
 
   function toggle(eq: Equipment) {
     setSelected((prev) => (prev.includes(eq) ? prev.filter((x) => x !== eq) : [...prev, eq]))
+  }
+
+  function selectAll() {
+    setSelected([...allEquipment])
   }
 
   function continueNext() {
@@ -25,8 +29,18 @@ export function EquipmentPage() {
       <header className="flow-hero">
         <p className="brand">REPWISE</p>
         <h1>What equipment do you have?</h1>
-        <p className="muted">Pick everything available. We’ll only show matching exercises.</p>
+        <p className="muted">
+          Select every option you can use. Each muscle has 15+ demos spanning your gear — more gear
+          unlocks more videos.
+        </p>
       </header>
+
+      <div className="equip-actions">
+        <button type="button" className="btn ghost sm" onClick={selectAll}>
+          Select all
+        </button>
+        <span className="muted">{selected.length} selected</span>
+      </div>
 
       <div className="equip-grid">
         {allEquipment.map((eq) => (
@@ -44,7 +58,7 @@ export function EquipmentPage() {
 
       <div className="flow-actions">
         <button type="button" className="btn primary lg" onClick={continueNext} disabled={!selected.length}>
-          Choose body parts →
+          Open anatomy map →
         </button>
       </div>
     </div>

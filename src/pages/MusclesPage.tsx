@@ -1,13 +1,11 @@
-import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { MuscleMap } from '../components/MuscleMap'
 import type { Muscle } from '../data/exercises'
-import { getEquipment, getMuscles, setMuscles } from '../lib/prefs'
+import { getEquipment, setMuscles } from '../lib/prefs'
 
 export function MusclesPage() {
   const navigate = useNavigate()
   const equipment = getEquipment()
-  const [selected, setSelected] = useState<Muscle[]>(() => getMuscles())
 
   if (!equipment.length) {
     return (
@@ -20,39 +18,28 @@ export function MusclesPage() {
     )
   }
 
-  function toggle(m: Muscle) {
-    setSelected((prev) => (prev.includes(m) ? prev.filter((x) => x !== m) : [...prev, m]))
-  }
-
-  function continueNext() {
-    setMuscles(selected)
-    navigate('/exercises')
+  function openMuscle(m: Muscle) {
+    setMuscles([m])
+    navigate(`/exercises/${m}`)
   }
 
   return (
-    <div className="flow-page">
+    <div className="flow-page wide">
       <header className="flow-hero">
-        <p className="eyebrow">Step 2</p>
-        <h1>Tap the muscles you want to train</h1>
+        <p className="eyebrow">Step 2 · Anatomy map</p>
+        <h1>Tap a muscle on the chart</h1>
         <p className="muted">
-          Equipment locked in: {equipment.join(', ')}. Click body regions on the diagram.
+          Front view (left) and back view (right) — same layout as a musculature anatomy poster.
+          Your gear: {equipment.join(', ')}.
         </p>
       </header>
 
-      <MuscleMap selected={selected} onToggle={toggle} />
+      <MuscleMap selected={null} onSelect={openMuscle} />
 
       <div className="flow-actions">
         <Link className="btn ghost" to="/">
           ← Equipment
         </Link>
-        <button
-          type="button"
-          className="btn primary lg"
-          onClick={continueNext}
-          disabled={!selected.length}
-        >
-          Show exercises →
-        </button>
       </div>
     </div>
   )

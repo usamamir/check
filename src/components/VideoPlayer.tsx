@@ -16,8 +16,9 @@ export function VideoPlayer({ youtubeId, title, autoplay = false }: Props) {
   const thumb = `https://i.ytimg.com/vi/${youtubeId}/hqdefault.jpg`
   const src = `https://www.youtube.com/embed/${youtubeId}?autoplay=1&rel=0&modestbranding=1&playsinline=1&fs=1`
 
+  // Reset / autoplay whenever the chosen exercise video changes
   useEffect(() => {
-    setPlaying(autoplay)
+    setPlaying(Boolean(autoplay))
   }, [youtubeId, autoplay])
 
   return (

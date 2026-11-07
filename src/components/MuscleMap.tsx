@@ -1,284 +1,118 @@
+import type { CSSProperties } from 'react'
 import type { Muscle } from '../data/exercises'
 import { muscleLabels } from '../data/exercises'
 
 type Props = {
-  selected: Muscle[]
-  onToggle: (m: Muscle) => void
+  selected: Muscle | null
+  onSelect: (m: Muscle) => void
 }
 
-/** Front + back clickable muscle diagram */
-export function MuscleMap({ selected, onToggle }: Props) {
-  const on = (m: Muscle) => selected.includes(m)
+type Hotspot = {
+  id: Muscle
+  label: string
+  color: string
+  /** percent positions relative to full anatomy chart image */
+  style: { left: string; top: string; width: string; height: string }
+}
 
-  const fill = (m: Muscle) => (on(m) ? '#b8ff3c' : '#2a3a34')
-  const stroke = (m: Muscle) => (on(m) ? '#f3f7f2' : '#4a6258')
+/** Chart-matched colors (front/back musculature poster) */
+const muscleColor: Record<Muscle, string> = {
+  chest: '#8B5A2B',
+  back: '#7B3FA0',
+  shoulders: '#E08A3C',
+  biceps: '#C43C3C',
+  triceps: '#D45A6A',
+  core: '#C45A6A',
+  quads: '#3B5CC4',
+  hamstrings: '#4A2F8A',
+  glutes: '#3D6BC7',
+  calves: '#2E9B4F',
+}
 
+/**
+ * Hotspots aligned to the musculature anatomy chart (front left / back right).
+ * Coordinates are % of the full poster image.
+ */
+const hotspots: Hotspot[] = [
+  // FRONT (left figure)
+  { id: 'chest', label: 'Pectoralis Major', color: muscleColor.chest, style: { left: '18%', top: '19%', width: '15%', height: '11%' } },
+  { id: 'shoulders', label: 'Deltoids', color: muscleColor.shoulders, style: { left: '13%', top: '15%', width: '7%', height: '8%' } },
+  { id: 'shoulders', label: 'Deltoids', color: muscleColor.shoulders, style: { left: '31%', top: '15%', width: '7%', height: '8%' } },
+  { id: 'biceps', label: 'Biceps', color: muscleColor.biceps, style: { left: '10%', top: '25%', width: '6.5%', height: '12%' } },
+  { id: 'biceps', label: 'Biceps', color: muscleColor.biceps, style: { left: '34.5%', top: '25%', width: '6.5%', height: '12%' } },
+  { id: 'core', label: 'Abs / Obliques', color: muscleColor.core, style: { left: '19.5%', top: '31%', width: '12%', height: '15%' } },
+  { id: 'quads', label: 'Quadriceps', color: muscleColor.quads, style: { left: '17%', top: '49%', width: '17%', height: '20%' } },
+  { id: 'calves', label: 'Calves', color: muscleColor.calves, style: { left: '18%', top: '71%', width: '15%', height: '13%' } },
+  // BACK (right figure)
+  { id: 'back', label: 'Lats / Traps', color: muscleColor.back, style: { left: '65%', top: '16%', width: '18%', height: '24%' } },
+  { id: 'shoulders', label: 'Rear Delts', color: muscleColor.shoulders, style: { left: '61%', top: '15%', width: '6.5%', height: '8%' } },
+  { id: 'shoulders', label: 'Rear Delts', color: muscleColor.shoulders, style: { left: '80.5%', top: '15%', width: '6.5%', height: '8%' } },
+  { id: 'triceps', label: 'Triceps', color: muscleColor.triceps, style: { left: '58%', top: '25%', width: '6.5%', height: '12%' } },
+  { id: 'triceps', label: 'Triceps', color: muscleColor.triceps, style: { left: '83.5%', top: '25%', width: '6.5%', height: '12%' } },
+  { id: 'glutes', label: 'Gluteus Maximus', color: muscleColor.glutes, style: { left: '67%', top: '41%', width: '14%', height: '11%' } },
+  { id: 'hamstrings', label: 'Hamstrings', color: muscleColor.hamstrings, style: { left: '66%', top: '52%', width: '16%', height: '17%' } },
+  { id: 'calves', label: 'Calves', color: muscleColor.calves, style: { left: '67%', top: '71%', width: '14%', height: '13%' } },
+]
+
+const legend: Muscle[] = [
+  'chest',
+  'back',
+  'shoulders',
+  'biceps',
+  'triceps',
+  'core',
+  'quads',
+  'hamstrings',
+  'glutes',
+  'calves',
+]
+
+export function MuscleMap({ selected, onSelect }: Props) {
   return (
-    <div className="muscle-map">
-      <div className="map-panel">
-        <p className="map-label">Front — tap a muscle</p>
-        <svg viewBox="0 0 220 480" role="img" aria-label="Front body muscle map">
-          {/* Head */}
-          <ellipse cx="110" cy="28" rx="22" ry="26" fill="#1a2621" stroke="#4a6258" />
-          {/* Torso outline */}
-          <path
-            d="M70 70 C70 55 150 55 150 70 L165 150 C170 190 165 230 155 260 L150 320 L70 320 L65 260 C55 230 50 190 55 150 Z"
-            fill="#15201c"
-            stroke="#3a4f47"
-          />
-          {/* Chest L/R */}
-          <path
-            d="M78 95 C90 80 105 82 110 100 C110 120 95 135 78 125 Z"
-            fill={fill('chest')}
-            stroke={stroke('chest')}
-            className="muscle"
-            onClick={() => onToggle('chest')}
-          />
-          <path
-            d="M142 95 C130 80 115 82 110 100 C110 120 125 135 142 125 Z"
-            fill={fill('chest')}
-            stroke={stroke('chest')}
-            className="muscle"
-            onClick={() => onToggle('chest')}
-          />
-          {/* Shoulders */}
-          <ellipse
-            cx="58"
-            cy="88"
-            rx="22"
-            ry="16"
-            fill={fill('shoulders')}
-            stroke={stroke('shoulders')}
-            className="muscle"
-            onClick={() => onToggle('shoulders')}
-          />
-          <ellipse
-            cx="162"
-            cy="88"
-            rx="22"
-            ry="16"
-            fill={fill('shoulders')}
-            stroke={stroke('shoulders')}
-            className="muscle"
-            onClick={() => onToggle('shoulders')}
-          />
-          {/* Biceps */}
-          <rect
-            x="28"
-            y="110"
-            width="28"
-            height="70"
-            rx="12"
-            fill={fill('biceps')}
-            stroke={stroke('biceps')}
-            className="muscle"
-            onClick={() => onToggle('biceps')}
-          />
-          <rect
-            x="164"
-            y="110"
-            width="28"
-            height="70"
-            rx="12"
-            fill={fill('biceps')}
-            stroke={stroke('biceps')}
-            className="muscle"
-            onClick={() => onToggle('biceps')}
-          />
-          {/* Core */}
-          <rect
-            x="88"
-            y="145"
-            width="44"
-            height="70"
-            rx="10"
-            fill={fill('core')}
-            stroke={stroke('core')}
-            className="muscle"
-            onClick={() => onToggle('core')}
-          />
-          {/* Quads */}
-          <rect
-            x="72"
-            y="325"
-            width="30"
-            height="95"
-            rx="12"
-            fill={fill('quads')}
-            stroke={stroke('quads')}
-            className="muscle"
-            onClick={() => onToggle('quads')}
-          />
-          <rect
-            x="118"
-            y="325"
-            width="30"
-            height="95"
-            rx="12"
-            fill={fill('quads')}
-            stroke={stroke('quads')}
-            className="muscle"
-            onClick={() => onToggle('quads')}
-          />
-          {/* Calves */}
-          <rect
-            x="74"
-            y="425"
-            width="26"
-            height="45"
-            rx="10"
-            fill={fill('calves')}
-            stroke={stroke('calves')}
-            className="muscle"
-            onClick={() => onToggle('calves')}
-          />
-          <rect
-            x="120"
-            y="425"
-            width="26"
-            height="45"
-            rx="10"
-            fill={fill('calves')}
-            stroke={stroke('calves')}
-            className="muscle"
-            onClick={() => onToggle('calves')}
-          />
-        </svg>
+    <div className="anatomy-wrap">
+      <div className="anatomy-stage">
+        <img
+          src={`${import.meta.env.BASE_URL}anatomy-chart.jpg`}
+          alt="Musculature anatomy chart — front and back muscle groups"
+          className="anatomy-img"
+          draggable={false}
+        />
+        {hotspots.map((h, i) => (
+          <button
+            key={`${h.id}-${i}`}
+            type="button"
+            className={`hotspot ${selected === h.id ? 'on' : ''}`}
+            style={
+              {
+                ...h.style,
+                '--hs': h.color,
+              } as CSSProperties
+            }
+            aria-label={`Select ${h.label}`}
+            title={h.label}
+            onClick={() => onSelect(h.id)}
+          >
+            <span className="hotspot-label">{h.label}</span>
+          </button>
+        ))}
       </div>
 
-      <div className="map-panel">
-        <p className="map-label">Back — tap a muscle</p>
-        <svg viewBox="0 0 220 480" role="img" aria-label="Back body muscle map">
-          <ellipse cx="110" cy="28" rx="22" ry="26" fill="#1a2621" stroke="#4a6258" />
-          <path
-            d="M70 70 C70 55 150 55 150 70 L165 150 C170 190 165 230 155 260 L150 320 L70 320 L65 260 C55 230 50 190 55 150 Z"
-            fill="#15201c"
-            stroke="#3a4f47"
-          />
-          {/* Traps / upper back as shoulders+back */}
-          <path
-            d="M70 80 C90 70 130 70 150 80 L145 130 L75 130 Z"
-            fill={fill('back')}
-            stroke={stroke('back')}
-            className="muscle"
-            onClick={() => onToggle('back')}
-          />
-          <path
-            d="M78 135 L142 135 L140 210 L80 210 Z"
-            fill={fill('back')}
-            stroke={stroke('back')}
-            className="muscle"
-            onClick={() => onToggle('back')}
-          />
-          <ellipse
-            cx="58"
-            cy="88"
-            rx="22"
-            ry="16"
-            fill={fill('shoulders')}
-            stroke={stroke('shoulders')}
-            className="muscle"
-            onClick={() => onToggle('shoulders')}
-          />
-          <ellipse
-            cx="162"
-            cy="88"
-            rx="22"
-            ry="16"
-            fill={fill('shoulders')}
-            stroke={stroke('shoulders')}
-            className="muscle"
-            onClick={() => onToggle('shoulders')}
-          />
-          {/* Triceps on back of arms */}
-          <rect
-            x="28"
-            y="110"
-            width="28"
-            height="70"
-            rx="12"
-            fill={fill('triceps')}
-            stroke={stroke('triceps')}
-            className="muscle"
-            onClick={() => onToggle('triceps')}
-          />
-          <rect
-            x="164"
-            y="110"
-            width="28"
-            height="70"
-            rx="12"
-            fill={fill('triceps')}
-            stroke={stroke('triceps')}
-            className="muscle"
-            onClick={() => onToggle('triceps')}
-          />
-          {/* Glutes */}
-          <path
-            d="M75 255 C90 245 130 245 145 255 L148 310 L72 310 Z"
-            fill={fill('glutes')}
-            stroke={stroke('glutes')}
-            className="muscle"
-            onClick={() => onToggle('glutes')}
-          />
-          {/* Hamstrings */}
-          <rect
-            x="72"
-            y="315"
-            width="30"
-            height="100"
-            rx="12"
-            fill={fill('hamstrings')}
-            stroke={stroke('hamstrings')}
-            className="muscle"
-            onClick={() => onToggle('hamstrings')}
-          />
-          <rect
-            x="118"
-            y="315"
-            width="30"
-            height="100"
-            rx="12"
-            fill={fill('hamstrings')}
-            stroke={stroke('hamstrings')}
-            className="muscle"
-            onClick={() => onToggle('hamstrings')}
-          />
-          <rect
-            x="74"
-            y="425"
-            width="26"
-            height="45"
-            rx="10"
-            fill={fill('calves')}
-            stroke={stroke('calves')}
-            className="muscle"
-            onClick={() => onToggle('calves')}
-          />
-          <rect
-            x="120"
-            y="425"
-            width="26"
-            height="45"
-            rx="10"
-            fill={fill('calves')}
-            stroke={stroke('calves')}
-            className="muscle"
-            onClick={() => onToggle('calves')}
-          />
-        </svg>
-      </div>
-
-      <div className="selected-muscles">
-        {selected.length === 0 ? (
-          <p className="muted">No muscles selected yet — tap the body.</p>
-        ) : (
-          selected.map((m) => (
-            <button key={m} type="button" className="chip on" onClick={() => onToggle(m)}>
-              {muscleLabels[m]} ×
+      <div className="anatomy-legend">
+        <p className="muted">Tap a colored region on the chart — front (left) or back (right)</p>
+        <div className="legend-grid">
+          {legend.map((m) => (
+            <button
+              key={m}
+              type="button"
+              className={`legend-chip ${selected === m ? 'on' : ''}`}
+              style={{ ['--hs' as string]: muscleColor[m] }}
+              onClick={() => onSelect(m)}
+            >
+              <i className="legend-swatch" aria-hidden />
+              {muscleLabels[m]}
             </button>
-          ))
-        )}
+          ))}
+        </div>
       </div>
     </div>
   )
