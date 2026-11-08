@@ -1,18 +1,20 @@
 import { db, exercisesRepo, prefsRepo, profileRepo } from '@/db'
-import { emptyFatigue, generateWorkout, type GeneratedWorkout } from '@/features/generator'
+import { generateWorkout, type GeneratedWorkout } from '@/features/generator'
 import type { LiftHistory } from '@/features/generator'
+import { computeCurrentFatigue } from '@/features/recovery/computeRecovery'
 import { differenceInCalendarDays, startOfWeek } from 'date-fns'
 
 export async function buildTodayWorkout(opts?: {
   lockedExerciseIds?: string[]
   dayIndexOffset?: number
 }): Promise<GeneratedWorkout> {
-  const [profile, gym, exercises, favorites, banned] = await Promise.all([
+  const [profile, gym, exercises, favorites, banned, fatigue] = await Promise.all([
     profileRepo.getUserProfile(),
     profileRepo.getActiveGymProfile(),
     exercisesRepo.listExercises(),
     prefsRepo.listFavoriteIds(),
-    prefsRepo.listBannedIds()
+    prefsRepo.listBannedIds(),
+    computeCurrentFatigue()
   ])
 
   const dayIndex =
@@ -70,7 +72,7 @@ export async function buildTodayWorkout(opts?: {
     daysPerWeek: profile.daysPerWeek,
     sessionMinutes: profile.sessionMinutes,
     dayIndex,
-    fatigue: emptyFatigue(), // Phase 8 wires live fatigue; fresh start is fine
+    fatigue,
     weeklyVolume,
     availableEquipment: gym.equipment,
     favorites,

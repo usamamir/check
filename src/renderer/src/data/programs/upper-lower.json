@@ -1,0 +1,19 @@
+{
+  "id": "upper-lower-4day",
+  "name": "4-Day Upper / Lower",
+  "description": "Classic strength split with two upper and two lower days.",
+  "daysPerWeek": 4,
+  "level": "intermediate",
+  "split": "upper_lower",
+  "builtin": true,
+  "weeks": [
+    {
+      "days": [
+        { "label": "Upper A", "focus": ["chest", "upper_back", "front_delts"] },
+        { "label": "Lower A", "focus": ["quads", "hamstrings", "glutes"] },
+        { "label": "Upper B", "focus": ["lats", "chest", "side_delts"] },
+        { "label": "Lower B", "focus": ["hamstrings", "quads", "calves"] }
+      ]
+    }
+  ]
+}

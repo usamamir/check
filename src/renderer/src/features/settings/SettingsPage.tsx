@@ -7,6 +7,13 @@ import { Separator } from '@/components/ui/separator'
 import { profileRepo } from '@/db'
 import { Check, Dumbbell } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import {
+  exportAllJson,
+  exportHistoryCsv,
+  importAllJson,
+  resetAllData,
+  seedDemoHistory
+} from './dataServices'
 
 export function SettingsPage(): JSX.Element {
   const queryClient = useQueryClient()
@@ -134,23 +141,114 @@ export function SettingsPage(): JSX.Element {
         <section className="rounded-2xl border border-border bg-surface/70 p-6">
           <h2 className="font-display text-xl font-bold tracking-wide">Data</h2>
           <p className="mt-1 text-sm text-muted">
-            Export / import / backup arrive in Phase 12. All data stays on this machine.
+            Everything stays on this machine. Export before resetting.
           </p>
           <div className="mt-4 flex flex-wrap gap-2">
-            <Button variant="secondary" disabled>
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={async () => {
+                const json = await exportAllJson()
+                downloadBlob(json, 'forge-backup.json', 'application/json')
+              }}
+            >
               Export JSON
             </Button>
-            <Button variant="secondary" disabled>
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={async () => {
+                const csv = await exportHistoryCsv()
+                downloadBlob(csv, 'forge-history.csv', 'text/csv')
+              }}
+            >
+              Export history CSV
+            </Button>
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={() => {
+                const input = document.createElement('input')
+                input.type = 'file'
+                input.accept = 'application/json'
+                input.onchange = async () => {
+                  const file = input.files?.[0]
+                  if (!file) return
+                  const text = await file.text()
+                  await importAllJson(text)
+                  await queryClient.invalidateQueries()
+                  window.location.reload()
+                }
+                input.click()
+              }}
+            >
               Import JSON
             </Button>
-            <Button variant="ghost" disabled>
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={async () => {
+                await seedDemoHistory()
+                await queryClient.invalidateQueries()
+              }}
+            >
+              Seed 8 weeks demo history
+            </Button>
+            <Button
+              type="button"
+              variant="danger"
+              onClick={async () => {
+                const ok = window.prompt('Type RESET to erase all local FORGE data')
+                if (ok !== 'RESET') return
+                await resetAllData()
+                window.location.reload()
+              }}
+            >
               Reset all data
             </Button>
           </div>
         </section>
+
+        <section className="rounded-2xl border border-border bg-surface/70 p-6">
+          <h2 className="font-display text-xl font-bold tracking-wide">About</h2>
+          <p className="mt-2 text-sm text-muted">
+            FORGE is offline-first. Exercise data from{' '}
+            <button
+              type="button"
+              className="text-accent underline"
+              onClick={() =>
+                void window.api.openExternal('https://github.com/yuhonas/free-exercise-db')
+              }
+            >
+              free-exercise-db
+            </button>{' '}
+            (Unlicense). Optional online lookups may use{' '}
+            <button
+              type="button"
+              className="text-accent underline"
+              onClick={() => void window.api.openExternal('https://wger.de/')}
+            >
+              wger
+            </button>{' '}
+            (CC-BY-SA). Built with Electron, React, Dexie, and other open-source libraries.
+          </p>
+          <p className="mt-3 text-xs text-muted-foreground">
+            Press Ctrl/Cmd+K for the command palette.
+          </p>
+        </section>
       </div>
     </div>
   )
+}
+
+function downloadBlob(content: string, filename: string, type: string): void {
+  const blob = new Blob([content], { type })
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = filename
+  a.click()
+  URL.revokeObjectURL(url)
 }
 
 function Meta({ label, value }: { label: string; value: string }): JSX.Element {

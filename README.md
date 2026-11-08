@@ -38,6 +38,10 @@ npm run build:win     # NSIS
 npm run build:mac     # DMG
 ```
 
+Packaged builds load the renderer from the privileged `app://forge` protocol so YouTube embeds receive a valid origin (avoids Error 153 from `file://`). QA checklist: fresh install onboarding, offline library images, generate → start → log sets, recovery heatmap, export/import JSON.
+
+Dev: press **Ctrl/Cmd+K** for the command palette. Settings → **Seed 8 weeks demo history** fills charts.
+
 ## YouTube video map
 
 Demo embeds are driven by `src/renderer/src/data/videoMap.json`:

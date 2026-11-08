@@ -1,0 +1,18 @@
+{
+  "id": "ppl-6day",
+  "name": "6-Day Push / Pull / Legs",
+  "description": "High-frequency hypertrophy template.",
+  "daysPerWeek": 6,
+  "level": "intermediate",
+  "split": "push_pull_legs",
+  "builtin": true,
+  "weeks": [
+    {
+      "days": [
+        { "label": "Push", "focus": ["chest", "front_delts", "triceps"] },
+        { "label": "Pull", "focus": ["lats", "upper_back", "biceps"] },
+        { "label": "Legs", "focus": ["quads", "hamstrings", "glutes"] }
+      ]
+    }
+  ]
+}

@@ -13,12 +13,20 @@ files:
 asarUnpack:
   - resources/**
 win:
+  target:
+    - target: nsis
+      arch:
+        - x64
   executableName: FORGE
+  artifactName: FORGE-Setup-${version}.${ext}
 nsis:
-  artifactName: ${name}-${version}-setup.${ext}
+  artifactName: FORGE-Setup-${version}.${ext}
   shortcutName: ${productName}
   uninstallDisplayName: ${productName}
+  oneClick: false
+  allowToChangeInstallationDirectory: true
   createDesktopShortcut: always
+  createStartMenuShortcut: true
 mac:
   entitlementsInherit: build/entitlements.mac.plist
   extendInfo:

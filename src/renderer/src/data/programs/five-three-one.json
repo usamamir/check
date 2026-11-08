@@ -1,0 +1,19 @@
+{
+  "id": "531-strength",
+  "name": "5/3/1 Strength Block",
+  "description": "Strength-focused block with heavy top sets; weights still come from the progression engine.",
+  "daysPerWeek": 4,
+  "level": "advanced",
+  "split": "upper_lower",
+  "builtin": true,
+  "weeks": [
+    {
+      "days": [
+        { "label": "Press day", "focus": ["front_delts", "chest", "triceps"] },
+        { "label": "Deadlift day", "focus": ["hamstrings", "glutes", "upper_back"] },
+        { "label": "Bench day", "focus": ["chest", "triceps", "front_delts"] },
+        { "label": "Squat day", "focus": ["quads", "glutes", "abs"] }
+      ]
+    }
+  ]
+}
