@@ -15,8 +15,11 @@ Premium adaptive strength training for desktop. Offline-first, no accounts, no c
 
 ```bash
 npm install
+npm run import:exercises   # first time (or when refreshing free-exercise-db)
 npm run dev
 ```
+
+`import:exercises` downloads [free-exercise-db](https://github.com/yuhonas/free-exercise-db), normalizes muscles/equipment to FORGE enums, writes `src/renderer/src/data/exercises.json`, and unpacks offline images into `resources/exercise-images/` (~100MB). Use `SKIP_IMAGES=1` for JSON only.
 
 ## Quality
 
