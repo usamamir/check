@@ -1,5 +1,3 @@
-import { ElectronAPI } from '@electron-toolkit/preload'
-
 export interface ForgeApi {
   openExternal: (url: string) => Promise<void>
   getVersion: () => Promise<string>
@@ -8,7 +6,6 @@ export interface ForgeApi {
 
 declare global {
   interface Window {
-    electron: ElectronAPI
     api: ForgeApi
   }
 }
