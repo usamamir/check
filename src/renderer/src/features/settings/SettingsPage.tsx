@@ -1,5 +1,6 @@
 import type { JSX } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useNavigate } from 'react-router-dom'
 import { PageHeader } from '@/app/layout/PageHeader'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
@@ -9,6 +10,7 @@ import { cn } from '@/lib/utils'
 
 export function SettingsPage(): JSX.Element {
   const queryClient = useQueryClient()
+  const navigate = useNavigate()
 
   const profileQuery = useQuery({
     queryKey: ['userProfile'],
@@ -62,6 +64,19 @@ export function SettingsPage(): JSX.Element {
             />
             <Meta label="Theme" value={settings?.theme ?? '—'} />
             <Meta label="Accent" value={settings?.accent ?? '—'} />
+          </div>
+          <div className="mt-4">
+            <Button
+              variant="secondary"
+              size="sm"
+              onClick={async () => {
+                await profileRepo.updateUserProfile({ onboardingComplete: false })
+                await queryClient.invalidateQueries({ queryKey: ['userProfile'] })
+                navigate('/onboarding')
+              }}
+            >
+              Redo onboarding
+            </Button>
           </div>
         </section>
 
