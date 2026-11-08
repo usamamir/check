@@ -2,6 +2,7 @@ import type { JSX } from 'react'
 import { Navigate, Outlet, useLocation } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { profileRepo } from '@/db'
+import { CommandPalette } from '@/app/CommandPalette'
 
 export function RequireOnboarding(): JSX.Element {
   const location = useLocation()
@@ -26,5 +27,10 @@ export function RequireOnboarding(): JSX.Element {
     return <Navigate to="/" replace />
   }
 
-  return <Outlet />
+  return (
+    <>
+      <Outlet />
+      <CommandPalette />
+    </>
+  )
 }

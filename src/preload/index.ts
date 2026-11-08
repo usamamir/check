@@ -1,6 +1,6 @@
 import { contextBridge, ipcRenderer } from 'electron'
-import { electronAPI } from '@electron-toolkit/preload'
 
+/** Sandboxed preload must not require external packages — bundle only Electron APIs. */
 const api = {
   openExternal: (url: string): Promise<void> =>
     ipcRenderer.invoke('shell:openExternal', url) as Promise<void>,
@@ -9,16 +9,8 @@ const api = {
     ipcRenderer.invoke('app:getPlatform') as Promise<NodeJS.Platform>
 }
 
-if (process.contextIsolated) {
-  try {
-    contextBridge.exposeInMainWorld('electron', electronAPI)
-    contextBridge.exposeInMainWorld('api', api)
-  } catch (error) {
-    console.error(error)
-  }
-} else {
-  // @ts-expect-error fallback when isolation is off
-  window.electron = electronAPI
-  // @ts-expect-error fallback when isolation is off
-  window.api = api
+try {
+  contextBridge.exposeInMainWorld('api', api)
+} catch (error) {
+  console.error(error)
 }

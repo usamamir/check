@@ -1,6 +1,6 @@
-import { app, shell, BrowserWindow, ipcMain, protocol, net, session } from 'electron'
-import { join, normalize } from 'path'
-import { pathToFileURL } from 'url'
+import { app, shell, BrowserWindow, ipcMain, protocol, session } from 'electron'
+import { join, resolve, relative, extname, isAbsolute } from 'path'
+import { readFile } from 'fs/promises'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 
@@ -38,6 +38,30 @@ const DEV_CSP = [
   "base-uri 'self'",
   "form-action 'self'"
 ].join('; ')
+
+/**
+ * Chromium rejects <script type="module"> unless Content-Type is a JS MIME.
+ * net.fetch(file://…) inside asar often omits/wrong-types this → blank window.
+ */
+const MIME_TYPES: Record<string, string> = {
+  '.html': 'text/html; charset=utf-8',
+  '.js': 'text/javascript; charset=utf-8',
+  '.mjs': 'text/javascript; charset=utf-8',
+  '.css': 'text/css; charset=utf-8',
+  '.json': 'application/json; charset=utf-8',
+  '.svg': 'image/svg+xml',
+  '.png': 'image/png',
+  '.jpg': 'image/jpeg',
+  '.jpeg': 'image/jpeg',
+  '.gif': 'image/gif',
+  '.webp': 'image/webp',
+  '.ico': 'image/x-icon',
+  '.woff': 'font/woff',
+  '.woff2': 'font/woff2',
+  '.ttf': 'font/ttf',
+  '.otf': 'font/otf',
+  '.map': 'application/json'
+}
 
 protocol.registerSchemesAsPrivileged([
   {
@@ -77,6 +101,10 @@ function createWindow(): BrowserWindow {
     mainWindow.show()
   })
 
+  mainWindow.webContents.on('did-fail-load', (_event, errorCode, errorDescription, validatedURL) => {
+    console.error(`[forge] did-fail-load ${errorCode} ${errorDescription} url=${validatedURL}`)
+  })
+
   mainWindow.webContents.setWindowOpenHandler((details) => {
     shell.openExternal(details.url)
     return { action: 'deny' }
@@ -92,32 +120,52 @@ function createWindow(): BrowserWindow {
   return mainWindow
 }
 
+function isPathInsideRoot(root: string, candidate: string): boolean {
+  const rel = relative(root, candidate)
+  return rel === '' || (!rel.startsWith('..') && !isAbsolute(rel))
+}
+
 function registerAppProtocol(): void {
+  const rendererRoot = resolve(__dirname, '../renderer')
+
   protocol.handle(PROTOCOL, async (request) => {
-    const url = new URL(request.url)
-    let pathname = decodeURIComponent(url.pathname)
-    if (!pathname || pathname === '/') {
-      pathname = '/index.html'
-    }
-
-    const rendererRoot = join(__dirname, '../renderer')
-    const resolved = normalize(join(rendererRoot, pathname))
-
-    if (!resolved.startsWith(rendererRoot)) {
-      return new Response('Forbidden', { status: 403 })
-    }
-
     try {
-      const response = await net.fetch(pathToFileURL(resolved).toString())
-      const headers = new Headers(response.headers)
-      headers.set('Content-Security-Policy', PROD_CSP)
-      return new Response(response.body, {
-        status: response.status,
-        statusText: response.statusText,
-        headers
+      const url = new URL(request.url)
+      let pathname = decodeURIComponent(url.pathname)
+      if (!pathname || pathname === '/') {
+        pathname = '/index.html'
+      }
+
+      // Drop leading slashes so path.resolve never treats the segment as absolute
+      const relativePath = pathname.replace(/^[/\\]+/, '')
+      const resolved = resolve(rendererRoot, relativePath)
+
+      if (!isPathInsideRoot(rendererRoot, resolved)) {
+        return new Response('Forbidden', {
+          status: 403,
+          headers: { 'Content-Type': 'text/plain; charset=utf-8' }
+        })
+      }
+
+      const data = await readFile(resolved)
+      const ext = extname(resolved).toLowerCase()
+      const contentType = MIME_TYPES[ext] ?? 'application/octet-stream'
+
+      return new Response(data, {
+        status: 200,
+        headers: {
+          'Content-Type': contentType,
+          'Content-Security-Policy': PROD_CSP,
+          // Same-origin module loads; keep CORS explicit for crossorigin attrs from Vite
+          'Access-Control-Allow-Origin': `${PROTOCOL}://${HOST}`
+        }
       })
-    } catch {
-      return new Response('Not Found', { status: 404 })
+    } catch (err) {
+      console.error('[forge] protocol handler error', request.url, err)
+      return new Response('Not Found', {
+        status: 404,
+        headers: { 'Content-Type': 'text/plain; charset=utf-8' }
+      })
     }
   })
 }
