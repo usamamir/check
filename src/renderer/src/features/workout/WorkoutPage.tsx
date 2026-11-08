@@ -76,9 +76,14 @@ export function WorkoutPage(): JSX.Element {
   }, [])
 
   useEffect(() => {
-    void load()
-    // Initial session hydrate from Dexie
-    // eslint-disable-next-line react-hooks/set-state-in-effect -- async Dexie bootstrap
+    let cancelled = false
+    void (async () => {
+      await load()
+      if (cancelled) return
+    })()
+    return () => {
+      cancelled = true
+    }
   }, [load])
 
   useEffect(() => {
