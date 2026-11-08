@@ -130,6 +130,81 @@ input {
   margin: 0.35rem 0 0.6rem;
 }
 
+.flow-hero.center {
+  text-align: center;
+}
+
+.circle-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.6rem 1.8rem;
+  margin-top: 0.5rem;
+}
+
+.equip-circle {
+  width: 150px;
+  background: none;
+  border: 0;
+  color: inherit;
+  cursor: pointer;
+  display: grid;
+  justify-items: center;
+  gap: 0.55rem;
+  padding: 0;
+}
+
+.equip-circle img {
+  width: 132px;
+  height: 132px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.4);
+  transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.equip-circle:hover img,
+.equip-circle:focus-visible img {
+  transform: scale(1.06);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 5px rgba(184, 255, 60, 0.22);
+}
+
+.equip-circle strong {
+  font-size: 0.95rem;
+  letter-spacing: 0.01em;
+}
+
+.chosen-equip {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  margin-bottom: 1rem;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0.4rem 0.9rem 0.4rem 0.4rem;
+  width: fit-content;
+  max-width: 100%;
+}
+
+.chosen-equip img {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--accent);
+}
+
+.chosen-equip strong {
+  display: block;
+}
+
+.chosen-equip p {
+  font-size: 0.85rem;
+}
+
 .equip-actions {
   display: flex;
   align-items: center;

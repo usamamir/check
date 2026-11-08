@@ -1,65 +1,46 @@
-import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { allEquipment, equipmentLabels, type Equipment } from '../data/exercises'
-import { getEquipment, setEquipment } from '../lib/prefs'
+import { setEquipment } from '../lib/prefs'
+
+const equipmentImage: Record<Equipment, string> = {
+  barbell: 'equipment/barbell.jpg',
+  dumbbell: 'equipment/dumbbell.jpg',
+  cable: 'equipment/cable.jpg',
+  machine: 'equipment/machine.jpg',
+  bodyweight: 'equipment/bodyweight.jpg',
+  kettlebell: 'equipment/kettlebell.jpg',
+  band: 'equipment/band.jpg',
+}
 
 export function EquipmentPage() {
   const navigate = useNavigate()
-  const [selected, setSelected] = useState<Equipment[]>(() => {
-    const saved = getEquipment()
-    return saved.length ? saved : [...allEquipment]
-  })
 
-  function toggle(eq: Equipment) {
-    setSelected((prev) => (prev.includes(eq) ? prev.filter((x) => x !== eq) : [...prev, eq]))
-  }
-
-  function selectAll() {
-    setSelected([...allEquipment])
-  }
-
-  function continueNext() {
-    const list = selected.length ? selected : (['bodyweight'] as Equipment[])
-    setEquipment(list)
+  function choose(eq: Equipment) {
+    setEquipment([eq])
     navigate('/muscles')
   }
 
   return (
-    <div className="flow-page">
-      <header className="flow-hero">
+    <div className="flow-page wide">
+      <header className="flow-hero center">
         <p className="brand">REPWISE</p>
-        <h1>What equipment do you have?</h1>
+        <h1>Choose your equipment</h1>
         <p className="muted">
-          Select every option you can use. Each muscle has 15+ demos spanning your gear — more gear
-          unlocks more videos.
+          Tap a circle. You’ll get the anatomy chart next, then exercises for the muscle you tap
+          and this equipment.
         </p>
       </header>
 
-      <div className="equip-actions">
-        <button type="button" className="btn ghost sm" onClick={selectAll}>
-          Select all
-        </button>
-        <span className="muted">{selected.length} selected</span>
-      </div>
-
-      <div className="equip-grid">
+      <div className="circle-grid">
         {allEquipment.map((eq) => (
-          <button
-            key={eq}
-            type="button"
-            className={`equip-card ${selected.includes(eq) ? 'on' : ''}`}
-            onClick={() => toggle(eq)}
-          >
+          <button key={eq} type="button" className="equip-circle" onClick={() => choose(eq)}>
+            <img
+              src={`${import.meta.env.BASE_URL}${equipmentImage[eq]}`}
+              alt=""
+            />
             <strong>{equipmentLabels[eq]}</strong>
-            <span>{selected.includes(eq) ? 'Selected' : 'Tap to add'}</span>
           </button>
         ))}
-      </div>
-
-      <div className="flow-actions">
-        <button type="button" className="btn primary lg" onClick={continueNext} disabled={!selected.length}>
-          Open anatomy map →
-        </button>
       </div>
     </div>
   )

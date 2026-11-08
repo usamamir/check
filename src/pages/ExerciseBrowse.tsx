@@ -11,52 +11,45 @@ import {
 import { getEquipment } from '../lib/prefs'
 import { VideoPlayer } from '../components/VideoPlayer'
 
+const equipmentImage: Record<Equipment, string> = {
+  barbell: 'equipment/barbell.jpg',
+  dumbbell: 'equipment/dumbbell.jpg',
+  cable: 'equipment/cable.jpg',
+  machine: 'equipment/machine.jpg',
+  bodyweight: 'equipment/bodyweight.jpg',
+  kettlebell: 'equipment/kettlebell.jpg',
+  band: 'equipment/band.jpg',
+}
+
 export function ExerciseBrowse() {
   const { muscleId } = useParams()
-  const equipment = useMemo(() => getEquipment() as Equipment[], [])
-  const equipmentKey = equipment.join(',')
+  const equipment = useMemo(() => getEquipment()[0] as Equipment | undefined, [])
   const muscle = (muscleId || '') as Muscle
   const valid = muscle in muscleLabels
 
   const [q, setQ] = useState('')
-  const [equipFilter, setEquipFilter] = useState<'all' | Equipment>('all')
   const [activeId, setActiveId] = useState<string | null>(null)
 
   const list = useMemo(() => {
-    if (!valid) return []
-    const baseEquip = equipFilter === 'all' ? equipment : [equipFilter]
-    return exercisesForMuscle(muscle, baseEquip).filter((ex) =>
+    if (!valid || !equipment) return []
+    return exercisesForMuscle(muscle, [equipment]).filter((ex) =>
       !q.trim() ? true : ex.name.toLowerCase().includes(q.trim().toLowerCase()),
     )
-  }, [valid, muscle, equipment, equipFilter, q])
+  }, [valid, muscle, equipment, q])
 
   useEffect(() => {
-    if (!valid) {
-      setActiveId(null)
-      return
-    }
-    const baseEquip = equipFilter === 'all' ? equipment : [equipFilter]
-    const filtered = exercisesForMuscle(muscle, baseEquip).filter((ex) =>
-      !q.trim() ? true : ex.name.toLowerCase().includes(q.trim().toLowerCase()),
-    )
-    setActiveId(filtered[0]?.id ?? null)
-  }, [muscle, equipFilter, q, equipmentKey, valid, equipment])
+    setActiveId(list[0]?.id ?? null)
+  }, [muscle, equipment, q, list])
 
   const active = list.find((e) => e.id === activeId) ?? list[0] ?? null
   const guide = valid ? muscleGuides[muscle] : null
-  const availableEquip = useMemo(() => {
-    if (!valid) return [] as Equipment[]
-    const set = new Set<Equipment>()
-    exercisesForMuscle(muscle, equipment).forEach((ex) => ex.equipment.forEach((e) => set.add(e)))
-    return equipment.filter((e) => set.has(e))
-  }, [valid, muscle, equipment])
 
-  if (!equipment.length) {
+  if (!equipment) {
     return (
       <div className="flow-page">
         <h1>Choose equipment first</h1>
         <Link className="btn primary" to="/">
-          Start
+          Choose a circle
         </Link>
       </div>
     )
@@ -78,9 +71,11 @@ export function ExerciseBrowse() {
       <header className="browse-head">
         <div>
           <p className="brand">REPWISE</p>
-          <h1>{muscleLabels[muscle]} exercises</h1>
+          <h1>
+            {muscleLabels[muscle]} · {equipmentLabels[equipment]}
+          </h1>
           <p className="muted">
-            {list.length} demos for your gear · click any exercise to switch the video
+            {list.length} exercises · click one and the video switches to that demo
           </p>
         </div>
         <div className="browse-links">
@@ -88,10 +83,18 @@ export function ExerciseBrowse() {
             Equipment
           </Link>
           <Link className="btn ghost sm" to="/muscles">
-            Anatomy map
+            Anatomy
           </Link>
         </div>
       </header>
+
+      <div className="chosen-equip">
+        <img src={`${import.meta.env.BASE_URL}${equipmentImage[equipment]}`} alt="" />
+        <div>
+          <strong>{equipmentLabels[equipment]}</strong>
+          <p className="muted">{muscleLabels[muscle]} only</p>
+        </div>
+      </div>
 
       {guide && (
         <section className="muscle-guide-inline">
@@ -108,37 +111,20 @@ export function ExerciseBrowse() {
       <div className="browse-controls">
         <input
           className="search"
-          placeholder="Search this muscle’s exercises…"
+          placeholder={`Search ${equipmentLabels[equipment].toLowerCase()} ${muscleLabels[muscle].toLowerCase()} exercises…`}
           value={q}
           onChange={(e) => setQ(e.target.value)}
         />
-        <div className="chip-row wrap">
-          <button
-            type="button"
-            className={`chip ${equipFilter === 'all' ? 'on' : ''}`}
-            onClick={() => setEquipFilter('all')}
-          >
-            All my gear
-          </button>
-          {availableEquip.map((e) => (
-            <button
-              key={e}
-              type="button"
-              className={`chip ${equipFilter === e ? 'on' : ''}`}
-              onClick={() => setEquipFilter(e)}
-            >
-              {equipmentLabels[e]}
-            </button>
-          ))}
-        </div>
       </div>
 
       {!list.length ? (
         <div className="empty">
-          <p>No exercises for this muscle with the current equipment filter.</p>
-          <button type="button" className="btn primary" onClick={() => setEquipFilter('all')}>
-            Show all my gear
-          </button>
+          <p>
+            No {equipmentLabels[equipment].toLowerCase()} exercises for {muscleLabels[muscle]}.
+          </p>
+          <Link className="btn primary" to="/muscles">
+            Pick another muscle
+          </Link>
         </div>
       ) : (
         <div className="browse-grid">
@@ -154,7 +140,7 @@ export function ExerciseBrowse() {
                 <div>
                   <strong>{ex.name}</strong>
                   <span>
-                    {ex.equipment.map((e) => equipmentLabels[e]).join(' / ')} · {ex.level}
+                    {equipmentLabels[equipment]} · {ex.level}
                   </span>
                 </div>
               </button>
@@ -167,8 +153,7 @@ export function ExerciseBrowse() {
                 <div>
                   <h2>{active.name}</h2>
                   <p className="muted">
-                    {active.equipment.map((e) => equipmentLabels[e]).join(', ')} · video updates when
-                    you pick another exercise
+                    {equipmentLabels[equipment]} · {muscleLabels[muscle]}
                   </p>
                 </div>
                 <div className="detail-nav">

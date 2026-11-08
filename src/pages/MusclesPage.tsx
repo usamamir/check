@@ -1,18 +1,28 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { MuscleMap } from '../components/MuscleMap'
-import type { Muscle } from '../data/exercises'
+import { equipmentLabels, type Equipment, type Muscle } from '../data/exercises'
 import { getEquipment, setMuscles } from '../lib/prefs'
+
+const equipmentImage: Record<Equipment, string> = {
+  barbell: 'equipment/barbell.jpg',
+  dumbbell: 'equipment/dumbbell.jpg',
+  cable: 'equipment/cable.jpg',
+  machine: 'equipment/machine.jpg',
+  bodyweight: 'equipment/bodyweight.jpg',
+  kettlebell: 'equipment/kettlebell.jpg',
+  band: 'equipment/band.jpg',
+}
 
 export function MusclesPage() {
   const navigate = useNavigate()
-  const equipment = getEquipment()
+  const equipment = getEquipment()[0]
 
-  if (!equipment.length) {
+  if (!equipment) {
     return (
       <div className="flow-page">
-        <h1>Pick equipment first</h1>
+        <h1>Pick a piece of equipment</h1>
         <Link className="btn primary" to="/">
-          Choose equipment
+          Choose a circle
         </Link>
       </div>
     )
@@ -26,21 +36,29 @@ export function MusclesPage() {
   return (
     <div className="flow-page wide">
       <header className="flow-hero">
-        <p className="eyebrow">Step 2 · Anatomy map</p>
+        <p className="eyebrow">Anatomy · {equipmentLabels[equipment]}</p>
         <h1>Tap a muscle on the chart</h1>
         <p className="muted">
-          Front view (left) and back view (right) — same layout as a musculature anatomy poster.
-          Your gear: {equipment.join(', ')}.
+          Front view is on the left, back view on the right. Exercises will match{' '}
+          {equipmentLabels[equipment].toLowerCase()} and the muscle you choose.
         </p>
       </header>
 
-      <MuscleMap selected={null} onSelect={openMuscle} />
-
-      <div className="flow-actions">
-        <Link className="btn ghost" to="/">
-          ← Equipment
+      <div className="chosen-equip">
+        <img
+          src={`${import.meta.env.BASE_URL}${equipmentImage[equipment]}`}
+          alt=""
+        />
+        <div>
+          <strong>{equipmentLabels[equipment]}</strong>
+          <p className="muted">Selected equipment</p>
+        </div>
+        <Link className="btn ghost sm" to="/">
+          Change
         </Link>
       </div>
+
+      <MuscleMap selected={null} onSelect={openMuscle} />
     </div>
   )
 }
