@@ -5,6 +5,7 @@ import { TodayPage } from '@/features/workout/TodayPage'
 import { WorkoutPage } from '@/features/workout/WorkoutPage'
 import { RecoveryPage } from '@/features/recovery/RecoveryPage'
 import { LibraryPage } from '@/features/library/LibraryPage'
+import { ExerciseDetailPage } from '@/features/library/ExerciseDetailPage'
 import { HistoryPage } from '@/features/history/HistoryPage'
 import { ProgressPage } from '@/features/progress/ProgressPage'
 import { ProgramsPage } from '@/features/programs/ProgramsPage'
@@ -27,6 +28,7 @@ export const router = createHashRouter([
           { path: 'workout', element: <WorkoutPage /> },
           { path: 'recovery', element: <RecoveryPage /> },
           { path: 'library', element: <LibraryPage /> },
+          { path: 'library/:exerciseId', element: <ExerciseDetailPage /> },
           { path: 'history', element: <HistoryPage /> },
           { path: 'progress', element: <ProgressPage /> },
           { path: 'programs', element: <ProgramsPage /> },
