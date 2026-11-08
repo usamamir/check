@@ -1,12 +1,9 @@
 import { profileRepo, db } from '@/db'
 import { GYM_PRESETS } from '@/db/defaults'
+import { epley1rm } from '@/lib/oneRm'
 import type { OnboardingValues } from './onboardingSchema'
 
-/** Epley 1RM — also used by the engine in Phase 5 */
-export function epley1rm(weight: number, reps: number): number {
-  if (reps <= 1) return weight
-  return weight * (1 + reps / 30)
-}
+export { epley1rm }
 
 const BASELINE_EXERCISE_IDS: Record<keyof OnboardingValues['baseline'], string> = {
   bench: 'Barbell_Bench_Press_-_Medium_Grip',
