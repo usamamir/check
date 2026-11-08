@@ -1,0 +1,18 @@
+{
+  "id": "full-body-beginner-3day",
+  "name": "3-Day Full Body Beginner",
+  "description": "Three full-body sessions per week with progressive overload.",
+  "daysPerWeek": 3,
+  "level": "beginner",
+  "split": "full_body",
+  "builtin": true,
+  "weeks": [
+    {
+      "days": [
+        { "label": "Full Body A", "focus": ["quads", "chest", "upper_back"] },
+        { "label": "Full Body B", "focus": ["hamstrings", "lats", "front_delts"] },
+        { "label": "Full Body C", "focus": ["glutes", "chest", "abs"] }
+      ]
+    }
+  ]
+}
