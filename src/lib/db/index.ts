@@ -10,7 +10,9 @@ const globalForDb = globalThis as unknown as {
 };
 
 function dbPath() {
-  const dir = path.join(process.cwd(), "data");
+  const dir = process.env.SUPPLYSCOUT_DATA_DIR
+    ? process.env.SUPPLYSCOUT_DATA_DIR
+    : path.join(process.cwd(), "data");
   if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
   return path.join(dir, "supplyscout.db");
 }

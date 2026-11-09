@@ -4,7 +4,7 @@ Local desktop web app for discovering **US-based** brands/manufacturers/wholesal
 
 Runs entirely on your machine. No user accounts. Data stays in `./data/supplyscout.db`.
 
-## Quick start
+## Quick start (web)
 
 ```bash
 npm install
@@ -14,6 +14,31 @@ npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000).
+
+## Windows desktop installer (.exe)
+
+### Install on a Windows PC
+
+1. Download **`SupplyScout-Setup-0.1.0.exe`**
+2. Double-click it → choose an install folder → Finish
+3. Launch **SupplyScout** from the Desktop or Start Menu shortcut
+
+No Node.js install is required. Windows may show a SmartScreen prompt on first run (unsigned build) — choose **More info → Run anyway**.
+
+Zip alternative (no installer): extract `SupplyScout-0.1.0-win.zip` and run `SupplyScout.exe`.
+
+### Build the installer yourself
+
+```bash
+npm install
+sudo apt-get install -y nsis   # Linux host; provides makensis
+npm run dist:win
+```
+
+Artifacts land in `release/`:
+
+- `SupplyScout-Setup-0.1.0.exe` — NSIS installer (desktop + Start Menu shortcuts)
+- `SupplyScout-0.1.0-win.zip` — portable unpacked app
 
 ### Scripts
 

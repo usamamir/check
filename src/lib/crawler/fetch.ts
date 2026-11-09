@@ -1,4 +1,3 @@
-import { chromium, type Browser } from "playwright";
 import { getUserAgent } from "@/lib/db/settings";
 import { isUrlAllowed } from "./robots";
 import { sleep } from "@/lib/utils";
@@ -14,20 +13,50 @@ export type FetchResult = {
   via: "http" | "playwright";
 };
 
-const lastRequestAt = new Map<string, number>();
-let browserPromise: Promise<Browser> | null = null;
+type BrowserLike = {
+  newPage: (opts?: { userAgent?: string }) => Promise<{
+    goto: (url: string, opts: { waitUntil: string; timeout: number }) => Promise<{ status: () => number } | null>;
+    content: () => Promise<string>;
+    url: () => string;
+    close: () => Promise<void>;
+  }>;
+  close: () => Promise<void>;
+};
 
-async function getBrowser() {
+const lastRequestAt = new Map<string, number>();
+let browserPromise: Promise<BrowserLike> | null = null;
+let playwrightUnavailable = false;
+
+async function getBrowser(): Promise<BrowserLike | null> {
+  if (playwrightUnavailable) return null;
   if (!browserPromise) {
-    browserPromise = chromium.launch({ headless: true });
+    browserPromise = (async () => {
+      try {
+        const { chromium } = await import("playwright");
+        return (await chromium.launch({ headless: true })) as unknown as BrowserLike;
+      } catch (err) {
+        playwrightUnavailable = true;
+        browserPromise = null;
+        console.warn(
+          "[crawler] Playwright unavailable — using HTTP/Cheerio only:",
+          err instanceof Error ? err.message : err
+        );
+        return null as unknown as BrowserLike;
+      }
+    })();
   }
-  return browserPromise;
+  const browser = await browserPromise;
+  return browser || null;
 }
 
 export async function closeBrowser() {
   if (browserPromise) {
-    const b = await browserPromise;
-    await b.close().catch(() => undefined);
+    try {
+      const b = await browserPromise;
+      if (b) await b.close().catch(() => undefined);
+    } catch {
+      // ignore
+    }
     browserPromise = null;
   }
 }
@@ -47,7 +76,7 @@ function looksBlocked(status: number, html: string): boolean {
     lower.includes("cf-browser-verification") ||
     lower.includes("attention required! | cloudflare") ||
     lower.includes("checking your browser before accessing") ||
-    lower.includes("access denied") && lower.includes("cloudflare")
+    (lower.includes("access denied") && lower.includes("cloudflare"))
   );
 }
 
@@ -95,6 +124,11 @@ export async function fetchPage(
 
   await respectRateLimit(parsed.hostname, rate);
 
+  let httpHtml = "";
+  let httpStatus = 0;
+  let httpFinal = url;
+  let httpHeaders: Record<string, string> = {};
+
   if (!opts.forcePlaywright) {
     try {
       const res = await fetch(url, {
@@ -111,6 +145,10 @@ export async function fetchPage(
       res.headers.forEach((v, k) => {
         headers[k] = v;
       });
+      httpHtml = html;
+      httpStatus = res.status;
+      httpFinal = res.url;
+      httpHeaders = headers;
 
       if (looksBlocked(res.status, html)) {
         return {
@@ -148,14 +186,36 @@ export async function fetchPage(
           via: "http",
         };
       }
-      // fall through to playwright for network/timeout edge cases on JS sites
+      // fall through to playwright
     }
   }
 
-  // Playwright fallback
+  // Playwright fallback (optional — skipped if unavailable in packaged builds)
   try {
     await respectRateLimit(parsed.hostname, rate);
     const browser = await getBrowser();
+    if (!browser) {
+      if (httpHtml) {
+        return {
+          url,
+          finalUrl: httpFinal,
+          status: httpStatus,
+          html: httpHtml,
+          headers: httpHeaders,
+          via: "http",
+        };
+      }
+      return {
+        url,
+        finalUrl: url,
+        status: 0,
+        html: "",
+        headers: {},
+        error: "Playwright unavailable and HTTP fetch failed",
+        via: "http",
+      };
+    }
+
     const page = await browser.newPage({ userAgent: ua });
     try {
       const response = await page.goto(url, {
@@ -182,6 +242,16 @@ export async function fetchPage(
       await page.close().catch(() => undefined);
     }
   } catch (err) {
+    if (httpHtml) {
+      return {
+        url,
+        finalUrl: httpFinal,
+        status: httpStatus,
+        html: httpHtml,
+        headers: httpHeaders,
+        via: "http",
+      };
+    }
     return {
       url,
       finalUrl: url,
@@ -194,7 +264,10 @@ export async function fetchPage(
   }
 }
 
-export async function fetchJson<T = unknown>(url: string, ratePerSec = 1): Promise<{ ok: boolean; status: number; data?: T; error?: string }> {
+export async function fetchJson<T = unknown>(
+  url: string,
+  ratePerSec = 1
+): Promise<{ ok: boolean; status: number; data?: T; error?: string }> {
   try {
     const parsed = new URL(url);
     await respectRateLimit(parsed.hostname, ratePerSec);

@@ -15,7 +15,8 @@ export async function GET() {
   } catch {
     // ignore
   }
-  const dbFile = path.join(process.cwd(), "data", "supplyscout.db");
+  const dataDir = process.env.SUPPLYSCOUT_DATA_DIR || path.join(process.cwd(), "data");
+  const dbFile = path.join(dataDir, "supplyscout.db");
   if (!fs.existsSync(dbFile)) {
     return NextResponse.json({ error: "Database not found" }, { status: 404 });
   }
@@ -36,8 +37,10 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "file required" }, { status: 400 });
   }
   const buf = Buffer.from(await file.arrayBuffer());
-  const dbFile = path.join(process.cwd(), "data", "supplyscout.db");
-  const bak = path.join(process.cwd(), "data", `supplyscout.db.bak-${Date.now()}`);
+  const dataDir = process.env.SUPPLYSCOUT_DATA_DIR || path.join(process.cwd(), "data");
+  fs.mkdirSync(dataDir, { recursive: true });
+  const dbFile = path.join(dataDir, "supplyscout.db");
+  const bak = path.join(dataDir, `supplyscout.db.bak-${Date.now()}`);
   if (fs.existsSync(dbFile)) fs.copyFileSync(dbFile, bak);
   // close isn't straightforward with singleton; write and ask restart
   fs.writeFileSync(dbFile, buf);

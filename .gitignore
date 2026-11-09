@@ -40,3 +40,7 @@ yarn-error.log*
 /data/*.bak-*
 /storage
 /crawl-storage
+/release
+/*.exe
+/.cache-win
+/electron-resources
