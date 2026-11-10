@@ -247,10 +247,7 @@
         '<button class="btn btn--ghost" type="button" data-compare-button data-compare-add data-id="' + esc(product.handle) + '" data-title="' + esc(product.title) + '" data-price="' + product.price + '" data-img="' + esc(images[0]) + '" data-url="product.html?p=' + encodeURIComponent(product.handle) + '">Compare</button>' +
         "</div></form>" +
         '<div class="pay-note"><p>Pay with PayPal, Visa, Mastercard, American Express, or Discover.</p>' +
-        '<p>Pay over time with Klarna or <a href="financing.html">Bread financing</a>.</p>' +
-        '<div class="payment-row"><img src="../jettribe-shopify/assets/payment-ic.png" alt="PayPal, Visa, Discover, Mastercard, and American Express" width="294" height="32">' +
-        '<img src="../jettribe-shopify/assets/pay-klarna.png" alt="Klarna" width="79" height="32">' +
-        '<img src="../jettribe-shopify/assets/pay-bread.png" alt="Bread" width="72" height="32"></div></div></div></div>' +
+        '<div class="payment-row"><img src="../jettribe-shopify/assets/payment-ic.png" alt="PayPal, Visa, Discover, Mastercard, and American Express" width="294" height="32"></div></div></div></div>' +
         '<div class="product-lower"><div class="tabs"><button class="is-active" type="button" data-tab="description">Description</button><button type="button" data-tab="shipping">Shipping</button><button type="button" data-tab="reviews">Reviews</button></div>' +
         '<div class="tab-panel rte is-active" data-tab-panel="description">' + (product.description || "<p>No description was published for this product.</p>") + "</div>" +
         '<div class="tab-panel rte" data-tab-panel="shipping"><p>Free USA shipping on orders of $400 or more. Shipping is calculated at checkout for smaller orders. Rider support: 951.246.3147, Monday through Friday, 9am to 4pm PST.</p></div>' +

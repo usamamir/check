@@ -466,8 +466,6 @@
         paypalNote.removeAttribute("data-pp-mounted");
         mountPayPalMessages();
       }
-      var klarnaNote = qs("klarna-placement");
-      if (klarnaNote) klarnaNote.setAttribute("data-purchase-amount", String(variant.price));
       if (skuEl) {
         var sku = variant.sku || skuEl.getAttribute("data-fallback-sku") || "";
         skuEl.textContent = sku ? "SKU: " + sku : "";

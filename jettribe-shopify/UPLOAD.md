@@ -2,18 +2,16 @@
 
 Upload `jettribe-shopify-theme.zip` in Shopify admin under **Online Store → Themes → Add theme → Upload zip file**. The zip root already contains `layout`, `templates`, `sections`, `assets`, and `config`. Leave the zip closed. Publish the theme. Menu categories, including 2026 JTR Series, open from the theme and list imported products. Shopify does not have to contain that collection first. Color filters are circles.
 
-This is a Shopify Online Store 2.0 theme matched to the live Jettribe storefront: black header, red announcement bar, blue prices, Oswald and Roboto type, the same homepage tiles and hero photos, the same menu, rider-support footer, wishlist, quick view, and the same payment marks (PayPal, Visa, Discover, Mastercard, American Express, Klarna, and Bread).
+This is a Shopify Online Store 2.0 theme matched to the live Jettribe storefront: black header, red announcement bar, blue prices, Oswald and Roboto type, the same homepage tiles and hero photos, the same menu, rider-support footer, wishlist, quick view, and payment marks for PayPal, Visa, Discover, Mastercard, and American Express.
 
 BigCommerce Stencil files cannot run on Shopify. Checkout, payment processing, customer passwords, and the product catalog are store settings and data, not theme files.
 
 ## Payments
 
-The footer, homepage, product page, and cart show the same marks as jettribe.com: PayPal, Visa, Discover, Mastercard, American Express, Klarna, and Bread. The product page also shows the PayPal Pay Later line from the messages account already on jettribe.com. These marks do not turn processing on. In **Settings → Payments**:
+The footer, homepage, product page, and cart show PayPal, Visa, Discover, Mastercard, and American Express. The product page also shows the PayPal Pay Later line from the messages account already on jettribe.com. These marks do not turn processing on. In **Settings → Payments**:
 
 - **Shopify Payments** for Visa, Mastercard, American Express, and Discover
 - **PayPal**
-- **Klarna**, then paste the Klarna on-site messaging client id into **Theme settings → Payments**. The Klarna mark shows before that. The pay-later sentence on the homepage and product page starts after the id is saved. Do not guess an id.
-- **Bread** by installing the Bread Shopify app, then paste the application link into the Financing page section
 
 If PayPal issues a new messages client id after the Shopify PayPal account is connected, replace the client id and merchant id under **Theme settings → Payments**. The loaded script is messages only.
 

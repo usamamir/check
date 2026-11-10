@@ -51,7 +51,7 @@
     "pay-later": {
       "type": "pay-later",
       "settings": {
-        "text": "Pay with PayPal or major cards. Pay over time with Klarna or Bread.",
+        "text": "Pay with PayPal, Visa, Mastercard, American Express, or Discover.",
         "link_label": "See financing",
         "link": "/search?jtpage=financing"
       }

@@ -68,14 +68,6 @@
 
   <script src="{{ 'theme.js' | asset_url }}" defer="defer"></script>
   <script src="{{ 'catalog-route.js' | asset_url }}" defer="defer"></script>
-  {% if settings.klarna_client_id != blank %}
-    <script
-      async
-      src="https://osm.klarnaservices.com/lib.js"
-      data-environment="production"
-      data-client-id="{{ settings.klarna_client_id | escape }}"
-    ></script>
-  {% endif %}
   {% if settings.show_paypal_message and settings.paypal_client_id != blank and settings.paypal_merchant_id != blank %}
     <script
       defer

@@ -205,14 +205,6 @@
 
         <div class="pay-note">
           <p>Pay with PayPal, Visa, Mastercard, American Express, or Discover.</p>
-          <p>Pay over time with Klarna or <a href="/search?jtpage=financing">Bread financing</a>.</p>
-          {%- if settings.klarna_client_id != blank and settings.klarna_product_placement_id != blank -%}
-            <klarna-placement
-              data-id="{{ settings.klarna_product_placement_id }}"
-              data-theme="dark"
-              data-purchase-amount="{{ current.price }}"
-            ></klarna-placement>
-          {%- endif -%}
           {% render 'payment-icons' %}
         </div>
       </div>
