@@ -181,8 +181,8 @@
     var selectedSizes = canonicalSizes((params.get("size") || "").split(","));
     var min = params.get("min") === null || params.get("min") === "" ? null : Number(params.get("min"));
     var max = params.get("max") === null || params.get("max") === "" ? null : Number(params.get("max"));
-    var page = Math.max(1, Number(params.get("page") || 1));
-    var per = 24;
+    var page = 1;
+    var per = 10000;
     var metas = (cat.products || []).map(function (productHandle) {
       var row = (data.products || {})[productHandle] || {};
       return {
@@ -297,16 +297,8 @@
     ].map(function (item) {
       return '<option value="' + item[0] + '"' + (sort === item[0] ? " selected" : "") + ">" + item[1] + "</option>";
     }).join("");
-    var pager = "";
-    if (pages > 1) {
-      var links = [];
-      for (var i = 1; i <= pages; i += 1) {
-        links.push('<a class="' + (i === page ? "is-current" : "") + '" href="' + esc(href({ page: i === 1 ? "" : String(i) })) + '">' + i + "</a>");
-      }
-      pager = '<nav class="pagination" aria-label="Pages">' + links.join("") + "</nav>";
-    }
     var gridHtml = slice.length
-      ? '<div class="product-grid" data-jt-grid><p>Loading products…</p></div>' + pager
+      ? '<div class="product-grid product-more" data-jt-grid><p>Loading products…</p></div>'
       : '<div class="empty-products"><p>' + (metas.length ? "No products match these filters." : "No products are listed in this category.") + "</p></div>";
     var root = qs("[data-jt-category-root]", mount);
     root.innerHTML =

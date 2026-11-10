@@ -1042,6 +1042,41 @@
   mountPayPalMessages();
 
   /* Cart page quantity posts stay native. Gallery on cart is server rendered. */
+  function reviewStars(count) {
+    var n = Math.max(0, Math.min(5, Number(count) || 0));
+    return "★★★★★".slice(0, n) + "☆☆☆☆☆".slice(0, 5 - n);
+  }
+  function paintReviews(root, list) {
+    if (!root) return;
+    var tab = qs('[data-tab="reviews"]');
+    if (!list || !list.length) {
+      root.innerHTML = "<p>No reviews for this product yet.</p>";
+      if (tab) tab.textContent = "Reviews";
+      return;
+    }
+    if (tab) tab.textContent = "Reviews (" + list.length + ")";
+    var total = list.reduce(function (sum, review) { return sum + Number(review.rating || 0); }, 0);
+    var html = '<p class="review-meta"><span class="review-stars" aria-hidden="true">' + reviewStars(Math.round(total / list.length)) + "</span> " + list.length + (list.length === 1 ? " review" : " reviews") + '</p><div class="review-list">';
+    list.forEach(function (review) {
+      html += '<article class="review-card"><div class="review-stars" aria-label="' + esc(review.rating || 0) + ' out of 5">' + reviewStars(review.rating) + "</div>";
+      if (review.title) html += "<h3>" + esc(review.title) + "</h3>";
+      html += '<p class="review-meta">' + esc(review.author || "Customer") + (review.date ? " · " + esc(review.date) : "") + "</p>";
+      html += "<p>" + esc(review.body || "") + "</p>";
+      if (review.image) html += '<p><img src="' + esc(review.image) + '" alt="" width="280" loading="lazy"></p>';
+      html += "</article>";
+    });
+    root.innerHTML = html + "</div>";
+  }
+  var reviewRoot = qs("[data-product-reviews]");
+  if (reviewRoot && window.Jettribe && Jettribe.reviewsUrl) {
+    fetch(Jettribe.reviewsUrl, { headers: { Accept: "application/json" } })
+      .then(function (res) { return res.ok ? res.json() : {}; })
+      .then(function (data) {
+        paintReviews(reviewRoot, data[reviewRoot.getAttribute("data-product-reviews")] || []);
+      })
+      .catch(function () {});
+  }
+
   qsa("[data-country-select]").forEach(function (country) {
     var province = qs("#" + country.getAttribute("data-province"));
     if (!province || !window.Shopify || !Shopify.CountryProvinceSelector) return;

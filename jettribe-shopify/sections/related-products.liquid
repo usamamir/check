@@ -4,7 +4,7 @@
   <section class="product-band">
     <div class="container">
       <h2 class="page-heading"><span>{{ section.settings.heading }}</span></h2>
-      <div class="product-grid">
+      <div class="product-scroll" tabindex="0">
         {%- assign shown = 0 -%}
         {%- for related in pool -%}
           {%- if related.id != product.id and shown < section.settings.limit -%}
@@ -23,7 +23,7 @@
   "name": "Related products",
   "settings": [
     { "type": "text", "id": "heading", "label": "Heading", "default": "You may also like" },
-    { "type": "range", "id": "limit", "label": "Products", "min": 4, "max": 8, "step": 1, "default": 4 }
+    { "type": "range", "id": "limit", "label": "Products", "min": 4, "max": 16, "step": 1, "default": 12 }
   ]
 }
 {% endschema %}

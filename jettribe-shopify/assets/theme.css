@@ -708,6 +708,34 @@ ul { margin: 0; padding: 0; list-style: none; }
   gap: 16px;
   text-align: left;
 }
+.product-scroll {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding: 2px 2px 14px;
+  text-align: left;
+}
+.product-scroll .card {
+  flex: 0 0 240px;
+  scroll-snap-align: start;
+}
+.product-more {
+  max-height: min(78vh, 980px);
+  overflow-y: auto;
+  padding-right: 8px;
+}
+.product-scroll::-webkit-scrollbar,
+.product-more::-webkit-scrollbar { height: 10px; width: 10px; }
+.product-scroll::-webkit-scrollbar-thumb,
+.product-more::-webkit-scrollbar-thumb { background: #b5b5b5; border-radius: 8px; }
+.product-scroll::-webkit-scrollbar-track,
+.product-more::-webkit-scrollbar-track { background: #eee; }
+.review-list { display: grid; gap: 14px; text-align: left; }
+.review-card { border: 1px solid var(--line); background: #fff; padding: 14px 16px; }
+.review-card h3 { margin: 0 0 4px; font-size: 16px; }
+.review-stars { color: #e53d42; letter-spacing: 2px; font-size: 14px; }
+.review-card .review-meta { color: #757575; font-size: 13px; margin-bottom: 8px; }
 .card {
   border: 1px solid var(--line);
   background: #fff;

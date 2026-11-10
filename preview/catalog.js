@@ -151,7 +151,36 @@
         '<div class="card-actions">' + action + "</div></div></article>";
     }
 
+    function reviewStars(count) {
+      var n = Math.max(0, Math.min(5, Number(count) || 0));
+      return "★★★★★".slice(0, n) + "☆☆☆☆☆".slice(0, 5 - n);
+    }
+    function reviewHtml(product) {
+      var list = product.reviews || [];
+      if (!list.length) return "<p>No reviews for this product yet.</p>";
+      var total = list.reduce(function (sum, review) { return sum + Number(review.rating || 0); }, 0);
+      var html = '<p class="review-meta"><span class="review-stars" aria-hidden="true">' + reviewStars(Math.round(total / list.length)) + "</span> " + list.length + (list.length === 1 ? " review" : " reviews") + '</p><div class="review-list">';
+      list.forEach(function (review) {
+        html += '<article class="review-card"><div class="review-stars" aria-label="' + esc(review.rating || 0) + ' out of 5">' + reviewStars(review.rating) + "</div>";
+        if (review.title) html += "<h3>" + esc(review.title) + "</h3>";
+        html += '<p class="review-meta">' + esc(review.author || "Customer") + (review.date ? " · " + esc(review.date) : "") + "</p>";
+        html += "<p>" + esc(review.body || "") + "</p>";
+        if (review.image) html += '<p><img src="' + esc(review.image) + '" alt="" width="280" loading="lazy"></p>';
+        html += "</article>";
+      });
+      return html + "</div>";
+    }
+
     if (home) {
+      var onSale = products.filter(function (product) { return product.available && product.compare && product.compare > product.price; });
+      var featured = (onSale.length >= 8 ? onSale : products.filter(function (product) { return product.available; })).slice(0, 16);
+      var used = {};
+      featured.forEach(function (product) { used[product.handle] = true; });
+      var fresh = products.filter(function (product) { return product.available && !used[product.handle]; }).slice(0, 16);
+      var featRail = document.querySelector("[data-home-rail='featured']");
+      var newRail = document.querySelector("[data-home-rail='new']");
+      if (featRail) featRail.innerHTML = featured.map(card).join("");
+      if (newRail) newRail.innerHTML = fresh.map(card).join("");
       document.querySelectorAll(".card-title a").forEach(function (link) {
         var title = link.textContent.replace(/\s+/g, " ").trim().toLowerCase();
         var match = products.filter(function (product) {
@@ -231,7 +260,7 @@
         ? '<button class="btn" type="submit">Add to Cart</button>'
         : '<button class="btn" type="button" disabled>Out of Stock</button>';
       var primary = (product.categories && product.categories[0]) || (crumbs[0] && crumbs[0].handle) || "";
-      var related = productsIn(primary).filter(function (item) { return item.handle !== product.handle; }).slice(0, 4);
+      var related = productsIn(primary).filter(function (item) { return item.handle !== product.handle; }).slice(0, 16);
       productMount.innerHTML =
         '<nav class="breadcrumbs">' + crumbHtml + "</nav>" +
         '<div class="product"><div><div class="product-gallery-main"><img data-gallery-main src="' + esc(images[0]) + '" alt="' + esc(product.title) + '" width="1200" height="1200"></div><div class="thumbs">' + thumbs + "</div></div>" +
@@ -248,11 +277,13 @@
         "</div></form>" +
         '<div class="pay-note"><p>Pay with PayPal, Visa, Mastercard, American Express, or Discover.</p>' +
         '<div class="payment-row"><img src="../jettribe-shopify/assets/payment-ic.png" alt="PayPal, Visa, Discover, Mastercard, and American Express" width="294" height="32"></div></div></div></div>' +
-        '<div class="product-lower"><div class="tabs"><button class="is-active" type="button" data-tab="description">Description</button><button type="button" data-tab="shipping">Shipping</button><button type="button" data-tab="reviews">Reviews</button></div>' +
-        '<div class="tab-panel rte is-active" data-tab-panel="description">' + (product.description || "<p>No description was published for this product.</p>") + "</div>" +
+        '<div class="product-lower"><div class="tabs"><button class="is-active" type="button" data-tab="description">Description</button><button type="button" data-tab="shipping">Shipping</button><button type="button" data-tab="reviews">Reviews' + ((product.reviews && product.reviews.length) ? " (" + product.reviews.length + ")" : "") + "</button></div>" +
+        '<div class="tab-panel rte is-active" data-tab-panel="description"></div>' +
         '<div class="tab-panel rte" data-tab-panel="shipping"><p>Free USA shipping on orders of $400 or more. Shipping is calculated at checkout for smaller orders. Rider support: 951.246.3147, Monday through Friday, 9am to 4pm PST.</p></div>' +
-        '<div class="tab-panel" data-tab-panel="reviews"><p>Reviews stay with the product record. A Shopify reviews app shows them here after the catalog import.</p></div></div>' +
-        (related.length ? '<h2 class="page-heading"><span>You may also like</span></h2><div class="product-grid">' + related.map(card).join("") + "</div>" : "");
+        '<div class="tab-panel" data-tab-panel="reviews">' + reviewHtml(product) + "</div></div>" +
+        (related.length ? '<h2 class="page-heading"><span>You may also like</span></h2><div class="product-scroll" tabindex="0">' + related.map(card).join("") + "</div>" : "");
+      var descriptionPanel = productMount.querySelector('[data-tab-panel="description"]');
+      if (descriptionPanel) descriptionPanel.innerHTML = product.description || "<p>No description was published for this product.</p>";
       document.dispatchEvent(new CustomEvent("catalog:rendered"));
       return;
     }
@@ -301,8 +332,8 @@
       if (sort === "alpha-desc") return b.title.localeCompare(a.title);
       return 0;
     });
-    var per = 24;
-    var pageNum = Math.max(1, Number(query.get("page") || 1));
+    var per = filtered.length || 1;
+    var pageNum = 1;
     var pagesCount = Math.max(1, Math.ceil(filtered.length / per));
     if (pageNum > pagesCount) pageNum = pagesCount;
     var slice = filtered.slice((pageNum - 1) * per, pageNum * per);
@@ -405,7 +436,7 @@
       option("priceasc", "Price: Ascending", sort) +
       option("pricedesc", "Price: Descending", sort) +
       "</select></form></div>" +
-      (slice.length ? '<div class="product-grid">' + slice.map(card).join("") + "</div>" + pager : '<div class="empty-products"><p>No products match these filters.</p></div>') +
+      (slice.length ? '<div class="product-grid product-more">' + slice.map(card).join("") + "</div>" : '<div class="empty-products"><p>No products match these filters.</p></div>') +
       "</div></div>";
     document.dispatchEvent(new CustomEvent("catalog:rendered"));
   }

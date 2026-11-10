@@ -22,8 +22,8 @@
           <div class="toolbar">
             <p style="margin:0;" data-result-count>{{ search.results_count }} results for “{{ search.terms }}”</p>
           </div>
-          {% paginate search.results by 24 %}
-            <div class="product-grid">
+          {% paginate search.results by 50 %}
+            <div class="product-grid product-more">
               {%- for item in search.results -%}
                 {%- if item.object_type == 'product' -%}
                   {% render 'product-card', product: item %}

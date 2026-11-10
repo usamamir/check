@@ -232,7 +232,7 @@
       qsa("[data-tab]", scope).forEach(function (el) { el.classList.remove("is-active"); });
       qsa("[data-tab-panel]", scope).forEach(function (el) { el.classList.remove("is-active"); });
       tab.classList.add("is-active");
-      var panel = qs('[data-tab-panel="' + tab.getAttribute("data-tab") + '"]', scope);
+      var panel = qs('[data-tab-panel="' + tab.getAttribute("data-tab") + '"]', scope) || qs('[data-tab-panel="' + tab.getAttribute("data-tab") + '"]');
       if (panel) panel.classList.add("is-active");
     }
     var thumb = event.target.closest("[data-thumb]");

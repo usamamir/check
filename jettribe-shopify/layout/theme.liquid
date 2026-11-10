@@ -45,6 +45,7 @@
       freeShipping: {{ settings.free_shipping_threshold | times: 100 }},
       showEmptyMenuItems: {{ settings.show_empty_menu_items | json }},
       catalogUrl: {{ 'jt-categories.json' | asset_url | json }},
+      reviewsUrl: {{ 'jt-reviews.json' | asset_url | json }},
       routes: {
         root: {{ routes.root_url | json }},
         cart: {{ routes.cart_url | json }},

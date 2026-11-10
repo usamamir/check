@@ -7,7 +7,7 @@
 <section class="product-band{% if section.settings.style == 'dark' %} product-band--dark{% endif %}">
   <div class="container">
     <h2 class="page-heading"><span>{{ section.settings.heading }}</span></h2>
-    <div class="product-grid">
+    <div class="product-scroll" tabindex="0">
       {%- if source != blank and source.products_count > 0 -%}
         {%- for product in source.products limit: section.settings.products_to_show -%}
           {% render 'product-card', product: product %}
@@ -32,9 +32,9 @@
       "id": "products_to_show",
       "label": "Products to show",
       "min": 4,
-      "max": 16,
+      "max": 24,
       "step": 1,
-      "default": 8
+      "default": 16
     },
     {
       "type": "select",

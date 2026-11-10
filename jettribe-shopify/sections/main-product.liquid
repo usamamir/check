@@ -222,8 +222,8 @@
       <div class="tab-panel rte" data-tab-panel="shipping">
         {{ section.settings.shipping_text }}
       </div>
-      <div class="tab-panel" data-tab-panel="reviews">
-        <p>Product reviews appear here after a reviews app is installed. Add the app in the Apps section under this product.</p>
+      <div class="tab-panel" data-tab-panel="reviews" data-product-reviews="{{ product.handle | escape }}">
+        <p data-reviews-empty>No reviews for this product yet.</p>
       </div>
     </div>
   </div>
