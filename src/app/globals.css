@@ -1,0 +1,74 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: 210 20% 98%;
+  --foreground: 222 47% 11%;
+  --card: 0 0% 100%;
+  --card-foreground: 222 47% 11%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 222 47% 11%;
+  --primary: 222 47% 18%;
+  --primary-foreground: 210 40% 98%;
+  --secondary: 214 20% 94%;
+  --secondary-foreground: 222 47% 18%;
+  --muted: 214 20% 94%;
+  --muted-foreground: 215 16% 40%;
+  --accent: 214 20% 94%;
+  --accent-foreground: 222 47% 18%;
+  --destructive: 0 72% 51%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 214 20% 88%;
+  --input: 214 20% 88%;
+  --ring: 222 47% 18%;
+  --radius: 0.5rem;
+  --sidebar: 222 30% 12%;
+  --sidebar-foreground: 210 20% 96%;
+  --sidebar-muted: 215 16% 65%;
+  --tier-a: 142 71% 35%;
+  --tier-b: 199 89% 38%;
+  --tier-c: 38 92% 40%;
+  --tier-d: 215 14% 45%;
+}
+
+.dark {
+  --background: 222 30% 8%;
+  --foreground: 210 20% 96%;
+  --card: 222 28% 11%;
+  --card-foreground: 210 20% 96%;
+  --popover: 222 28% 11%;
+  --popover-foreground: 210 20% 96%;
+  --primary: 210 40% 96%;
+  --primary-foreground: 222 47% 11%;
+  --secondary: 217 20% 18%;
+  --secondary-foreground: 210 20% 96%;
+  --muted: 217 20% 18%;
+  --muted-foreground: 215 16% 65%;
+  --accent: 217 20% 18%;
+  --accent-foreground: 210 20% 96%;
+  --destructive: 0 62% 45%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 217 20% 20%;
+  --input: 217 20% 20%;
+  --ring: 212 96% 70%;
+  --sidebar: 222 35% 7%;
+  --sidebar-foreground: 210 20% 96%;
+  --sidebar-muted: 215 16% 55%;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: var(--font-geist-sans), "Segoe UI", sans-serif;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}

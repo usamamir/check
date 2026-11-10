@@ -1,0 +1,39 @@
+appId: com.supplyscout.app
+productName: SupplyScout
+copyright: Copyright © SupplyScout
+directories:
+  output: release
+  buildResources: electron/assets
+files:
+  - electron/main.cjs
+  - package.json
+extraResources:
+  - from: .next/standalone
+    to: server
+    filter:
+      - "**/*"
+  - from: electron-resources/node
+    to: node
+    filter:
+      - "**/*"
+win:
+  target:
+    - target: nsis
+      arch:
+        - x64
+    - target: portable
+      arch:
+        - x64
+  signAndEditExecutable: false
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+  shortcutName: SupplyScout
+  artifactName: SupplyScout-Setup-${version}.${ext}
+portable:
+  artifactName: SupplyScout-Portable-${version}.${ext}
+asar: true
+npmRebuild: false
+electronVersion: 33.2.1
