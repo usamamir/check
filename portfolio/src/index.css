@@ -1,0 +1,203 @@
+:root {
+  color-scheme: dark;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: #000;
+  overflow: hidden;
+}
+
+body[data-phase='modern'] {
+  overflow: auto;
+}
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+a {
+  color: inherit;
+}
+
+::selection {
+  background: #ff9900;
+  color: #111;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+/* Icon glyphs (no emoji) */
+.glyph {
+  width: 22px;
+  height: 22px;
+  display: block;
+  position: relative;
+}
+
+.glyph--doc {
+  border: 2px solid currentColor;
+  border-radius: 2px;
+}
+.glyph--doc::before {
+  content: '';
+  position: absolute;
+  left: 4px;
+  right: 4px;
+  top: 5px;
+  height: 2px;
+  background: currentColor;
+  box-shadow: 0 4px 0 currentColor, 0 8px 0 currentColor;
+}
+
+.glyph--box {
+  border: 2px solid currentColor;
+  border-radius: 2px;
+}
+.glyph--box::before {
+  content: '';
+  position: absolute;
+  left: -2px;
+  right: -2px;
+  top: 6px;
+  height: 2px;
+  background: currentColor;
+}
+.glyph--box::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: -2px;
+  bottom: -2px;
+  width: 2px;
+  background: currentColor;
+  transform: translateX(-50%);
+}
+
+.glyph--chart {
+  border-bottom: 2px solid currentColor;
+  border-left: 2px solid currentColor;
+}
+.glyph--chart::before {
+  content: '';
+  position: absolute;
+  left: 3px;
+  bottom: 0;
+  width: 3px;
+  height: 8px;
+  background: currentColor;
+  box-shadow: 5px -4px 0 currentColor, 10px 2px 0 currentColor;
+}
+
+.glyph--search {
+  border: 2px solid currentColor;
+  border-radius: 50%;
+  width: 14px;
+  height: 14px;
+  margin: 1px 0 0 1px;
+}
+.glyph--search::after {
+  content: '';
+  position: absolute;
+  width: 8px;
+  height: 2px;
+  background: currentColor;
+  right: -5px;
+  bottom: -3px;
+  transform: rotate(45deg);
+}
+
+.glyph--sheet {
+  border: 2px solid currentColor;
+}
+.glyph--sheet::before {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  background:
+    linear-gradient(currentColor, currentColor) 0 4px / 100% 1px no-repeat,
+    linear-gradient(currentColor, currentColor) 0 9px / 100% 1px no-repeat,
+    linear-gradient(currentColor, currentColor) 6px 0 / 1px 100% no-repeat;
+}
+
+.glyph--mail {
+  border: 2px solid currentColor;
+  border-radius: 2px;
+}
+.glyph--mail::before {
+  content: '';
+  position: absolute;
+  left: 2px;
+  right: 2px;
+  top: 3px;
+  height: 8px;
+  border-top: 2px solid currentColor;
+  transform: perspective(8px) rotateX(20deg);
+}
+
+.glyph--trash {
+  border: 2px solid currentColor;
+  border-top: none;
+  border-radius: 0 0 3px 3px;
+  height: 16px;
+  margin-top: 5px;
+}
+.glyph--trash::before {
+  content: '';
+  position: absolute;
+  left: -3px;
+  right: -3px;
+  top: -4px;
+  height: 3px;
+  background: currentColor;
+}
+.glyph--trash::after {
+  content: '';
+  position: absolute;
+  left: 3px;
+  right: 3px;
+  top: 3px;
+  height: 8px;
+  background:
+    linear-gradient(currentColor, currentColor) 0 0 / 2px 100% no-repeat,
+    linear-gradient(currentColor, currentColor) 50% 0 / 2px 100% no-repeat,
+    linear-gradient(currentColor, currentColor) 100% 0 / 2px 100% no-repeat;
+}

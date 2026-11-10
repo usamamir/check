@@ -1,0 +1,25 @@
+# Force HTTPS (after SSL is enabled in Hostinger)
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Redirect HTTP -> HTTPS
+  RewriteCond %{HTTPS} !=on
+  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+  # Prefer apex domain (digivistaco.com). Comment these 2 lines if you prefer www.
+  RewriteCond %{HTTP_HOST} ^www\.digivistaco\.com$ [NC]
+  RewriteRule ^ https://digivistaco.com%{REQUEST_URI} [L,R=301]
+</IfModule>
+
+# Security + caching basics
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# SPA-safe: serve index.html for unknown routes (anchors still work)
+<IfModule mod_rewrite.c>
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule . /index.html [L]
+</IfModule>
