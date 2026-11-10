@@ -313,9 +313,9 @@
       '<nav class="breadcrumbs">' + crumbs + "</nav>" +
       '<h1 class="page-heading" style="justify-content:flex-start;"><span>' + esc(cat.name) + "</span></h1>" +
       '<div class="collection-layout"><aside>' +
-      (colorHtml ? '<details class="facet" open><summary>Color</summary><div class="color-swatches">' + colorHtml + "</div></details>" : "") +
-      (sizeHtml ? '<details class="facet" open><summary>Size</summary><div class="size-chips">' + sizeHtml + "</div></details>" : "") +
       (childHtml ? '<details class="facet" open><summary>' + esc(cat.name) + "</summary><ul>" + childHtml + "</ul></details>" : "") +
+      (sizeHtml ? '<details class="facet" open><summary>Size</summary><div class="size-chips">' + sizeHtml + "</div></details>" : "") +
+      (colorHtml ? '<details class="facet" open><summary>Color</summary><div class="color-swatches">' + colorHtml + "</div></details>" : "") +
       (prices.length ? '<details class="facet" open><summary>Price</summary><form class="price-range" data-jt-price method="get" action="' + esc(searchBase()) + '">' +
         '<input type="hidden" name="jtcat" value="' + esc(handle) + '">' +
         (selectedColors.length ? '<input type="hidden" name="color" value="' + esc(selectedColors.join(",")) + '">' : "") +

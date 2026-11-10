@@ -248,14 +248,19 @@ ul { margin: 0; padding: 0; list-style: none; }
 .search-form--split select {
   flex: none;
   height: 28px;
-  max-width: 148px;
+  max-width: 168px;
   padding: 0 12px 0 0;
   border: 0;
   border-right: 1px solid rgba(255,255,255,0.28);
-  background: transparent;
+  background-color: transparent;
   color: #fff;
+  color-scheme: dark;
   font-size: 14px;
   font-weight: 700;
+}
+.search-form--split select option {
+  color: #161616;
+  background-color: #fff;
 }
 .search-form--split input[type="search"] {
   flex: 1;

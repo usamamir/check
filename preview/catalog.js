@@ -388,9 +388,9 @@
       '<nav class="breadcrumbs">' + crumbs + "</nav>" +
       '<h1 class="page-heading" style="justify-content:flex-start;"><span>' + esc(title) + "</span></h1>" +
       '<div class="collection-layout"><aside>' +
-      (colorHtml ? '<details class="facet" open><summary>Color</summary><div class="color-swatches">' + colorHtml + "</div></details>" : "") +
-      (sizeHtml ? '<details class="facet" open><summary>Size</summary><div class="size-chips">' + sizeHtml + "</div></details>" : "") +
       (childHtml ? '<details class="facet" open><summary>' + esc(sideName) + "</summary><ul>" + childHtml + "</ul></details>" : "") +
+      (sizeHtml ? '<details class="facet" open><summary>Size</summary><div class="size-chips">' + sizeHtml + "</div></details>" : "") +
+      (colorHtml ? '<details class="facet" open><summary>Color</summary><div class="color-swatches">' + colorHtml + "</div></details>" : "") +
       '<details class="facet" open><summary>Price</summary><form class="price-range" data-price-range method="get" action="collection.html">' +
       hidden(query, ["min", "max", "page"]) +
       '<div class="price-range-labels"><span data-price-min-label>' + money(rangeMin) + "</span><span data-price-max-label>" + money(rangeMax) + "</span></div>" +

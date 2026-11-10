@@ -87,8 +87,8 @@
         "type": "checkbox",
         "id": "show_vip_deals",
         "label": "Show VIP Deals in the menu",
-        "info": "Turn this off outside the one or two times a year VIP is open.",
-        "default": true
+        "info": "Leave this off. Turn it on only while a VIP promotion is running.",
+        "default": false
       },
       {
         "type": "checkbox",
