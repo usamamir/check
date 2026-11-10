@@ -1,0 +1,9 @@
+node_modules
+dist
+release
+.DS_Store
+*.local
+tsconfig.tsbuildinfo
+*.exe
+!downloads/*.exe
+build-resources/

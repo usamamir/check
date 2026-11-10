@@ -1,0 +1,73 @@
+{
+  "name": "fitbod-clone",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Unofficial Fitbod homepage clone desktop app",
+  "author": "Fitbod Clone",
+  "type": "module",
+  "main": "electron/main.cjs",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "electron:dev": "electron .",
+    "icon": "mkdir -p build-resources && ffmpeg -y -i public/assets/app-icon.jpg build-resources/icon.png",
+    "dist:win": "npm run icon && npm run build && electron-builder --win nsis zip --x64 --publish never"
+  },
+  "build": {
+    "appId": "me.fitbod.clone",
+    "productName": "FitbodClone",
+    "copyright": "Unofficial demo clone",
+    "directories": {
+      "output": "release",
+      "buildResources": "build-resources"
+    },
+    "files": [
+      "dist/**/*",
+      "electron/**/*",
+      "package.json",
+      "!node_modules/**/*",
+      "!**/node_modules/**/*"
+    ],
+    "asar": true,
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64"]
+        },
+        {
+          "target": "zip",
+          "arch": ["x64"]
+        }
+      ],
+      "icon": "build-resources/icon.png",
+      "artifactName": "FitbodClone-Setup-${version}.${ext}"
+    },
+    "nsis": {
+      "oneClick": true,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": false,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Fitbod Clone",
+      "uninstallDisplayName": "Fitbod Clone",
+      "artifactName": "FitbodClone-Setup.exe",
+      "deleteAppDataOnUninstall": true,
+      "runAfterFinish": true
+    }
+  },
+  "dependencies": {
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.1.2",
+    "@types/react-dom": "^19.1.2",
+    "@vitejs/plugin-react": "^4.4.1",
+    "electron": "^36.4.0",
+    "electron-builder": "^26.18.0",
+    "typescript": "~5.8.3",
+    "vite": "^6.3.5"
+  }
+}
