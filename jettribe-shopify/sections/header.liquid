@@ -5,7 +5,7 @@
       {%- if settings.show_translate -%}
         <div id="google_translate_element"></div>
       {%- endif -%}
-      <a href="#" data-open-wish>Wishlists</a>
+      <button class="linkish" type="button" data-open-wish>Wishlists</button>
       <span class="sep">|</span>
       <a href="{{ settings.returns_url }}">Returns</a>
       <span class="sep">|</span>
@@ -79,7 +79,7 @@
       {%- endif -%}
       <div class="mobile-utilities">
         <a href="tel:{{ section.settings.phone | replace: ' ', '' | replace: '.', '' }}">{{ section.settings.phone }}</a>
-        <a href="#" data-open-wish>Wishlist</a>
+        <button class="linkish" type="button" data-open-wish>Wishlist</button>
         <a href="{{ settings.returns_url }}">Returns</a>
         <a href="{{ routes.account_login_url }}">Sign in</a>
         <a href="{{ settings.gift_card_link }}">Gift Certificates</a>

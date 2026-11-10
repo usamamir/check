@@ -11,6 +11,7 @@ Upload the theme and the product file separately. The theme zip is the only file
    Turn those on in Settings, Payments (Shopify Payments and PayPal). The theme cannot switch processors on.
    PayPal Pay Later text uses the messages account already on jettribe.com.
    Product reviews copied from BigCommerce show on each product's Reviews tab. 161 reviews across 77 products are included in the theme.
+   After publish, submit the store sitemap in Google Search Console. Shopify serves it at /sitemap.xml. Paste Google's verification code in Theme settings, SEO.
    Empty menu categories, including empty Outlet links, stay hidden. Turn them back on in Theme settings, Navigation, "Show menu categories that have no products".
    VIP Deals stays in the menu. Turn it off in Theme settings, Navigation, "Show VIP Deals in the menu" when VIP is closed.
 

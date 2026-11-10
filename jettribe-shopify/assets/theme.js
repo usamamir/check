@@ -1062,11 +1062,49 @@
       if (review.title) html += "<h3>" + esc(review.title) + "</h3>";
       html += '<p class="review-meta">' + esc(review.author || "Customer") + (review.date ? " · " + esc(review.date) : "") + "</p>";
       html += "<p>" + esc(review.body || "") + "</p>";
-      if (review.image) html += '<p><img src="' + esc(review.image) + '" alt="" width="280" loading="lazy"></p>';
+      if (review.image) html += '<p><img src="' + esc(review.image) + '" alt="' + esc(review.title || "Customer photo") + '" width="280" loading="lazy"></p>';
       html += "</article>";
     });
     root.innerHTML = html + "</div>";
+    var old = qs("script[data-review-schema]");
+    if (old) old.remove();
+    var data = {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": (qs(".product-title") || {}).textContent || "",
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": (total / list.length).toFixed(1),
+        "reviewCount": String(list.length)
+      },
+      "review": list.slice(0, 8).map(function (review) {
+        return {
+          "@type": "Review",
+          "author": { "@type": "Person", "name": review.author || "Customer" },
+          "datePublished": review.date || "",
+          "name": review.title || "",
+          "reviewBody": review.body || "",
+          "reviewRating": { "@type": "Rating", "ratingValue": String(review.rating || 0), "bestRating": "5" }
+        };
+      })
+    };
+    var script = document.createElement("script");
+    script.type = "application/ld+json";
+    script.setAttribute("data-review-schema", "");
+    script.textContent = JSON.stringify(data);
+    document.head.appendChild(script);
   }
+  function demoteExtraHeadings() {
+    qsa(".rte h1, .product-lower h1").forEach(function (heading) {
+      if (heading.classList.contains("product-title")) return;
+      var next = document.createElement("h2");
+      next.innerHTML = heading.innerHTML;
+      next.className = heading.className;
+      heading.replaceWith(next);
+    });
+  }
+  demoteExtraHeadings();
+  document.addEventListener("catalog:rendered", demoteExtraHeadings);
   var reviewRoot = qs("[data-product-reviews]");
   if (reviewRoot && window.Jettribe && Jettribe.reviewsUrl) {
     fetch(Jettribe.reviewsUrl, { headers: { Accept: "application/json" } })

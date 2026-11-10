@@ -20,9 +20,15 @@
     {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
   </title>
 
-  {% if page_description %}
-    <meta name="description" content="{{ page_description | escape }}">
-  {% endif %}
+  {%- liquid
+    assign seo_description = page_description | default: settings.default_meta_description
+  -%}
+  {%- if seo_description != blank -%}
+    <meta name="description" content="{{ seo_description | escape }}">
+  {%- endif -%}
+  {%- if settings.google_site_verification != blank -%}
+    <meta name="google-site-verification" content="{{ settings.google_site_verification | escape }}">
+  {%- endif -%}
 
   {% render 'meta-tags' %}
   {{ content_for_header }}

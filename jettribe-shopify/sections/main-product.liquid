@@ -236,6 +236,9 @@
       "name": {{ product.title | json }},
       "description": {{ product.description | strip_html | truncate: 500 | json }},
       "sku": {{ current.sku | json }},
+      {%- if product.featured_image -%}
+      "image": {{ product.featured_image | image_url: width: 1200 | json }},
+      {%- endif -%}
       "brand": { "@type": "Brand", "name": {{ product.vendor | default: shop.name | json }} },
       "offers": {
         "@type": "Offer",

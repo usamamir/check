@@ -8,7 +8,7 @@
           {%- if collection.image -%}
             <img src="{{ collection.image | image_url: width: 800 }}" alt="{{ collection.title | escape }}" width="800" height="800">
           {%- else -%}
-            <img src="{{ 'cat-wetsuits.jpg' | asset_url }}" alt="" width="800" height="800">
+            <img src="{{ 'cat-wetsuits.jpg' | asset_url }}" alt="{{ collection.title | escape }}" width="800" height="800" loading="lazy">
           {%- endif -%}
           <span class="cate-title">{{ collection.title }}</span>
         </a>

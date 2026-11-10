@@ -201,5 +201,23 @@
         "default": "https://www.youtube.com/user/Jettribe1"
       }
     ]
+  },
+  {
+    "name": "SEO",
+    "settings": [
+      {
+        "type": "textarea",
+        "id": "default_meta_description",
+        "label": "Default meta description",
+        "info": "Used when a page does not have its own description.",
+        "default": "Jettribe personal watercraft gear: Coast Guard vests, wetsuits, goggles, gloves, boots, and PWC covers. Free USA shipping on orders of $400 or more."
+      },
+      {
+        "type": "text",
+        "id": "google_site_verification",
+        "label": "Google Search Console verification code",
+        "info": "Paste only the content value from the Search Console HTML tag. Leave this blank until Google gives you the code."
+      }
+    ]
   }
 ]

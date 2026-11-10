@@ -283,7 +283,14 @@
         '<div class="tab-panel" data-tab-panel="reviews">' + reviewHtml(product) + "</div></div>" +
         (related.length ? '<h2 class="page-heading"><span>You may also like</span></h2><div class="product-scroll" tabindex="0">' + related.map(card).join("") + "</div>" : "");
       var descriptionPanel = productMount.querySelector('[data-tab-panel="description"]');
-      if (descriptionPanel) descriptionPanel.innerHTML = product.description || "<p>No description was published for this product.</p>";
+      if (descriptionPanel) {
+        descriptionPanel.innerHTML = product.description || "<p>No description was published for this product.</p>";
+        descriptionPanel.querySelectorAll("h1").forEach(function (heading) {
+          var next = document.createElement("h2");
+          next.innerHTML = heading.innerHTML;
+          heading.replaceWith(next);
+        });
+      }
       document.dispatchEvent(new CustomEvent("catalog:rendered"));
       return;
     }
