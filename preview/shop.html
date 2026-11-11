@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Shop — Jettribe</title>
+  <link rel="stylesheet" href="./critical.css" />
+  <script>window.JT={homeUrl:'./',restUrl:'/wp-json/',isShop:true,i18n:{loading:'Loading…',search:'Search gear…'}};</script>
+</head>
+<body class="jt-theme jt-commerce">
+  <div class="jt-download-banner"><div class="jt-container jt-download-banner__inner"><p>Preview shop listing. <a href="./downloads/jettribe-theme.zip" download><strong>Download theme zip</strong></a></p></div></div>
+  <header class="jt-header" data-jt-header>
+    <div class="jt-header__bar jt-container">
+      <a class="jt-logo" href="./index.html"><span class="jt-logo__mark">JT</span><span class="jt-logo__text">Jettribe</span></a>
+      <nav class="jt-nav"><a class="jt-nav__link" href="./shop.html">Shop</a><a class="jt-nav__link" href="./product.html">PDP</a><a class="jt-nav__link" href="./index.html">Home</a></nav>
+      <div class="jt-header__actions">
+        <button class="jt-icon-btn" type="button" data-jt-search-open><span class="screen-reader-text">Search</span>⌕</button>
+        <button class="jt-icon-btn jt-cart-btn" type="button" data-jt-cart-open><span class="jt-cart-count" data-jt-cart-count>0</span>Cart</button>
+      </div>
+    </div>
+  </header>
+  <div id="jt-search" class="jt-search" data-jt-search hidden><div class="jt-container"><form><input type="search" data-jt-search-input placeholder="Search gear…" /><button type="button" data-jt-search-close>×</button></form><div data-jt-search-results></div></div></div>
+  <aside class="jt-cart" data-jt-cart hidden><div class="jt-cart__backdrop" data-jt-cart-close></div><div class="jt-cart__panel"><header class="jt-cart__head"><h2>Cart</h2><button data-jt-cart-close>×</button></header><div data-jt-cart-items></div><footer class="jt-cart__foot"><div class="jt-cart__subtotal"><span>Subtotal</span><strong data-jt-cart-subtotal>—</strong></div></footer></div></aside>
+  <div class="jt-toast-region" data-jt-toasts></div>
+  <div class="jt-cursor" data-jt-cursor hidden></div>
+
+  <main id="primary" class="jt-main jt-shop-main" style="--accent:#00E5FF">
+    <header class="jt-cat-header" data-jt-caustics>
+      <div class="jt-cat-header__caustics" aria-hidden="true"></div>
+      <div class="jt-container">
+        <nav class="jt-breadcrumbs">Home / Shop</nav>
+        <h1 data-jt-split>All gear</h1>
+        <p>PLACEHOLDER catalog for theme development.</p>
+      </div>
+    </header>
+    <div class="jt-container jt-shop-layout">
+      <aside class="jt-filters" data-jt-filters>
+        <form>
+          <label><span>Sort</span><select><option>Featured</option><option>Newest</option><option>Price</option></select></label>
+          <label><span>In stock</span><input type="checkbox" checked /></label>
+          <button class="jt-btn jt-btn--ghost" type="button">Apply</button>
+        </form>
+        <p class="jt-filters__count" data-jt-result-count></p>
+      </aside>
+      <section class="jt-shop-results">
+        <div class="jt-grid jt-grid--products" data-jt-product-grid>
+          <article class="jt-card" data-jt-card style="--accent:#00E5FF"><a class="jt-card__media" href="./product.html"><div class="jt-card__placeholder"><span>CI</span></div></a><div class="jt-card__body"><span class="jt-badge">PLACEHOLDER</span><h3 class="jt-card__title"><a href="./product.html">Circuit 2-Piece Wetsuit Set</a></h3><div class="jt-card__price">Price TBA</div><button class="jt-btn jt-btn--ghost jt-card__quick" data-jt-quick-add data-product-id="1">Quick add</button></div></article>
+          <article class="jt-card" data-jt-card style="--accent:#FF3B5C"><a class="jt-card__media" href="./product.html"><div class="jt-card__placeholder"><span>HY</span></div></a><div class="jt-card__body"><span class="jt-badge">PLACEHOLDER</span><h3 class="jt-card__title"><a href="./product.html">Hyper 2-Piece Wetsuit Set</a></h3><div class="jt-card__price">Price TBA</div><button class="jt-btn jt-btn--ghost jt-card__quick" data-jt-quick-add data-product-id="2">Quick add</button></div></article>
+          <article class="jt-card" data-jt-card style="--accent:#7CFF6B"><a class="jt-card__media" href="./product.html"><div class="jt-card__placeholder"><span>HT</span></div></a><div class="jt-card__body"><span class="jt-badge">PLACEHOLDER</span><h3 class="jt-card__title"><a href="./product.html">Hyper Tour Coat</a></h3><div class="jt-card__price">Price TBA</div><button class="jt-btn jt-btn--ghost jt-card__quick" data-jt-quick-add data-product-id="3">Quick add</button></div></article>
+          <article class="jt-card" data-jt-card style="--accent:#FFB020"><a class="jt-card__media" href="./product.html"><div class="jt-card__placeholder"><span>GR</span></div></a><div class="jt-card__body"><span class="jt-badge">PLACEHOLDER</span><h3 class="jt-card__title"><a href="./product.html">GRB Race Boot</a></h3><div class="jt-card__price">Price TBA</div><button class="jt-btn jt-btn--ghost jt-card__quick" data-jt-quick-add data-product-id="4">Quick add</button></div></article>
+          <article class="jt-card" data-jt-card style="--accent:#A78BFA"><a class="jt-card__media" href="./product.html"><div class="jt-card__placeholder"><span>GP</span></div></a><div class="jt-card__body"><span class="jt-badge">PLACEHOLDER</span><h3 class="jt-card__title"><a href="./product.html">GP-40 Gloves</a></h3><div class="jt-card__price">Price TBA</div><button class="jt-btn jt-btn--ghost jt-card__quick" data-jt-quick-add data-product-id="5">Quick add</button></div></article>
+          <article class="jt-card" data-jt-card style="--accent:#00E5FF"><a class="jt-card__media" href="./product.html"><div class="jt-card__placeholder"><span>GO</span></div></a><div class="jt-card__body"><span class="jt-badge">PLACEHOLDER</span><h3 class="jt-card__title"><a href="./product.html">Classic Floating Goggles</a></h3><div class="jt-card__price">Price TBA</div><button class="jt-btn jt-btn--ghost jt-card__quick" data-jt-quick-add data-product-id="6">Quick add</button></div></article>
+        </div>
+      </section>
+    </div>
+  </main>
+  <footer class="jt-footer"><div class="jt-container jt-footer__legal"><p><a href="./downloads/jettribe-theme.zip" download>Download theme zip</a> · <a href="./index.html">Home</a></p></div></footer>
+  <style>.jt-download-banner{background:#0a1a24;border-bottom:1px solid #134;padding:.6rem 0}.jt-download-banner__inner{display:flex;justify-content:space-between;gap:1rem;align-items:center}.jt-download-banner p{margin:0}</style>
+  <script type="module">
+    const manifest = await fetch('./manifest.json').then(r => r.json());
+    for (const key of ['src/entries/main.ts','src/entries/shop.ts']) {
+      const item = manifest[key]; if (!item) continue;
+      for (const css of item.css || []) { const l=document.createElement('link'); l.rel='stylesheet'; l.href='./assets/'+css; document.head.appendChild(l); }
+      const s=document.createElement('script'); s.type='module'; s.src='./assets/'+item.file; document.body.appendChild(s);
+    }
+  </script>
+</body>
+</html>

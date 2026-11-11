@@ -1,0 +1,78 @@
+{
+  "_index-B5p9zUun.js": {
+    "file": "assets/index-B5p9zUun.js",
+    "name": "index",
+    "imports": [
+      "_reduced-9gYO58R3.js"
+    ]
+  },
+  "_reduced-9gYO58R3.js": {
+    "file": "assets/reduced-9gYO58R3.js",
+    "name": "reduced"
+  },
+  "src/entries/home.ts": {
+    "file": "assets/home-DjGmPNmp.js",
+    "name": "home",
+    "src": "src/entries/home.ts",
+    "isEntry": true,
+    "imports": [
+      "_index-B5p9zUun.js",
+      "_reduced-9gYO58R3.js"
+    ]
+  },
+  "src/entries/main.ts": {
+    "file": "assets/main-BPUyOYSo.js",
+    "name": "main",
+    "src": "src/entries/main.ts",
+    "isEntry": true,
+    "imports": [
+      "_index-B5p9zUun.js",
+      "_reduced-9gYO58R3.js"
+    ],
+    "dynamicImports": [
+      "src/three/index.ts"
+    ],
+    "css": [
+      "assets/main-B25-d-v-.css"
+    ]
+  },
+  "src/entries/product.ts": {
+    "file": "assets/product-nvV2gheJ.js",
+    "name": "product",
+    "src": "src/entries/product.ts",
+    "isEntry": true,
+    "imports": [
+      "_index-B5p9zUun.js",
+      "_reduced-9gYO58R3.js"
+    ]
+  },
+  "src/entries/shop.ts": {
+    "file": "assets/shop-Vgu9gWJB.js",
+    "name": "shop",
+    "src": "src/entries/shop.ts",
+    "isEntry": true,
+    "imports": [
+      "_index-B5p9zUun.js",
+      "_reduced-9gYO58R3.js"
+    ]
+  },
+  "src/entries/three.ts": {
+    "file": "assets/three-BulvM6aP.js",
+    "name": "three",
+    "src": "src/entries/three.ts",
+    "isEntry": true,
+    "imports": [
+      "src/three/index.ts",
+      "_reduced-9gYO58R3.js"
+    ]
+  },
+  "src/three/index.ts": {
+    "file": "assets/three-CAl8hV4l.js",
+    "name": "three",
+    "src": "src/three/index.ts",
+    "isDynamicEntry": true,
+    "imports": [
+      "_reduced-9gYO58R3.js"
+    ]
+  }
+}

@@ -1,0 +1,2 @@
+import{g as t,S as o}from"./index-B5p9zUun.js";import"./reduced-9gYO58R3.js";const e=document.querySelector("[data-jt-pin-story]");if(e&&!window.matchMedia("(prefers-reduced-motion: reduce)").matches){const r=e.querySelectorAll(".jt-featured__swatch");t.timeline({scrollTrigger:{trigger:e,start:"top top",end:"+=120%",scrub:!0,pin:!0}}).fromTo(r,{xPercent:8,opacity:.4},{xPercent:0,opacity:1,stagger:.15,ease:"none"})}o.refresh();
+//# sourceMappingURL=home-DjGmPNmp.js.map

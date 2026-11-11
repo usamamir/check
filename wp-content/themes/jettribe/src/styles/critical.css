@@ -1,0 +1,336 @@
+@import "./tokens.css";
+
+@font-face {
+  font-family: "Barlow Condensed";
+  font-style: normal;
+  font-weight: 600 800;
+  font-display: swap;
+  src: url("https://fonts.gstatic.com/s/barlowcondensed/v12/HTxwL3I-JCGChYJ8VI-L6OO_au7B49_V3ISusOlm_Cw.woff2") format("woff2");
+  unicode-range: U+0000-00FF;
+}
+
+@font-face {
+  font-family: "Sora";
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url("https://fonts.gstatic.com/s/sora/v12/xMQOuFFYT72X5wkB_18qmnw.woff2") format("woff2");
+  unicode-range: U+0000-00FF;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--jt-bg);
+  color: var(--jt-text);
+  font-family: var(--jt-body);
+  line-height: 1.55;
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: auto;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(1200px 600px at 80% -10%, color-mix(in srgb, var(--jt-accent) 18%, transparent), transparent 60%),
+    radial-gradient(900px 500px at 10% 20%, color-mix(in srgb, var(--jt-water) 35%, transparent), transparent 55%),
+    linear-gradient(180deg, #071018 0%, var(--jt-bg) 40%, #03060a 100%);
+  background-attachment: fixed;
+}
+
+img,
+svg,
+video,
+canvas {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+  text-decoration-thickness: 0.08em;
+  text-underline-offset: 0.18em;
+}
+
+button,
+input,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+.jt-skip {
+  position: absolute;
+  left: -999px;
+  top: 0;
+  background: var(--jt-accent);
+  color: var(--jt-bg);
+  padding: 0.75rem 1rem;
+  z-index: 10000;
+}
+
+.jt-skip:focus {
+  left: 1rem;
+  top: 1rem;
+}
+
+.jt-container {
+  width: var(--jt-container);
+  margin-inline: auto;
+}
+
+.jt-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  height: var(--jt-header-h);
+  transition: transform var(--jt-base) var(--jt-ease), background var(--jt-base) var(--jt-ease), backdrop-filter var(--jt-base) var(--jt-ease);
+}
+
+.jt-header.is-scrolled {
+  background: color-mix(in srgb, var(--jt-bg) 72%, transparent);
+  backdrop-filter: blur(16px);
+}
+
+.jt-header.is-hidden {
+  transform: translateY(-100%);
+}
+
+.jt-header__bar {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 1rem;
+  height: var(--jt-header-h);
+}
+
+.jt-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  text-decoration: none;
+}
+
+.jt-logo__mark {
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border: 1px solid color-mix(in srgb, var(--jt-accent) 60%, transparent);
+  color: var(--jt-accent);
+  font-family: var(--jt-display);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.jt-logo__text {
+  font-family: var(--jt-display);
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.jt-nav {
+  display: none;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+@media (min-width: 900px) {
+  .jt-nav {
+    display: flex;
+  }
+
+  .jt-header__menu-btn {
+    display: none;
+  }
+}
+
+.jt-nav__link {
+  appearance: none;
+  background: none;
+  border: 0;
+  padding: 0.4rem 0;
+  color: var(--jt-text);
+  font-family: var(--jt-display);
+  font-size: 1.05rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  position: relative;
+  cursor: pointer;
+}
+
+.jt-nav__link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 1px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--jt-fast) var(--jt-ease);
+}
+
+.jt-nav__link:hover::after,
+.jt-nav__link:focus-visible::after {
+  transform: scaleX(1);
+}
+
+.jt-header__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  justify-self: end;
+}
+
+.jt-icon-btn {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: var(--jt-text);
+  width: 2.5rem;
+  height: 2.5rem;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  position: relative;
+}
+
+.jt-cart-count {
+  position: absolute;
+  top: 0.2rem;
+  right: 0.15rem;
+  min-width: 1.1rem;
+  height: 1.1rem;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--jt-bg);
+  font-size: 0.65rem;
+  font-weight: 700;
+  display: grid;
+  place-items: center;
+  padding: 0 0.25rem;
+}
+
+.jt-hero {
+  position: relative;
+  min-height: 100svh;
+  display: grid;
+  align-items: end;
+  overflow: clip;
+}
+
+.jt-hero__stage {
+  position: absolute;
+  inset: 0;
+}
+
+.jt-hero__poster,
+.jt-hero__canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.jt-hero__content {
+  position: relative;
+  z-index: 2;
+  padding-block: 6rem 5rem;
+  max-width: 48rem;
+}
+
+.jt-brand-kicker {
+  margin: 0 0 0.75rem;
+  font-family: var(--jt-display);
+  font-size: clamp(2rem, 6vw, 4rem);
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--jt-accent);
+  text-shadow: 0 0 40px color-mix(in srgb, var(--jt-accent) 35%, transparent);
+}
+
+.jt-hero__title {
+  margin: 0;
+  font-family: var(--jt-display);
+  font-size: clamp(3rem, 9vw, 7rem);
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  line-height: 0.9;
+}
+
+.jt-hero__lede {
+  margin: 1rem 0 1.75rem;
+  max-width: 32rem;
+  color: var(--jt-muted);
+  font-size: clamp(1rem, 1.4vw, 1.15rem);
+}
+
+.jt-btn {
+  appearance: none;
+  border: 1px solid transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 3rem;
+  padding: 0.75rem 1.35rem;
+  font-family: var(--jt-display);
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-radius: var(--jt-radius-sm);
+  cursor: pointer;
+  transition: transform var(--jt-fast) var(--jt-ease), background var(--jt-fast) var(--jt-ease), color var(--jt-fast) var(--jt-ease), border-color var(--jt-fast) var(--jt-ease);
+}
+
+.jt-btn--primary {
+  background: var(--accent);
+  color: var(--jt-bg);
+}
+
+.jt-btn--ghost {
+  background: transparent;
+  border-color: color-mix(in srgb, var(--jt-text) 24%, transparent);
+  color: var(--jt-text);
+}
+
+.jt-btn:hover,
+.jt-btn:focus-visible {
+  transform: translateY(-1px);
+}
+
+.jt-btn:active {
+  transform: scale(0.98);
+}
+
+.screen-reader-text {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}

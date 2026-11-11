@@ -1,0 +1,30 @@
+:root {
+  --jt-bg: #05080d;
+  --jt-surface: #0d141c;
+  --jt-surface-2: #121b26;
+  --jt-text: #f4f7fa;
+  --jt-muted: #8a97a6;
+  --jt-accent: #00e5ff;
+  --jt-accent-warm: #ff3b5c;
+  --jt-water: #0a4d68;
+  --jt-border: color-mix(in srgb, var(--jt-text) 12%, transparent);
+  --jt-display: "Barlow Condensed", "Arial Narrow", sans-serif;
+  --jt-body: "Sora", system-ui, sans-serif;
+  --jt-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --jt-fast: 0.2s;
+  --jt-base: 0.4s;
+  --jt-slow: 0.6s;
+  --jt-reveal: 1.2s;
+  --jt-radius-sm: 0.25rem;
+  --jt-radius-md: 0.5rem;
+  --jt-container: min(90rem, calc(100% - 2rem));
+  --jt-header-h: 4.25rem;
+  --accent: var(--jt-accent);
+  color-scheme: dark;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --jt-container: min(90rem, calc(100% - 3rem));
+  }
+}
