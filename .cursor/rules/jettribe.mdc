@@ -1,0 +1,19 @@
+---
+description: Jettribe theme priorities and stack constraints
+globs:
+  - wp-content/themes/jettribe/**
+  - preview/**
+  - scripts/**
+---
+
+# Jettribe rules
+
+Priorities (higher wins): 1) Speed 2) Easy browsing 3) 3D/motion as progressive enhancement.
+
+Stack: WordPress + WooCommerce, custom `jettribe` theme, Vite + TypeScript, GSAP, Lenis, three.js. No page builders, no Barba/Swup/SPA. Cross-document View Transitions + Speculation Rules prerender.
+
+Motion: animate only transform/opacity/clip-path/filter; content visible by default; honor prefers-reduced-motion.
+
+Performance budgets (A10): LCP ≤1.8s, INP ≤200ms, CLS ≤0.05, TBT ≤150ms, mobile Lighthouse Perf ≥90; JS before interaction ≤90KB gzip (excl. Woo); CSS ≤35KB gzip; 3D never in initial chain.
+
+Never invent product data. Ask before installing plugins or changing the stack.

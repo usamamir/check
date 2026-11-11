@@ -1,0 +1,13 @@
+{
+  "core": "WordPress/WordPress#latest",
+  "phpVersion": "8.2",
+  "plugins": ["woocommerce"],
+  "themes": ["./wp-content/themes/jettribe"],
+  "config": {
+    "WP_DEBUG": true,
+    "SCRIPT_DEBUG": true
+  },
+  "mappings": {
+    "wp-content/themes/jettribe": "./wp-content/themes/jettribe"
+  }
+}

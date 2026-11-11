@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Circuit 2-Piece Wetsuit Set — Jettribe</title>
+  <link rel="stylesheet" href="./critical.css" />
+  <script>window.JT={homeUrl:'./',restUrl:'/wp-json/',isProduct:true,i18n:{added:'Added to cart'}};</script>
+</head>
+<body class="jt-theme jt-commerce">
+  <div class="jt-download-banner"><div class="jt-container jt-download-banner__inner"><p>Product detail preview. <a href="./downloads/jettribe-theme.zip" download><strong>Download theme zip</strong></a></p></div></div>
+  <header class="jt-header" data-jt-header>
+    <div class="jt-header__bar jt-container">
+      <a class="jt-logo" href="./index.html"><span class="jt-logo__mark">JT</span><span class="jt-logo__text">Jettribe</span></a>
+      <nav class="jt-nav"><a class="jt-nav__link" href="./shop.html">Shop</a><a class="jt-nav__link" href="./index.html">Home</a></nav>
+      <div class="jt-header__actions"><button class="jt-icon-btn jt-cart-btn" type="button" data-jt-cart-open><span class="jt-cart-count" data-jt-cart-count>0</span></button></div>
+    </div>
+  </header>
+  <aside class="jt-cart" data-jt-cart hidden><div class="jt-cart__backdrop" data-jt-cart-close></div><div class="jt-cart__panel"><header class="jt-cart__head"><h2>Cart</h2><button data-jt-cart-close>×</button></header><div data-jt-cart-items></div><footer class="jt-cart__foot"><div class="jt-cart__subtotal"><span>Subtotal</span><strong data-jt-cart-subtotal>—</strong></div></footer></div></aside>
+  <div class="jt-toast-region" data-jt-toasts></div>
+
+  <main id="primary" class="jt-main jt-pdp" style="--accent:#00E5FF">
+    <div class="jt-container">
+      <nav class="jt-breadcrumbs">Home / Wetsuits / Circuit 2-Piece</nav>
+      <div class="jt-pdp__layout">
+        <section class="jt-pdp__viewer" data-jt-pdp-viewer data-glb="">
+          <img class="jt-pdp__poster" src="./media/product-poster.svg" alt="Circuit 2-Piece Wetsuit Set" width="1200" height="1200" fetchpriority="high" />
+          <canvas class="jt-pdp__canvas" data-jt-pdp-canvas hidden aria-hidden="true"></canvas>
+        </section>
+        <section class="jt-pdp__buy">
+          <span class="jt-badge">PLACEHOLDER</span>
+          <h1 data-jt-split>Circuit 2-Piece Wetsuit Set</h1>
+          <div class="jt-pdp__price">Price TBA</div>
+          <form onsubmit="event.preventDefault(); document.querySelector('[data-jt-cart-open]').click();">
+            <label>Size
+              <select><option>S</option><option>M</option><option>L</option><option>XL</option></select>
+            </label>
+            <button class="jt-btn jt-btn--primary single_add_to_cart_button" type="submit">Add to cart</button>
+          </form>
+          <ul class="jt-pdp__meta">
+            <li>Ships in 2–4 business days</li>
+            <li>Free returns within 30 days on unused gear</li>
+            <li><a href="./about.html">Size guide</a></li>
+          </ul>
+        </section>
+      </div>
+      <section class="jt-pdp__details">
+        <details open><summary>Description</summary><div class="jt-prose">PLACEHOLDER product for theme development. Replace with real Jettribe catalog data, images, and GLB models.</div></details>
+        <details><summary>Specs & care</summary><div class="jt-prose">Specs arrive with the product export.</div></details>
+      </section>
+    </div>
+    <div class="jt-buybar" data-jt-buybar hidden>
+      <div class="jt-container jt-buybar__inner">
+        <strong>Circuit 2-Piece Wetsuit Set</strong>
+        <span class="jt-pdp__price">Price TBA</span>
+        <button type="button" class="jt-btn jt-btn--primary" data-jt-buybar-add>Add to cart</button>
+      </div>
+    </div>
+  </main>
+  <footer class="jt-footer"><div class="jt-container jt-footer__legal"><p><a href="./downloads/jettribe-theme.zip" download>Download theme zip</a></p></div></footer>
+  <style>.jt-download-banner{background:#0a1a24;border-bottom:1px solid #134;padding:.6rem 0}.jt-download-banner p{margin:0}.jt-pdp__buy form{display:grid;gap:1rem}select{background:#05080d;border:1px solid #243041;color:#f4f7fa;padding:.7rem;border-radius:.25rem}</style>
+  <script type="module">
+    const manifest = await fetch('./manifest.json').then(r => r.json());
+    for (const key of ['src/entries/main.ts','src/entries/product.ts']) {
+      const item = manifest[key]; if (!item) continue;
+      for (const css of item.css || []) { const l=document.createElement('link'); l.rel='stylesheet'; l.href='./assets/'+css; document.head.appendChild(l); }
+      const s=document.createElement('script'); s.type='module'; s.src='./assets/'+item.file; document.body.appendChild(s);
+    }
+  </script>
+</body>
+</html>

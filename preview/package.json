@@ -1,0 +1,10 @@
+{
+  "name": "jettribe-preview",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Static preview of the Jettribe WordPress theme with downloadable theme zip",
+  "scripts": {
+    "start": "node ../scripts/serve-preview.mjs",
+    "build": "node -e \"console.log('Static preview — assets built from repo root via npm run build')\""
+  }
+}

@@ -1,0 +1,17 @@
+node_modules/
+.DS_Store
+*.log
+.wp-env/
+dist-temp/
+.theme-pack/
+.cache/
+coverage/
+playwright-report/
+test-results/
+.env
+.env.*
+
+# Keep built theme assets + preview download in git so publish-app can ship them.
+# Source maps are local-only.
+**/*.map
+/jettribe-theme.zip

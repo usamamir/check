@@ -1,0 +1,2 @@
+import{g as o}from"./index-B5p9zUun.js";import"./reduced-9gYO58R3.js";const t=document.querySelector("[data-jt-product-grid]");t&&!window.matchMedia("(prefers-reduced-motion: reduce)").matches&&o.from(t.children,{opacity:0,y:24,duration:.55,stagger:.06,ease:"power3.out"});const e=document.querySelector("[data-jt-result-count]");e&&t&&(e.textContent=`${t.children.length} products`);
+//# sourceMappingURL=shop-Vgu9gWJB.js.map

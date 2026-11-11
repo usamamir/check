@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Jettribe — Built for the water line</title>
+  <meta name="description" content="Preview of the Jettribe WordPress + WooCommerce theme. Download the theme zip and upload it to WordPress." />
+  <link rel="preload" as="image" href="./media/hero-poster.svg" fetchpriority="high" />
+  <link rel="stylesheet" href="./critical.css" />
+  <style>@view-transition { navigation: auto; }</style>
+  <script>
+    window.JT = {
+      homeUrl: './',
+      restUrl: '/wp-json/',
+      nonce: '',
+      themeUri: '.',
+      isHome: true,
+      i18n: { added: 'Added to cart', search: 'Search gear…', loading: 'Loading…' }
+    };
+  </script>
+</head>
+<body class="jt-theme">
+  <a class="jt-skip" href="#primary">Skip to content</a>
+  <div class="jt-cursor" data-jt-cursor hidden aria-hidden="true"></div>
+
+  <div class="jt-download-banner">
+    <div class="jt-container jt-download-banner__inner">
+      <p><strong>WordPress theme ready.</strong> Preview the storefront here, then download and upload the zip under Appearance → Themes.</p>
+      <a class="jt-btn jt-btn--primary" href="./downloads/jettribe-theme.zip" download="jettribe-theme.zip">Download theme zip</a>
+    </div>
+  </div>
+
+  <header class="jt-header" data-jt-header>
+    <div class="jt-header__bar jt-container">
+      <button class="jt-icon-btn jt-header__menu-btn" type="button" data-jt-menu-open aria-expanded="false" aria-controls="jt-mobile-nav">
+        <span class="screen-reader-text">Open menu</span>
+        <span aria-hidden="true"></span><span aria-hidden="true"></span>
+      </button>
+      <a class="jt-logo" href="./index.html">
+        <span class="jt-logo__mark" aria-hidden="true">JT</span>
+        <span class="jt-logo__text">Jettribe</span>
+      </a>
+      <nav class="jt-nav" aria-label="Primary" data-jt-mega>
+        <a class="jt-nav__link" href="./shop.html">Shop</a>
+        <a class="jt-nav__link" href="./about.html">Race Team</a>
+        <a class="jt-nav__link" href="./product.html">PDP</a>
+        <a class="jt-nav__link" href="./downloads/jettribe-theme.zip" download>Theme zip</a>
+      </nav>
+      <div class="jt-header__actions">
+        <button class="jt-icon-btn" type="button" data-jt-search-open aria-expanded="false" aria-controls="jt-search">
+          <span class="screen-reader-text">Search</span>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.6"/><path d="M20 20l-3.5-3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        </button>
+        <button class="jt-icon-btn jt-cart-btn" type="button" data-jt-cart-open aria-expanded="false" aria-controls="jt-cart-drawer">
+          <span class="screen-reader-text">Cart</span>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 6h2l1.4 9.2a2 2 0 0 0 2 1.8h7.3a2 2 0 0 0 2-1.6L20 8H8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span class="jt-cart-count" data-jt-cart-count>0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div id="jt-mobile-nav" class="jt-mobile" data-jt-mobile hidden>
+    <div class="jt-mobile__panel">
+      <button type="button" class="jt-icon-btn jt-mobile__close" data-jt-menu-close><span class="screen-reader-text">Close menu</span>×</button>
+      <nav aria-label="Mobile">
+        <a href="./shop.html">Shop all</a>
+        <a href="./product.html">Product detail</a>
+        <a href="./about.html">Race Team</a>
+        <a href="./downloads/jettribe-theme.zip" download>Download theme</a>
+      </nav>
+    </div>
+  </div>
+
+  <div id="jt-search" class="jt-search" data-jt-search hidden>
+    <div class="jt-search__panel jt-container">
+      <form role="search" action="./shop.html" method="get">
+        <label class="screen-reader-text" for="jt-search-input">Search products</label>
+        <input id="jt-search-input" type="search" name="s" placeholder="Search gear…" data-jt-search-input autocomplete="off" />
+        <button type="button" class="jt-icon-btn" data-jt-search-close>×</button>
+      </form>
+      <div class="jt-search__results" data-jt-search-results aria-live="polite"></div>
+    </div>
+  </div>
+
+  <aside id="jt-cart-drawer" class="jt-cart" data-jt-cart hidden aria-label="Cart">
+    <div class="jt-cart__backdrop" data-jt-cart-close></div>
+    <div class="jt-cart__panel" role="dialog" aria-modal="true">
+      <header class="jt-cart__head">
+        <h2>Your cart</h2>
+        <button type="button" class="jt-icon-btn" data-jt-cart-close>×</button>
+      </header>
+      <div class="jt-cart__items" data-jt-cart-items></div>
+      <footer class="jt-cart__foot">
+        <div class="jt-cart__subtotal"><span>Subtotal</span><strong data-jt-cart-subtotal>—</strong></div>
+        <a class="jt-btn jt-btn--primary" href="./shop.html">Checkout</a>
+      </footer>
+    </div>
+  </aside>
+  <div class="jt-toast-region" data-jt-toasts aria-live="polite"></div>
+
+  <main id="primary" class="jt-main jt-home">
+    <section class="jt-hero" data-jt-hero data-jt-3d="water-line">
+      <div class="jt-hero__stage">
+        <img class="jt-hero__poster" src="./media/hero-poster.svg" alt="Jettribe race gear above open water" width="1920" height="1080" fetchpriority="high" decoding="async" data-jt-hero-poster />
+        <canvas class="jt-hero__canvas" data-jt-hero-canvas aria-hidden="true" hidden></canvas>
+      </div>
+      <div class="jt-hero__content jt-container">
+        <p class="jt-brand-kicker" data-jt-reveal>Jettribe</p>
+        <h1 class="jt-hero__title" data-jt-split>Built for the water line</h1>
+        <p class="jt-hero__lede" data-jt-reveal>Ride and race gear engineered for spray, speed, and the next heat.</p>
+        <div class="jt-hero__cta" data-jt-reveal>
+          <a class="jt-btn jt-btn--primary" href="./shop.html" data-jt-magnetic>Shop gear</a>
+          <a class="jt-btn jt-btn--ghost" href="./downloads/jettribe-theme.zip" download="jettribe-theme.zip">Download WP theme</a>
+        </div>
+      </div>
+      <div class="jt-hero__scroll" aria-hidden="true"><span></span></div>
+    </section>
+
+    <section class="jt-section jt-cats">
+      <div class="jt-container">
+        <header class="jt-section__head">
+          <h2 data-jt-split>Shop by category</h2>
+          <p>Find any piece of kit in three clicks or fewer.</p>
+        </header>
+        <div class="jt-cats__rail">
+          <a class="jt-cats__card" href="./shop.html"><span>Wetsuits</span></a>
+          <a class="jt-cats__card" href="./shop.html"><span>Tour Coats</span></a>
+          <a class="jt-cats__card" href="./shop.html"><span>Footwear</span></a>
+          <a class="jt-cats__card" href="./shop.html"><span>Gloves</span></a>
+          <a class="jt-cats__card" href="./shop.html"><span>Goggles</span></a>
+          <a class="jt-cats__card" href="./shop.html"><span>Apparel</span></a>
+        </div>
+      </div>
+    </section>
+
+    <section class="jt-section jt-featured" data-jt-pin-story>
+      <div class="jt-container jt-featured__grid">
+        <div class="jt-featured__copy">
+          <p class="jt-eyebrow">Series</p>
+          <h2 data-jt-split>Hyper collection</h2>
+          <p>Stretch panels, sealed seams, and colorways that cut through spray. Scroll to walk the set.</p>
+          <a class="jt-btn jt-btn--ghost" href="./shop.html">Explore Hyper</a>
+        </div>
+        <div class="jt-featured__stage">
+          <div class="jt-featured__swatch" style="--accent:#FF3B5C"></div>
+          <div class="jt-featured__swatch" style="--accent:#00E5FF"></div>
+          <div class="jt-featured__swatch" style="--accent:#7CFF6B"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="jt-section">
+      <div class="jt-container">
+        <header class="jt-section__head">
+          <h2 data-jt-split>Best sellers</h2>
+          <p>Race-proven pieces riders re-order every season. Marked PLACEHOLDER until your catalog import lands.</p>
+        </header>
+        <div class="jt-grid jt-grid--products" data-jt-product-grid>
+          <article class="jt-card" data-jt-card style="--accent:#00E5FF">
+            <a class="jt-card__media" href="./product.html"><div class="jt-card__placeholder" aria-hidden="true"><span>CI</span></div><span class="jt-card__sweep"></span></a>
+            <div class="jt-card__body"><span class="jt-badge">PLACEHOLDER</span><h3 class="jt-card__title"><a href="./product.html">Circuit 2-Piece Wetsuit Set</a></h3><div class="jt-card__price">Price TBA</div></div>
+          </article>
+          <article class="jt-card" data-jt-card style="--accent:#FF3B5C">
+            <a class="jt-card__media" href="./product.html"><div class="jt-card__placeholder" aria-hidden="true"><span>HY</span></div><span class="jt-card__sweep"></span></a>
+            <div class="jt-card__body"><span class="jt-badge">PLACEHOLDER</span><h3 class="jt-card__title"><a href="./product.html">Hyper 2-Piece Wetsuit Set</a></h3><div class="jt-card__price">Price TBA</div></div>
+          </article>
+          <article class="jt-card" data-jt-card style="--accent:#7CFF6B">
+            <a class="jt-card__media" href="./product.html"><div class="jt-card__placeholder" aria-hidden="true"><span>HT</span></div><span class="jt-card__sweep"></span></a>
+            <div class="jt-card__body"><span class="jt-badge">PLACEHOLDER</span><h3 class="jt-card__title"><a href="./product.html">Hyper Tour Coat</a></h3><div class="jt-card__price">Price TBA</div></div>
+          </article>
+          <article class="jt-card" data-jt-card style="--accent:#FFB020">
+            <a class="jt-card__media" href="./product.html"><div class="jt-card__placeholder" aria-hidden="true"><span>GR</span></div><span class="jt-card__sweep"></span></a>
+            <div class="jt-card__body"><span class="jt-badge">PLACEHOLDER</span><h3 class="jt-card__title"><a href="./product.html">GRB Race Boot</a></h3><div class="jt-card__price">Price TBA</div></div>
+          </article>
+          <article class="jt-card" data-jt-card style="--accent:#A78BFA">
+            <a class="jt-card__media" href="./product.html"><div class="jt-card__placeholder" aria-hidden="true"><span>GP</span></div><span class="jt-card__sweep"></span></a>
+            <div class="jt-card__body"><span class="jt-badge">PLACEHOLDER</span><h3 class="jt-card__title"><a href="./product.html">GP-40 Gloves</a></h3><div class="jt-card__price">Price TBA</div></div>
+          </article>
+          <article class="jt-card" data-jt-card style="--accent:#00E5FF">
+            <a class="jt-card__media" href="./product.html"><div class="jt-card__placeholder" aria-hidden="true"><span>GO</span></div><span class="jt-card__sweep"></span></a>
+            <div class="jt-card__body"><span class="jt-badge">PLACEHOLDER</span><h3 class="jt-card__title"><a href="./product.html">Classic Floating Goggles</a></h3><div class="jt-card__price">Price TBA</div></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="jt-section jt-story">
+      <div class="jt-container jt-story__grid">
+        <div>
+          <h2 data-jt-split>Built for racing</h2>
+          <p>From closed-course heat starts to long-distance touring, Jettribe kit is cut for mobility under load and visibility in spray.</p>
+        </div>
+        <ul class="jt-stats">
+          <li><strong data-jt-count>40</strong><span>Years of PWC focus</span></li>
+          <li><strong data-jt-count>360</strong><span>Degree stretch panels</span></li>
+          <li><strong data-jt-count>100</strong><span>Percent water-tested</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="jt-section jt-cta-band">
+      <div class="jt-container jt-cta-band__inner">
+        <h2 data-jt-split>Install on WordPress</h2>
+        <p>This preview is static. The downloadable zip is a full custom theme with WooCommerce templates, Vite-built assets, motion, and the Water Line 3D hero.</p>
+        <div class="jt-hero__cta">
+          <a class="jt-btn jt-btn--primary" href="./downloads/jettribe-theme.zip" download="jettribe-theme.zip">Download jettribe-theme.zip</a>
+          <a class="jt-btn jt-btn--ghost" href="./shop.html">Browse shop preview</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="jt-footer" data-jt-footer>
+    <svg class="jt-footer__wave" viewBox="0 0 1440 80" preserveAspectRatio="none" aria-hidden="true"><path d="M0,40 C240,80 480,0 720,40 C960,80 1200,0 1440,40 L1440,80 L0,80 Z" fill="currentColor"/></svg>
+    <div class="jt-container jt-footer__grid">
+      <div>
+        <a class="jt-logo" href="./index.html"><span class="jt-logo__mark">JT</span><span class="jt-logo__text">Jettribe</span></a>
+        <p>Ride and race gear built for personal watercraft.</p>
+      </div>
+      <div>
+        <h2>Shop</h2>
+        <a href="./shop.html">All gear</a>
+        <a href="./product.html">Product page</a>
+      </div>
+      <div>
+        <h2>Theme</h2>
+        <a href="./downloads/jettribe-theme.zip" download>Download zip</a>
+        <a href="./about.html">About preview</a>
+      </div>
+      <div>
+        <h2>Newsletter</h2>
+        <form class="jt-newsletter" data-jt-newsletter onsubmit="event.preventDefault(); alert('Connect your ESP on WordPress.');">
+          <label class="jt-field"><span>Email</span><input type="email" required placeholder="you@email.com" /></label>
+          <button class="jt-btn jt-btn--primary" type="submit">Join</button>
+        </form>
+      </div>
+    </div>
+    <div class="jt-container jt-footer__legal"><p>© 2026 Jettribe. Preview build.</p></div>
+  </footer>
+
+  <style>
+    .jt-download-banner {
+      position: sticky;
+      top: 0;
+      z-index: 200;
+      background: color-mix(in srgb, #00e5ff 16%, #05080d);
+      border-bottom: 1px solid color-mix(in srgb, #00e5ff 35%, transparent);
+    }
+    .jt-download-banner__inner {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      align-items: center;
+      justify-content: space-between;
+      padding-block: 0.75rem;
+      font-size: 0.95rem;
+    }
+    .jt-download-banner p { margin: 0; max-width: 48rem; color: #f4f7fa; }
+    .jt-header { top: 0; }
+    body { padding-top: 0; }
+  </style>
+  <script type="module">
+    const manifest = await fetch('./manifest.json').then(r => r.json());
+    const entries = ['src/entries/main.ts', 'src/entries/home.ts'];
+    for (const key of entries) {
+      const item = manifest[key];
+      if (!item) continue;
+      for (const css of item.css || []) {
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = './assets/' + css;
+        document.head.appendChild(link);
+      }
+      const script = document.createElement('script');
+      script.type = 'module';
+      script.src = './assets/' + item.file;
+      document.body.appendChild(script);
+    }
+  </script>
+</body>
+</html>
