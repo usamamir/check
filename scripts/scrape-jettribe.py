@@ -160,7 +160,27 @@ def parse_product(url: str, html: str) -> dict[str, Any]:
             label = clean_text(m.group(1))
             if label and label not in sizes:
                 sizes.append(label)
-    in_stock = "out of stock" not in html.lower()
+    # Prefer product-specific availability markers; page chrome often mentions "out of stock".
+    avail = re.search(
+        r'data-product-available\s*=\s*"(true|false)"|productView-availability[^>]*>[\s\S]{0,120}',
+        html,
+        re.I,
+    )
+    if avail and avail.group(1):
+        in_stock = avail.group(1).lower() == "true"
+    else:
+        blob = " ".join(
+            re.findall(
+                r'class="[^"]*productView-availability[^"]*"[\s\S]{0,200}',
+                html,
+                re.I,
+            )
+        ).lower()
+        name_l = title.lower()
+        if "out of stock" in blob or "out of stock" in name_l:
+            in_stock = False
+        else:
+            in_stock = True
     slug = url.rstrip("/").split("/")[-1]
     old_url = url
     return {
