@@ -17,6 +17,12 @@ export default defineConfig({
       allow: [path.resolve(__dirname, "..")],
     },
   },
+  preview: {
+    host: "127.0.0.1",
+    port: 4173,
+    // Temporary public tunnels (cloudflared / localtunnel) rewrite Host
+    allowedHosts: true,
+  },
   build: {
     target: "es2022",
     cssCodeSplit: true,
