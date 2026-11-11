@@ -1,11 +1,7 @@
-1. Shopify
-   Products → Import
-   File: jettribe-products.csv
-   Check Overwrite products with matching handles.
-   Do not open the file in Excel.
-   Open a product. That product is the parent. The Variants list under it is the children.
+Shopify
+Products → Import
+File: jettribe-products.csv
+Check Overwrite products with matching handles.
+Do not open the file in Excel.
 
-2. SKU Labs
-   Import/Export → Listings
-   File: skulabs-parent-child.csv
-   Each parent row is followed by its child rows. The child rows name the parent SKU.
+Do not import a file into SKU Labs. SKU Labs already has the items. After this Shopify import, run a listings sync in SKU Labs so those existing items link to the Shopify sizes.
