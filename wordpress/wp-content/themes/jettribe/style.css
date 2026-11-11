@@ -1,0 +1,18 @@
+/*
+Theme Name: Jettribe
+Theme URI: https://www.jettribe.com
+Author: Jettribe
+Description: Custom Nike-pattern storefront theme for Jettribe. Front-end assets are built with Vite from /storefront and enqueued here. Requires WooCommerce.
+Version: 1.0.0
+Text Domain: jettribe
+Requires at least: 6.4
+Requires PHP: 8.1
+*/
+
+/* Editor-facing fallback; production CSS ships from Vite build. */
+body {
+  margin: 0;
+  font-family: Inter, Helvetica, sans-serif;
+  color: #111;
+  background: #fff;
+}

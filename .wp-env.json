@@ -1,0 +1,13 @@
+{
+  "core": null,
+  "phpVersion": "8.2",
+  "plugins": ["https://downloads.wordpress.org/plugin/woocommerce.latest-stable.zip"],
+  "themes": ["./wordpress/wp-content/themes/jettribe"],
+  "config": {
+    "WP_DEBUG": true,
+    "JETTRIBE_IMPORT": true
+  },
+  "lifecycleScripts": {
+    "afterStart": "echo \"Run: node scripts/import-woocommerce.mjs after wp-env start\""
+  }
+}

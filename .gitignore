@@ -1,0 +1,8 @@
+node_modules/
+storefront/dist/
+storefront/node_modules/
+.wp-env/
+*.log
+.DS_Store
+.env
+.env.*
