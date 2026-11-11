@@ -1,0 +1,28 @@
+{
+  "source": "https://www.jettribe.com",
+  "note": "jettribe.co returned HTTP 500; used jettribe.com BigCommerce storefront",
+  "product_count": 550,
+  "contact": {
+    "phone": "951-246-3147",
+    "email": "ridersupport@jettribe.com",
+    "hours": "Mon - Fri, 9am - 5pm PT"
+  },
+  "testimonials": [
+    {
+      "quote": "I am very happy with the excellent support from Jettribe.",
+      "author": "Yohei Yamamoto"
+    },
+    {
+      "quote": "I'm loving the color combination and how every comes together.",
+      "author": "Michael Bernhardt"
+    },
+    {
+      "quote": "We have purchased a number of items (suits and beachwear). The suits are really sharp and great quality. I would give them a 6/5 if I could. You really can\u2019t get better than this!",
+      "author": "Derek Corell"
+    },
+    {
+      "quote": "You went above and beyond. The gear looks and feels amazing, and the best customer service!",
+      "author": "Jonathan K Espey"
+    }
+  ]
+}
