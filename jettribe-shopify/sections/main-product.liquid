@@ -176,6 +176,31 @@
             <p class="note note--plain custom-ship">Custom gear is made to order and ships later than in-stock items.</p>
           {%- endif -%}
 
+          {%- assign jt_letter = "" -%}
+          {%- for tag in product.tags -%}
+            {%- if tag contains "letter-choice:" -%}
+              {%- assign jt_letter = tag | remove: "letter-choice:" | strip -%}
+            {%- endif -%}
+          {%- endfor -%}
+          {%- if jt_letter != "" -%}
+            <div class="field">
+              <label for="DesignLetter">Design letter</label>
+              <select class="input" id="DesignLetter" name="properties[Design Letter]" data-letter-choice>
+                <option value="">Select a letter</option>
+                {%- if jt_letter == "A-V" -%}
+                  {%- assign jt_letters = "A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V" | split: "," -%}
+                {%- elsif jt_letter == "A-R" -%}
+                  {%- assign jt_letters = "A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R" | split: "," -%}
+                {%- else -%}
+                  {%- assign jt_letters = jt_letter | split: "," -%}
+                {%- endif -%}
+                {%- for letter in jt_letters -%}
+                  <option value="{{ letter }}">{{ letter }}</option>
+                {%- endfor -%}
+              </select>
+            </div>
+          {%- endif -%}
+
           <div class="qty-row">
             <label for="Quantity">Qty</label>
             <input class="input" id="Quantity" type="number" name="quantity" min="1" value="1">

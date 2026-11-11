@@ -388,6 +388,8 @@
     }
 
     function selectedLetter() {
+      var field = qs("[data-letter-choice]", form);
+      if (field && field.value) return String(field.value).toUpperCase();
       var letter = "";
       qsa("[data-option-index]", form).forEach(function (group) {
         var checked = qs("input:checked", group);
@@ -500,7 +502,7 @@
     }
 
     form.addEventListener("change", function (event) {
-      if (event.target.matches("[data-option-input]")) {
+      if (event.target.matches("[data-option-input], [data-letter-choice]")) {
         var group = event.target.closest("[data-option-index]");
         if (group) markSelected(group);
         applyVariant();
@@ -606,6 +608,19 @@
         });
         optionsHtml += "</div>";
       });
+      var letterSpan = "";
+      (Array.isArray(prod.tags) ? prod.tags : String(prod.tags || "").split(",")).forEach(function (tag) {
+        tag = String(tag || "").trim();
+        if (tag.indexOf("letter-choice:") === 0) letterSpan = tag.slice(13);
+      });
+      if (letterSpan) {
+        var letters = letterSpan === "A-V" ? "ABCDEFGHIJKLMNOPQRSTUV".split("") : letterSpan === "A-R" ? "ABCDEFGHIJKLMNOPQR".split("") : letterSpan.split(",");
+        optionsHtml += '<div class="field"><label for="QuickDesignLetter">Design letter</label><select class="input" id="QuickDesignLetter" name="properties[Design Letter]" data-letter-choice><option value="">Select a letter</option>';
+        letters.forEach(function (letter) {
+          optionsHtml += '<option value="' + letter + '">' + letter + "</option>";
+        });
+        optionsHtml += "</select></div>";
+      }
       var variant = (prod.variants || []).filter(function (item) {
         return (item.options || []).every(function (opt, i) { return picked[i] == null || opt === picked[i]; });
       }).sort(function (a, b) {
