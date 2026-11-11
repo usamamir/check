@@ -1,4 +1,11 @@
-Shopify admin → Products → Import
-File: jettribe-products.csv
-Check Overwrite products with matching handles.
-Do not open the file in Excel.
+1. Shopify
+   Products → Import
+   File: jettribe-products.csv
+   Check Overwrite products with matching handles.
+   Do not open the file in Excel.
+   Open a product. That product is the parent. The Variants list under it is the children.
+
+2. SKU Labs
+   Import/Export → Listings
+   File: skulabs-parent-child.csv
+   Each parent row is followed by its child rows. The child rows name the parent SKU.
