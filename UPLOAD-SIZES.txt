@@ -1,0 +1,10 @@
+Shopify admin → Products → Import
+File: jettribe-sizes.csv
+Check Overwrite products with matching handles.
+Do not open the file in Excel.
+
+This file adds every missing size onto the parent product and writes the BigCommerce quantity on each size. Name-plate fonts and sock add-ons are not extra variants. The size row is the child, and its quantity is the stock.
+
+Import this file. Do not import jettribe-bc-products.csv. That file turned name plates and sock add-ons into extra variants.
+
+After the import, open the product. The sizes are the variants. The Inventory screen lists each size on its own line. That is where the quantity shows.
