@@ -11,6 +11,7 @@
       "handle": {{ item.handle | json }},
       "title": {{ item.title | json }},
       "tags": {{ item.tags | json }},
+      "type": {{ item.type | json }},
       "available": {{ item.available | json }},
       "url": {{ item.url | json }},
       "images": [{% if item.featured_image %}{"src": {{ item.featured_image | image_url: width: 800 | json }}}{% endif %}],

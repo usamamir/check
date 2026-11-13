@@ -1,3 +1,4 @@
+{%- if product.available and product.featured_image -%}
 {%- liquid
   assign size_bits = ''
   for option in product.options_with_values
@@ -54,3 +55,4 @@
     </div>
   </div>
 </article>
+{%- endif -%}

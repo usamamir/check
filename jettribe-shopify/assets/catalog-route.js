@@ -65,6 +65,25 @@
   function safeHandle(handle) {
     return /^[A-Za-z0-9_-]+$/.test(handle || "");
   }
+  function normKey(value) {
+    return String(value || "")
+      .toLowerCase()
+      .replace(/&/g, " and ")
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "");
+  }
+  function productImage(prod) {
+    var img = (prod && prod.featured_image) || "";
+    if (img && typeof img === "object") img = img.src || img.url || "";
+    if (!img && prod && prod.images && prod.images.length) {
+      var first = prod.images[0];
+      img = typeof first === "string" ? first : (first.src || first.url || "");
+    }
+    return img || "";
+  }
+  function showOnSite(prod) {
+    return !!(prod && prod.available && productImage(prod));
+  }
   function detect() {
     var params = new URLSearchParams(window.location.search);
     if (params.get("jtcat")) return { type: "category", handle: params.get("jtcat") };
@@ -142,8 +161,8 @@
       });
     });
     var variant = (prod.variants || []).filter(function (item) { return item.available; })[0] || (prod.variants || [])[0] || {};
-    var img = prod.featured_image || "";
-    if (img && typeof img === "object") img = img.src || img.url || "";
+    var img = productImage(prod);
+    if (!img || !prod.available) return "";
     return cardHtml({
       id: prod.id || meta.handle,
       handle: prod.handle || meta.handle,
@@ -205,6 +224,7 @@
       featured_image: (image && (image.src || image)) || "",
       available: variants.some(function (variant) { return variant.available; }),
       tags: prod.tags || [],
+      type: prod.product_type || prod.type || "",
       url: productRoot() + "products/" + prod.handle
     };
   }
@@ -226,6 +246,7 @@
       compare: store.compare_at_price || 0,
       sizes: sizes,
       available: store.available,
+      image: productImage(store),
       live: store
     };
   }
@@ -258,28 +279,45 @@
     return tags.map(function (tag) { return String(tag).trim().toLowerCase(); }).filter(Boolean);
   }
   function categoryKeys(data) {
-    var keys = {};
-    Object.keys((data && data.categories) || {}).forEach(function (key) {
-      keys[String(key).toLowerCase()] = true;
+    var map = {};
+    var cats = (data && data.categories) || {};
+    Object.keys(cats).forEach(function (key) {
+      map[normKey(key)] = key;
+      var name = cats[key] && cats[key].name;
+      if (name && !map[normKey(name)]) map[normKey(name)] = key;
     });
-    return keys;
+    return map;
   }
-  function placements(prod, keys) {
+  function placements(prod, map) {
     var found = [];
+    function add(raw) {
+      var key = map[normKey(raw)];
+      if (key && found.indexOf(key) === -1) found.push(key);
+    }
     tagList(prod).forEach(function (tag) {
-      var key = tag.indexOf("collection:") === 0 ? tag.slice(11) : tag;
-      if (keys[key] && found.indexOf(key) === -1) found.push(key);
+      add(tag.indexOf("collection:") === 0 ? tag.slice(11) : tag);
     });
+    add(prod.type || prod.product_type || "");
     return found;
   }
-  function hasMenuTag(prod, handleKey) {
-    var tags = tagList(prod);
-    return tags.indexOf("collection:" + handleKey) !== -1 || tags.indexOf(handleKey) !== -1;
+  function hasMenuTag(prod, handle, map) {
+    return placements(prod, map).indexOf(handle) !== -1;
   }
-  function loadTagged(handle) {
+  function loadTagged(handle, name) {
     var key = String(handle || "").toLowerCase();
     if (!safeHandle(key)) return Promise.resolve(null);
-    var q = 'tag:"collection:' + key + '" OR tag:"' + key + '"';
+    var words = [key];
+    if (name) words.push(name);
+    var spaced = key.replace(/-/g, " ");
+    if (words.indexOf(spaced) === -1) words.push(spaced);
+    var parts = [];
+    words.forEach(function (word) {
+      var safe = String(word).replace(/"/g, "");
+      parts.push('tag:"collection:' + safe + '"');
+      parts.push('tag:"' + safe + '"');
+      parts.push('product_type:"' + safe + '"');
+    });
+    var q = parts.join(" OR ");
     function page(n) {
       return fetch(searchBase() + "?view=jtmenu&type=product&q=" + encodeURIComponent(q) + "&page=" + n, { headers: { Accept: "application/json" } })
         .then(function (res) {
@@ -316,14 +354,14 @@
     var keys = categoryKeys(data);
     function addLive(prod) {
       var meta = metaFromLive(prod);
-      if (!meta.handle || seenHandles[meta.handle]) return;
+      if (!meta.handle || seenHandles[meta.handle] || !showOnSite(meta.live)) return;
       seenHandles[meta.handle] = true;
       meta.locked = true;
       metas.push(meta);
     }
     (live || []).forEach(addLive);
     (tagged || []).forEach(function (prod) {
-      if (hasMenuTag(prod, handleKey)) addLive(prod);
+      if (hasMenuTag(prod, handle, keys)) addLive(prod);
     });
     (cat.products || []).forEach(function (productHandle) {
       if (seenHandles[productHandle]) return;
@@ -443,7 +481,7 @@
       return '<option value="' + item[0] + '"' + (sort === item[0] ? " selected" : "") + ">" + item[1] + "</option>";
     }).join("");
     var gridHtml = slice.length
-      ? '<div class="product-grid product-more" data-jt-grid><p>Loading products…</p></div>'
+      ? '<div class="product-grid" data-jt-grid><p>Loading products…</p></div>'
       : '<div class="empty-products"><p>' + (metas.length ? "No products match these filters." : "No products are listed in this category.") + "</p></div>";
     var root = qs("[data-jt-category-root]", mount);
     root.innerHTML =
@@ -485,8 +523,10 @@
     }
     if (!slice.length) return;
     function belongs(prod, meta) {
-      if (meta.locked || meta.saved) return true;
-      return placements(prod, keys).indexOf(handleKey) !== -1;
+      if (meta.locked) return true;
+      var places = placements(prod, keys);
+      if (places.length) return places.indexOf(handle) !== -1;
+      return !!meta.saved;
     }
     Promise.all(slice.map(function (meta) {
       if (meta.live) return belongs(meta.live, meta) ? cardFromProduct(meta.live, meta) : "";
@@ -496,7 +536,7 @@
           return res.json();
         })
         .then(function (prod) { return belongs(prod, meta) ? cardFromProduct(prod, meta) : ""; })
-        .catch(function () { return cardFromCatalog(meta); });
+        .catch(function () { return ""; });
     })).then(function (cards) {
       var kept = cards.filter(Boolean);
       var grid = qs("[data-jt-grid]", root);
@@ -552,6 +592,45 @@
         box.innerHTML = "<p>The blog could not be loaded.</p>";
       });
   }
+  function loadStoreCollections() {
+    function page(n) {
+      return fetch(productRoot() + "collections.json?limit=250&page=" + n, { headers: { Accept: "application/json" } })
+        .then(function (res) {
+          var type = (res.headers.get("content-type") || "").toLowerCase();
+          if (!res.ok || type.indexOf("json") === -1) return [];
+          return res.json().then(function (body) { return (body && body.collections) || []; });
+        })
+        .catch(function () { return []; });
+    }
+    return page(1).then(function (first) {
+      if (!first || first.length < 250) return first || [];
+      return page(2).then(function (second) { return first.concat(second || []); });
+    });
+  }
+  function loadCategoryLists(data, key) {
+    var cat = (data.categories && data.categories[key]) || {};
+    var wanted = {};
+    wanted[normKey(key)] = true;
+    if (cat.name) wanted[normKey(cat.name)] = true;
+    return loadStoreCollections().then(function (cols) {
+      var handles = [];
+      (cols || []).forEach(function (col) {
+        if ((wanted[normKey(col.handle)] || wanted[normKey(col.title)]) && handles.indexOf(col.handle) === -1) {
+          handles.push(col.handle);
+        }
+      });
+      if (!handles.length) handles.push(key);
+      return Promise.all(handles.map(loadCollection)).then(function (lists) {
+        var live = [];
+        lists.forEach(function (list) {
+          if (list) live = live.concat(list);
+        });
+        return loadTagged(key, cat.name).then(function (tagged) {
+          return [live, tagged];
+        });
+      });
+    });
+  }
   var mount = qs("[data-jt-route]");
   if (!mount) return;
   var route = detect();
@@ -570,7 +649,7 @@
     .then(function (data) {
       var key = resolveCategory(data, handle);
       if (key) {
-        Promise.all([loadCollection(key), loadTagged(key)]).then(function (lists) {
+        loadCategoryLists(data, key).then(function (lists) {
           renderCategory(mount, data, key, lists[0], lists[1]);
         });
         return;
