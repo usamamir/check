@@ -335,7 +335,8 @@
         price: row.price || 0,
         compare: row.compare || 0,
         sizes: canonicalSizes(row.sizes),
-        available: row.available !== false
+        available: row.available !== false,
+        saved: true
       });
     });
     function passes(meta, ignore) {
@@ -484,10 +485,8 @@
     }
     if (!slice.length) return;
     function belongs(prod, meta) {
-      if (meta.locked) return true;
-      var found = placements(prod, keys);
-      if (!found.length) return true;
-      return found.indexOf(handleKey) !== -1;
+      if (meta.locked || meta.saved) return true;
+      return placements(prod, keys).indexOf(handleKey) !== -1;
     }
     Promise.all(slice.map(function (meta) {
       if (meta.live) return belongs(meta.live, meta) ? cardFromProduct(meta.live, meta) : "";
@@ -510,13 +509,59 @@
     });
   }
 
+  function renderBlog(mount) {
+    var box = qs("[data-jt-blog]", mount);
+    if (!box) return;
+    var heading = qs("[data-jt-blog-heading]", mount);
+    var postHandle = new URLSearchParams(window.location.search).get("jtpost");
+    fetch(box.getAttribute("data-blog"), { headers: { Accept: "application/json" } })
+      .then(function (res) { return res.json(); })
+      .then(function (data) {
+        var posts = data.posts || [];
+        if (postHandle) {
+          var post = null;
+          posts.some(function (item) {
+            if (item.handle === postHandle) { post = item; return true; }
+            return false;
+          });
+          if (heading) heading.hidden = true;
+          if (!post) {
+            box.innerHTML = "<p>This post is not available.</p>";
+            return;
+          }
+          document.title = post.title + " | Jettribe";
+          box.innerHTML =
+            '<p><a href="' + esc(searchBase() + "?jtpage=blog") + '">Blog</a></p>' +
+            '<h1 class="page-heading" style="justify-content:flex-start;"><span>' + esc(post.title) + "</span></h1>" +
+            (post.date ? "<p>" + esc(post.date) + "</p>" : "") +
+            (post.image ? '<p class="article-hero"><img src="' + esc(post.image) + '" alt="' + esc(post.title) + '"></p>' : "") +
+            '<div class="rte">' + (post.html || "") + "</div>";
+          return;
+        }
+        if (heading) heading.hidden = false;
+        box.innerHTML = '<div class="blog-list">' + posts.map(function (post) {
+          var href = searchBase() + "?jtpage=blog&jtpost=" + encodeURIComponent(post.handle);
+          return '<article class="blog-card"><a href="' + esc(href) + '">' +
+            (post.image ? '<img src="' + esc(post.image) + '" alt="' + esc(post.title) + '">' : "") +
+            '</a><div><h2><a href="' + esc(href) + '">' + esc(post.title) + "</a></h2>" +
+            (post.date ? "<p>" + esc(post.date) + "</p>" : "") +
+            '<div class="rte">' + esc(post.excerpt || "") + '</div><a href="' + esc(href) + '">Read</a></div></article>';
+        }).join("") + "</div>";
+      })
+      .catch(function () {
+        box.innerHTML = "<p>The blog could not be loaded.</p>";
+      });
+  }
   var mount = qs("[data-jt-route]");
   if (!mount) return;
   var route = detect();
   if (!route || !safeHandle(route.handle)) return;
   document.documentElement.classList.add("jt-routed");
   var handle = ALIAS[route.handle] || route.handle;
-  if (route.type === "page" && showPage(mount, handle)) return;
+  if (route.type === "page" && showPage(mount, handle)) {
+    if (handle === "blog") renderBlog(mount);
+    return;
+  }
   fetch(mount.getAttribute("data-catalog"), { headers: { Accept: "application/json" } })
     .then(function (res) {
       if (!res.ok) throw new Error("catalog");

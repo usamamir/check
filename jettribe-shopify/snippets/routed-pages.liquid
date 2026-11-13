@@ -47,8 +47,8 @@
   <div class="rte">{% render 'copy-vip' %}</div>
 </article>
 <article data-jt-page="blog" data-jt-title="Blog" hidden>
-  <h1 class="page-heading" style="justify-content:flex-start;"><span>Blog</span></h1>
-  <div class="rte">{% render 'copy-blog' %}</div>
+  <h1 class="page-heading" data-jt-blog-heading style="justify-content:flex-start;"><span>Blog</span></h1>
+  <div data-jt-blog data-blog="{{ 'jt-blog.json' | asset_url }}"></div>
 </article>
 <article data-jt-page="careers" data-jt-title="Jettribe Careers" hidden>
   <h1 class="page-heading" style="justify-content:flex-start;"><span>Jettribe Careers</span></h1>
