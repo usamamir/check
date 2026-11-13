@@ -1032,8 +1032,15 @@ button.linkish { background: none; border: 0; padding: 0; font: inherit; cursor:
 .badge-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 20px; }
 .badge-row span { border: 1px solid #ddd; padding: 6px 10px; font-size: 12px; letter-spacing: 0.4px; text-transform: uppercase; background: #fff; }
 
-.goog-te-banner-frame, .skiptranslate, #goog-gt-tt, .goog-te-balloon-frame { display: none !important; }
+.goog-te-banner-frame, iframe.skiptranslate, #goog-gt-tt, .goog-te-balloon-frame { display: none !important; }
 body { top: 0 !important; }
+body.skiptranslate { top: 0 !important; display: block !important; visibility: visible !important; }
+@media (min-width: 992px) {
+  .site-nav { display: block !important; visibility: visible !important; background: #292f36 !important; }
+  .nav-list { display: flex !important; visibility: visible !important; }
+  .nav-list > .nav-item { display: flex !important; visibility: visible !important; }
+  .nav-list > .nav-item > a { color: #fff !important; visibility: visible !important; }
+}
 #google_translate_element { color: #fff; }
 #google_translate_element select { color: #161616; height: 28px; min-height: 28px; }
 

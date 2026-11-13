@@ -89,9 +89,9 @@
 
   <div class="service-bar">
     <div class="container service-bar-inner">
-      <a href="/search?jtpage=shipping-info">{{ section.settings.ship_text }}</a>
-      <a href="tel:{{ section.settings.phone | replace: ' ', '' | replace: '.', '' }}">{{ section.settings.support_text }} {{ section.settings.phone }}</a>
-      <a href="{{ settings.returns_url }}">{{ section.settings.returns_text }}</a>
+      <a href="/search?jtpage=shipping-info"><strong>{% if section.settings.ship_text != blank %}{{ section.settings.ship_text }}{% else %}Free USA shipping over $400{% endif %}</strong></a>
+      <a href="tel:{{ section.settings.phone | replace: ' ', '' | replace: '.', '' }}"><strong>{% if section.settings.support_text != blank %}{{ section.settings.support_text }}{% else %}Rider support{% endif %}</strong> {{ section.settings.phone }}</a>
+      <a href="{{ settings.returns_url }}"><strong>{% if section.settings.returns_text != blank %}{{ section.settings.returns_text }}{% else %}Hassle-free returns{% endif %}</strong></a>
     </div>
   </div>
 </header>

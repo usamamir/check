@@ -1018,6 +1018,7 @@
       });
     });
     qsa("a[href*='jtcat=']").forEach(function (link) {
+      if (link.closest(".site-nav")) return;
       if (link.closest(".mega-col")) return;
       if (link.parentElement && link.parentElement.classList.contains("has-sub")) return;
       if (menuCount(data, menuHandle(link.getAttribute("href"))) !== 0) return;
