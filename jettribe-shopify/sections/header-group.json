@@ -5,9 +5,9 @@
     "announcement-bar": {
       "type": "announcement-bar",
       "settings": {
-        "show_bar": false,
+        "show_bar": true,
         "line_1": "Jettribe is a true core personal watercraft brand: born in southern California",
-        "line_2": "*** Free USA Shipping on Orders $400+ ***"
+        "line_2": ""
       }
     },
     "header": {
