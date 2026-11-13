@@ -1,11 +1,14 @@
 {%- if product.available and product.featured_image -%}
 {%- liquid
   assign size_bits = ''
-  for option in product.options_with_values
-    assign oname = option.name | downcase
-    if oname contains 'size' or oname contains 'combo'
-      for value in option.values
-        assign size_bits = size_bits | append: value | append: '|'
+  for variant in product.variants
+    if variant.available
+      for option in product.options_with_values
+        assign oname = option.name | downcase
+        if oname contains 'size' or oname contains 'combo'
+          assign pos0 = option.position | minus: 1
+          assign size_bits = size_bits | append: variant.options[pos0] | append: '|'
+        endif
       endfor
     endif
   endfor

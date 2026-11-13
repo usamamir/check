@@ -27,6 +27,7 @@
           <li><a href="{{ routes.account_url }}">Order Status</a></li>
           <li><a href="/search?jtpage=shipping-info">Shipping Info</a></li>
           <li><a href="/search?jtpage=return-policy">Return Policy</a></li>
+          <li><a href="/search?jtpage=wetsuit-return-instructions">Wetsuit Return Instructions</a></li>
           <li><a href="/search?jtpage=warranty-policy">Warranty Policy</a></li>
           <li><a href="/search?jtpage=financing">Financing</a></li>
           <li><a href="/search?jtpage=privacy-policy">Privacy Policy</a></li>
@@ -95,6 +96,16 @@
   <div class="footer-bottom">
     <div class="container">
       {% render 'payment-icons' %}
+      {%- if localization.available_languages.size > 1 -%}
+        {% form 'localization', class: 'locale-form' %}
+          <label class="visually-hidden" for="FooterLanguage">Language</label>
+          <select id="FooterLanguage" name="language_code" onchange="this.form.submit()">
+            {%- for language in localization.available_languages -%}
+              <option value="{{ language.iso_code }}" {% if language.iso_code == localization.language.iso_code %}selected{% endif %}>{{ language.endonym_name }}</option>
+            {%- endfor -%}
+          </select>
+        {% endform %}
+      {%- endif -%}
       <p>&copy; {{ 'now' | date: '%Y' }} <strong>Jet Tribe</strong>, All rights Reserved.</p>
     </div>
   </div>

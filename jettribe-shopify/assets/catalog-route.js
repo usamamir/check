@@ -51,6 +51,25 @@
   function canonicalSize(value) {
     return String(value || "").trim().replace(/\s*\/\s*/g, "/");
   }
+  function inStockSizes(prod) {
+    var sizes = [];
+    var options = (prod && prod.options) || [];
+    options.forEach(function (option, index) {
+      if (!/size|combo/i.test(optionName(option))) return;
+      (prod.variants || []).forEach(function (variant) {
+        if (!variant.available) return;
+        var value = variant["option" + (index + 1)] || (variant.options || [])[index];
+        var key = canonicalSize(value);
+        if (key && sizes.indexOf(key) === -1) sizes.push(key);
+      });
+    });
+    return sizes;
+  }
+  function sizeInStock(prod, selected) {
+    if (!selected || !selected.length) return true;
+    var sizes = inStockSizes(prod);
+    return selected.some(function (size) { return sizes.indexOf(canonicalSize(size)) !== -1; });
+  }
   function canonicalSizes(list) {
     var seen = {};
     var out = [];
@@ -151,15 +170,7 @@
   function cardFromProduct(prod, meta) {
     var options = prod.options || [];
     var onlyDefault = !options.length || (options.length === 1 && optionName(options[0]).toLowerCase() === "title");
-    var sizes = [];
-    options.forEach(function (option, index) {
-      if (!/size|combo/i.test(optionName(option))) return;
-      (prod.variants || []).forEach(function (variant) {
-        var value = variant["option" + (index + 1)] || (variant.options || [])[index];
-        var key = canonicalSize(value);
-        if (key && sizes.indexOf(key) === -1) sizes.push(key);
-      });
-    });
+    var sizes = inStockSizes(prod);
     var variant = (prod.variants || []).filter(function (item) { return item.available; })[0] || (prod.variants || [])[0] || {};
     var img = productImage(prod);
     if (!img || !prod.available) return "";
@@ -174,7 +185,7 @@
       available: !!prod.available,
       onlyDefault: onlyDefault,
       variantId: variant.id || "",
-      sizes: sizes.length ? sizes : canonicalSizes(meta.sizes)
+      sizes: sizes
     });
   }
   function cardFromCatalog(meta) {
@@ -230,15 +241,7 @@
   }
   function metaFromLive(prod) {
     var store = asStoreProduct(prod);
-    var sizes = [];
-    (store.options || []).forEach(function (option, index) {
-      if (!/size|combo/i.test(optionName(option))) return;
-      (store.variants || []).forEach(function (variant) {
-        var value = variant["option" + (index + 1)] || (variant.options || [])[index];
-        var key = canonicalSize(value);
-        if (key && sizes.indexOf(key) === -1) sizes.push(key);
-      });
-    });
+    var sizes = inStockSizes(store);
     return {
       handle: store.handle,
       title: store.title,
@@ -529,13 +532,13 @@
       return !!meta.saved;
     }
     Promise.all(slice.map(function (meta) {
-      if (meta.live) return belongs(meta.live, meta) ? cardFromProduct(meta.live, meta) : "";
+      if (meta.live) return belongs(meta.live, meta) && sizeInStock(meta.live, selectedSizes) ? cardFromProduct(meta.live, meta) : "";
       return fetch(productRoot() + "products/" + encodeURIComponent(meta.handle) + ".js", { headers: { Accept: "application/json" } })
         .then(function (res) {
           if (!res.ok) throw new Error("missing");
           return res.json();
         })
-        .then(function (prod) { return belongs(prod, meta) ? cardFromProduct(prod, meta) : ""; })
+        .then(function (prod) { return belongs(prod, meta) && sizeInStock(prod, selectedSizes) ? cardFromProduct(prod, meta) : ""; })
         .catch(function () { return ""; });
     })).then(function (cards) {
       var kept = cards.filter(Boolean);

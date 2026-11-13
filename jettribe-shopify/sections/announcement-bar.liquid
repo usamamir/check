@@ -1,4 +1,4 @@
-{%- if section.settings.line_1 != blank or section.settings.line_2 != blank -%}
+{%- if section.settings.show_bar -%}
   <div class="announcement">
     {%- if section.settings.line_1 != blank -%}
       <p><strong>{{ section.settings.line_1 }}</strong></p>
@@ -13,6 +13,13 @@
 {
   "name": "Announcement bar",
   "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_bar",
+      "label": "Show the red promotion bar",
+      "info": "Turn this on when a promotion is running. Turn it off to hide the red bar.",
+      "default": false
+    },
     {
       "type": "text",
       "id": "line_1",

@@ -89,9 +89,9 @@
 
   <div class="service-bar">
     <div class="container service-bar-inner">
-      <a href="/search?jtpage=shipping-info"><strong>Free USA shipping</strong> over $400</a>
-      <a href="tel:{{ section.settings.phone | replace: ' ', '' | replace: '.', '' }}"><strong>Rider support</strong> {{ section.settings.phone }}</a>
-      <a href="{{ settings.returns_url }}"><strong>Hassle-free returns</strong></a>
+      <a href="/search?jtpage=shipping-info">{{ section.settings.ship_text }}</a>
+      <a href="tel:{{ section.settings.phone | replace: ' ', '' | replace: '.', '' }}">{{ section.settings.support_text }} {{ section.settings.phone }}</a>
+      <a href="{{ settings.returns_url }}">{{ section.settings.returns_text }}</a>
     </div>
   </div>
 </header>
@@ -120,6 +120,24 @@
       "id": "phone",
       "label": "Phone",
       "default": "951 246 3147"
+    },
+    {
+      "type": "text",
+      "id": "ship_text",
+      "label": "White bar, shipping",
+      "default": "Free USA shipping over $400"
+    },
+    {
+      "type": "text",
+      "id": "support_text",
+      "label": "White bar, support",
+      "default": "Rider support"
+    },
+    {
+      "type": "text",
+      "id": "returns_text",
+      "label": "White bar, returns",
+      "default": "Hassle-free returns"
     }
   ]
 }

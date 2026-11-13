@@ -8,7 +8,24 @@
 </article>
 <article data-jt-page="return-policy" data-jt-title="Returns" hidden>
   <h1 class="page-heading" style="justify-content:flex-start;"><span>Returns</span></h1>
-  <div class="rte">{% render 'copy-return-policy' %}</div>
+  <div class="rte">
+    {%- if pages['return-policy'].content != blank -%}
+      {{ pages['return-policy'].content }}
+    {%- else -%}
+      {% render 'copy-return-policy' %}
+    {%- endif -%}
+  </div>
+</article>
+<article data-jt-page="wetsuit-return-instructions" data-jt-title="Wetsuit Return Instructions" hidden>
+  <h1 class="page-heading" style="justify-content:flex-start;"><span>Wetsuit Return Instructions</span></h1>
+  <div class="rte">
+    {%- if pages['wetsuit-return-instructions'].content != blank -%}
+      {{ pages['wetsuit-return-instructions'].content }}
+    {%- else -%}
+      {% render 'copy-wetsuit-return-instructions' %}
+    {%- endif -%}
+    <p><a href="/search?jtpage=return-policy">Return policy</a></p>
+  </div>
 </article>
 <article data-jt-page="dropshipping" data-jt-title="Dropshipping" hidden>
   <h1 class="page-heading" style="justify-content:flex-start;"><span>Dropshipping</span></h1>
@@ -28,7 +45,13 @@
 </article>
 <article data-jt-page="warranty-policy" data-jt-title="Warranty Policy" hidden>
   <h1 class="page-heading" style="justify-content:flex-start;"><span>Warranty Policy</span></h1>
-  <div class="rte">{% render 'copy-warranty-policy' %}</div>
+  <div class="rte">
+    {%- if pages['warranty-policy'].content != blank -%}
+      {{ pages['warranty-policy'].content }}
+    {%- else -%}
+      {% render 'copy-warranty-policy' %}
+    {%- endif -%}
+  </div>
 </article>
 <article data-jt-page="culture" data-jt-title="Culture" hidden>
   <h1 class="page-heading" style="justify-content:flex-start;"><span>Culture</span></h1>
