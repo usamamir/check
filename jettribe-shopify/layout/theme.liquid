@@ -34,6 +34,13 @@
   {{ content_for_header }}
   {{ 'theme.css' | asset_url | stylesheet_tag }}
   <style>
+    .site-nav { display: block !important; visibility: visible !important; background: #292f36 !important; }
+    .nav-list { display: flex !important; flex-wrap: wrap; visibility: visible !important; }
+    .nav-list > .nav-item { display: flex !important; visibility: visible !important; }
+    .nav-list > .nav-item > a { color: #fff !important; }
+    @media (max-width: 991px) {
+      .nav-list { display: flex !important; flex-wrap: wrap; }
+    }
     :root {
       --red: {{ settings.color_red }};
       --black: {{ settings.color_black }};

@@ -9,7 +9,7 @@
     "menu": "main-menu",
     "show_translate": true,
     "show_vip_deals": false,
-    "show_empty_menu_items": false,
+    "show_empty_menu_items": true,
     "cart_type": "drawer",
     "free_shipping_threshold": 400,
     "show_payment_image": true,

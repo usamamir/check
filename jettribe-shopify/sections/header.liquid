@@ -72,11 +72,7 @@
 
   <nav class="site-nav" id="SiteNav" data-site-nav aria-label="Primary">
     <div class="container">
-      {%- if settings.menu_source == 'shopify' and linklists[settings.menu].links.size > 0 -%}
-        {% render 'nav-links', menu: linklists[settings.menu] %}
-      {%- else -%}
-        {% render 'nav-jettribe' %}
-      {%- endif -%}
+      {% render 'nav-jettribe' %}
       <div class="mobile-utilities">
         <a href="tel:{{ section.settings.phone | replace: ' ', '' | replace: '.', '' }}">{{ section.settings.phone }}</a>
         <button class="linkish" type="button" data-open-wish>Wishlist</button>

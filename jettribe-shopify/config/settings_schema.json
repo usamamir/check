@@ -59,7 +59,7 @@
         "type": "select",
         "id": "menu_source",
         "label": "Main menu source",
-        "info": "Every menu category uses the same rule for every product. The page lists products in the Shopify collection with that name, plus products tagged with that name or collection:that-name, plus products whose product type is that name. Products with no photo and out-of-stock products stay off the page. A tag that does not name a category leaves the product where it already appears.",
+        "info": "Every menu category uses the same rule for every product. The page lists products in the Shopify collection with that name, plus products tagged with that name or collection:that-name, plus products whose product type is that name. A tag that does not name a category leaves the product where it already appears.",
         "default": "jettribe",
         "options": [
           {
@@ -96,8 +96,8 @@
         "type": "checkbox",
         "id": "show_empty_menu_items",
         "label": "Show menu categories that have no products",
-        "info": "Leave this off to hide empty Outlet and other menu links. Turn it on when those categories are filled.",
-        "default": false
+        "info": "Keep this on so Home through More stay on the bar even while a category is still filling.",
+        "default": true
       }
     ]
   },

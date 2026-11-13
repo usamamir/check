@@ -101,7 +101,7 @@
     return img || "";
   }
   function showOnSite(prod) {
-    return !!(prod && prod.available && productImage(prod));
+    return !!(prod && prod.handle);
   }
   function detect() {
     var params = new URLSearchParams(window.location.search);
@@ -173,7 +173,6 @@
     var sizes = inStockSizes(prod);
     var variant = (prod.variants || []).filter(function (item) { return item.available; })[0] || (prod.variants || [])[0] || {};
     var img = productImage(prod);
-    if (!img || !prod.available) return "";
     return cardHtml({
       id: prod.id || meta.handle,
       handle: prod.handle || meta.handle,
@@ -539,7 +538,7 @@
           return res.json();
         })
         .then(function (prod) { return belongs(prod, meta) && sizeInStock(prod, selectedSizes) ? cardFromProduct(prod, meta) : ""; })
-        .catch(function () { return ""; });
+        .catch(function () { return cardFromCatalog(meta); });
     })).then(function (cards) {
       var kept = cards.filter(Boolean);
       var grid = qs("[data-jt-grid]", root);

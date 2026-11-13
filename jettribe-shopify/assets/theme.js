@@ -74,7 +74,7 @@
     });
     qsa(".nav-item.has-sub > a", siteNav).forEach(function (link) {
       link.addEventListener("click", function (event) {
-        if (window.matchMedia("(max-width: 991px)").matches) {
+        if (window.matchMedia("(max-width: 767px)").matches && !link.parentElement.classList.contains("is-open")) {
           event.preventDefault();
           link.parentElement.classList.toggle("is-open");
         }
@@ -1027,7 +1027,7 @@
       else link.hidden = true;
     });
   }
-  if (window.Jettribe && Jettribe.catalogUrl && !Jettribe.showEmptyMenuItems) {
+  if (window.Jettribe && Jettribe.catalogUrl && Jettribe.showEmptyMenuItems === false) {
     fetch(Jettribe.catalogUrl, { headers: { Accept: "application/json" } })
       .then(function (res) { return res.ok ? res.json() : null; })
       .then(function (data) { if (data) hideEmptyMenu(data); })
