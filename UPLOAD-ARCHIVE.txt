@@ -1,0 +1,13 @@
+Two files. Import them in this order. Do not open them in Excel.
+
+1. Shopify admin → Products → Import
+   File: jettribe-restore-images.csv
+   Check Overwrite products with matching handles.
+   This puts the photo back on 1,654 products that already have a picture in the old catalog.
+
+2. Shopify admin → Products → Import
+   File: jettribe-archive-no-image.csv
+   Check Overwrite products with matching handles.
+   This archives 1,028 products that have no photo. Archived products stay off the website.
+
+Do not import jettribe-bc-products.csv.
