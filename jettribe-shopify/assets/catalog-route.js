@@ -257,6 +257,21 @@
     if (!Array.isArray(tags)) tags = String(tags).split(",");
     return tags.map(function (tag) { return String(tag).trim().toLowerCase(); }).filter(Boolean);
   }
+  function categoryKeys(data) {
+    var keys = {};
+    Object.keys((data && data.categories) || {}).forEach(function (key) {
+      keys[String(key).toLowerCase()] = true;
+    });
+    return keys;
+  }
+  function placements(prod, keys) {
+    var found = [];
+    tagList(prod).forEach(function (tag) {
+      var key = tag.indexOf("collection:") === 0 ? tag.slice(11) : tag;
+      if (keys[key] && found.indexOf(key) === -1) found.push(key);
+    });
+    return found;
+  }
   function hasMenuTag(prod, handleKey) {
     var tags = tagList(prod);
     return tags.indexOf("collection:" + handleKey) !== -1 || tags.indexOf(handleKey) !== -1;
@@ -298,6 +313,7 @@
     var metas = [];
     var seenHandles = {};
     var handleKey = String(handle || "").toLowerCase();
+    var keys = categoryKeys(data);
     function addLive(prod) {
       var meta = metaFromLive(prod);
       if (!meta.handle || seenHandles[meta.handle]) return;
@@ -469,7 +485,9 @@
     if (!slice.length) return;
     function belongs(prod, meta) {
       if (meta.locked) return true;
-      return hasMenuTag(prod, handleKey);
+      var found = placements(prod, keys);
+      if (!found.length) return true;
+      return found.indexOf(handleKey) !== -1;
     }
     Promise.all(slice.map(function (meta) {
       if (meta.live) return belongs(meta.live, meta) ? cardFromProduct(meta.live, meta) : "";

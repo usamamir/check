@@ -6,8 +6,8 @@ Upload the theme and the product file separately. The theme zip is the only file
    Upload jettribe-shopify-theme.zip in Online Store, Themes, Add theme, Upload zip file.
    Leave the zip closed. Publish the theme.
    Menu categories, including 2026 JTR Series, open from this theme.
-   Every menu category uses the same rule for every product. The page lists products in the Shopify collection with that handle, plus any product tagged collection:that-handle or tagged with the handle.
-   Add or remove any product in that collection, or change that tag, to move it. Color filters are circles. Size filters are buttons.
+   The menu design is unchanged. Every product uses the same tag rule: a tag that names a menu category places that product there, on every category. Other tags leave the product where it already appears.
+   Add the product to the Shopify collection with the same handle, or tag it collection:that-handle, to move it. Color filters are circles. Size filters are buttons.
    Payment marks are PayPal, Visa, Discover, Mastercard, and American Express.
    Turn those on in Settings, Payments (Shopify Payments and PayPal). The theme cannot switch processors on.
    PayPal Pay Later text uses the messages account already on jettribe.com.
