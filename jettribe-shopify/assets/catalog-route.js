@@ -173,7 +173,86 @@
       sizes: canonicalSizes(meta.sizes)
     });
   }
-  function renderCategory(mount, data, handle) {
+  function dollarsToCents(value) {
+    var n = Number(value);
+    return isFinite(n) ? Math.round(n * 100) : 0;
+  }
+  function asStoreProduct(prod) {
+    var variants = (prod.variants || []).map(function (variant) {
+      return {
+        id: variant.id,
+        title: variant.title,
+        sku: variant.sku,
+        available: !!variant.available,
+        option1: variant.option1,
+        option2: variant.option2,
+        option3: variant.option3,
+        options: [variant.option1, variant.option2, variant.option3].filter(function (value) { return value != null && value !== ""; }),
+        price: dollarsToCents(variant.price),
+        compare_at_price: variant.compare_at_price ? dollarsToCents(variant.compare_at_price) : 0
+      };
+    });
+    var first = variants[0] || {};
+    var image = prod.images && prod.images[0];
+    return {
+      id: prod.id,
+      handle: prod.handle,
+      title: prod.title,
+      options: prod.options || [],
+      variants: variants,
+      price: first.price || 0,
+      compare_at_price: first.compare_at_price || 0,
+      featured_image: (image && (image.src || image)) || "",
+      available: variants.some(function (variant) { return variant.available; }),
+      tags: prod.tags || [],
+      url: productRoot() + "products/" + prod.handle
+    };
+  }
+  function metaFromLive(prod) {
+    var store = asStoreProduct(prod);
+    var sizes = [];
+    (store.options || []).forEach(function (option, index) {
+      if (!/size|combo/i.test(optionName(option))) return;
+      (store.variants || []).forEach(function (variant) {
+        var value = variant["option" + (index + 1)] || (variant.options || [])[index];
+        var key = canonicalSize(value);
+        if (key && sizes.indexOf(key) === -1) sizes.push(key);
+      });
+    });
+    return {
+      handle: store.handle,
+      title: store.title,
+      price: store.price,
+      compare: store.compare_at_price || 0,
+      sizes: sizes,
+      available: store.available,
+      live: store
+    };
+  }
+  function loadCollection(handle) {
+    var key = String(handle || "").toLowerCase();
+    function page(n) {
+      return fetch(productRoot() + "collections/" + encodeURIComponent(key) + "/products.json?limit=250&page=" + n, { headers: { Accept: "application/json" } })
+        .then(function (res) {
+          var type = (res.headers.get("content-type") || "").toLowerCase();
+          if (res.status === 404) return { missing: true };
+          if (!res.ok || type.indexOf("json") === -1 || !res.json) return { missing: true };
+          return res.json().then(function (body) {
+            return { products: (body && body.products) || [] };
+          });
+        });
+    }
+    function collect(n, acc) {
+      return page(n).then(function (result) {
+        if (!result || result.missing) return n === 1 ? null : acc;
+        var next = acc.concat(result.products);
+        if (result.products.length === 250 && n < 4) return collect(n + 1, next);
+        return next;
+      });
+    }
+    return collect(1, []).catch(function () { return null; });
+  }
+  function renderCategory(mount, data, handle, live) {
     var cat = data.categories[handle];
     var params = new URLSearchParams(window.location.search);
     var sort = params.get("sort") || "featured";
@@ -183,16 +262,27 @@
     var max = params.get("max") === null || params.get("max") === "" ? null : Number(params.get("max"));
     var page = 1;
     var per = 10000;
-    var metas = (cat.products || []).map(function (productHandle) {
+    var metas = [];
+    var seenHandles = {};
+    (live || []).forEach(function (prod) {
+      var meta = metaFromLive(prod);
+      if (!meta.handle || seenHandles[meta.handle]) return;
+      seenHandles[meta.handle] = true;
+      meta.locked = true;
+      metas.push(meta);
+    });
+    (cat.products || []).forEach(function (productHandle) {
+      if (seenHandles[productHandle]) return;
+      seenHandles[productHandle] = true;
       var row = (data.products || {})[productHandle] || {};
-      return {
+      metas.push({
         handle: productHandle,
         title: row.title || productHandle,
         price: row.price || 0,
         compare: row.compare || 0,
         sizes: canonicalSizes(row.sizes),
         available: row.available !== false
-      };
+      });
     });
     function passes(meta, ignore) {
       if (ignore !== "color" && selectedColors.length) {
@@ -339,17 +429,35 @@
       });
     }
     if (!slice.length) return;
+    function menuTags(prod) {
+      var tags = (prod && prod.tags) || [];
+      if (!Array.isArray(tags)) tags = String(tags).split(",");
+      return tags.map(function (tag) { return String(tag).trim(); }).filter(function (tag) { return /^collection:/i.test(tag); });
+    }
+    function belongs(prod, meta) {
+      if (meta.locked) return true;
+      var tags = menuTags(prod);
+      if (!tags.length) return true;
+      var wanted = "collection:" + String(handle).toLowerCase();
+      return tags.some(function (tag) { return tag.toLowerCase() === wanted; });
+    }
     Promise.all(slice.map(function (meta) {
+      if (meta.live) return belongs(meta.live, meta) ? cardFromProduct(meta.live, meta) : "";
       return fetch(productRoot() + "products/" + encodeURIComponent(meta.handle) + ".js", { headers: { Accept: "application/json" } })
         .then(function (res) {
           if (!res.ok) throw new Error("missing");
           return res.json();
         })
-        .then(function (prod) { return cardFromProduct(prod, meta); })
+        .then(function (prod) { return belongs(prod, meta) ? cardFromProduct(prod, meta) : ""; })
         .catch(function () { return cardFromCatalog(meta); });
     })).then(function (cards) {
+      var kept = cards.filter(Boolean);
       var grid = qs("[data-jt-grid]", root);
-      if (grid) grid.innerHTML = cards.join("");
+      if (grid) {
+        grid.innerHTML = kept.length ? kept.join("") : "<p>No products are listed in this category.</p>";
+      }
+      var count = qs(".toolbar p", root);
+      if (count) count.textContent = kept.length + " products";
       document.dispatchEvent(new CustomEvent("catalog:rendered"));
     });
   }
@@ -369,7 +477,9 @@
     .then(function (data) {
       var key = resolveCategory(data, handle);
       if (key) {
-        renderCategory(mount, data, key);
+        loadCollection(key).then(function (live) {
+          renderCategory(mount, data, key, live);
+        });
         return;
       }
       if (!showPage(mount, route.handle)) giveUp();

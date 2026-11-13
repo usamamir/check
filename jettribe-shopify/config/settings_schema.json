@@ -59,6 +59,7 @@
         "type": "select",
         "id": "menu_source",
         "label": "Main menu source",
+        "info": "Each Jettribe menu category lists the Shopify collection with the same handle. A product also stays in a category while it has the tag collection:handle. Add or remove the product in that collection, or change that tag, to move it.",
         "default": "jettribe",
         "options": [
           {
