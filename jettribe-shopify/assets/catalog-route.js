@@ -252,7 +252,40 @@
     }
     return collect(1, []).catch(function () { return null; });
   }
-  function renderCategory(mount, data, handle, live) {
+  function tagList(prod) {
+    var tags = (prod && prod.tags) || [];
+    if (!Array.isArray(tags)) tags = String(tags).split(",");
+    return tags.map(function (tag) { return String(tag).trim().toLowerCase(); }).filter(Boolean);
+  }
+  function hasMenuTag(prod, handleKey) {
+    var tags = tagList(prod);
+    return tags.indexOf("collection:" + handleKey) !== -1 || tags.indexOf(handleKey) !== -1;
+  }
+  function loadTagged(handle) {
+    var key = String(handle || "").toLowerCase();
+    if (!safeHandle(key)) return Promise.resolve(null);
+    var q = 'tag:"collection:' + key + '" OR tag:"' + key + '"';
+    function page(n) {
+      return fetch(searchBase() + "?view=jtmenu&type=product&q=" + encodeURIComponent(q) + "&page=" + n, { headers: { Accept: "application/json" } })
+        .then(function (res) {
+          var type = (res.headers.get("content-type") || "").toLowerCase();
+          if (!res.ok || type.indexOf("json") === -1) return { missing: true };
+          return res.json().then(function (body) {
+            return { products: (body && body.products) || [], pages: (body && body.pages) || 1 };
+          });
+        });
+    }
+    function collect(n, acc) {
+      return page(n).then(function (result) {
+        if (!result || result.missing) return n === 1 ? null : acc;
+        var next = acc.concat(result.products);
+        if (n < (result.pages || 1) && n < 8) return collect(n + 1, next);
+        return next;
+      });
+    }
+    return collect(1, []).catch(function () { return null; });
+  }
+  function renderCategory(mount, data, handle, live, tagged) {
     var cat = data.categories[handle];
     var params = new URLSearchParams(window.location.search);
     var sort = params.get("sort") || "featured";
@@ -264,12 +297,17 @@
     var per = 10000;
     var metas = [];
     var seenHandles = {};
-    (live || []).forEach(function (prod) {
+    var handleKey = String(handle || "").toLowerCase();
+    function addLive(prod) {
       var meta = metaFromLive(prod);
       if (!meta.handle || seenHandles[meta.handle]) return;
       seenHandles[meta.handle] = true;
       meta.locked = true;
       metas.push(meta);
+    }
+    (live || []).forEach(addLive);
+    (tagged || []).forEach(function (prod) {
+      if (hasMenuTag(prod, handleKey)) addLive(prod);
     });
     (cat.products || []).forEach(function (productHandle) {
       if (seenHandles[productHandle]) return;
@@ -429,17 +467,9 @@
       });
     }
     if (!slice.length) return;
-    function menuTags(prod) {
-      var tags = (prod && prod.tags) || [];
-      if (!Array.isArray(tags)) tags = String(tags).split(",");
-      return tags.map(function (tag) { return String(tag).trim(); }).filter(function (tag) { return /^collection:/i.test(tag); });
-    }
     function belongs(prod, meta) {
       if (meta.locked) return true;
-      var tags = menuTags(prod);
-      if (!tags.length) return true;
-      var wanted = "collection:" + String(handle).toLowerCase();
-      return tags.some(function (tag) { return tag.toLowerCase() === wanted; });
+      return hasMenuTag(prod, handleKey);
     }
     Promise.all(slice.map(function (meta) {
       if (meta.live) return belongs(meta.live, meta) ? cardFromProduct(meta.live, meta) : "";
@@ -477,8 +507,8 @@
     .then(function (data) {
       var key = resolveCategory(data, handle);
       if (key) {
-        loadCollection(key).then(function (live) {
-          renderCategory(mount, data, key, live);
+        Promise.all([loadCollection(key), loadTagged(key)]).then(function (lists) {
+          renderCategory(mount, data, key, lists[0], lists[1]);
         });
         return;
       }
