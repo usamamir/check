@@ -1,0 +1,15 @@
+{
+  "type": "header",
+  "name": "Header",
+  "sections": {
+    "header": {
+      "type": "header",
+      "settings": {
+        "phone": "951 246 3147"
+      }
+    }
+  },
+  "order": [
+    "header"
+  ]
+}

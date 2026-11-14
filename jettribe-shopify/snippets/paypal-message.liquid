@@ -1,0 +1,13 @@
+{%- comment -%}
+  PayPal Pay Later text. The script loads with components=messages only, so this does not charge a card.
+{%- endcomment -%}
+{%- if settings.show_paypal_message and settings.paypal_client_id != blank and settings.paypal_merchant_id != blank -%}
+  <div
+    class="paypal-message"
+    data-pp-message
+    data-pp-placement="{{ placement | default: 'product' }}"
+    {%- if amount != blank %}
+      data-pp-amount="{{ amount | divided_by: 100.0 }}"
+    {%- endif %}
+  ></div>
+{%- endif -%}

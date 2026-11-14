@@ -1,0 +1,39 @@
+{% layout none %}
+{% paginate search.results by 250 %}
+{% assign sep = "" %}
+{"products":[
+{% for item in search.results %}
+  {% if item.object_type == 'product' %}
+    {{ sep }}
+    {% assign sep = "," %}
+    {
+      "id": {{ item.id | json }},
+      "handle": {{ item.handle | json }},
+      "title": {{ item.title | json }},
+      "tags": {{ item.tags | json }},
+      "type": {{ item.type | json }},
+      "available": {{ item.available | json }},
+      "url": {{ item.url | json }},
+      "images": [{% if item.featured_image %}{"src": {{ item.featured_image | image_url: width: 800 | json }}}{% endif %}],
+      "options": {{ item.options | json }},
+      "variants": [
+        {% for variant in item.variants %}
+          {% unless forloop.first %},{% endunless %}
+          {
+            "id": {{ variant.id | json }},
+            "title": {{ variant.title | json }},
+            "sku": {{ variant.sku | json }},
+            "available": {{ variant.available | json }},
+            "option1": {{ variant.option1 | json }},
+            "option2": {{ variant.option2 | json }},
+            "option3": {{ variant.option3 | json }},
+            "price": {{ variant.price | divided_by: 100.0 | json }},
+            "compare_at_price": {% if variant.compare_at_price %}{{ variant.compare_at_price | divided_by: 100.0 | json }}{% else %}null{% endif %}
+          }
+        {% endfor %}
+      ]
+    }
+  {% endif %}
+{% endfor %}
+],"pages":{{ paginate.pages | default: 0 }}}
+{% endpaginate %}

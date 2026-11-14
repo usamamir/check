@@ -1,0 +1,7 @@
+Shopify
+Products → Import
+File: jettribe-products.csv
+Check Overwrite products with matching handles.
+Do not open the file in Excel.
+
+Do not import a file into SKU Labs. SKU Labs already has the items. After this Shopify import, run a listings sync in SKU Labs so those existing items link to the Shopify sizes.

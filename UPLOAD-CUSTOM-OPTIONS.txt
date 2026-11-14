@@ -1,0 +1,21 @@
+Fix custom vest options (Size + Name Plate) and prices
+
+1) Online Store → Themes → Add theme → Upload zip, then Preview that new row:
+https://raw.githubusercontent.com/usamamir/check/cursor/jettribe-shopify-theme-86d6/jettribe-theme-nov14-20261114-0845.zip
+
+The theme matches jettribe.com on custom vests:
+- Size: XXS, S/M, L/XL, 2XL/3XL
+- $40 - Add Customized Vest Name Plate: None / Moto Font Customization / Standard Font Customization
+- Name for Plate + Race Number fields appear when a font is selected
+
+2) Products → Import. Wait until any other import finishes first.
+Check Overwrite products with matching handles.
+Do not open the CSV in Excel.
+
+Preferred (full inventory + clean options + tags + prices):
+https://raw.githubusercontent.com/usamamir/check/cursor/jettribe-shopify-theme-86d6/jettribe-inventory-and-tags.csv
+
+Custom-option products only (smaller file):
+https://raw.githubusercontent.com/usamamir/check/cursor/jettribe-shopify-theme-86d6/jettribe-fix-custom-options.csv
+
+Base size stays at the vest price. Choosing a customized name plate uses the +$40 variant. Name plate and race number text fields only show when a font is selected.

@@ -1,0 +1,93 @@
+{%- liquid
+  assign block_card = false
+  assign title_l = product.title | downcase
+  assign handle_l = product.handle | downcase
+  if title_l contains 'promo card' or title_l contains 'promotional' or title_l contains 'gift card' or title_l contains 'gift certificate' or title_l contains 'restrictions apply'
+    assign block_card = true
+  endif
+  if handle_l contains 'promo-card' or handle_l contains 'promotional' or handle_l contains 'gift-card' or handle_l contains 'egift' or handle_l contains 'e-gift'
+    assign block_card = true
+  endif
+-%}
+{%- unless block_card -%}
+{%- if product.available and product.featured_image -%}
+{%- liquid
+  assign size_bits = ''
+  for variant in product.variants
+    if variant.available
+      for option in product.options_with_values
+        assign oname = option.name | downcase
+        if oname contains 'plate' or oname contains 'font' or oname contains 'custom' or oname contains 'addon' or oname contains 'add-on' or oname contains 'sock'
+          continue
+        endif
+        if oname contains 'size' or oname contains 'combo' or oname contains 'sizing'
+          assign pos0 = option.position | minus: 1
+          assign raw_size = variant.options[pos0] | strip
+          if raw_size contains '[PI]' or raw_size contains 'Name Plate' or raw_size contains 'Customization' or raw_size contains '$'
+            assign raw_size = raw_size | split: ',' | first | strip
+          endif
+          if raw_size contains '='
+            assign raw_size = raw_size | split: '=' | first | strip
+          endif
+          assign size_ok = false
+          assign size_check = raw_size | upcase | replace: ' ', ''
+          if size_check == 'XXS' or size_check == 'XS' or size_check == 'S' or size_check == 'M' or size_check == 'L' or size_check == 'XL' or size_check == 'XXL' or size_check == 'XXXL' or size_check == '2XL' or size_check == '3XL' or size_check == '4XL' or size_check == '5XL'
+            assign size_ok = true
+          endif
+          if size_check == 'XXS/XS' or size_check == 'XS/S' or size_check == 'S/M' or size_check == 'M/L' or size_check == 'L/XL' or size_check == 'XL/XXL' or size_check == 'XXL/XXXL' or size_check == '2XL/3XL'
+            assign size_ok = true
+          endif
+          if size_check == 'SMALL' or size_check == 'MEDIUM' or size_check == 'LARGE' or size_check == 'XLARGE' or size_check == 'XXLARGE'
+            assign size_ok = true
+          endif
+          if size_ok
+            assign size_bits = size_bits | append: raw_size | append: '|'
+          endif
+        endif
+      endfor
+    endif
+  endfor
+-%}
+<article class="card" data-sizes="{{ size_bits | escape }}">
+  <a class="card-media" href="{{ product.url }}">
+    <img
+      src="{{ product.featured_image | image_url: width: 600 }}"
+      alt="{{ product.featured_image.alt | escape }}"
+      width="500"
+      height="659"
+      loading="lazy"
+    >
+  </a>
+  <div class="card-hover">
+    <button type="button" class="btn btn--blue" data-quick-view="{{ product.handle }}">Quick view</button>
+  </div>
+  <div class="card-body">
+    <h3 class="card-title"><a href="{{ product.url }}">{{ product.title }}</a></h3>
+    <div class="price">{% render 'price', product: product %}</div>
+    <label class="compare-check">
+      <input
+        type="checkbox"
+        data-compare-add
+        data-id="{{ product.id }}"
+        data-title="{{ product.title | escape }}"
+        data-price="{{ product.price }}"
+        data-img="{{ product.featured_image | image_url: width: 480 }}"
+        data-url="{{ product.url }}"
+      >
+      <span>Compare</span>
+    </label>
+    <div class="card-actions">
+      {%- if product.available -%}
+        {%- if product.has_only_default_variant -%}
+          <button type="button" class="btn" data-add-variant="{{ product.selected_or_first_available_variant.id }}">Add to Cart</button>
+        {%- else -%}
+          <a class="btn" href="{{ product.url }}">Choose Options</a>
+        {%- endif -%}
+      {%- else -%}
+        <span class="btn is-disabled">Out of Stock</span>
+      {%- endif -%}
+    </div>
+  </div>
+</article>
+{%- endif -%}
+{%- endunless -%}

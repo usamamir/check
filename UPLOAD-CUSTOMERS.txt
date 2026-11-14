@@ -1,0 +1,13 @@
+Shopify admin → Customers → Import
+File: jettribe-customers.csv
+Do not open the file in Excel.
+
+23,263 customers. One address each. Extra BigCommerce addresses are noted on the customer, and the first street address is the one imported.
+
+Accepts Email Marketing is no. The BigCommerce column is review and abandoned-cart mail, not a newsletter opt-in. Customers who had that box checked are tagged bc-review-emails.
+
+Dealer and distributor groups are tags: dealer-usa, dealer-distributor, distributor, industry-distribution, ebay, pending-subscriptions, subscribed, unsubscribed.
+
+51 customers have a BigCommerce store credit balance. The amount is in the customer note and they are tagged store-credit. Shopify does not apply that balance on import.
+
+Passwords do not transfer. After the import, select the customers and send account invites so they can set a password.

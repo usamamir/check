@@ -1,0 +1,57 @@
+{%- liquid
+  assign seo_description = page_description | default: settings.default_meta_description
+  if request.page_type == 'product' and product.featured_image
+    assign share_image = product.featured_image | image_url: width: 1200
+    assign share_alt = product.title
+  elsif request.page_type == 'article' and article.image
+    assign share_image = article.image | image_url: width: 1200
+    assign share_alt = article.title
+  elsif settings.logo != blank
+    assign share_image = settings.logo | image_url: width: 1200
+    assign share_alt = shop.name
+  else
+    assign share_image = 'logo.png' | asset_url
+    assign share_alt = shop.name
+  endif
+-%}
+<meta property="og:site_name" content="{{ shop.name }}">
+<meta property="og:url" content="{{ canonical_url }}">
+<meta property="og:title" content="{{ page_title | escape }}">
+<meta property="og:type" content="{% if request.page_type == 'product' %}product{% else %}website{% endif %}">
+<meta property="og:image" content="{{ share_image }}">
+<meta property="og:image:alt" content="{{ share_alt | escape }}">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{ page_title | escape }}">
+<meta name="twitter:image" content="{{ share_image }}">
+{%- if seo_description != blank -%}
+  <meta property="og:description" content="{{ seo_description | escape }}">
+  <meta name="twitter:description" content="{{ seo_description | escape }}">
+{%- endif -%}
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "name": {{ shop.name | json }},
+        "url": {{ shop.url | json }},
+        "logo": {{ 'logo.png' | asset_url | json }},
+        "sameAs": [
+          {{ settings.social_facebook | json }},
+          {{ settings.social_instagram | json }},
+          {{ settings.social_youtube | json }}
+        ]
+      },
+      {
+        "@type": "WebSite",
+        "name": {{ shop.name | json }},
+        "url": {{ shop.url | json }},
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "{{ shop.url }}/search?type=product&q={search_term_string}",
+          "query-input": "required name=search_term_string"
+        }
+      }
+    ]
+  }
+</script>

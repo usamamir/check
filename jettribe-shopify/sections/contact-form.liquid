@@ -1,0 +1,39 @@
+<section class="page-wrap">
+  <div class="container narrow">
+    {% render 'breadcrumbs' %}
+    <h1 class="page-heading" style="justify-content:flex-start;"><span>{{ page.title | default: 'Contact' }}</span></h1>
+    <div class="rte">{{ page.content }}</div>
+    <p><strong>Jettribe Rider Support</strong><br>
+      <a href="tel:9512463147">951.246.3147</a><br>
+      Mon - Fri, 9am - 4pm PST<br>
+      <a href="mailto:ridersupport@jettribe.com">ridersupport@jettribe.com</a>
+    </p>
+    {% form 'contact' %}
+      {%- if form.posted_successfully? -%}
+        <p class="form-success">Thanks. Rider support will get back to you.</p>
+      {%- endif -%}
+      {{ form.errors | default_errors }}
+      <div class="field">
+        <label for="ContactName">Name</label>
+        <input id="ContactName" type="text" name="contact[name]" value="{% if customer %}{{ customer.name }}{% endif %}" required>
+      </div>
+      <div class="field">
+        <label for="ContactEmail">Email</label>
+        <input id="ContactEmail" type="email" name="contact[email]" value="{% if customer %}{{ customer.email }}{% endif %}" required>
+      </div>
+      <div class="field">
+        <label for="ContactPhone">Phone</label>
+        <input id="ContactPhone" type="tel" name="contact[phone]">
+      </div>
+      <div class="field">
+        <label for="ContactBody">Message</label>
+        <textarea id="ContactBody" name="contact[body]" required></textarea>
+      </div>
+      <button class="btn" type="submit">Send</button>
+    {% endform %}
+  </div>
+</section>
+
+{% schema %}
+{ "name": "Contact form", "settings": [] }
+{% endschema %}

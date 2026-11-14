@@ -1,0 +1,22 @@
+<section class="page-wrap">
+  <div class="container" style="max-width:980px;">
+    {% render 'breadcrumbs' %}
+    <h1 class="page-heading" style="justify-content:flex-start;"><span>{{ page.title | default: 'Financing' }}</span></h1>
+    <div class="rte">{{ page.content }}</div>
+    <p>Clear, transparent terms. Fair rates. No prepayment penalties.</p>
+    <div class="finance-marks">{% render 'payment-icons' %}</div>
+    <div class="finance-grid">
+      <article class="finance-card">
+        <h3>Cards and PayPal</h3>
+        <p>Pay at checkout with PayPal, Visa, Mastercard, American Express, or Discover.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Financing page",
+  "settings": []
+}
+{% endschema %}

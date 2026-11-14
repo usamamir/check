@@ -1,0 +1,19 @@
+{
+  "type": "footer",
+  "name": "Footer",
+  "sections": {
+    "footer": {
+      "type": "footer",
+      "settings": {
+        "phone": "951.246.3147",
+        "hours": "Mon - Fri, 9am - 4pm PST",
+        "email": "ridersupport@jettribe.com",
+        "shipping_address": "1120 Como Street South\nSulphur Springs, Texas 75482",
+        "corporate_address": "(No Products at this Location)\nTemecula, California\nOffice By Appointment Only"
+      }
+    }
+  },
+  "order": [
+    "footer"
+  ]
+}

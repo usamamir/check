@@ -1,0 +1,154 @@
+<!doctype html>
+<html class="no-js" lang="{{ request.locale.iso_code }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="{{ settings.color_black }}">
+  <link rel="canonical" href="{{ canonical_url }}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+
+  {%- if settings.favicon != blank -%}
+    <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32, height: 32 }}">
+  {%- endif -%}
+
+  <title>
+    {{ page_title }}
+    {%- if current_tags %} &ndash; tagged "{{ current_tags | join: ', ' }}"{% endif -%}
+    {%- if current_page != 1 %} &ndash; Page {{ current_page }}{% endif -%}
+    {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
+  </title>
+
+  {%- liquid
+    assign seo_description = page_description | default: settings.default_meta_description
+  -%}
+  {%- if seo_description != blank -%}
+    <meta name="description" content="{{ seo_description | escape }}">
+  {%- endif -%}
+  {%- if settings.google_site_verification != blank -%}
+    <meta name="google-site-verification" content="{{ settings.google_site_verification | escape }}">
+  {%- endif -%}
+
+  {% render 'meta-tags' %}
+  {{ content_for_header }}
+  {{ 'theme.css' | asset_url | stylesheet_tag }}
+  <style>
+    :root {
+      --red: {{ settings.color_red }};
+      --black: {{ settings.color_black }};
+      --blue: {{ settings.color_blue }};
+      --text: {{ settings.color_text }};
+      --heading: {{ settings.color_heading }};
+      --header: {{ settings.color_black }};
+    }
+    #JettribeMenu {
+      display: block !important;
+      visibility: visible !important;
+      background: #292f36 !important;
+      color: #fff !important;
+      min-height: 52px !important;
+      position: relative !important;
+      z-index: 10050 !important;
+      width: 100% !important;
+      overflow: visible !important;
+    }
+    #JettribeMenu .nav-list {
+      display: flex !important;
+      visibility: visible !important;
+      flex-wrap: wrap;
+      align-items: stretch;
+      min-height: 52px;
+      gap: 0 18px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    #JettribeMenu .nav-list > .nav-item {
+      display: flex !important;
+      visibility: visible !important;
+      align-items: center;
+      position: static;
+    }
+    #JettribeMenu .nav-list > .nav-item.has-drop {
+      position: relative;
+      margin-left: auto;
+    }
+    #JettribeMenu .nav-list > .nav-item > a {
+      color: #fff !important;
+      visibility: visible !important;
+      font-family: Roboto, sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    #JettribeMenu .nav-item:hover > .nav-sub,
+    #JettribeMenu .nav-item.is-mega > .nav-sub,
+    #JettribeMenu .nav-item.is-open > .nav-sub,
+    #JettribeMenu .nav-item:focus-within > .nav-sub {
+      display: block !important;
+    }
+    #JettribeMenu .nav-item:hover > .nav-drop,
+    #JettribeMenu .nav-item.is-mega > .nav-drop,
+    #JettribeMenu .nav-item.is-open > .nav-drop,
+    #JettribeMenu .nav-item:focus-within > .nav-drop {
+      display: block !important;
+    }
+    #JettribeMenu .nav-sub > .container {
+      background: #2e353d !important;
+      color: #fff !important;
+      box-shadow: 0 16px 32px rgba(0,0,0,0.28) !important;
+    }
+    body { top: 0 !important; }
+  </style>
+  <script>
+    document.documentElement.className = document.documentElement.className.replace('no-js', 'js');
+    window.Jettribe = {
+      moneyFormat: {{ shop.money_format | json }},
+      cartType: {{ settings.cart_type | json }},
+      freeShipping: {{ settings.free_shipping_threshold | times: 100 }},
+      showEmptyMenuItems: true,
+      catalogUrl: {{ 'jt-categories.json' | asset_url | json }},
+      reviewsUrl: {{ 'jt-reviews.json' | asset_url | json }},
+      routes: {
+        root: {{ routes.root_url | json }},
+        cart: {{ routes.cart_url | json }},
+        search: {{ routes.search_url | json }}
+      }
+    };
+  </script>
+</head>
+<body class="template-{{ request.page_type | handle }}">
+  <a class="skip-link" href="#MainContent">Skip to content</a>
+
+  {% render 'site-header' %}
+  {% render 'menu-bar' %}
+  {% render 'service-bar' %}
+
+  <div class="announcement" style="display:flex!important;visibility:visible!important;justify-content:center;align-items:center;flex-wrap:wrap;gap:6px 28px;background:#e53d42;color:#fff;text-align:center;text-transform:uppercase;font-size:15px;padding:11px 16px;">
+    <p style="margin:0;"><strong>Jettribe is a true core personal watercraft brand: born in southern California</strong></p>
+  </div>
+
+  <main id="MainContent" class="main" role="main" tabindex="-1">
+    {{ content_for_layout }}
+  </main>
+  {% sections 'footer-group' %}
+
+  {% render 'cart-drawer' %}
+  {% render 'quick-view' %}
+  {% render 'wishlist-drawer' %}
+  {% render 'compare-bar' %}
+
+  <script src="{{ 'theme.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'catalog-route.js' | asset_url }}" defer="defer"></script>
+  {% if settings.show_paypal_message and settings.paypal_client_id != blank and settings.paypal_merchant_id != blank %}
+    <script
+      defer
+      src="https://www.paypal.com/sdk/js?client-id={{ settings.paypal_client_id | url_encode }}&merchant-id={{ settings.paypal_merchant_id | url_encode }}&components=messages&currency=USD"
+      data-namespace="paypalMessages"
+      onload="document.dispatchEvent(new Event('paypal:ready'))"
+    ></script>
+  {% endif %}
+</body>
+</html>
