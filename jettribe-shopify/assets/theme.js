@@ -572,8 +572,22 @@
     var blob = label + " " + (values || []).join(" ");
     return /\$\s*\d/.test(blob) && /add-?on|plate|sock|custom/i.test(blob);
   }
+  var SIZE_WORD = "(?:XXS|XS|S|M|L|XL|XXL|XXXL|XXXXL|2XL|3XL|4XL|5XL|Small|Medium|Large|X\\s*Large|XX\\s*Large|XXX\\s*Large)";
+  var SIZE_LABEL = new RegExp("^" + SIZE_WORD + "(?:\\s*\\/\\s*" + SIZE_WORD + ")?$", "i");
+  var SIZE_NUMERIC = /^(?:[5-9]|1[0-5]|2[8-9]|[3-4][0-9])$/;
+  function isSizeJunk(value) {
+    return /\[PI\]|name\s*plate|customization|add\s*custom|font\s*custom|\$\s*\d|gift\s*card|restrictions\s*apply/i.test(String(value || ""));
+  }
   function canonicalSize(value) {
-    return String(value || "").trim().replace(/\s*\/\s*/g, "/");
+    var raw = String(value == null ? "" : value).trim();
+    if (!raw || /^default\s*title$/i.test(raw) || /^none$/i.test(raw)) return "";
+    var head = raw.split(/,|\[PI\]|\[RB\]|\[S\]|\[RT\]|\[CS\]/)[0].trim();
+    head = head.split("=")[0].trim();
+    head = head.replace(/\s*\/\s*/g, "/").replace(/\s+/g, " ").trim();
+    if (isSizeJunk(raw) && !SIZE_LABEL.test(head) && !SIZE_NUMERIC.test(head)) return "";
+    if (SIZE_LABEL.test(head) || SIZE_NUMERIC.test(head)) return head.replace(/\s*\/\s*/g, "/");
+    if (/^(one\s*size|os|osfa)$/i.test(head)) return "One Size";
+    return "";
   }
   function productSku(prod, variant) {
     if (variant && variant.sku) return variant.sku;
@@ -951,6 +965,7 @@
       });
       (card.getAttribute("data-sizes") || "").split("|").filter(Boolean).forEach(function (size) {
         var key = canonicalSize(size);
+        if (!key) return;
         sizeCounts[key] = (sizeCounts[key] || 0) + 1;
       });
     });

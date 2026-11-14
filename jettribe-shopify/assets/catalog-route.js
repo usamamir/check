@@ -48,14 +48,40 @@
   function titleColors(text) {
     return COLORS.filter(function (row) { return row[2].test(text || ""); }).map(function (row) { return row[0]; });
   }
+  var SIZE_WORD = "(?:XXS|XS|S|M|L|XL|XXL|XXXL|XXXXL|2XL|3XL|4XL|5XL|Small|Medium|Large|X\\s*Large|XX\\s*Large|XXX\\s*Large)";
+  var SIZE_LABEL = new RegExp("^" + SIZE_WORD + "(?:\\s*\\/\\s*" + SIZE_WORD + ")?$", "i");
+  var SIZE_NUMERIC = /^(?:[5-9]|1[0-5]|2[8-9]|[3-4][0-9])$/;
+  function isSizeJunk(value) {
+    return /\[PI\]|name\s*plate|customization|add\s*custom|font\s*custom|\$\s*\d|gift\s*card|restrictions\s*apply/i.test(String(value || ""));
+  }
+  function isSizeOptionName(name) {
+    var n = String(name || "");
+    if (!/size|combo|sizing/i.test(n)) return false;
+    if (/plate|font|customization|addon|add-on|sock/i.test(n)) return false;
+    return true;
+  }
   function canonicalSize(value) {
-    return String(value || "").trim().replace(/\s*\/\s*/g, "/");
+    var raw = String(value == null ? "" : value).trim();
+    if (!raw || /^default\s*title$/i.test(raw) || /^none$/i.test(raw)) return "";
+    // Keep only the leading size token when BC modifiers were mashed into the value.
+    var head = raw.split(/,|\[PI\]|\[RB\]|\[S\]|\[RT\]|\[CS\]/)[0].trim();
+    head = head.split("=")[0].trim();
+    head = head.replace(/\s*\/\s*/g, "/").replace(/\s+/g, " ").trim();
+    head = head
+      .replace(/^x\s*large$/i, "X Large")
+      .replace(/^xx\s*large$/i, "XX Large")
+      .replace(/^xxx\s*large$/i, "XXX Large");
+    if (isSizeJunk(raw) && !SIZE_LABEL.test(head) && !SIZE_NUMERIC.test(head)) return "";
+    if (SIZE_LABEL.test(head) || SIZE_NUMERIC.test(head)) return head.replace(/\s*\/\s*/g, "/");
+    // Allow clean short labels like "One Size"
+    if (/^(one\s*size|os|osfa)$/i.test(head)) return "One Size";
+    return "";
   }
   function inStockSizes(prod) {
     var sizes = [];
     var options = (prod && prod.options) || [];
     options.forEach(function (option, index) {
-      if (!/size|combo/i.test(optionName(option))) return;
+      if (!isSizeOptionName(optionName(option))) return;
       (prod.variants || []).forEach(function (variant) {
         if (!variant.available) return;
         var value = variant["option" + (index + 1)] || (variant.options || [])[index];
@@ -463,7 +489,11 @@
     });
     metas.forEach(function (meta) {
       if (!passes(meta, "size")) return;
-      meta.sizes.forEach(function (size) { sizeSet[size] = (sizeSet[size] || 0) + 1; });
+      meta.sizes.forEach(function (size) {
+        var clean = canonicalSize(size);
+        if (!clean) return;
+        sizeSet[clean] = (sizeSet[clean] || 0) + 1;
+      });
     });
     var colorHtml = COLORS.filter(function (row) { return colorSet[row[0]]; }).map(function (row) {
       var nextColors = selectedColors.slice();
@@ -480,12 +510,13 @@
       if (ib === -1) ib = 500;
       if (ia !== ib) return ia - ib;
       return a.localeCompare(b);
-    }).map(function (size) {
+    }).filter(function (size) { return !!canonicalSize(size); }).map(function (size) {
+      var clean = canonicalSize(size);
       var nextSizes = selectedSizes.slice();
-      var on = nextSizes.indexOf(size) !== -1;
-      if (on) nextSizes = nextSizes.filter(function (item) { return item !== size; });
-      else nextSizes.push(size);
-      return '<a class="size-chip' + (on ? " is-active" : "") + '" href="' + esc(href({ size: nextSizes.join(",") })) + '">' + esc(size) + "</a>";
+      var on = nextSizes.indexOf(clean) !== -1;
+      if (on) nextSizes = nextSizes.filter(function (item) { return item !== clean; });
+      else nextSizes.push(clean);
+      return '<a class="size-chip' + (on ? " is-active" : "") + '" href="' + esc(href({ size: nextSizes.join(",") })) + '">' + esc(clean) + "</a>";
     }).join("");
     var childHtml = (cat.children || []).map(function (child) {
       return '<li><a href="' + esc(href({}, child.handle)) + '">' + esc(child.name) + "</a></li>";
