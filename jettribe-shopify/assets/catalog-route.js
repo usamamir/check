@@ -113,6 +113,8 @@
     if (isBlockedProduct(prod, meta)) return false;
     var img = productImage(prod) || (meta && meta.image) || "";
     if (!img) return false;
+    if (prod && prod.available === false) return false;
+    if (meta && meta.available === false) return false;
     return !!(prod && prod.handle) || !!(meta && meta.handle);
   }
   function detect() {

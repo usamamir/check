@@ -10,7 +10,7 @@
   endif
 -%}
 {%- unless block_card -%}
-{%- if product.featured_image -%}
+{%- if product.available and product.featured_image -%}
 {%- liquid
   assign size_bits = ''
   for variant in product.variants

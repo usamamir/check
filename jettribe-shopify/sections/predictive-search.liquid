@@ -13,7 +13,7 @@
         endif
       -%}
       {%- unless block_card -%}
-        {%- if product.featured_image -%}
+        {%- if product.available and product.featured_image -%}
           <a href="{{ product.url }}">
             <img src="{{ product.featured_image | image_url: width: 120 }}" alt="{{ product.title | escape }}" width="54" height="54">
             <span>{{ product.title }}</span>

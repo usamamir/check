@@ -1,0 +1,33 @@
+IMPORT BIGCOMMERCE INVENTORY INTO SHOPIFY
+
+Source file used: Google Drive BigCommerce product export
+(also saved as jettribe-bc-inventory-source.zip)
+
+1) Update quantities and variations
+   Products → Import
+   Check: Overwrite products with matching handles
+   Do not open in Excel
+
+https://raw.githubusercontent.com/usamamir/check/cursor/jettribe-shopify-theme-86d6/jettribe-inventory-from-bc.csv
+
+2) Publish in-stock products and attach menu category tags
+   Products → Import
+   Check: Overwrite products with matching handles
+
+https://raw.githubusercontent.com/usamamir/check/cursor/jettribe-shopify-theme-86d6/jettribe-publish-instock.csv
+
+3) Unpublish out-of-stock / not-for-sale products so they stop appearing
+   Products → Import
+   Check: Overwrite products with matching handles
+
+https://raw.githubusercontent.com/usamamir/check/cursor/jettribe-shopify-theme-86d6/jettribe-unpublish-oos.csv
+
+4) Re-upload the theme zip so out-of-stock cards stay off collection grids
+
+https://raw.githubusercontent.com/usamamir/check/cursor/jettribe-shopify-theme-86d6/jettribe-theme-nov14-20261114-0845.zip
+
+Notes
+- 477 BigCommerce-visible products with stock are set active and tagged for menu categories
+- Variant sizes/colors and inventory quantities come from the BigCommerce export
+- Products that are hidden on BigCommerce stay draft even if warehouse qty > 0
+- Promo / gift-card products stay excluded
