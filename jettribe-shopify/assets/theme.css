@@ -914,6 +914,14 @@ button.linkish { background: none; border: 0; padding: 0; font: inherit; cursor:
 }
 .product-price .price { font-size: 22px; display: block; margin: 8px 0; }
 .option-label { font-weight: 700; margin: 12px 0 6px; color: #000; }
+[data-option-mount]:not([data-ready]) .option-values label span {
+  max-width: 7.5rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: inline-block;
+  vertical-align: middle;
+}
 .option-values { display: flex; flex-wrap: wrap; gap: 8px; }
 .option-values label {
   border: 1px solid #ccc;

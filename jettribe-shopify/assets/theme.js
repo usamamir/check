@@ -345,15 +345,232 @@
     }).finally(function () { if (button) button.disabled = false; });
   });
 
+  /* Normalize BigCommerce-style size + name-plate options for product forms */
+  function parseMangledOption(raw) {
+    var value = String(raw == null ? "" : raw).trim();
+    if (!value) return null;
+    if (/\[PI\]|Name Plate=|Font Customization/i.test(value)) {
+      var sizePart = value.split(/,\[PI\]/)[0].replace(/^Size=/i, "").trim();
+      sizePart = canonicalSize(sizePart) || sizePart.replace(/\s*\/\s*/g, "/").replace(/\s+/g, " ").trim();
+      var plate = "None";
+      var m = value.match(/=\s*([^,:]+)(?::\d+)?\s*$/);
+      if (m) {
+        var choice = m[1].trim();
+        if (/moto/i.test(choice)) plate = "Moto Font Customization";
+        else if (/standard/i.test(choice)) plate = "Standard Font Customization";
+        else if (/blank/i.test(choice)) plate = "Blank PVC Vest Name Plate ($25)";
+        else if (/custom pvc|yes custom/i.test(choice)) plate = "Custom PVC Vest Name Plate ($60)";
+        else if (!/^none$/i.test(choice)) plate = choice;
+      }
+      return { size: sizePart, plate: plate, mangled: true };
+    }
+    var clean = canonicalSize(value);
+    if (clean) return { size: clean, plate: "None", mangled: false };
+    if (/^(none|default)$/i.test(value)) return { size: "", plate: "None", mangled: false };
+    if (/moto font/i.test(value)) return { size: "", plate: "Moto Font Customization", mangled: false };
+    if (/standard font/i.test(value)) return { size: "", plate: "Standard Font Customization", mangled: false };
+    return { size: value.replace(/\s*\/\s*/g, "/"), plate: "", mangled: false };
+  }
+
+  function displayPlateLabel(value) {
+    var v = String(value || "").trim();
+    if (!v || /^(none|default)$/i.test(v)) return "None";
+    if (/moto/i.test(v) && !/moto font customization/i.test(v)) return "Moto Font Customization";
+    if (/standard/i.test(v) && !/standard font customization/i.test(v)) return "Standard Font Customization";
+    return v;
+  }
+
+  function plateOptionTitle(name) {
+    var n = String(name || "");
+    if (/name\s*plate|customized vest name plate/i.test(n)) return "$40 - Add Customized Vest Name Plate";
+    if (/pvc/i.test(n) && /plate/i.test(n)) return n;
+    return n;
+  }
+
+  function rematerializeProduct(prod) {
+    if (!prod || !prod.variants || !prod.variants.length) return prod;
+    var mangledCount = 0;
+    prod.variants.forEach(function (variant) {
+      (variant.options || []).forEach(function (opt) {
+        if (/\[PI\]|Name Plate=|Font Customization:\d+/i.test(String(opt || ""))) mangledCount += 1;
+      });
+    });
+    var optionNames = (prod.options || []).map(optionLabel);
+    var hasPlateOption = optionNames.some(function (name) {
+      return /plate|font|custom/i.test(name) && !/^size$/i.test(name);
+    });
+    if (!mangledCount && hasPlateOption) {
+      prod.options = optionNames.map(function (name, index) {
+        if (/size/i.test(name)) return "Size";
+        if (/plate|font/i.test(name)) return plateOptionTitle(name);
+        return name;
+      });
+      prod.variants.forEach(function (variant) {
+        variant.options = (variant.options || []).map(function (opt, index) {
+          var name = String(prod.options[index] || "");
+          if (/size/i.test(name)) return canonicalSize(opt) || String(opt || "").replace(/\s*\/\s*/g, "/");
+          if (/plate/i.test(name)) return displayPlateLabel(opt);
+          return opt;
+        });
+        variant.option1 = variant.options[0];
+        variant.option2 = variant.options[1];
+        variant.option3 = variant.options[2];
+      });
+      return prod;
+    }
+    if (!mangledCount) return prod;
+
+    var sizeOrder = [];
+    var plateOrder = [];
+    prod.variants.forEach(function (variant) {
+      var raw = (variant.options && variant.options[0]) || variant.option1 || "";
+      var parsed = parseMangledOption(raw) || { size: String(raw), plate: "None" };
+      variant._jtSize = parsed.size || "One Size";
+      variant._jtPlate = displayPlateLabel(parsed.plate || "None");
+      if (sizeOrder.indexOf(variant._jtSize) === -1) sizeOrder.push(variant._jtSize);
+      if (plateOrder.indexOf(variant._jtPlate) === -1) plateOrder.push(variant._jtPlate);
+    });
+    plateOrder.sort(function (a, b) {
+      if (/^none$/i.test(a)) return -1;
+      if (/^none$/i.test(b)) return 1;
+      return a.localeCompare(b);
+    });
+    prod.options = ["Size", "$40 - Add Customized Vest Name Plate"];
+    prod.variants.forEach(function (variant) {
+      variant.options = [variant._jtSize, variant._jtPlate];
+      variant.option1 = variant._jtSize;
+      variant.option2 = variant._jtPlate;
+      variant.option3 = null;
+    });
+    return prod;
+  }
+
+  function renderOptionGroups(form, prod, namePrefix) {
+    var mount = qs("[data-option-mount]", form);
+    if (mount) {
+      mount.innerHTML = "";
+    } else {
+      qsa("[data-option-index]", form).forEach(function (el) {
+        var label = el.previousElementSibling;
+        if (label && label.classList.contains("option-label")) label.remove();
+        el.remove();
+      });
+      qsa("[data-addon-note]", form).forEach(function (el) { el.remove(); });
+    }
+    var html = "";
+    (prod.options || []).forEach(function (name, index) {
+      var seen = {};
+      var values = [];
+      (prod.variants || []).forEach(function (variant) {
+        var value = (variant.options || [])[index];
+        if (value == null || value === "" || seen[value]) return;
+        seen[value] = true;
+        values.push(value);
+      });
+      if (!values.length) return;
+      if (/plate/i.test(String(name))) {
+        values.sort(function (a, b) {
+          if (/^none$/i.test(a)) return -1;
+          if (/^none$/i.test(b)) return 1;
+          return a.localeCompare(b);
+        });
+      }
+      html += '<div class="option-label">' + escapeHtml(name) + "</div>";
+      html += '<div class="option-values" data-option-index="' + index + '" data-option-name="' + escapeHtml(name) + '"' + (/plate/i.test(String(name)) ? ' data-plate-group="true"' : "") + ">";
+      values.forEach(function (value, valueIndex) {
+        html += '<label class="' + (!valueIndex ? "is-selected" : "") + '"><input type="radio" name="' + namePrefix + "-" + index + '" value="' + escapeHtml(value) + '" data-option-input' + (!valueIndex ? " checked" : "") + "><span>" + escapeHtml(value) + "</span></label>";
+      });
+      html += "</div>";
+      if (/plate/i.test(String(name))) {
+        html += '<p class="addon-note" data-addon-note>Choose None if you do not want a customized name plate. Custom plates take an extra 1–2 weeks and ship separately.</p>';
+      }
+    });
+    if (mount) mount.innerHTML = html;
+    else {
+      var anchor = qs("[data-option-anchor]", form) || qs(".qty-row", form) || qs("[data-add-button]", form);
+      if (anchor) {
+        var wrap = document.createElement("div");
+        wrap.setAttribute("data-option-mount", "");
+        wrap.innerHTML = html;
+        anchor.parentNode.insertBefore(wrap, anchor);
+      }
+    }
+    ensurePlateTextFields(form);
+  }
+
+  function ensurePlateTextFields(form) {
+    if (qs("[data-plate-fields]", form)) return;
+    var existing = [];
+    qsa(".field", form).forEach(function (field) {
+      var input = qs("input[type='text'], textarea", field);
+      if (!input || !input.name) return;
+      if (/name for plate|race number/i.test(input.name)) existing.push(field);
+    });
+    var box = document.createElement("div");
+    box.setAttribute("data-plate-fields", "");
+    box.hidden = true;
+    if (existing.length) {
+      existing.forEach(function (field) { box.appendChild(field); });
+    } else {
+      box.innerHTML =
+        '<div class="field"><label for="NameForPlate">Name for Plate (Only if $40 Option Added)</label>' +
+        '<input class="input" id="NameForPlate" type="text" name="properties[Name for Plate (Only if $40 Option Added)]"></div>' +
+        '<div class="field"><label for="RaceNumberPlate">Race Number (Only if Custom Option is Added)</label>' +
+        '<input class="input" id="RaceNumberPlate" type="text" name="properties[Race Number (Only if Custom Option is Added)]"></div>';
+    }
+    var note = qs("[data-addon-note]", form);
+    var anchor = note || qs("[data-option-anchor]", form) || qs(".qty-row", form) || qs("[data-add-button]", form);
+    if (anchor) anchor.parentNode.insertBefore(box, note ? note.nextSibling : anchor);
+    else form.appendChild(box);
+  }
+
+  function syncPlateTextFields(form) {
+    var group = qs("[data-plate-group]", form);
+    var box = qs("[data-plate-fields]", form);
+    if (!box) return;
+    var checked = group ? qs("input:checked", group) : null;
+    var on = !!(checked && checked.value && !/^none$/i.test(checked.value));
+    box.hidden = !on;
+    qsa("input, textarea", box).forEach(function (input) {
+      input.disabled = !on;
+      if (!on) input.value = "";
+    });
+  }
+
   /* Product page variants */
   var productJsonEl = qs("[data-product-json]");
   if (productJsonEl) {
-    var product = JSON.parse(productJsonEl.textContent);
+    var product = rematerializeProduct(JSON.parse(productJsonEl.textContent));
     var form = qs("[data-product-form]");
     var idInput = qs("[data-variant-id]", form);
     var priceEl = qs("[data-product-price]");
     var skuEl = qs("[data-sku]");
     var button = qs("[data-add-button]", form);
+
+    if (form) {
+      if (!qs("[data-option-anchor]", form)) {
+        var qty = qs(".qty-row", form);
+        if (qty) qty.setAttribute("data-option-anchor", "");
+      }
+      var needsRebuild = (product.options || []).some(function (name) {
+        return /plate|font/i.test(String(name));
+      }) || (product.variants || []).some(function (variant) {
+        return (variant.options || []).some(function (opt) {
+          return /\[PI\]|Name Plate=|Font Customization:\d+/i.test(String(opt || ""));
+        });
+      });
+      if (needsRebuild) renderOptionGroups(form, product, "option");
+      else {
+        ensurePlateTextFields(form);
+        qsa("[data-option-index]", form).forEach(function (group) {
+          if (/plate/i.test(group.getAttribute("data-option-name") || "")) {
+            group.setAttribute("data-plate-group", "true");
+          }
+        });
+      }
+      var mount = qs("[data-option-mount]", form);
+      if (mount) mount.setAttribute("data-ready", "");
+    }
 
     function selectedOptions() {
       return qsa("[data-option-index]", form).map(function (group) {
@@ -375,6 +592,7 @@
     function isAddonGroup(group) {
       var name = group.getAttribute("data-option-name") || "";
       if (/design|letter/i.test(name)) return false;
+      if (/plate/i.test(name)) return true;
       var values = qsa("input", group).map(function (input) { return input.value; }).join(" ");
       var priced = /\$\s*\d/.test(name) || /\$\s*\d/.test(values);
       if (!priced) return false;
@@ -396,7 +614,7 @@
         var sample = qs("input", group);
         if (!sample) return;
         var label = document.createElement("label");
-        label.innerHTML = '<input type="radio" name="' + sample.name + '" value="" data-option-input data-addon-none><span>None</span>';
+        label.innerHTML = '<input type="radio" name="' + sample.name + '" value="None" data-option-input data-addon-none><span>None</span>';
         group.insertBefore(label, group.firstChild);
         real = qs("input[data-addon-none]", group);
       }
@@ -474,6 +692,7 @@
     function applyVariant() {
       var variant = findVariant(selectedOptions());
       refreshAvailability();
+      syncPlateTextFields(form);
       if (!variant) {
         if (button) { button.disabled = true; button.textContent = "Unavailable"; }
         return;
@@ -506,21 +725,6 @@
         if (main) main.src = variant.featured_image.src;
       }
       showLetterImage(selectedLetter());
-      var noneChoice = qs("input[data-addon-none]:checked", form);
-      var noneField = qs("[data-addon-choice]", form);
-      if (noneChoice) {
-        if (!noneField) {
-          noneField = document.createElement("input");
-          noneField.type = "hidden";
-          noneField.name = "properties[Add-on choice]";
-          noneField.setAttribute("data-addon-choice", "");
-          form.appendChild(noneField);
-        }
-        noneField.disabled = false;
-        noneField.value = "None";
-      } else if (noneField) {
-        noneField.disabled = true;
-      }
       var url = new URL(window.location.href);
       url.searchParams.set("variant", variant.id);
       window.history.replaceState({}, "", url);
@@ -620,6 +824,7 @@
     fetchJSON("/products/" + handle + ".js").then(function (prod) {
       var body = qs("[data-quick-body]");
       if (!body) return;
+      prod = rematerializeProduct(prod);
       var optionsHtml = "";
       var picked = [];
       (prod.options || []).forEach(function (option, index) {
@@ -631,7 +836,14 @@
           if (value && values.indexOf(value) === -1) values.push(value);
         });
         if (!values.length) return;
-        var addon = isAddonLabel(label, values);
+        if (/plate/i.test(label)) {
+          values.sort(function (a, b) {
+            if (/^none$/i.test(a)) return -1;
+            if (/^none$/i.test(b)) return 1;
+            return a.localeCompare(b);
+          });
+        }
+        var addon = isAddonLabel(label, values) || /plate/i.test(label);
         var noneAt = -1;
         values.forEach(function (value, valueIndex) {
           if (noneAt === -1 && isNoneValue(value)) noneAt = valueIndex;
@@ -639,13 +851,22 @@
         var checkedAt = addon && noneAt !== -1 ? noneAt : 0;
         picked[index] = values[checkedAt];
         var isColor = /colou?r/i.test(label);
-        optionsHtml += '<div class="option-label">' + escapeHtml(label) + '</div><div class="option-values' + (isColor ? " option-values--color" : "") + '" data-option-index="' + index + '" data-option-name="' + escapeHtml(label) + '">';
+        var isPlate = /plate/i.test(label);
+        optionsHtml += '<div class="option-label">' + escapeHtml(label) + '</div><div class="option-values' + (isColor ? " option-values--color" : "") + '" data-option-index="' + index + '" data-option-name="' + escapeHtml(label) + '"' + (isPlate ? ' data-plate-group="true"' : "") + ">";
         values.forEach(function (value, valueIndex) {
           var swatch = isColor ? '<i style="--swatch: ' + swatchBackground(value) + '"></i>' : "";
           var on = valueIndex === checkedAt;
-          optionsHtml += '<label class="' + (isColor ? "swatch " : "") + (on ? "is-selected" : "") + '"><input type="radio" name="quick-option-' + index + '" value="' + escapeHtml(value) + '"' + (on ? " checked" : "") + ' data-option-input>' + swatch + '<span>' + escapeHtml(displayOption(label, value)) + "</span></label>";
+          var shown = isPlate ? displayPlateLabel(value) : (/size/i.test(label) ? (canonicalSize(value) || value) : value);
+          optionsHtml += '<label class="' + (isColor ? "swatch " : "") + (on ? "is-selected" : "") + '"><input type="radio" name="quick-option-' + index + '" value="' + escapeHtml(value) + '"' + (on ? " checked" : "") + ' data-option-input>' + swatch + '<span>' + escapeHtml(shown) + "</span></label>";
         });
         optionsHtml += "</div>";
+        if (isPlate) {
+          optionsHtml += '<p class="addon-note" data-addon-note>Choose None if you do not want a customized name plate.</p>';
+          optionsHtml += '<div data-plate-fields hidden>' +
+            '<div class="field"><label>Name for Plate (Only if $40 Option Added)</label><input class="input" type="text" name="properties[Name for Plate (Only if $40 Option Added)]"></div>' +
+            '<div class="field"><label>Race Number (Only if Custom Option is Added)</label><input class="input" type="text" name="properties[Race Number (Only if Custom Option is Added)]"></div>' +
+            "</div>";
+        }
       });
       var letterSpan = "";
       (Array.isArray(prod.tags) ? prod.tags : String(prod.tags || "").split(",")).forEach(function (tag) {
@@ -699,6 +920,7 @@
             label.classList.toggle("is-selected", !!(input && input.checked));
           });
         });
+        syncPlateTextFields(qForm);
         var matches = (prod.variants || []).filter(function (item) {
           return (item.options || []).every(function (opt, i) { return options[i] == null || options[i] === "" || opt === options[i]; });
         }).sort(function (a, b) { return a.price - b.price; });

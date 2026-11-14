@@ -68,16 +68,46 @@
         {% form 'product', product, class: 'product-form', data-product-form: 'true', enctype: 'multipart/form-data' %}
           <input type="hidden" name="id" value="{{ current.id }}" data-variant-id>
 
+          <div data-option-mount>
           {%- unless product.has_only_default_variant -%}
             {%- for option in product.options_with_values -%}
               {%- assign option_key = option.name | downcase -%}
               {%- assign option_is_color = false -%}
+              {%- assign option_is_plate = false -%}
               {%- if option_key contains 'color' or option_key contains 'colour' -%}
                 {%- assign option_is_color = true -%}
               {%- endif -%}
-              <div class="option-label">{{ option.name }}</div>
-              <div class="option-values{% if option_is_color %} option-values--color{% endif %}" data-option-index="{{ forloop.index0 }}" data-option-name="{{ option.name | escape }}">
+              {%- if option_key contains 'plate' or option_key contains 'font' -%}
+                {%- assign option_is_plate = true -%}
+              {%- endif -%}
+              {%- capture option_title -%}
+                {%- if option_is_plate -%}
+                  $40 - Add Customized Vest Name Plate
+                {%- elsif option_key contains 'size' -%}
+                  Size
+                {%- else -%}
+                  {{ option.name }}
+                {%- endif -%}
+              {%- endcapture -%}
+              <div class="option-label">{{ option_title | strip }}</div>
+              <div class="option-values{% if option_is_color %} option-values--color{% endif %}" data-option-index="{{ forloop.index0 }}" data-option-name="{{ option_title | strip | escape }}"{% if option_is_plate %} data-plate-group="true"{% endif %}>
                 {%- for value in option.values -%}
+                  {%- assign value_label = value -%}
+                  {%- assign value_l = value | downcase -%}
+                  {%- if option_is_plate -%}
+                    {%- if value_l == 'default' or value_l == 'none' -%}
+                      {%- assign value_label = 'None' -%}
+                    {%- elsif value_l contains 'moto' -%}
+                      {%- assign value_label = 'Moto Font Customization' -%}
+                    {%- elsif value_l contains 'standard' -%}
+                      {%- assign value_label = 'Standard Font Customization' -%}
+                    {%- endif -%}
+                  {%- elsif option_key contains 'size' -%}
+                    {%- if value contains '[PI]' or value contains 'Name Plate' or value contains 'Customization' -%}
+                      {%- assign value_label = value | split: ',' | first | strip -%}
+                    {%- endif -%}
+                    {%- assign value_label = value_label | replace: ' / ', '/' | replace: '/ ', '/' | replace: ' /', '/' | replace: 'S/ M', 'S/M' | replace: 'L / XL', 'L/XL' -%}
+                  {%- endif -%}
                   <label class="{% if option_is_color %}swatch {% endif %}{% if option.selected_value == value %}is-selected{% endif %}">
                     <input
                       type="radio"
@@ -90,12 +120,17 @@
                       {%- capture swatch -%}{% render 'swatch-color', label: value %}{%- endcapture -%}
                       <i style="--swatch: {{ swatch | strip }};"></i>
                     {%- endif -%}
-                    <span>{% if option_key contains 'size' %}{{ value | replace: ' / ', '/' | replace: '/ ', '/' | replace: ' /', '/' }}{% else %}{{ value }}{% endif %}</span>
+                    <span>{{ value_label }}</span>
                   </label>
                 {%- endfor -%}
               </div>
+              {%- if option_is_plate -%}
+                <p class="addon-note" data-addon-note>Choose None if you do not want a customized name plate. Custom plates take an extra 1–2 weeks and ship separately.</p>
+              {%- endif -%}
             {%- endfor -%}
           {%- endunless -%}
+          </div>
+          <div data-option-anchor></div>
 
           {%- if product.selling_plan_groups.size > 0 -%}
             <div class="field">
