@@ -171,17 +171,18 @@
     var options = prod.options || [];
     var onlyDefault = !options.length || (options.length === 1 && optionName(options[0]).toLowerCase() === "title");
     var sizes = inStockSizes(prod);
+    if (!sizes.length) sizes = canonicalSizes(meta && meta.sizes);
     var variant = (prod.variants || []).filter(function (item) { return item.available; })[0] || (prod.variants || [])[0] || {};
-    var img = productImage(prod);
+    var img = productImage(prod) || (meta && meta.image) || "";
     return cardHtml({
       id: prod.id || meta.handle,
       handle: prod.handle || meta.handle,
       title: prod.title || meta.title,
       price: prod.price || meta.price || 0,
-      compare: prod.compare_at_price || 0,
+      compare: prod.compare_at_price || meta.compare || 0,
       img: img,
       url: prod.url || (productRoot() + "products/" + meta.handle),
-      available: !!prod.available,
+      available: prod.available !== false,
       onlyDefault: onlyDefault,
       variantId: variant.id || "",
       sizes: sizes
@@ -194,7 +195,7 @@
       title: meta.title,
       price: meta.price || 0,
       compare: meta.compare || 0,
-      img: "",
+      img: meta.image || "",
       url: productRoot() + "products/" + meta.handle,
       available: meta.available !== false,
       onlyDefault: false,
@@ -376,6 +377,7 @@
         compare: row.compare || 0,
         sizes: canonicalSizes(row.sizes),
         available: row.available !== false,
+        image: row.image || "",
         saved: true
       });
     });
@@ -483,7 +485,7 @@
       return '<option value="' + item[0] + '"' + (sort === item[0] ? " selected" : "") + ">" + item[1] + "</option>";
     }).join("");
     var gridHtml = slice.length
-      ? '<div class="product-grid" data-jt-grid><p>Loading products…</p></div>'
+      ? '<div class="product-grid" data-jt-grid>' + slice.map(function (meta) { return cardFromCatalog(meta); }).join("") + "</div>"
       : '<div class="empty-products"><p>' + (metas.length ? "No products match these filters." : "No products are listed in this category.") + "</p></div>";
     var root = qs("[data-jt-category-root]", mount);
     root.innerHTML =
@@ -525,26 +527,30 @@
     }
     if (!slice.length) return;
     function belongs(prod, meta) {
-      if (meta.locked) return true;
+      if (meta.saved || meta.locked) return true;
       var places = placements(prod, keys);
       if (places.length) return places.indexOf(handle) !== -1;
-      return !!meta.saved;
+      return true;
     }
     Promise.all(slice.map(function (meta) {
-      if (meta.live) return belongs(meta.live, meta) && sizeInStock(meta.live, selectedSizes) ? cardFromProduct(meta.live, meta) : "";
+      if (meta.live) {
+        if (selectedSizes.length && !sizeInStock(meta.live, selectedSizes)) return cardFromCatalog(meta);
+        return belongs(meta.live, meta) ? cardFromProduct(meta.live, meta) : cardFromCatalog(meta);
+      }
       return fetch(productRoot() + "products/" + encodeURIComponent(meta.handle) + ".js", { headers: { Accept: "application/json" } })
         .then(function (res) {
           if (!res.ok) throw new Error("missing");
           return res.json();
         })
-        .then(function (prod) { return belongs(prod, meta) && sizeInStock(prod, selectedSizes) ? cardFromProduct(prod, meta) : ""; })
+        .then(function (prod) {
+          if (selectedSizes.length && !sizeInStock(prod, selectedSizes)) return cardFromCatalog(meta);
+          return belongs(prod, meta) ? cardFromProduct(prod, meta) : cardFromCatalog(meta);
+        })
         .catch(function () { return cardFromCatalog(meta); });
     })).then(function (cards) {
       var kept = cards.filter(Boolean);
       var grid = qs("[data-jt-grid]", root);
-      if (grid) {
-        grid.innerHTML = kept.length ? kept.join("") : "<p>No products are listed in this category.</p>";
-      }
+      if (grid && kept.length) grid.innerHTML = kept.join("");
       var count = qs(".toolbar p", root);
       if (count) count.textContent = kept.length + " products";
       document.dispatchEvent(new CustomEvent("catalog:rendered"));

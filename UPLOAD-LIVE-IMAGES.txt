@@ -1,0 +1,13 @@
+Put photos from jettribe.com onto the Shopify products, and un-archive them.
+
+Products → Import. Check Overwrite products with matching handles. Do not open this in Excel.
+
+https://raw.githubusercontent.com/usamamir/check/cursor/jettribe-shopify-theme-86d6/jettribe-live-images.csv
+
+This file only sets Status to active, Published on online store to true, and the product photo from the live website. It does not change titles, prices, sizes, or inventory.
+
+Then re-upload the theme:
+
+https://raw.githubusercontent.com/usamamir/check/cursor/jettribe-shopify-theme-86d6/jettribe-shopify-theme.zip
+
+Do not import jettribe-archive-no-image.csv.

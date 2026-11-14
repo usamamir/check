@@ -1068,16 +1068,12 @@ body.skiptranslate { top: 0 !important; display: block !important; visibility: v
   .nav-list > .nav-item,
   .nav-list > .nav-item.has-drop { position: relative; display: flex !important; margin-left: 0; }
   .nav-list > .nav-item > a { display: inline-flex; line-height: 1.2; padding: 8px 0; border-bottom: 0; box-shadow: none; white-space: nowrap; }
-  .nav-sub,
   .nav-item:hover > .nav-sub,
   .nav-item.is-mega > .nav-sub,
-  .nav-item:focus-within > .nav-sub,
-  .nav-drop,
+  .nav-item:focus-within > .nav-sub { display: block; position: absolute; left: 0; right: 0; top: 100%; }
   .nav-item:hover > .nav-drop,
   .nav-item.is-mega > .nav-drop,
-  .nav-item:focus-within > .nav-drop { position: static; display: none; margin: 0; padding: 0; min-height: 0; width: auto; right: auto; box-shadow: none; }
-  .nav-item.is-open > .nav-sub,
-  .nav-item.is-open > .nav-drop { display: block; }
+  .nav-item:focus-within > .nav-drop { display: block; }
   .nav-sub > .container { background: transparent; box-shadow: none; border-top: 0; }
   .mega-grid { display: block; max-height: none; overflow: visible; padding: 0; }
   .mega-col { padding: 8px 18px 12px 28px; border-bottom: 1px solid rgba(255,255,255,0.08); }
