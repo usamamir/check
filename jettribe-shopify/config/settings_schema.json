@@ -82,8 +82,8 @@
         "type": "checkbox",
         "id": "show_translate",
         "label": "Show Google Translate",
-        "info": "This is a separate widget. Country language uses Shopify Translate and Adapt: add the language in Settings, Languages, publish it, then assign it to the country in Settings, Markets.",
-        "default": true
+        "info": "Leave this off. Google Translate can hide the menu. Use Shopify Translate and Adapt for country languages.",
+        "default": false
       },
       {
         "type": "checkbox",

@@ -1,0 +1,56 @@
+{%- comment -%}
+  Always-visible primary menu. Inline styles keep this on the page even if theme CSS fails.
+{%- endcomment -%}
+<nav
+  id="JettribeMenu"
+  class="site-nav"
+  data-site-nav
+  aria-label="Primary"
+  style="display:block!important;visibility:visible!important;opacity:1!important;background:#292f36!important;color:#fff!important;position:relative!important;z-index:10050!important;width:100%!important;min-height:52px!important;max-height:none!important;overflow:visible!important;border-top:1px solid rgba(255,255,255,0.12)!important;border-bottom:0!important;"
+>
+  <div class="container" style="display:block!important;visibility:visible!important;width:min(1320px,calc(100% - 40px));margin:0 auto;">
+    {% render 'nav-jettribe' %}
+  </div>
+</nav>
+<style>
+  #JettribeMenu,
+  #JettribeMenu .nav-list,
+  #JettribeMenu .nav-list > .nav-item,
+  #JettribeMenu .nav-list > .nav-item > a {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    color: #fff !important;
+  }
+  #JettribeMenu .nav-list {
+    flex-wrap: wrap !important;
+    align-items: stretch !important;
+    gap: 0 18px !important;
+    min-height: 52px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    list-style: none !important;
+  }
+  #JettribeMenu .nav-list > .nav-item {
+    align-items: center !important;
+    position: relative !important;
+  }
+  #JettribeMenu .nav-list > .nav-item.has-drop {
+    margin-left: auto !important;
+  }
+  #JettribeMenu .nav-list > .nav-item > a {
+    align-items: center !important;
+    font-family: Roboto, sans-serif !important;
+    font-size: 15px !important;
+    font-weight: 700 !important;
+    text-decoration: none !important;
+    white-space: nowrap !important;
+    padding: 0 !important;
+  }
+  .shopify-section-group-header-group,
+  #shopify-section-group-header-group,
+  .shopify-section-header-group {
+    display: block !important;
+    visibility: visible !important;
+  }
+</style>

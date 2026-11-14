@@ -34,13 +34,6 @@
   {{ content_for_header }}
   {{ 'theme.css' | asset_url | stylesheet_tag }}
   <style>
-    .site-nav { display: block !important; visibility: visible !important; background: #292f36 !important; }
-    .nav-list { display: flex !important; flex-wrap: wrap; visibility: visible !important; }
-    .nav-list > .nav-item { display: flex !important; visibility: visible !important; }
-    .nav-list > .nav-item > a { color: #fff !important; }
-    @media (max-width: 991px) {
-      .nav-list { display: flex !important; flex-wrap: wrap; }
-    }
     :root {
       --red: {{ settings.color_red }};
       --black: {{ settings.color_black }};
@@ -49,6 +42,28 @@
       --heading: {{ settings.color_heading }};
       --header: {{ settings.color_black }};
     }
+    /* Menu cannot be hidden by other CSS or apps */
+    #JettribeMenu,
+    #JettribeMenu .nav-list,
+    #JettribeMenu .nav-list > .nav-item {
+      display: flex !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+    }
+    #JettribeMenu {
+      display: block !important;
+      background: #292f36 !important;
+      color: #fff !important;
+      min-height: 52px !important;
+      position: relative !important;
+      z-index: 10050 !important;
+      width: 100% !important;
+    }
+    #JettribeMenu .nav-list > .nav-item > a {
+      color: #fff !important;
+      visibility: visible !important;
+    }
+    body { top: 0 !important; }
   </style>
   <script>
     document.documentElement.className = document.documentElement.className.replace('no-js', 'js');
@@ -56,7 +71,7 @@
       moneyFormat: {{ shop.money_format | json }},
       cartType: {{ settings.cart_type | json }},
       freeShipping: {{ settings.free_shipping_threshold | times: 100 }},
-      showEmptyMenuItems: {{ settings.show_empty_menu_items | json }},
+      showEmptyMenuItems: true,
       catalogUrl: {{ 'jt-categories.json' | asset_url | json }},
       reviewsUrl: {{ 'jt-reviews.json' | asset_url | json }},
       routes: {
@@ -69,7 +84,16 @@
 </head>
 <body class="template-{{ request.page_type | handle }}">
   <a class="skip-link" href="#MainContent">Skip to content</a>
-  {% sections 'header-group' %}
+
+  {%- comment -%}
+    Menu is rendered from the layout, not from a section group.
+    That way the theme editor cannot remove it, and it stays on every page.
+  {%- endcomment -%}
+  {% section 'header' %}
+  {% render 'menu-bar' %}
+  {% render 'service-bar' %}
+  {% section 'announcement-bar' %}
+
   <main id="MainContent" class="main" role="main" tabindex="-1">
     {{ content_for_layout }}
   </main>

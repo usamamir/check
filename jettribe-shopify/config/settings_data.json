@@ -7,7 +7,7 @@
     "color_heading": "#161616",
     "menu_source": "jettribe",
     "menu": "main-menu",
-    "show_translate": true,
+    "show_translate": false,
     "show_vip_deals": false,
     "show_empty_menu_items": true,
     "cart_type": "drawer",
@@ -21,6 +21,22 @@
     "gift_card_link": "/products/gift-card",
     "social_facebook": "https://www.facebook.com/JettribeRacing",
     "social_instagram": "https://www.instagram.com/jettribe/",
-    "social_youtube": "https://www.youtube.com/user/Jettribe1"
+    "social_youtube": "https://www.youtube.com/user/Jettribe1",
+    "sections": {
+      "header": {
+        "type": "header",
+        "settings": {
+          "phone": "951 246 3147"
+        }
+      },
+      "announcement-bar": {
+        "type": "announcement-bar",
+        "settings": {
+          "show_bar": true,
+          "line_1": "Jettribe is a true core personal watercraft brand: born in southern California",
+          "line_2": ""
+        }
+      }
+    }
   }
 }

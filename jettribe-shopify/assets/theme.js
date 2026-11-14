@@ -1027,12 +1027,16 @@
       else link.hidden = true;
     });
   }
-  if (window.Jettribe && Jettribe.catalogUrl && Jettribe.showEmptyMenuItems === false) {
-    fetch(Jettribe.catalogUrl, { headers: { Accept: "application/json" } })
-      .then(function (res) { return res.ok ? res.json() : null; })
-      .then(function (data) { if (data) hideEmptyMenu(data); })
-      .catch(function () {});
-  }
+  /* Never hide menu links. Empty categories were remapped so every link opens products. */
+
+  document.addEventListener("DOMContentLoaded", function () {
+    var menu = document.getElementById("JettribeMenu");
+    if (!menu) return;
+    menu.style.display = "block";
+    menu.style.visibility = "visible";
+    menu.hidden = false;
+    menu.removeAttribute("hidden");
+  });
 
   function mountPayPalMessages(root) {
     var sdk = window.paypalMessages;
