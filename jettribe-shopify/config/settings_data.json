@@ -28,14 +28,6 @@
         "settings": {
           "phone": "951 246 3147"
         }
-      },
-      "announcement-bar": {
-        "type": "announcement-bar",
-        "settings": {
-          "show_bar": true,
-          "line_1": "Jettribe is a true core personal watercraft brand: born in southern California",
-          "line_2": ""
-        }
       }
     }
   }

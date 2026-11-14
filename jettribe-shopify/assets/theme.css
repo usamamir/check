@@ -430,6 +430,7 @@ button.linkish { background: none; border: 0; padding: 0; font: inherit; cursor:
 }
 .nav-item:hover > .nav-sub,
 .nav-item.is-mega > .nav-sub,
+.nav-item.is-open > .nav-sub,
 .nav-item:focus-within > .nav-sub { display: block; }
 .mega-grid {
   display: grid;
@@ -589,6 +590,7 @@ button.linkish { background: none; border: 0; padding: 0; font: inherit; cursor:
 }
 .nav-item:hover > .nav-drop,
 .nav-item.is-mega > .nav-drop,
+.nav-item.is-open > .nav-drop,
 .nav-item:focus-within > .nav-drop { display: block; }
 .nav-drop a {
   display: block;
@@ -1062,31 +1064,77 @@ body.skiptranslate { top: 0 !important; display: block !important; visibility: v
   .logo { justify-content: center; }
   .logo img { width: min(180px, 48vw); }
   .service-bar-inner { flex-wrap: wrap; justify-content: flex-start; gap: 8px 16px; padding: 10px 0; font-size: 13px; }
-  .site-nav { display: block !important; visibility: visible !important; position: relative; inset: auto; z-index: 40; overflow: visible; border-top: 1px solid rgba(255,255,255,0.12); background: #292f36; }
-  .site-nav.is-open { display: block; }
-  .nav-list { display: flex !important; flex-wrap: wrap; padding: 8px 0; min-height: 52px; gap: 0 16px; }
+  #JettribeMenu,
+  .site-nav {
+    display: block !important;
+    visibility: visible !important;
+    position: relative !important;
+    inset: auto;
+    z-index: 10050;
+    overflow: visible !important;
+    background: #292f36;
+  }
+  .nav-list {
+    display: flex !important;
+    flex-wrap: wrap;
+    padding: 8px 0;
+    min-height: 52px;
+    gap: 0 16px;
+  }
   .nav-list > .nav-item,
-  .nav-list > .nav-item.has-drop { position: relative; display: flex !important; margin-left: 0; }
-  .nav-list > .nav-item > a { display: inline-flex; line-height: 1.2; padding: 8px 0; border-bottom: 0; box-shadow: none; white-space: nowrap; }
+  .nav-list > .nav-item.has-drop {
+    position: static;
+    display: flex !important;
+    margin-left: 0;
+  }
+  .nav-list > .nav-item.has-drop { position: relative; margin-left: auto; }
+  .nav-list > .nav-item > a {
+    display: inline-flex;
+    line-height: 1.2;
+    padding: 8px 0;
+    border-bottom: 0;
+    box-shadow: none;
+    white-space: nowrap;
+    color: #fff !important;
+  }
   .nav-item:hover > .nav-sub,
   .nav-item.is-mega > .nav-sub,
-  .nav-item:focus-within > .nav-sub { display: block; position: absolute; left: 0; right: 0; top: 100%; }
+  .nav-item.is-open > .nav-sub,
+  .nav-item:focus-within > .nav-sub {
+    display: block !important;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 100%;
+    z-index: 10060;
+  }
   .nav-item:hover > .nav-drop,
   .nav-item.is-mega > .nav-drop,
-  .nav-item:focus-within > .nav-drop { display: block; }
-  .nav-sub > .container { background: transparent; box-shadow: none; border-top: 0; }
-  .mega-grid { display: block; max-height: none; overflow: visible; padding: 0; }
-  .mega-col { padding: 8px 18px 12px 28px; border-bottom: 1px solid rgba(255,255,255,0.08); }
-  .mega-col a, .mega-head, .mega-nest, .mega-col a.mega-head { color: #fff; border-bottom-color: rgba(255,255,255,0.35); }
+  .nav-item.is-open > .nav-drop,
+  .nav-item:focus-within > .nav-drop {
+    display: block !important;
+    z-index: 10060;
+  }
+  .nav-sub > .container {
+    background: #2e353d !important;
+    color: #fff !important;
+    box-shadow: 0 16px 32px rgba(0,0,0,0.28) !important;
+    border-top: 0;
+  }
+  .mega-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    max-height: min(60vh, 420px);
+    overflow: auto;
+    padding: 16px;
+  }
+  .mega-col a, .mega-head, .mega-nest, .mega-col a.mega-head { color: #fff; }
   .mega-all { color: #fff !important; }
-  .mega-promos { grid-template-columns: 1fr; padding: 8px 18px 16px; }
-  .mega-promo { min-height: 110px; }
-  .mega-col a:hover { color: #fff; }
-  .nav-drop { background: transparent; }
+  .mega-promos { grid-template-columns: 1fr 1fr; padding: 8px 16px 16px; }
+  .nav-drop { background: #2e353d !important; }
   .nav-drop a { color: #fff; }
   .nav-drop a:hover { background: rgba(255,255,255,0.08); color: #fff; }
-  .mobile-utilities { display: block; padding: 16px 18px 24px; }
-  .mobile-utilities a, .mobile-utilities button.linkish { color: #fff; display: inline-block; margin: 6px 12px 6px 0; text-transform: uppercase; }
+  .mobile-utilities { display: none; }
   .cate-grid { grid-template-columns: 1fr 1fr; }
   .product { grid-template-columns: 1fr; padding: 16px; }
   .collection-layout, .account-layout, .cart-layout, .quick-grid, .videos, .blog-card { grid-template-columns: 1fr; }

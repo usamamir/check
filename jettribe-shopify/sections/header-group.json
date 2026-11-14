@@ -2,14 +2,6 @@
   "type": "header",
   "name": "Header",
   "sections": {
-    "announcement-bar": {
-      "type": "announcement-bar",
-      "settings": {
-        "show_bar": true,
-        "line_1": "Jettribe is a true core personal watercraft brand: born in southern California",
-        "line_2": ""
-      }
-    },
     "header": {
       "type": "header",
       "settings": {
@@ -18,7 +10,6 @@
     }
   },
   "order": [
-    "header",
-    "announcement-bar"
+    "header"
   ]
 }

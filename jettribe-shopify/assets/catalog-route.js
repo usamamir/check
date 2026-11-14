@@ -100,8 +100,20 @@
     }
     return img || "";
   }
-  function showOnSite(prod) {
-    return !!(prod && prod.handle);
+  function isBlockedProduct(prod, meta) {
+    var title = String((prod && prod.title) || (meta && meta.title) || "").toLowerCase();
+    var handle = String((prod && prod.handle) || (meta && meta.handle) || "").toLowerCase();
+    var blob = title + " " + handle;
+    if (/promo(\s|-)?card|promotional|gift[\s-]?card|gift[\s-]?certificate|coupon|restrictions apply|\$\d+\s*promo|e-?gift|egift/.test(blob)) {
+      return true;
+    }
+    return false;
+  }
+  function showOnSite(prod, meta) {
+    if (isBlockedProduct(prod, meta)) return false;
+    var img = productImage(prod) || (meta && meta.image) || "";
+    if (!img) return false;
+    return !!(prod && prod.handle) || !!(meta && meta.handle);
   }
   function detect() {
     var params = new URLSearchParams(window.location.search);
@@ -168,6 +180,7 @@
       '<div class="card-actions">' + action + "</div></div></article>";
   }
   function cardFromProduct(prod, meta) {
+    if (!showOnSite(prod, meta)) return "";
     var options = prod.options || [];
     var onlyDefault = !options.length || (options.length === 1 && optionName(options[0]).toLowerCase() === "title");
     var sizes = inStockSizes(prod);
@@ -189,6 +202,7 @@
     });
   }
   function cardFromCatalog(meta) {
+    if (!showOnSite(null, meta)) return "";
     return cardHtml({
       id: meta.handle,
       handle: meta.handle,
@@ -357,7 +371,7 @@
     var keys = categoryKeys(data);
     function addLive(prod) {
       var meta = metaFromLive(prod);
-      if (!meta.handle || seenHandles[meta.handle] || !showOnSite(meta.live)) return;
+      if (!meta.handle || seenHandles[meta.handle] || !showOnSite(meta.live, meta)) return;
       seenHandles[meta.handle] = true;
       meta.locked = true;
       metas.push(meta);
@@ -368,9 +382,8 @@
     });
     (cat.products || []).forEach(function (productHandle) {
       if (seenHandles[productHandle]) return;
-      seenHandles[productHandle] = true;
       var row = (data.products || {})[productHandle] || {};
-      metas.push({
+      var saved = {
         handle: productHandle,
         title: row.title || productHandle,
         price: row.price || 0,
@@ -379,7 +392,10 @@
         available: row.available !== false,
         image: row.image || "",
         saved: true
-      });
+      };
+      if (!showOnSite(null, saved)) return;
+      seenHandles[productHandle] = true;
+      metas.push(saved);
     });
     function passes(meta, ignore) {
       if (ignore !== "color" && selectedColors.length) {

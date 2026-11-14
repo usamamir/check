@@ -72,33 +72,58 @@
       menuToggle.setAttribute("aria-expanded", open ? "true" : "false");
       document.body.style.overflow = open ? "hidden" : "";
     });
-    qsa(".nav-item.has-sub > a", siteNav).forEach(function (link) {
-      link.addEventListener("click", function (event) {
-        if (window.matchMedia("(max-width: 767px)").matches && !link.parentElement.classList.contains("is-open")) {
-          event.preventDefault();
-          link.parentElement.classList.toggle("is-open");
-        }
-      });
-    });
   }
 
-  /* Keep a menu panel open while the pointer travels into it. */
+  /* Mega menu: hover on desktop, click/tap to open panels everywhere. */
   function bindMenuIntent(nav) {
     if (!nav) return;
     var timer = null;
+    function closeOthers(except) {
+      qsa(".nav-list > .nav-item.is-mega, .nav-list > .nav-item.is-open", nav).forEach(function (other) {
+        if (other !== except) {
+          other.classList.remove("is-mega");
+          other.classList.remove("is-open");
+        }
+      });
+    }
     qsa(".nav-list > .nav-item", nav).forEach(function (item) {
+      var hasPanel = !!(qs(".nav-sub, .nav-drop", item));
       item.addEventListener("mouseenter", function () {
-        if (window.matchMedia("(max-width: 991px)").matches) return;
         clearTimeout(timer);
-        qsa(".nav-list > .nav-item.is-mega", nav).forEach(function (other) {
-          if (other !== item) other.classList.remove("is-mega");
-        });
-        item.classList.add("is-mega");
+        closeOthers(item);
+        if (hasPanel) item.classList.add("is-mega");
       });
       item.addEventListener("mouseleave", function () {
-        if (window.matchMedia("(max-width: 991px)").matches) return;
-        timer = setTimeout(function () { item.classList.remove("is-mega"); }, 320);
+        timer = setTimeout(function () {
+          item.classList.remove("is-mega");
+          item.classList.remove("is-open");
+        }, 280);
       });
+      if (!hasPanel) return;
+      var topLink = item.firstElementChild;
+      if (!topLink || String(topLink.tagName || "").toLowerCase() !== "a") {
+        topLink = item.querySelector("a");
+      }
+      if (!topLink) return;
+      topLink.addEventListener("click", function (event) {
+        var touchish = window.matchMedia("(hover: none), (pointer: coarse)").matches
+          || window.matchMedia("(max-width: 991px)").matches;
+        if (!touchish) return;
+        if (!item.classList.contains("is-mega") && !item.classList.contains("is-open")) {
+          event.preventDefault();
+          closeOthers(item);
+          item.classList.add("is-mega");
+          item.classList.add("is-open");
+        }
+      });
+    });
+    document.addEventListener("click", function (event) {
+      if (!nav.contains(event.target)) {
+        qsa(".nav-list > .nav-item.is-mega, .nav-list > .nav-item.is-open", nav).forEach(function (item) {
+          item.classList.remove("is-mega");
+          item.classList.remove("is-open");
+        });
+      }
     });
   }
   bindMenuIntent(siteNav);
