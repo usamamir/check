@@ -1,37 +1,12 @@
-{%- if section.settings.show_bar -%}
-  <div class="announcement">
-    {%- if section.settings.line_1 != blank -%}
-      <p><strong>{{ section.settings.line_1 }}</strong></p>
-    {%- endif -%}
-    {%- if section.settings.line_2 != blank -%}
-      <p><strong>{{ section.settings.line_2 }}</strong></p>
-    {%- endif -%}
-  </div>
-{%- endif -%}
+{% render 'announcement' %}
 
 {% schema %}
 {
   "name": "Announcement bar",
   "settings": [
     {
-      "type": "checkbox",
-      "id": "show_bar",
-      "label": "Show the red promotion bar",
-      "info": "The brand line stays on this bar. Use line 2 for a promotion, and clear line 2 when the promotion ends.",
-      "default": true
-    },
-    {
-      "type": "text",
-      "id": "line_1",
-      "label": "Line 1",
-      "default": "Jettribe is a true core personal watercraft brand: born in southern California"
-    },
-    {
-      "type": "text",
-      "id": "line_2",
-      "label": "Line 2",
-      "info": "Leave this blank. Fill it in only while a promotion is running.",
-      "default": ""
+      "type": "paragraph",
+      "content": "The red bar shows the brand line. Promotions are edited in the announcement snippet later if needed."
     }
   ]
 }
