@@ -1,16 +1,14 @@
-Fix $0.00 prices and size labels
+Fix $0.00 prices (full BigCommerce sheet)
 
 Products → Import. Check Overwrite products with matching handles. Do not open in Excel.
 
-https://raw.githubusercontent.com/usamamir/check/cursor/jettribe-shopify-theme-86d6/jettribe-fix-prices-and-sizes.csv
+Use the new full-catalog file built from your Drive sheet:
 
-This sets real BigCommerce prices (never uses Sale Price 0.00) and renames sizes:
-Extra Small → XS, Small → S, Medium → M, Large → L, X Large / Extra Large → XL, XX Large → XXL, etc.
+https://raw.githubusercontent.com/usamamir/check/cursor/jettribe-shopify-theme-86d6/jettribe-bc-prices.csv
 
-Also re-upload the theme so filters and product pages show the short size codes only.
+Steps: https://raw.githubusercontent.com/usamamir/check/cursor/jettribe-shopify-theme-86d6/UPLOAD-BC-PRICES.txt
 
-Theme:
+Do not use jettribe-fix-prices-and-sizes.csv anymore — it only fixed ~1048 products.
+
+Theme (size filters + product page):
 https://raw.githubusercontent.com/usamamir/check/cursor/jettribe-shopify-theme-86d6/jettribe-theme-nov14-20261114-0845.zip
-
-PVC products (after the price fix, or instead if you only need those):
-https://raw.githubusercontent.com/usamamir/check/cursor/jettribe-shopify-theme-86d6/jettribe-fix-pvc-customization.csv
