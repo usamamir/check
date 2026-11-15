@@ -1,0 +1,37 @@
+SKU Labs ↔ Shopify inventory sync (jettribe.co.nz)
+
+Credentials are fine if Last orders import / Last stock push show recent times.
+The red banner "Some forms were invalid: origin address, return address" means Save is blocked until store addresses are complete.
+
+1) Fix addresses (required before Save sticks)
+   Settings → Stores → open "My Store Shopify" (or your Shopify store)
+   → Addresses → Edit Addresses
+   Fill Origin (ship-from) fully: street, city, state/province, ZIP/postal, country
+   Return: check "Same as origin address" OR fill a full return address
+   Click Save (banner should clear)
+
+2) Warehouses for stock sync
+   Next to "Enable stock sync" click "choose warehouses"
+   Check the warehouse(s) that should feed Shopify
+   Stock rule: use "free" (not "skip")
+   Confirm stock sync is also ON inside that modal
+   Save
+
+3) Refresh listings (yours shows Last listings import: 5 days ago)
+   Settings → Listings Sync → Run listings sync
+   Wait until it finishes so SKUs link to Shopify variants
+
+4) Shopify side checks
+   Products must Track quantity
+   Variant SKUs in Shopify must match SKU Labs SKUs exactly
+   Location must be the one SKU Labs pushes to
+
+5) Catalog options (from your screen)
+   Listing link setting: Link only matching SKUs — OK if SKUs match
+   Prefer NOT "Build new items..." once catalog already exists in SKU Labs
+   (use link-only / update linked so it doesn't create duplicate items)
+
+Docs:
+https://www.skulabs.com/help/en/articles/4119128-how-do-i-change-my-store-s-origin-and-return-address
+https://www.skulabs.com/help/en/articles/14288133-why-isn-t-my-inventory-syncing-to-my-sales-channel
+https://www.skulabs.com/help/en/articles/5881047-how-to-fix-a-product-not-syncing-inventory-with-shopify
