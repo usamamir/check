@@ -237,12 +237,16 @@
     if (!sizes.length) sizes = canonicalSizes(meta && meta.sizes);
     var variant = (prod.variants || []).filter(function (item) { return item.available; })[0] || (prod.variants || [])[0] || {};
     var img = productImage(prod) || (meta && meta.image) || "";
+    var display = bestDisplayPrice(prod.variants || []);
+    var price = display.price || prod.price || (meta && meta.price) || 0;
+    var compare = display.compare || prod.compare_at_price || (meta && meta.compare) || 0;
+    if (compare <= price) compare = 0;
     return cardHtml({
       id: prod.id || meta.handle,
       handle: prod.handle || meta.handle,
       title: prod.title || meta.title,
-      price: prod.price || meta.price || 0,
-      compare: prod.compare_at_price || meta.compare || 0,
+      price: price,
+      compare: compare,
       img: img,
       url: prod.url || (productRoot() + "products/" + meta.handle),
       available: prod.available !== false,
@@ -271,6 +275,24 @@
     var n = Number(value);
     return isFinite(n) ? Math.round(n * 100) : 0;
   }
+  function bestDisplayPrice(variants) {
+    var list = variants || [];
+    var priced = list.filter(function (variant) { return Number(variant.price) > 0; })
+      .sort(function (a, b) { return a.price - b.price; });
+    if (priced.length) {
+      return {
+        price: priced[0].price,
+        compare: priced.reduce(function (max, variant) {
+          return Math.max(max, Number(variant.compare_at_price) || 0);
+        }, Number(priced[0].compare_at_price) || 0)
+      };
+    }
+    var first = list[0] || {};
+    var compare = Number(first.compare_at_price) || 0;
+    // Last resort: never advertise $0.00 when compare-at exists (Sale=0.00 import bug)
+    if (compare > 0) return { price: compare, compare: 0 };
+    return { price: 0, compare: 0 };
+  }
   function asStoreProduct(prod) {
     var variants = (prod.variants || []).map(function (variant) {
       return {
@@ -286,7 +308,7 @@
         compare_at_price: variant.compare_at_price ? dollarsToCents(variant.compare_at_price) : 0
       };
     });
-    var first = variants[0] || {};
+    var display = bestDisplayPrice(variants);
     var image = prod.images && prod.images[0];
     return {
       id: prod.id,
@@ -294,8 +316,8 @@
       title: prod.title,
       options: prod.options || [],
       variants: variants,
-      price: first.price || 0,
-      compare_at_price: first.compare_at_price || 0,
+      price: display.price,
+      compare_at_price: display.compare > display.price ? display.compare : 0,
       featured_image: (image && (image.src || image)) || "",
       available: variants.some(function (variant) { return variant.available; }),
       tags: prod.tags || [],

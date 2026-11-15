@@ -77,13 +77,28 @@
   <div class="card-body">
     <h3 class="card-title"><a href="{{ product.url }}">{{ product.title }}</a></h3>
     <div class="price">{% render 'price', product: product %}</div>
+    {%- liquid
+      assign card_price = product.price
+      if card_price == 0
+        for variant in product.variants
+          if variant.price > 0
+            if card_price == 0 or variant.price < card_price
+              assign card_price = variant.price
+            endif
+          endif
+        endfor
+      endif
+      if card_price == 0 and product.compare_at_price > 0
+        assign card_price = product.compare_at_price
+      endif
+    -%}
     <label class="compare-check">
       <input
         type="checkbox"
         data-compare-add
         data-id="{{ product.id }}"
         data-title="{{ product.title | escape }}"
-        data-price="{{ product.price }}"
+        data-price="{{ card_price }}"
         data-img="{{ product.featured_image | image_url: width: 480 }}"
         data-url="{{ product.url }}"
       >

@@ -1,7 +1,27 @@
-{%- if product.compare_at_price > product.price -%}
-  <s>{{ product.compare_at_price | money }}</s>
+{%- liquid
+  assign show_price = product.price
+  assign show_compare = product.compare_at_price
+  if show_price == 0
+    for variant in product.variants
+      if variant.price > 0
+        if show_price == 0 or variant.price < show_price
+          assign show_price = variant.price
+        endif
+        if variant.compare_at_price > show_compare
+          assign show_compare = variant.compare_at_price
+        endif
+      endif
+    endfor
+  endif
+  if show_price == 0 and show_compare > 0
+    assign show_price = show_compare
+    assign show_compare = 0
+  endif
+-%}
+{%- if show_compare > show_price -%}
+  <s>{{ show_compare | money }}</s>
 {%- endif -%}
-<span>Now: {{ product.price | money }}</span>
-{%- if product.price_varies and product.compare_at_price <= product.price -%}
+<span>Now: {{ show_price | money }}</span>
+{%- if product.price_varies and show_compare <= show_price -%}
   <span class="visually-hidden">From</span>
 {%- endif -%}

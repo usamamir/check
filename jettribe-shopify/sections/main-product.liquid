@@ -45,24 +45,33 @@
         <div class="product-price price" data-product-price>
           {%- liquid
             assign show_price = current.price
+            assign show_compare = current.compare_at_price
             if show_price == 0
               for variant in product.variants
                 if variant.price > 0
-                  assign show_price = variant.price
-                  break
+                  if show_price == 0 or variant.price < show_price
+                    assign show_price = variant.price
+                  endif
+                  if variant.compare_at_price > show_compare
+                    assign show_compare = variant.compare_at_price
+                  endif
                 endif
               endfor
+            endif
+            if show_price == 0 and show_compare > 0
+              assign show_price = show_compare
+              assign show_compare = 0
             endif
             if show_price == 0
               assign show_price = product.price
             endif
           -%}
-          {%- if current.compare_at_price > show_price -%}
-            <s>{{ current.compare_at_price | money }}</s>
+          {%- if show_compare > show_price -%}
+            <s>{{ show_compare | money }}</s>
           {%- endif -%}
           Now: {{ show_price | money }}
         </div>
-        {% render 'paypal-message', placement: 'product', amount: current.price %}
+        {% render 'paypal-message', placement: 'product', amount: show_price %}
         {%- liquid
           assign jt_fallback_sku = ''
           for variant in product.variants
