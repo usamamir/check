@@ -1,0 +1,20 @@
+PVC plate customization (matches jettribe.com)
+
+On products like RS-25P Fade Multi Customization:
+
+1) Size
+2) Add-on PVC Plate: Blank $25 | Custom $60
+   - None = vest only, gallery stays on product photos
+   - Custom PVC Vest Name Plate ($60) = shows Design Confirmation A–R, name + number fields, and swaps the main image to that letter’s plate design
+   - Blank PVC Vest Name Plate ($25) = adds a blank plate, no letter/name fields
+3) Design Confirmation A–R only appears after Custom ($60)
+
+Upload theme, then import CSV:
+
+Theme:
+https://raw.githubusercontent.com/usamamir/check/cursor/jettribe-shopify-theme-86d6/jettribe-theme-nov14-20261114-0845.zip
+
+CSV (Products → Import, Overwrite matching handles, do not open in Excel):
+https://raw.githubusercontent.com/usamamir/check/cursor/jettribe-shopify-theme-86d6/jettribe-fix-pvc-customization.csv
+
+Wait if another import is already running.

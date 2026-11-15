@@ -72,16 +72,32 @@
           {%- unless product.has_only_default_variant -%}
             {%- for option in product.options_with_values -%}
               {%- assign option_key = option.name | downcase -%}
+              {%- if option_key contains 'design confirmation' or option_key contains 'select letter' -%}
+                {%- continue -%}
+              {%- endif -%}
               {%- assign option_is_color = false -%}
               {%- assign option_is_plate = false -%}
               {%- if option_key contains 'color' or option_key contains 'colour' -%}
                 {%- assign option_is_color = true -%}
               {%- endif -%}
-              {%- if option_key contains 'plate' or option_key contains 'font' -%}
+              {%- if option_key contains 'plate' or option_key contains 'font' or option_key contains 'pvc' -%}
                 {%- assign option_is_plate = true -%}
               {%- endif -%}
+              {%- assign option_is_pvc = false -%}
+              {%- if option_key contains 'pvc' -%}
+                {%- assign option_is_pvc = true -%}
+              {%- endif -%}
+              {%- for value in option.values -%}
+                {%- assign vdown = value | downcase -%}
+                {%- if vdown contains 'custom pvc' or vdown contains 'blank pvc' -%}
+                  {%- assign option_is_pvc = true -%}
+                  {%- assign option_is_plate = true -%}
+                {%- endif -%}
+              {%- endfor -%}
               {%- capture option_title -%}
-                {%- if option_is_plate -%}
+                {%- if option_is_pvc -%}
+                  Add-on PVC Plate: Blank $25 | Custom $60
+                {%- elsif option_is_plate -%}
                   $40 - Add Customized Vest Name Plate
                 {%- elsif option_key contains 'size' -%}
                   Size
@@ -97,6 +113,10 @@
                   {%- if option_is_plate -%}
                     {%- if value_l == 'default' or value_l == 'none' -%}
                       {%- assign value_label = 'None' -%}
+                    {%- elsif value_l contains 'custom pvc' -%}
+                      {%- assign value_label = 'Custom PVC Vest Name Plate ($60)' -%}
+                    {%- elsif value_l contains 'blank pvc' -%}
+                      {%- assign value_label = 'Blank PVC Vest Name Plate ($25)' -%}
                     {%- elsif value_l contains 'moto' -%}
                       {%- assign value_label = 'Moto Font Customization' -%}
                     {%- elsif value_l contains 'standard' -%}
@@ -212,12 +232,28 @@
           {%- endif -%}
 
           {%- assign jt_letter = "" -%}
+          {%- assign jt_pvc = false -%}
+          {%- if product.tags contains 'pvc-plate-custom' -%}
+            {%- assign jt_pvc = true -%}
+          {%- endif -%}
+          {%- for option in product.options_with_values -%}
+            {%- assign oname = option.name | downcase -%}
+            {%- if oname contains 'pvc' -%}
+              {%- assign jt_pvc = true -%}
+            {%- endif -%}
+            {%- for value in option.values -%}
+              {%- assign vdown = value | downcase -%}
+              {%- if vdown contains 'custom pvc' or vdown contains 'blank pvc' -%}
+                {%- assign jt_pvc = true -%}
+              {%- endif -%}
+            {%- endfor -%}
+          {%- endfor -%}
           {%- for tag in product.tags -%}
             {%- if tag contains "letter-choice:" -%}
               {%- assign jt_letter = tag | remove: "letter-choice:" | strip -%}
             {%- endif -%}
           {%- endfor -%}
-          {%- if jt_letter != "" -%}
+          {%- if jt_letter != "" and jt_pvc == false -%}
             <div class="field">
               <label for="DesignLetter">Design letter</label>
               <select class="input" id="DesignLetter" name="properties[Design Letter]" data-letter-choice>
