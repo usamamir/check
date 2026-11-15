@@ -29,15 +29,28 @@
           if raw_size contains '='
             assign raw_size = raw_size | split: '=' | first | strip
           endif
+          assign size_l = raw_size | downcase | strip
+          if size_l == 'extra small' or size_l == 'x small' or size_l == 'xsmall'
+            assign raw_size = 'XS'
+          elsif size_l == 'small'
+            assign raw_size = 'S'
+          elsif size_l == 'medium' or size_l == 'med'
+            assign raw_size = 'M'
+          elsif size_l == 'large'
+            assign raw_size = 'L'
+          elsif size_l == 'extra large' or size_l == 'x large' or size_l == 'xlarge'
+            assign raw_size = 'XL'
+          elsif size_l == 'xx large' or size_l == 'xxlarge'
+            assign raw_size = 'XXL'
+          elsif size_l == 'xxx large' or size_l == 'xxxlarge'
+            assign raw_size = '3XL'
+          endif
           assign size_ok = false
           assign size_check = raw_size | upcase | replace: ' ', ''
-          if size_check == 'XXS' or size_check == 'XS' or size_check == 'S' or size_check == 'M' or size_check == 'L' or size_check == 'XL' or size_check == 'XXL' or size_check == 'XXXL' or size_check == '2XL' or size_check == '3XL' or size_check == '4XL' or size_check == '5XL'
+          if size_check == 'XXS' or size_check == 'XS' or size_check == 'S' or size_check == 'M' or size_check == 'L' or size_check == 'XL' or size_check == 'XXL' or size_check == '2XL' or size_check == '3XL' or size_check == '4XL' or size_check == '5XL'
             assign size_ok = true
           endif
           if size_check == 'XXS/XS' or size_check == 'XS/S' or size_check == 'S/M' or size_check == 'M/L' or size_check == 'L/XL' or size_check == 'XL/XXL' or size_check == 'XXL/XXXL' or size_check == '2XL/3XL'
-            assign size_ok = true
-          endif
-          if size_check == 'SMALL' or size_check == 'MEDIUM' or size_check == 'LARGE' or size_check == 'XLARGE' or size_check == 'XXLARGE'
             assign size_ok = true
           endif
           if size_ok

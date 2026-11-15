@@ -104,16 +104,26 @@
             {%- if label_l contains '[pi]' or label_l contains 'name plate' or label_l contains 'customization' or label_l contains '$' or label_l contains 'font custom' -%}
               {%- assign label = label | split: ',' | first | strip -%}
             {%- endif -%}
+            {%- assign label_l = label | downcase | strip -%}
+            {%- if label_l == 'extra small' or label_l == 'x small' or label_l == 'xsmall' -%}{%- assign label = 'XS' -%}
+            {%- elsif label_l == 'small' -%}{%- assign label = 'S' -%}
+            {%- elsif label_l == 'medium' or label_l == 'med' -%}{%- assign label = 'M' -%}
+            {%- elsif label_l == 'large' -%}{%- assign label = 'L' -%}
+            {%- elsif label_l == 'extra large' or label_l == 'x large' or label_l == 'xlarge' -%}{%- assign label = 'XL' -%}
+            {%- elsif label_l == 'xx large' or label_l == 'xxlarge' -%}{%- assign label = 'XXL' -%}
+            {%- elsif label_l == 'xxx large' or label_l == 'xxxlarge' -%}{%- assign label = '3XL' -%}
+            {%- endif -%}
             {%- assign size_check = label | upcase | replace: ' ', '' -%}
             {%- assign size_ok = false -%}
-            {%- if size_check == 'XXS' or size_check == 'XS' or size_check == 'S' or size_check == 'M' or size_check == 'L' or size_check == 'XL' or size_check == 'XXL' or size_check == 'XXXL' or size_check == '2XL' or size_check == '3XL' or size_check == '4XL' or size_check == '5XL' -%}
+            {%- if size_check == 'XXS' or size_check == 'XS' or size_check == 'S' or size_check == 'M' or size_check == 'L' or size_check == 'XL' or size_check == 'XXL' or size_check == '2XL' or size_check == '3XL' or size_check == '4XL' or size_check == '5XL' -%}
               {%- assign size_ok = true -%}
             {%- endif -%}
             {%- if size_check == 'XXS/XS' or size_check == 'XS/S' or size_check == 'S/M' or size_check == 'M/L' or size_check == 'L/XL' or size_check == 'XL/XXL' or size_check == 'XXL/XXXL' or size_check == '2XL/3XL' -%}
               {%- assign size_ok = true -%}
             {%- endif -%}
-            {%- if size_check == 'SMALL' or size_check == 'MEDIUM' or size_check == 'LARGE' or size_check == 'XLARGE' or size_check == 'XXLARGE' or size_check == 'ONESIZE' -%}
+            {%- if size_check == 'ONESIZE' -%}
               {%- assign size_ok = true -%}
+              {%- assign label = 'One Size' -%}
             {%- endif -%}
             {%- if size_ok -%}
               <a class="size-chip{% if value.active %} is-active{% endif %}" href="{% if value.active %}{{ value.url_to_remove }}{% else %}{{ value.url_to_add }}{% endif %}">{{ label }}</a>

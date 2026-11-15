@@ -48,7 +48,7 @@
   function titleColors(text) {
     return COLORS.filter(function (row) { return row[2].test(text || ""); }).map(function (row) { return row[0]; });
   }
-  var SIZE_WORD = "(?:XXS|XS|S|M|L|XL|XXL|XXXL|XXXXL|2XL|3XL|4XL|5XL|Small|Medium|Large|X\\s*Large|XX\\s*Large|XXX\\s*Large)";
+  var SIZE_WORD = "(?:XXS|XS|S|M|L|XL|XXL|XXXL|XXXXL|2XL|3XL|4XL|5XL|Small|Medium|Large|X\\s*-?\\s*Large|XX\\s*-?\\s*Large|XXX\\s*-?\\s*Large|Extra\\s*Small|Extra\\s*Large|X\\s*Small)";
   var SIZE_LABEL = new RegExp("^" + SIZE_WORD + "(?:\\s*\\/\\s*" + SIZE_WORD + ")?$", "i");
   var SIZE_NUMERIC = /^(?:[5-9]|1[0-5]|2[8-9]|[3-4][0-9])$/;
   function isSizeJunk(value) {
@@ -60,20 +60,42 @@
     if (/plate|font|customization|addon|add-on|sock/i.test(n)) return false;
     return true;
   }
+  function mapSizeToken(token) {
+    var t = String(token || "").trim().toLowerCase().replace(/-/g, " ");
+    t = t.replace(/\s+/g, " ");
+    var table = {
+      "extra small": "XS", "x small": "XS", xsmall: "XS", xs: "XS",
+      xxs: "XXS", "2xs": "XXS", "xx small": "XXS",
+      small: "S", s: "S",
+      medium: "M", m: "M", med: "M",
+      large: "L", l: "L",
+      "extra large": "XL", "x large": "XL", xlarge: "XL", xl: "XL",
+      "xx large": "XXL", xxlarge: "XXL", xxl: "XXL",
+      "2xl": "2XL", "2x": "2XL", "2x large": "2XL",
+      "xxx large": "3XL", xxxlarge: "3XL", xxxl: "3XL", "3xl": "3XL", "3x": "3XL",
+      "4xl": "4XL", "4x": "4XL", "5xl": "5XL", "5x": "5XL"
+    };
+    if (table[t]) return table[t];
+    var compact = t.replace(/\s+/g, "");
+    if (table[compact]) return table[compact];
+    var up = String(token || "").trim().toUpperCase().replace(/\s+/g, "");
+    if (/^(XXS|XS|S|M|L|XL|XXL|2XL|3XL|4XL|5XL)$/.test(up)) return up === "XXXL" ? "3XL" : up;
+    return "";
+  }
   function canonicalSize(value) {
     var raw = String(value == null ? "" : value).trim();
     if (!raw || /^default\s*title$/i.test(raw) || /^none$/i.test(raw)) return "";
-    // Keep only the leading size token when BC modifiers were mashed into the value.
     var head = raw.split(/,|\[PI\]|\[RB\]|\[S\]|\[RT\]|\[CS\]/)[0].trim();
     head = head.split("=")[0].trim();
     head = head.replace(/\s*\/\s*/g, "/").replace(/\s+/g, " ").trim();
-    head = head
-      .replace(/^x\s*large$/i, "X Large")
-      .replace(/^xx\s*large$/i, "XX Large")
-      .replace(/^xxx\s*large$/i, "XXX Large");
     if (isSizeJunk(raw) && !SIZE_LABEL.test(head) && !SIZE_NUMERIC.test(head)) return "";
-    if (SIZE_LABEL.test(head) || SIZE_NUMERIC.test(head)) return head.replace(/\s*\/\s*/g, "/");
-    // Allow clean short labels like "One Size"
+    if (head.indexOf("/") !== -1) {
+      var parts = head.split("/").map(mapSizeToken);
+      if (parts[0] && parts[1]) return parts[0] + "/" + parts[1];
+    }
+    var mapped = mapSizeToken(head);
+    if (mapped) return mapped;
+    if (SIZE_NUMERIC.test(head)) return head;
     if (/^(one\s*size|os|osfa)$/i.test(head)) return "One Size";
     return "";
   }

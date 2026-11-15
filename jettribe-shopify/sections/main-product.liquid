@@ -43,10 +43,24 @@
         {%- endif -%}
         <h1 class="product-title">{{ product.title }}</h1>
         <div class="product-price price" data-product-price>
-          {%- if current.compare_at_price > current.price -%}
+          {%- liquid
+            assign show_price = current.price
+            if show_price == 0
+              for variant in product.variants
+                if variant.price > 0
+                  assign show_price = variant.price
+                  break
+                endif
+              endfor
+            endif
+            if show_price == 0
+              assign show_price = product.price
+            endif
+          -%}
+          {%- if current.compare_at_price > show_price -%}
             <s>{{ current.compare_at_price | money }}</s>
           {%- endif -%}
-          Now: {{ current.price | money }}
+          Now: {{ show_price | money }}
         </div>
         {% render 'paypal-message', placement: 'product', amount: current.price %}
         {%- liquid
@@ -127,6 +141,15 @@
                       {%- assign value_label = value | split: ',' | first | strip -%}
                     {%- endif -%}
                     {%- assign value_label = value_label | replace: ' / ', '/' | replace: '/ ', '/' | replace: ' /', '/' | replace: 'S/ M', 'S/M' | replace: 'L / XL', 'L/XL' -%}
+                    {%- assign vl = value_label | downcase | strip -%}
+                    {%- if vl == 'extra small' or vl == 'x small' or vl == 'xsmall' -%}{%- assign value_label = 'XS' -%}
+                    {%- elsif vl == 'small' -%}{%- assign value_label = 'S' -%}
+                    {%- elsif vl == 'medium' or vl == 'med' -%}{%- assign value_label = 'M' -%}
+                    {%- elsif vl == 'large' -%}{%- assign value_label = 'L' -%}
+                    {%- elsif vl == 'extra large' or vl == 'x large' or vl == 'xlarge' -%}{%- assign value_label = 'XL' -%}
+                    {%- elsif vl == 'xx large' or vl == 'xxlarge' -%}{%- assign value_label = 'XXL' -%}
+                    {%- elsif vl == 'xxx large' or vl == 'xxxlarge' -%}{%- assign value_label = '3XL' -%}
+                    {%- endif -%}
                   {%- endif -%}
                   <label class="{% if option_is_color %}swatch {% endif %}{% if option.selected_value == value %}is-selected{% endif %}">
                     <input
