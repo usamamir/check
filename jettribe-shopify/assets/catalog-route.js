@@ -277,14 +277,21 @@
   }
   function bestDisplayPrice(variants) {
     var list = variants || [];
-    var priced = list.filter(function (variant) { return Number(variant.price) > 0; })
-      .sort(function (a, b) { return a.price - b.price; });
-    if (priced.length) {
+    // Universal rule: prefer an available variant with a real price (skip $0 / OOS defaults)
+    var availablePriced = list.filter(function (variant) {
+      return variant.available !== false && Number(variant.price) > 0;
+    }).sort(function (a, b) { return a.price - b.price; });
+    var anyPriced = list.filter(function (variant) {
+      return Number(variant.price) > 0;
+    }).sort(function (a, b) { return a.price - b.price; });
+    var pick = availablePriced[0] || anyPriced[0];
+    if (pick) {
+      var comparePool = (availablePriced.length ? availablePriced : anyPriced);
       return {
-        price: priced[0].price,
-        compare: priced.reduce(function (max, variant) {
+        price: pick.price,
+        compare: comparePool.reduce(function (max, variant) {
           return Math.max(max, Number(variant.compare_at_price) || 0);
-        }, Number(priced[0].compare_at_price) || 0)
+        }, Number(pick.compare_at_price) || 0)
       };
     }
     var first = list[0] || {};
@@ -293,8 +300,12 @@
     if (compare > 0) return { price: compare, compare: 0 };
     return { price: 0, compare: 0 };
   }
-  function asStoreProduct(prod) {
+  function asStoreProduct(prod, opts) {
+    // jtmenu / products.json → dollars; /products/handle.js → cents
+    var fromCents = !!(opts && opts.fromCents);
     var variants = (prod.variants || []).map(function (variant) {
+      var rawPrice = Number(variant.price);
+      var rawCompare = variant.compare_at_price == null ? 0 : Number(variant.compare_at_price);
       return {
         id: variant.id,
         title: variant.title,
@@ -304,8 +315,10 @@
         option2: variant.option2,
         option3: variant.option3,
         options: [variant.option1, variant.option2, variant.option3].filter(function (value) { return value != null && value !== ""; }),
-        price: dollarsToCents(variant.price),
-        compare_at_price: variant.compare_at_price ? dollarsToCents(variant.compare_at_price) : 0
+        price: fromCents ? (isFinite(rawPrice) ? Math.round(rawPrice) : 0) : dollarsToCents(rawPrice),
+        compare_at_price: fromCents
+          ? (isFinite(rawCompare) && rawCompare > 0 ? Math.round(rawCompare) : 0)
+          : (rawCompare ? dollarsToCents(rawCompare) : 0)
       };
     });
     var display = bestDisplayPrice(variants);
@@ -636,8 +649,9 @@
           return res.json();
         })
         .then(function (prod) {
-          if (selectedSizes.length && !sizeInStock(prod, selectedSizes)) return cardFromCatalog(meta);
-          return belongs(prod, meta) ? cardFromProduct(prod, meta) : cardFromCatalog(meta);
+          var store = asStoreProduct(prod, { fromCents: true });
+          if (selectedSizes.length && !sizeInStock(store, selectedSizes)) return cardFromCatalog(meta);
+          return belongs(store, meta) ? cardFromProduct(store, meta) : cardFromCatalog(meta);
         })
         .catch(function () { return cardFromCatalog(meta); });
     })).then(function (cards) {

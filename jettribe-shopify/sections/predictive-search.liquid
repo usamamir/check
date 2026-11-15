@@ -17,7 +17,31 @@
           <a href="{{ product.url }}">
             <img src="{{ product.featured_image | image_url: width: 120 }}" alt="{{ product.title | escape }}" width="54" height="54">
             <span>{{ product.title }}</span>
-            <span>{{ product.price | money }}</span>
+            {%- liquid
+              assign jt_suggest_price = 0
+              assign jt_suggest_found = false
+              for variant in product.variants
+                if variant.available and variant.price > 0
+                  if jt_suggest_price == 0 or variant.price < jt_suggest_price
+                    assign jt_suggest_price = variant.price
+                  endif
+                  assign jt_suggest_found = true
+                endif
+              endfor
+              unless jt_suggest_found
+                for variant in product.variants
+                  if variant.price > 0
+                    if jt_suggest_price == 0 or variant.price < jt_suggest_price
+                      assign jt_suggest_price = variant.price
+                    endif
+                  endif
+                endfor
+              endunless
+              if jt_suggest_price == 0
+                assign jt_suggest_price = product.price
+              endif
+            -%}
+            <span>{{ jt_suggest_price | money }}</span>
           </a>
         {%- endif -%}
       {%- endunless -%}

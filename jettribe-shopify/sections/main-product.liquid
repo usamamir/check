@@ -46,17 +46,33 @@
           {%- liquid
             assign show_price = current.price
             assign show_compare = current.compare_at_price
-            if show_price == 0
+            if show_price == 0 or current.available == false
+              assign show_price = 0
+              assign show_compare = 0
+              assign found_available = false
               for variant in product.variants
-                if variant.price > 0
+                if variant.available and variant.price > 0
                   if show_price == 0 or variant.price < show_price
                     assign show_price = variant.price
                   endif
                   if variant.compare_at_price > show_compare
                     assign show_compare = variant.compare_at_price
                   endif
+                  assign found_available = true
                 endif
               endfor
+              unless found_available
+                for variant in product.variants
+                  if variant.price > 0
+                    if show_price == 0 or variant.price < show_price
+                      assign show_price = variant.price
+                    endif
+                    if variant.compare_at_price > show_compare
+                      assign show_compare = variant.compare_at_price
+                    endif
+                  endif
+                endfor
+              endunless
             endif
             if show_price == 0 and show_compare > 0
               assign show_price = show_compare

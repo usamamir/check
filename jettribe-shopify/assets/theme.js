@@ -930,8 +930,13 @@
       idInput.value = variant.id;
       if (priceEl) {
         var showPrice = variant.price;
-        if (!showPrice) {
-          var priced = product.variants.filter(function (item) { return item.price > 0; }).sort(function (a, b) { return a.price - b.price; })[0];
+        if (!showPrice || !variant.available) {
+          var availablePriced = product.variants.filter(function (item) {
+            return item.available && item.price > 0;
+          }).sort(function (a, b) { return a.price - b.price; })[0];
+          var priced = availablePriced || product.variants.filter(function (item) {
+            return item.price > 0;
+          }).sort(function (a, b) { return a.price - b.price; })[0];
           if (priced) showPrice = priced.price;
         }
         var html = "";

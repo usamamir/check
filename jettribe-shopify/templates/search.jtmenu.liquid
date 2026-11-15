@@ -16,6 +16,36 @@
       "url": {{ item.url | json }},
       "images": [{% if item.featured_image %}{"src": {{ item.featured_image | image_url: width: 800 | json }}}{% endif %}],
       "options": {{ item.options | json }},
+      {%- liquid
+        assign jt_menu_price = 0
+        assign jt_menu_compare = 0
+        assign jt_menu_found = false
+        for variant in item.variants
+          if variant.available and variant.price > 0
+            if jt_menu_price == 0 or variant.price < jt_menu_price
+              assign jt_menu_price = variant.price
+            endif
+            if variant.compare_at_price > jt_menu_compare
+              assign jt_menu_compare = variant.compare_at_price
+            endif
+            assign jt_menu_found = true
+          endif
+        endfor
+        unless jt_menu_found
+          for variant in item.variants
+            if variant.price > 0
+              if jt_menu_price == 0 or variant.price < jt_menu_price
+                assign jt_menu_price = variant.price
+              endif
+              if variant.compare_at_price > jt_menu_compare
+                assign jt_menu_compare = variant.compare_at_price
+              endif
+            endif
+          endfor
+        endunless
+      -%}
+      "price": {{ jt_menu_price | divided_by: 100.0 | json }},
+      "compare_at_price": {% if jt_menu_compare > jt_menu_price %}{{ jt_menu_compare | divided_by: 100.0 | json }}{% else %}null{% endif %},
       "variants": [
         {% for variant in item.variants %}
           {% unless forloop.first %},{% endunless %}

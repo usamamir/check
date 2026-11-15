@@ -78,8 +78,17 @@
     <h3 class="card-title"><a href="{{ product.url }}">{{ product.title }}</a></h3>
     <div class="price">{% render 'price', product: product %}</div>
     {%- liquid
-      assign card_price = product.price
-      if card_price == 0
+      assign card_price = 0
+      assign card_found_available = false
+      for variant in product.variants
+        if variant.available and variant.price > 0
+          if card_price == 0 or variant.price < card_price
+            assign card_price = variant.price
+          endif
+          assign card_found_available = true
+        endif
+      endfor
+      unless card_found_available
         for variant in product.variants
           if variant.price > 0
             if card_price == 0 or variant.price < card_price
@@ -87,6 +96,9 @@
             endif
           endif
         endfor
+      endunless
+      if card_price == 0
+        assign card_price = product.price
       endif
       if card_price == 0 and product.compare_at_price > 0
         assign card_price = product.compare_at_price
