@@ -1,0 +1,14 @@
+Yes Customization + Design Confirmation A–V (matches jettribe.com)
+
+For USCG JTR / Circuit-style vests: Size → $40 Name Plate (None / Yes Customization) → Design Confirmation A–V → Plate Personalization Name → Race Number. Selecting a letter swaps the main product image.
+
+1) Products → Import. Check Overwrite products with matching handles. Do not open in Excel.
+   Only adds Yes Customization variants (+$40). Base size prices are unchanged.
+
+https://raw.githubusercontent.com/usamamir/check/cursor/jettribe-shopify-theme-86d6/jettribe-fix-yes-customization.csv
+
+2) Themes → Upload zip, then Preview:
+
+https://raw.githubusercontent.com/usamamir/check/cursor/jettribe-shopify-theme-86d6/jettribe-theme-FIXED.zip
+
+Do not re-import jettribe-bc-prices.csv for this step — this file does not change catalog base prices.

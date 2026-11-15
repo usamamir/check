@@ -359,7 +359,8 @@
         if (/moto/i.test(choice)) plate = "Moto Font Customization";
         else if (/standard/i.test(choice)) plate = "Standard Font Customization";
         else if (/blank/i.test(choice)) plate = "Blank PVC Vest Name Plate ($25)";
-        else if (/custom pvc|yes custom/i.test(choice)) plate = "Custom PVC Vest Name Plate ($60)";
+        else if (/custom pvc/i.test(choice)) plate = "Custom PVC Vest Name Plate ($60)";
+        else if (/yes custom/i.test(choice)) plate = "Yes Customization";
         else if (!/^none$/i.test(choice)) plate = choice;
       }
       return { size: sizePart, plate: plate, mangled: true };
@@ -377,6 +378,7 @@
     if (!v || /^(none|default)$/i.test(v)) return "None";
     if (/custom pvc/i.test(v)) return "Custom PVC Vest Name Plate ($60)";
     if (/blank pvc/i.test(v)) return "Blank PVC Vest Name Plate ($25)";
+    if (/yes custom/i.test(v)) return "Yes Customization";
     if (/moto/i.test(v) && !/moto font customization/i.test(v)) return "Moto Font Customization";
     if (/standard/i.test(v) && !/standard font customization/i.test(v)) return "Standard Font Customization";
     return v;
@@ -398,8 +400,41 @@
   function isFortyPlateProduct(prod) {
     if (isPvcProduct(prod)) return false;
     var blob = ((prod.options || []).map(optionLabel).join(" ") + " " +
+      (prod.variants || []).map(function (variant) { return (variant.options || []).join(" "); }).join(" ") + " " +
+      productTags(prod).join(" ")).toLowerCase();
+    return /\$40|customized vest name plate|moto font|standard font|yes customization|letter-choice:a-v|custom-plate:yes-av/.test(blob);
+  }
+
+  function isYesAvProduct(prod) {
+    if (isPvcProduct(prod)) return false;
+    var tags = productTags(prod).join(" ").toLowerCase();
+    if (/letter-choice:a-v|custom-plate:yes-av/.test(tags)) return true;
+    var blob = ((prod.options || []).map(optionLabel).join(" ") + " " +
       (prod.variants || []).map(function (variant) { return (variant.options || []).join(" "); }).join(" ")).toLowerCase();
-    return /\$40|customized vest name plate|moto font|standard font/.test(blob);
+    return /yes customization/.test(blob);
+  }
+
+  function letterChoiceRange(prod) {
+    var el = qs("[data-letter-choice-range]");
+    if (el) {
+      var fromDom = String(el.getAttribute("data-letter-choice-range") || "").trim();
+      if (fromDom) return fromDom;
+    }
+    var tag = productTags(prod).filter(function (item) { return item.indexOf("letter-choice:") === 0; })[0];
+    if (tag === "letter-choice:A-V" || (prod && prod._jtYesAv)) return "A-V";
+    if (tag === "letter-choice:A-R" || (prod && prod._jtPvc)) return "A-R";
+    if (tag && tag.indexOf("letter-choice:") === 0) return tag.slice(13);
+    if (prod && prod._jtYesAv) return "A-V";
+    if (prod && prod._jtPvc) return "A-R";
+    return "";
+  }
+
+  function lettersForRange(range) {
+    // BC Yes Customization skips letter R (A–Q, S–V)
+    if (range === "A-V") return "ABCDEFGHIJKLMNOPQSTUV".split("");
+    if (range === "A-R") return "ABCDEFGHIJKLMNOPQR".split("");
+    if (range && range.indexOf(",") !== -1) return range.split(",").map(function (item) { return item.trim(); }).filter(Boolean);
+    return "ABCDEFGHIJKLMNOPQR".split("");
   }
 
   function plateOptionTitle(name, prod) {
@@ -419,7 +454,8 @@
     });
     var optionNames = (prod.options || []).map(optionLabel);
     var pvc = isPvcProduct(prod);
-    var forty = isFortyPlateProduct(prod);
+    var yesAv = isYesAvProduct(prod);
+    var forty = isFortyPlateProduct(prod) || yesAv;
     var hasPlateOption = optionNames.some(function (name) {
       return /plate|font|custom|pvc/i.test(name) && !/^size$/i.test(name);
     });
@@ -474,6 +510,7 @@
         pvc ? "Add-on PVC Plate: Blank $25 | Custom $60" : "$40 - Add Customized Vest Name Plate"
       ];
       prod._jtPvc = pvc;
+      prod._jtYesAv = !pvc && yesAv;
       prod._jtForty = !pvc && forty;
       return prod;
     }
@@ -497,9 +534,13 @@
         variant.option3 = variant.options[2];
       });
       prod._jtPvc = pvc;
+      prod._jtYesAv = !pvc && yesAv;
+      prod._jtForty = !pvc && forty;
       return prod;
     }
     prod._jtPvc = pvc;
+    prod._jtYesAv = !pvc && yesAv;
+    prod._jtForty = !pvc && forty;
     return prod;
   }
 
@@ -546,7 +587,9 @@
       if (/plate|pvc/i.test(String(name))) {
         var note = prod && prod._jtPvc
           ? "Choose None for the vest only. Custom ($60) unlocks plate designs A–R plus name/number. Blank ($25) adds an unprinted plate."
-          : "Choose None if you do not want a customized name plate. Custom plates take an extra 1–2 weeks and ship separately.";
+          : (prod && prod._jtYesAv)
+            ? "Choose None for the vest only. Yes Customization (+$40) unlocks Design Confirmation A–V plus name/number. Custom plates take 1–2 weeks and ship separately."
+            : "Choose None if you do not want a customized name plate. Custom plates take an extra 1–2 weeks and ship separately.";
         html += '<p class="addon-note" data-addon-note>' + note + "</p>";
       }
     });
@@ -561,18 +604,19 @@
       }
     }
     ensurePlateTextFields(form, prod);
-    ensurePvcLetterUI(form, prod);
-    syncPvcCustomization(form, prod);
+    ensureLetterUI(form, prod);
+    syncPlateCustomization(form, prod);
   }
 
   function ensurePlateTextFields(form, prod) {
     if (qs("[data-plate-fields]", form)) return;
     var pvc = !!(prod && prod._jtPvc) || isPvcProduct(prod || {});
+    var yesAv = !!(prod && prod._jtYesAv) || isYesAvProduct(prod || {});
     var existing = [];
     qsa(".field", form).forEach(function (field) {
       var input = qs("input[type='text'], textarea", field);
       if (!input || !input.name) return;
-      if (/name for plate|race number|custom name|custom number/i.test(input.name + " " + (qs("label", field) || {}).textContent)) {
+      if (/name for plate|plate personalization|race number|custom name|custom number/i.test(input.name + " " + (qs("label", field) || {}).textContent)) {
         existing.push(field);
       }
     });
@@ -587,6 +631,12 @@
         '<input class="input" id="CustomName60" type="text" name="properties[Enter Custom Name (Only with $60 Custom Option)]"></div>' +
         '<div class="field"><label for="CustomNumber60">Enter Custom Number (Only with $60 Custom Option)</label>' +
         '<input class="input" id="CustomNumber60" type="text" name="properties[Enter Custom Number (Only with $60 Custom Option)]"></div>';
+    } else if (yesAv) {
+      box.innerHTML =
+        '<div class="field"><label for="PlatePersonalizationName">Plate Personalization Name (Only if $40 Option Added)</label>' +
+        '<input class="input" id="PlatePersonalizationName" type="text" name="properties[Plate Personalization Name (Only if $40 Option Added)]"></div>' +
+        '<div class="field"><label for="RaceNumber40">Race Number (Only if $40 Option Added)</label>' +
+        '<input class="input" id="RaceNumber40" type="text" name="properties[Race Number (Only if $40 Option Added)]"></div>';
     } else {
       box.innerHTML =
         '<div class="field"><label for="NameForPlate">Name for Plate (Only if $40 Option Added)</label>' +
@@ -600,31 +650,36 @@
     else form.appendChild(box);
   }
 
-  function ensurePvcLetterUI(form, prod) {
-    if (!prod || !prod._jtPvc) return;
+  function ensureLetterUI(form, prod) {
+    var pvc = !!(prod && prod._jtPvc) || isPvcProduct(prod || {});
+    var yesAv = !!(prod && prod._jtYesAv) || isYesAvProduct(prod || {});
+    if (!pvc && !yesAv) return;
     if (qs("[data-pvc-letter-wrap]", form)) return;
-    var letters = "ABCDEFGHIJKLMNOPQR".split("");
-    var tag = productTags(prod).filter(function (item) { return item.indexOf("letter-choice:") === 0; })[0];
-    if (tag === "letter-choice:A-V") letters = "ABCDEFGHIJKLMNOPQRSTUV".split("");
-    else if (tag && tag.indexOf("letter-choice:") === 0 && tag.slice(13) && tag.slice(13) !== "A-R" && tag.slice(13) !== "A-V") {
-      letters = tag.slice(13).split(",").map(function (item) { return item.trim(); }).filter(Boolean);
-    }
+    var range = letterChoiceRange(prod) || (yesAv ? "A-V" : "A-R");
+    var letters = lettersForRange(range);
+    var label = range === "A-V"
+      ? "Design Confirmation (Select Letter A–V)"
+      : "Design Confirmation (Select Letter A–R)";
     var wrap = document.createElement("div");
     wrap.setAttribute("data-pvc-letter-wrap", "");
     wrap.hidden = true;
     wrap.innerHTML =
-      '<div class="option-label">Design Confirmation (Select Letter A–R)</div>' +
+      '<div class="option-label">' + label + "</div>" +
       '<div class="option-values" data-pvc-letters>' +
       letters.map(function (letter, index) {
-        return '<label class="' + (!index ? "is-selected" : "") + '"><input type="radio" name="properties[Design Confirmation (Select Letter A–R)]" value="' +
+        return '<label class="' + (!index ? "is-selected" : "") + '"><input type="radio" name="properties[' + label + ']" value="' +
           letter + '" data-pvc-letter' + (!index ? " checked" : "") + "><span>" + letter + "</span></label>";
       }).join("") +
       "</div>" +
-      '<p class="addon-note">Pick a plate design. The gallery updates to that letter.</p>';
+      '<p class="addon-note">Pick a plate design. The main image updates to that letter layout.</p>';
     var plateGroup = qs("[data-plate-group]", form);
     var insertAfter = plateGroup || qs("[data-addon-note]", form) || qs("[data-option-mount]", form);
     if (insertAfter) insertAfter.parentNode.insertBefore(wrap, insertAfter.nextSibling);
     else form.appendChild(wrap);
+  }
+
+  function ensurePvcLetterUI(form, prod) {
+    ensureLetterUI(form, prod);
   }
 
   var plateDesignCache = null;
@@ -660,34 +715,35 @@
     return checked ? String(checked.value || "").toUpperCase() : "";
   }
 
-  function syncPvcCustomization(form, prod) {
+  function syncPlateCustomization(form, prod) {
     if (!form) return;
-    var pvc = !!(prod && prod._jtPvc);
+    var pvc = !!(prod && prod._jtPvc) || isPvcProduct(prod || {});
+    var yesAv = !!(prod && prod._jtYesAv) || isYesAvProduct(prod || {});
     var plate = selectedPvcPlate(form);
-    var isCustom = /custom pvc/i.test(plate);
-    var isBlank = /blank pvc/i.test(plate);
+    var isCustomPvc = /custom pvc/i.test(plate);
+    var isYes = /yes custom/i.test(plate);
+    var showLetters = (pvc && isCustomPvc) || (yesAv && isYes);
     var letterWrap = qs("[data-pvc-letter-wrap]", form);
     var fields = qs("[data-plate-fields]", form);
     if (letterWrap) {
-      letterWrap.hidden = !isCustom;
+      letterWrap.hidden = !showLetters;
       qsa("[data-pvc-letter]", letterWrap).forEach(function (input) {
-        input.disabled = !isCustom;
+        input.disabled = !showLetters;
       });
     }
     if (fields) {
-      // $40 plates: any non-None; PVC plates: only Custom $60
-      var on = pvc ? isCustom : !!(plate && !/^none$/i.test(plate));
+      // PVC: only Custom $60; Yes A-V: Yes Customization; Moto/Standard: any non-None
+      var on = pvc ? isCustomPvc : !!(plate && !/^none$/i.test(plate));
       fields.hidden = !on;
       qsa("input, textarea", fields).forEach(function (input) {
         input.disabled = !on;
         if (!on) input.value = "";
       });
     }
-    if (!pvc) return;
     var main = qs("[data-gallery-main]");
     if (!main) return;
     if (!form._jtDefaultImage) form._jtDefaultImage = main.getAttribute("src") || "";
-    if (!isCustom) {
+    if (!showLetters) {
       if (form._jtDefaultImage) main.src = form._jtDefaultImage;
       return;
     }
@@ -701,8 +757,12 @@
     });
   }
 
+  function syncPvcCustomization(form, prod) {
+    syncPlateCustomization(form, prod);
+  }
+
   function syncPlateTextFields(form, prod) {
-    syncPvcCustomization(form, prod);
+    syncPlateCustomization(form, prod);
   }
 
   /* Product page variants */
@@ -727,16 +787,16 @@
           return /\[PI\]|Name Plate=|Font Customization:\d+/i.test(String(opt || ""));
         });
       });
-      if (needsRebuild || product._jtPvc || product._jtForty) renderOptionGroups(form, product, "option");
+      if (needsRebuild || product._jtPvc || product._jtForty || product._jtYesAv) renderOptionGroups(form, product, "option");
       else {
         ensurePlateTextFields(form, product);
         qsa("[data-option-index]", form).forEach(function (group) {
-          if (/plate|pvc/i.test(group.getAttribute("data-option-name") || "")) {
+          if (/plate|pvc|yes custom/i.test(group.getAttribute("data-option-name") || "")) {
             group.setAttribute("data-plate-group", "true");
           }
         });
-        ensurePvcLetterUI(form, product);
-        syncPvcCustomization(form, product);
+        ensureLetterUI(form, product);
+        syncPlateCustomization(form, product);
       }
       var mount = qs("[data-option-mount]", form);
       if (mount) mount.setAttribute("data-ready", "");
