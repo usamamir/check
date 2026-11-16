@@ -1,19 +1,21 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
-const isWpPack = process.env.VITE_WP_PACK === '1'
+// Single bundle for WordPress theme pack OR Hostinger/cPanel public_html upload
+const isSingleBundle =
+  process.env.VITE_WP_PACK === '1' || process.env.VITE_STATIC_PACK === '1'
 
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
-  // Relative base for static hosting; WordPress injects __DIGIVISTACO_ASSETS__ for chunks
+  // Relative paths so the site works at domain root (public_html) or a subfolder
   base: './',
   build: {
     manifest: true,
-    // WordPress theme: one JS file so Update→2026 cannot blank on missing chunks
-    cssCodeSplit: !isWpPack,
-    chunkSizeWarningLimit: isWpPack ? 1600 : 500,
-    rolldownOptions: isWpPack
+    // One JS file — safer on shared hosting (no missing chunk 404s)
+    cssCodeSplit: !isSingleBundle,
+    chunkSizeWarningLimit: isSingleBundle ? 1600 : 500,
+    rolldownOptions: isSingleBundle
       ? {
           output: {
             codeSplitting: false,
@@ -23,7 +25,7 @@ export default defineConfig({
         }
       : undefined,
   },
-  experimental: isWpPack
+  experimental: isSingleBundle
     ? undefined
     : {
         renderBuiltUrl(filename, { hostType }) {

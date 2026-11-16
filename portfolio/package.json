@@ -8,7 +8,8 @@
     "build": "tsc -b && vite build",
     "lint": "oxlint",
     "preview": "vite preview",
-    "pack:wp": "node scripts/pack-wordpress-theme.mjs"
+    "pack:wp": "node scripts/pack-wordpress-theme.mjs",
+    "pack:public-html": "node scripts/pack-public-html.mjs"
   },
   "dependencies": {
     "@react-three/drei": "^10.7.9",
