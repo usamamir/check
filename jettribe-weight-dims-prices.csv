@@ -308,13 +308,13 @@ Gecko RS-15 Grip Boots PWC Jetski Ride & Race Jet Ski Gear,gecko-rs-15-grip-boot
 ,gecko-rs-15-grip-boots-pwc-jetski-ride-race-jet-ski-gear,Size,11,,,,,JTG 91113-11,98.99,1814,lb,5,9,4,in
 JTG 91114 RS-15 RACE GLOVES,jtg-91114-rs-15-race-gloves,Title,Default Title,,,,,JTG 91114,47.29,227,lb,1,1,1,in
 JTG 11433P PWC BACK DEFLECTOR SKULL,jtg-11433p-pwc-back-deflector-skull,Title,Default Title,,,,,JTG 11433P,73.49,907,lb,1,9,18,in
-JTA 61505 LANYARD,jta-61505-lanyard,Title,Default Title,,,,,JTA 61505,5.29,,,1,1,1,in
+JTA 61505 LANYARD,jta-61505-lanyard,Title,Default Title,,,,,JTA 61505,5.29,0,lb,1,1,1,in
 Replacement Goggle Lens Helmet Style/Amber PWC Jetski Ride & Race,replacement-goggle-lens-helmet-style-amber-pwc-jetski-ride-race,Title,Default Title,,,,,JTA 11323,15.79,454,lb,1,1,1,in
 Display for PWC Goggles: Display Stand Fixture,display-for-pwc-goggles-display-stand-fixture,Title,Default Title,,,,,JTA 11324,31.49,1361,lb,5,9,22,in
 Replacement Goggle Lens Helmet Style/Revo PWC Jetski Ride & Race,replacement-goggle-lens-helmet-style-revo-pwc-jetski-ride-race,Title,Default Title,,,,,JTA 11325,15.79,454,lb,1,1,1,in
 Yamaha Waverunner Cover FX-HO (2012-15) PWC Jetski Ride & Race,yamaha-waverunner-cover-fx-ho-2012-15-pwc-jetski-ride-race,Title,Default Title,,,,,YMH 04024,244.69,2268,lb,1,1,1,in
-STAND UP FX-1 700 PWC JETSKI RIDE & RACE JET SKI COVER,stand-up-fx-1-700-pwc-jetski-ride-race-jet-ski-cover,Title,Default Title,,,,,YMH 04000,166.99,,,1,1,1,in
-Race Canopy Awning Shelter for Event Race PWC Jet Ski Watercraft,race-canopy-awning-shelter-for-event-race-pwc-jet-ski-watercraft,Title,Default Title,,,,,JTA 060310,1884.79,,,1,1,1,in
+STAND UP FX-1 700 PWC JETSKI RIDE & RACE JET SKI COVER,stand-up-fx-1-700-pwc-jetski-ride-race-jet-ski-cover,Title,Default Title,,,,,YMH 04000,166.99,0,lb,1,1,1,in
+Race Canopy Awning Shelter for Event Race PWC Jet Ski Watercraft,race-canopy-awning-shelter-for-event-race-pwc-jet-ski-watercraft,Title,Default Title,,,,,JTA 060310,1884.79,0,lb,1,1,1,in
 JTA 91304 COVER STORAGE BAG,jta-91304-cover-storage-bag,Title,Default Title,,,,,JTA 91304,10.59,454,lb,1,1,1,in
 Classic Goggle Strap *ONLY* PWC Jetski Ride & Race Jet Ski Accessories,classic-goggle-strap-only-pwc-jetski-ride-race-jet-ski-accessories,Title,Default Title,,,,,JTA 11330,9.49,113,lb,1,1,1,in
 Expert Goggle Replacement Strap *ONLY* PWC Ride & Race Jet Ski Accessories,expert-goggle-replacement-strap-only-pwc-ride-race-jet-ski-accessories,Title,Default Title,,,,,JTA 11331,7.29,113,lb,1,1,1,in
@@ -591,7 +591,6 @@ JET JEWELS - Stand Up Earring - JTA-14304,jet-jewels-stand-up-earring-jta-14304,
 "JTA 13302-YW DECAL JETTRIBE CORE 10"" - 2pc Yellow",jta-13302-yw-decal-jettribe-core-10-2pc-yellow,Title,Default Title,,,,,JTA 13302-YW,9.49,227,lb,1,3,10,in
 "JTA 13303-GN DECAL JETTRIBE CORE 5"" - 2pc Green",jta-13303-gn-decal-jettribe-core-5-2pc-green,Title,Default Title,,,,,JTA 13303-GN,6.29,227,lb,1,1,5,in
 "JTA 13303-GY DECAL JETTRIBE CORE 5"" - 2pc Grey",jta-13303-gy-decal-jettribe-core-5-2pc-grey,Title,Default Title,,,,,JTA 13303-GY,6.29,227,lb,1,1,5,in
-"JTA 13303-RD DECAL JETTRIBE CORE 5"" - 2pc Red",jta-13303-rd-decal-jettribe-core-5-2pc-red,Title,Default Title,,,,,JTA 13303-RD,6.29,227,lb,,,,
 "JTA 13303-YW DECAL JETTRIBE CORE 5"" - 2pc Yellow",jta-13303-yw-decal-jettribe-core-5-2pc-yellow,Title,Default Title,,,,,JTA 13303-YW,6.29,227,lb,1,1,5,in
 Special Forces Side-Entry Vest White PWC Jetski Ride & Race Jacket,special-forces-side-entry-vest-white-pwc-jetski-ride-race-jacket,Title,Default Title,,,,,JTG 13430-W,104.99,1588,lb,3,19,20,in
 C.E. Nato Back Deflector PWC Jetski Ride & Race Jet Ski Gear,c-e-nato-back-deflector-pwc-jetski-ride-race-jet-ski-gear,Title,Default Title,,,,,JTG 14418,164.99,907,lb,1,23,18,in
@@ -2067,25 +2066,7 @@ Spike Day Pack - Yellow PWC Jetski Ride & Race Gear,spike-day-pack-yellow-pwc-je
 Spike Day Pack - Green PWC Jetski Ride & Race Gear,spike-day-pack-green-pwc-jetski-ride-race-gear,Title,Default Title,,,,,JTA 17410-GN,41.99,907,lb,9,15,2,in
 Spike Day Pack - Red PWC Jetski Ride & Race Gear,spike-day-pack-red-pwc-jetski-ride-race-gear,Title,Default Title,,,,,JTA 17410-RD,41.99,907,lb,9,15,2,in
 Spike Day Pack - Blue PWC Jetski Ride & Race Gear,spike-day-pack-blue-pwc-jetski-ride-race-gear,Title,Default Title,,,,,JTA 17410-BL,41.99,907,lb,9,15,2,in
-Stand-Up League Hat - Black PWC Jetski Ride & Race Accessories,stand-up-league-hat-black-pwc-jetski-ride-race-accessories,Title,Default Title,,,,,JTA 17317-BK,20.99,454,lb,,,,
-Stand-Up League Hat - Blue PWC Jetski Ride & Race Accessories,stand-up-league-hat-blue-pwc-jetski-ride-race-accessories,Title,Default Title,,,,,JTA 17317-BL,20.99,454,lb,,,,
-Stand-Up League Hat - Red PWC Jetski Ride & Race Accessories,stand-up-league-hat-red-pwc-jetski-ride-race-accessories,Title,Default Title,,,,,JTA 17317-RD,20.99,454,lb,,,,
-Sit Down League Hat - Black PWC Jetski Ride & Race Accessories,sit-down-league-hat-black-pwc-jetski-ride-race-accessories,Title,Default Title,,,,,JTA 17318-BK,20.99,454,lb,,,,
-Sit Down League Hat - Blue PWC Jetski Ride & Race Accessories,sit-down-league-hat-blue-pwc-jetski-ride-race-accessories,Title,Default Title,,,,,JTA 17318-BL,20.99,454,lb,,,,
-Sit Down League Hat - Red PWC Jetski Ride & Race Accessories,sit-down-league-hat-red-pwc-jetski-ride-race-accessories,Title,Default Title,,,,,JTA 17318-RD,20.99,454,lb,,,,
-Freestyle League Hat - Black PWC Jetski Ride & Race Accessories,freestyle-league-hat-black-pwc-jetski-ride-race-accessories,Title,Default Title,,,,,JTA 17319-BK,20.99,454,lb,,,,
-TNT Solid Hat - Black PWC Jetski Ride & Race Accessories,tnt-solid-hat-black-pwc-jetski-ride-race-accessories,Title,Default Title,,,,,JTA 17320-BK,20.99,454,lb,,,,
-TNT Solid Hat - Pink PWC Jetski Ride & Race Accessories,tnt-solid-hat-pink-pwc-jetski-ride-race-accessories,Title,Default Title,,,,,JTA 17320-PK,20.99,454,lb,,,,
-TNT Solid Hat - Blue PWC Jetski Ride & Race Accessories,tnt-solid-hat-blue-pwc-jetski-ride-race-accessories,Title,Default Title,,,,,JTA 17320-BL,20.99,454,lb,,,,
-TNT Solid Hat - Green PWC Jetski Ride & Race Accessories,tnt-solid-hat-green-pwc-jetski-ride-race-accessories,Title,Default Title,,,,,JTA 17320-GN,20.99,454,lb,,,,
-TNT Stripe Hat - Green PWC Jetski Ride & Race Accessories,tnt-stripe-hat-green-pwc-jetski-ride-race-accessories,Title,Default Title,,,,,JTA 17370-GN,20.99,454,lb,,,,
-TNT Stripe Hat - Black PWC Jetski Ride & Race Accessories,tnt-stripe-hat-black-pwc-jetski-ride-race-accessories,Title,Default Title,,,,,JTA 17370-BK,20.99,454,lb,,,,
-TNT Stripe Hat - Pink PWC Jetski Ride & Race Accessories,tnt-stripe-hat-pink-pwc-jetski-ride-race-accessories,Title,Default Title,,,,,JTA 17370-PK,20.99,454,lb,,,,
 TNT Stripe Hat - Blue PWC Jetski Ride & Race Accessories,tnt-stripe-hat-blue-pwc-jetski-ride-race-accessories,Title,Default Title,,,,,JTA 17370-BL,20.99,454,lb,1,1,1,in
-Stacked Hat - Green PWC Jetski Ride & Race Accessories,stacked-hat-green-pwc-jetski-ride-race-accessories,Title,Default Title,,,,,JTA 17322-GN,20.99,454,lb,,,,
-Stacked Hat - Yellow PWC Jetski Ride & Race Accessories,stacked-hat-yellow-pwc-jetski-ride-race-accessories,Title,Default Title,,,,,JTA 17322-YW,20.99,454,lb,,,,
-Stacked Hat - Blue PWC Jetski Ride & Race Accessories,stacked-hat-blue-pwc-jetski-ride-race-accessories,Title,Default Title,,,,,JTA 17322-BL,20.99,454,lb,,,,
-Stacked Hat - Red PWC Jetski Ride & Race Accessories,stacked-hat-red-pwc-jetski-ride-race-accessories,Title,Default Title,,,,,JTA 17322-RD,20.99,454,lb,,,,
 Spike GP-30 Gloves - Blue (Small) | Closeout Size,spike-gp-30-gloves-blue-small-closeout-size,Size,Large,,,,,JTG 17424-BL-L,36.79,454,lb,1,4,5,in
 ,spike-gp-30-gloves-blue-small-closeout-size,Size,Medium,,,,,JTG 17424-BL-M,36.79,454,lb,1,4,5,in
 ,spike-gp-30-gloves-blue-small-closeout-size,Size,Small,,,,,JTG 17424-BL-S,36.79,454,lb,1,4,5,in
@@ -2126,20 +2107,9 @@ Shattered GP-30 Gloves - Grey (Small) PWC Jetski Ride & Race Gear,shattered-gp-3
 ,shattered-gp-30-gloves-grey-small-pwc-jetski-ride-race-gear,Size,Small,,,,,JTG 17425-GY-S,36.79,454,lb,1,4,5,in
 ,shattered-gp-30-gloves-grey-small-pwc-jetski-ride-race-gear,Size,X Large,,,,,JTG 17425-GY-XL,36.79,454,lb,1,4,5,in
 ,shattered-gp-30-gloves-grey-small-pwc-jetski-ride-race-gear,Size,XX Large,,,,,JTG 17425-GY-XXL,36.79,454,lb,1,4,5,in
-Pro Am Shoe - Black PWC Jetski Ride & Race Gear,pro-am-shoe-black-pwc-jetski-ride-race-gear,Title,Default Title,,,,,JTG 17466,48.29,1361,lb,,,,
-Banners 9' X 3' - Green/Purple PWC Jetski Ride & Race Accessories,banners-9-x-3-green-purple-pwc-jetski-ride-race-accessories,Title,Default Title,,,,,JTA 17365-GN,20.99,1814,lb,,,,
-Banners 9' X 3' - Black/Yellow PWC Jetski Ride & Race Accessories,banners-9-x-3-black-yellow-pwc-jetski-ride-race-accessories,Title,Default Title,,,,,JTA 17365-BK,20.99,1814,lb,,,,
-Banners 9' X 3' - Orange/Blue PWC Jetski Ride & Race Accessories,banners-9-x-3-orange-blue-pwc-jetski-ride-race-accessories,Title,Default Title,,,,,JTA 17365-OR,20.99,1814,lb,,,,
-Banners 9' X 3' - Turquoise/Blue PWC Jetski Ride & Race Accessories,banners-9-x-3-turquoise-blue-pwc-jetski-ride-race-accessories,Title,Default Title,,,,,JTA 17365-TU,20.99,1814,lb,,,,
-Banners 9' X 3' - Blue/ White PWC Jetski Ride & Race Accessories,banners-9-x-3-blue-white-pwc-jetski-ride-race-accessories,Title,Default Title,,,,,JTA 17365-BL,20.99,1814,lb,,,,
-Banners 9' X 3' - Red/ Blue PWC Jetski Ride & Race Accessories,banners-9-x-3-red-blue-pwc-jetski-ride-race-accessories,Title,Default Title,,,,,JTA 17365-RD,20.99,1814,lb,,,,
-Banners 9' X 3' - Yellow/Blue PWC Jetski Ride & Race Accessories,banners-9-x-3-yellow-blue-pwc-jetski-ride-race-accessories,Title,Default Title,,,,,JTA 17365-YW,20.99,1814,lb,,,,
-Banners 9' X 3' - Purple/ Blue PWC Jetski Ride & Race Accessories,banners-9-x-3-purple-blue-pwc-jetski-ride-race-accessories,Title,Default Title,,,,,JTA 17365-PU,20.99,1814,lb,,,,
 Rider Poster - Gyorgy Kasza PWC Jetski Ride & Race Accessories,rider-poster-gyorgy-kasza-pwc-jetski-ride-race-accessories,Title,Default Title,,,,,JTA 17358-KZ,5.29,227,lb,12,3,3,in
-Rider Poster - James Bushell PWC Jetski Ride & Race Accessories,rider-poster-james-bushell-pwc-jetski-ride-race-accessories,Title,Default Title,,,,,JTA 17358-BS,5.29,454,lb,,,,
 Rider Poster - Team Poster PWC Jetski Ride & Race Accessories,rider-poster-team-poster-pwc-jetski-ride-race-accessories,Title,Default Title,,,,,JTA 17358-TM,5.29,227,lb,12,3,3,in
 Decals - 12 X 18 - Sticker Sheet Red PWC Jetski Ride & Race Accessories,decals-12-x-18-sticker-sheet-red-pwc-jetski-ride-race-accessories,Title,Default Title,,,,,JTA 17321-RD,15.79,45,lb,1,1,1,in
-Decals - 12 X 18 - Yellow PWC Jetski Ride & Race Accessories,decals-12-x-18-yellow-pwc-jetski-ride-race-accessories,Title,Default Title,,,,,JTA 17321-YW,15.79,454,lb,,,,
 Decals - 12 X 18 - Blue Sticker Sheet PWC Jetski Ride & Race Accessories,decals-12-x-18-blue-sticker-sheet-pwc-jetski-ride-race-accessories,Title,Default Title,,,,,JTA 17321-BL,15.79,45,lb,0.01,1,1,in
 Decals - 12 X 18 - Sticker Sheet Gray PWC Jetski Ride & Race Accessories,decals-12-x-18-sticker-sheet-gray-pwc-jetski-ride-race-accessories,Title,Default Title,,,,,JTA 17321-GY,15.79,45,lb,0.1,1,1,in
 Decals - 12 X 18 Sticker Sheet - Green PWC Jetski Ride & Race Accessories,decals-12-x-18-sticker-sheet-green-pwc-jetski-ride-race-accessories,Title,Default Title,,,,,JTA 17321-GN,15.79,45,lb,0.1,1,1,in
@@ -2151,13 +2121,6 @@ Big Boy Anchor Bag | Extra Large Design | Holds Sand and Rocks | PWC Jetski Ride
 Caution Safety Flag | Included Storage Case | PWC Jetski Ride & Race Accessories,caution-safety-flag-included-storage-case-pwc-jetski-ride-race-accessories,Title,Default Title,,,,,JTA 17343,10.49,454,lb,1,1,24,in
 PWC Ski Dock Bumper | Jet Ski Ride & Race Accessories,pwc-ski-dock-bumper,Title,Default Title,,,,,JTA 17344,12.50,318,lb,2.5,15,6,in
 Dog Life Vest | Flotation Pet Gear | Closeout Size Small Only,accessory-dog-vest-pet-gear,Title,Default Title,,,,,JTA 17345-S,47.24,907,lb,3,10,10,in
-Triangle Towable - Spike Green PWC Jetski Ride & Race Recreation,triangle-towable-spike-green-pwc-jetski-ride-race-recreation,Title,Default Title,,,,,JTA 17333-GN,157.49,5443,lb,,,,
-Triangle Towable - Spike Blue PWC Jetski Ride & Race Recreation,triangle-towable-spike-blue-pwc-jetski-ride-race-recreation,Title,Default Title,,,,,JTA 17333-BL,157.49,5443,lb,,,,
-Triangle Towable - Spike Red PWC Jetski Ride & Race Recreation,triangle-towable-spike-red-pwc-jetski-ride-race-recreation,Title,Default Title,,,,,JTA 17333-RD,157.49,5443,lb,,,,
-Triangle Towable - Spike Yellow PWC Jetski Ride & Race Recreation,triangle-towable-spike-yellow-pwc-jetski-ride-race-recreation,Title,Default Title,,,,,JTA 17333-YW,157.49,5443,lb,,,,
-Donut Towable - Spike Green PWC Jetski Ride & Race Recreation,donut-towable-spike-green-pwc-jetski-ride-race-recreation,Title,Default Title,,,,,JTA 17334-GN,136.49,5443,lb,,,,
-Donut Towable - Spike Blue PWC Jetski Ride & Race Recreation,donut-towable-spike-blue-pwc-jetski-ride-race-recreation,Title,Default Title,,,,,JTA 17334-BL,136.49,5443,lb,,,,
-Donut Towable - Spike Red PWC Jetski Ride & Race Recreation,donut-towable-spike-red-pwc-jetski-ride-race-recreation,Title,Default Title,,,,,JTA 17334-RD,136.49,5443,lb,,,,
 Donut Towable - Spike Yellow PWC Jetski Ride & Race Recreation,donut-towable-spike-yellow-pwc-jetski-ride-race-recreation,Title,Default Title,,,,,JTA 17334-YW,136.49,5443,lb,4,10,1,in
 Youth U.C.S.G. Young Heart Neoprene Vest Jetski Kids 50 - 90 lbs (23kg - 41kg),youth-u-c-s-g-young-heart-neoprene-vest-jetski-kids-50-90-lbs-23kg-41kg,Title,Default Title,,,,,JTK 17540-Y,62.99,907,lb,2,10,10,in
 U.S.C.G. Ergo Yellow Side-Entry Vest PWC Jetski Race,u-s-c-g-ergo-yellow-side-entry-vest-pwc-jetski-race,Size,Large,,,,,JTG 17428-YW-L,102.89,1134,lb,2,18,14,in
@@ -2204,8 +2167,6 @@ Logo Stack T-Shirt Black| Closeout,logo-stack-t-shirt-black,Size,X Large,,,,,JTM
 ,logo-stack-t-shirt-black,Size,Medium,,,,,JTM 17241-M,10.00,227,lb,1,5,1,in
 Logo Stack - Limited Edition Grey - T-Shirt,logo-stack-limited-edition-grey-t-shirt,Size,Large,,,,,JTM 17241-GY-L,20.99,227,lb,1,4,5,in
 ,logo-stack-limited-edition-grey-t-shirt,Size,Medium,,,,,JTM 17241-GY-M,20.99,227,lb,1,4,5,in
-Logo Stack - Limited Edition White - T-Shirt PWC Jetski Ride Apparel,logo-stack-limited-edition-white-t-shirt-pwc-jetski-ride-apparel,Size,Large,,,,,JTM 17241-WH-L,20.99,454,lb,,,,
-,logo-stack-limited-edition-white-t-shirt-pwc-jetski-ride-apparel,Size,Medium,,,,,JTM 17241-WH-M,20.99,454,lb,,,,
 Logo Stack - Limited Edition Orange - T-Shirt (Large Only),logo-stack-limited-edition-orange-t-shirt-large-only,Size,Large,,,,,JTM 17241-OR-L,20.99,454,lb,1,1,1,in
 ,logo-stack-limited-edition-orange-t-shirt-large-only,Size,Medium,,,,,JTM 17241-OR-M,20.99,454,lb,1,1,1,in
 Yamaha Waverunner Cover | GP 760-800/1200 (97-00) | Premium Stealth Series,yamaha-waverunner-cover-gp-760-800-1200-97-00-premium-stealth-series,Title,Default Title,,,,,YMH 04002-SS,178.49,2041,lb,4,19,24,in
@@ -2387,7 +2348,6 @@ Ombre Triangle Top (Only) - Blue PWC Swimwear | Closeout Size Large Only,ombre-t
 ,ombre-triangle-top-only-blue-pwc-swimwear-closeout-size-large-only,Size,Medium,,,,,JTL 17113-BL-M,10.00,454,lb,1,1,1,in
 ,ombre-triangle-top-only-blue-pwc-swimwear-closeout-size-large-only,Size,Small,,,,,JTL 17113-BL-S,10.00,454,lb,1,1,1,in
 ,ombre-triangle-top-only-blue-pwc-swimwear-closeout-size-large-only,Size,X Large,,,,,JTL 17113-BL-XL,10.00,454,lb,1,1,1,in
-Tube Towable Webbing | Yellow Tow Line | PWC Jetski Accessories,tube-towable-webbing-yellow-tow-line-pwc-jetski-accessories,Title,Default Title,,,,,JTA 17340-YW,15.79,454,lb,,,,
 Ombre Triangle Top (Only)- Yellow PWC Swimwear | Closeout Size Large Only,ombre-triangle-top-only-yellow-pwc-swimwear-closeout-size-large-only,Size,Large,,,,,JTL 17113-YW-L,26.29,454,lb,1,1,1,in
 ,ombre-triangle-top-only-yellow-pwc-swimwear-closeout-size-large-only,Size,Medium,,,,,JTL 17113-YW-M,26.29,454,lb,1,1,1,in
 ,ombre-triangle-top-only-yellow-pwc-swimwear-closeout-size-large-only,Size,Small,,,,,JTL 17113-YW-S,26.29,454,lb,1,1,1,in
@@ -2802,32 +2762,6 @@ Linear T-Shirt White | Stand-Up / Sit Down / Freestyle Riders | PWC Jetski Appar
 Beach Towel - PWC Jetski Ride & Race Accessories,beach-towel-pwc-jetski-ride-race-accessories,Title,Default Title,,,,,JTA 18378,31.49,227,lb,4,12,5,in
 Yellow A1 Race Course Buoy - PWC Jetski Ride & Race Accessories,yellow-a1-race-course-buoy-pwc-jetski-ride-race-accessories,Title,Default Title,,,,,JTA 18307Y,40.99,1134,lb,4,12,5,in
 Red A1 Race Course Buoy - PWC Jetski Ride & Race Accessories,red-a1-race-course-buoy-pwc-jetski-ride-race-accessories,Title,Default Title,,,,,JTA 18307O,40.99,1134,lb,4,12,5,in
-Jettribe Christmas Sweatshirt,jettribe-christmas-sweatshirt,Size,S,Color,Black,,,PF_5bf33a4c6f866V1,50.00,454,lb,,,,
-,jettribe-christmas-sweatshirt,Size,M,Color,Black,,,PF_5bf33a4c6f866V2,50.00,454,lb,,,,
-,jettribe-christmas-sweatshirt,Size,L,Color,Black,,,PF_5bf33a4c6f866V3,50.00,454,lb,,,,
-,jettribe-christmas-sweatshirt,Size,XL,Color,Black,,,PF_5bf33a4c6f866V4,50.00,454,lb,,,,
-,jettribe-christmas-sweatshirt,Size,2XL,Color,Black,,,PF_5bf33a4c6f866V5,54.00,454,lb,,,,
-,jettribe-christmas-sweatshirt,Size,3XL,Color,Black,,,PF_5bf33a4c6f866V6,58.50,454,lb,,,,
-,jettribe-christmas-sweatshirt,Size,4XL,Color,Black,,,PF_5bf33a4c6f866V7,62.50,454,lb,,,,
-,jettribe-christmas-sweatshirt,Size,5XL,Color,Black,,,PF_5bf33a4c6f866V8,66.50,454,lb,,,,
-,jettribe-christmas-sweatshirt,Size,S,Color,Indigo Blue,,,PF_5bf33a4c6f866V9,50.00,454,lb,,,,
-,jettribe-christmas-sweatshirt,Size,M,Color,Indigo Blue,,,PF_5bf33a4c6f866V10,50.00,454,lb,,,,
-,jettribe-christmas-sweatshirt,Size,L,Color,Indigo Blue,,,PF_5bf33a4c6f866V11,50.00,454,lb,,,,
-,jettribe-christmas-sweatshirt,Size,XL,Color,Indigo Blue,,,PF_5bf33a4c6f866V12,50.00,454,lb,,,,
-,jettribe-christmas-sweatshirt,Size,2XL,Color,Indigo Blue,,,PF_5bf33a4c6f866V13,54.00,454,lb,,,,
-,jettribe-christmas-sweatshirt,Size,S,Color,Maroon,,,PF_5bf33a4c6f866V14,50.00,454,lb,,,,
-,jettribe-christmas-sweatshirt,Size,M,Color,Maroon,,,PF_5bf33a4c6f866V15,50.00,454,lb,,,,
-,jettribe-christmas-sweatshirt,Size,L,Color,Maroon,,,PF_5bf33a4c6f866V16,50.00,454,lb,,,,
-,jettribe-christmas-sweatshirt,Size,XL,Color,Maroon,,,PF_5bf33a4c6f866V17,50.00,454,lb,,,,
-,jettribe-christmas-sweatshirt,Size,2XL,Color,Maroon,,,PF_5bf33a4c6f866V18,54.00,454,lb,,,,
-,jettribe-christmas-sweatshirt,Size,S,Color,Red,,,PF_5bf33a4c6f866V19,50.00,454,lb,,,,
-,jettribe-christmas-sweatshirt,Size,M,Color,Red,,,PF_5bf33a4c6f866V20,50.00,454,lb,,,,
-,jettribe-christmas-sweatshirt,Size,L,Color,Red,,,PF_5bf33a4c6f866V21,50.00,6622,lb,,,,
-,jettribe-christmas-sweatshirt,Size,XL,Color,Red,,,PF_5bf33a4c6f866V22,50.00,7394,lb,,,,
-,jettribe-christmas-sweatshirt,Size,2XL,Color,Red,,,PF_5bf33a4c6f866V23,54.00,8709,lb,,,,
-,jettribe-christmas-sweatshirt,Size,3XL,Color,Red,,,PF_5bf33a4c6f866V24,58.50,9026,lb,,,,
-,jettribe-christmas-sweatshirt,Size,4XL,Color,Red,,,PF_5bf33a4c6f866V25,62.50,9525,lb,,,,
-,jettribe-christmas-sweatshirt,Size,5XL,Color,Red,,,PF_5bf33a4c6f866V26,66.50,10478,lb,,,,
 Team Travel Sharpened Duffel Bag - Blue PWC Jetski Ride & Race Gear,team-travel-sharpened-duffel-bag-blue-pwc-jetski-ride-race-gear,Title,Default Title,,,,,JTA 18480BL,83.99,1814,lb,5,28,14,in
 Team Travel Sharpened Duffel Bag - Green PWC Jetski Ride & Race Gear,team-travel-sharpened-duffel-bag-green-pwc-jetski-ride-race-gear,Title,Default Title,,,,,JTA 18480GN,83.99,1814,lb,5,28,14,in
 Team Travel Sharpened Duffel Bag - Grey PWC Jetski Ride & Race Gear,team-travel-sharpened-duffel-bag-grey-pwc-jetski-ride-race-gear,Title,Default Title,,,,,JTA 18480GY,83.99,1814,lb,5,28,14,in
@@ -2846,8 +2780,6 @@ Jettribe.com Gift Cards / Certificate,gift-cards-need-to-print-code-on-card-amou
 ,gift-cards-need-to-print-code-on-card-amount-10,Amount,$100,,,,,JTA 18100,100.00,45,lb,0.1,4,4,in
 EXTO-Plate - Replacement fr USCG Sharpened Grey JTG 18485,exto-plate-replacement-fr-uscg-sharpened-grey-jtg-18485,Title,Default Title,,,,,JTG 18401GY,31.49,454,lb,1,10,10,in
 EXTO-Plate - Replacement UR-20P Edge Red JTG 18415RD,exto-plate-replacement-ur-20p-edge-red-jtg-18415rd,Title,Default Title,,,,,JTG 18402RD,31.49,454,lb,1,10,10,in
-Customization for Vest Name Plate - Moto Font,customization-for-vest-name-plate-moto-font,Title,Default Title,,,,,JTG 18444MO,31.59,,,,,,
-Customization for Vest Name Plate - Standard Font,customization-for-vest-name-plate-standard-font,Title,Default Title,,,,,JTG 18444,31.59,,,,,,
 Lycra Socks Gator Top - Size XS (Boot Size 5 - 6),lycra-socks-gator-top-size-xs-boot-size-5-6,Title,Default Title,,,,,JTG 10401-XS,36.99,227,lb,1,4,5,in
 Lycra Socks Gator Top - Size M/L (Boot Size 7-9),lycra-socks-gator-top-size-m-l-boot-size-7-9,Title,Default Title,,,,,JTG 10401-ML,36.99,227,lb,1,4,5,in
 Lycra Socks Gator Top - Size XL/XXL (Boot Size 10-13),lycra-socks-gator-top-size-xl-xxl-boot-size-10-13,Title,Default Title,,,,,JTG 10401-XXL,36.99,227,lb,1,4,5,in
@@ -3150,7 +3082,6 @@ PWC Dock Line | 2 Piece Set | PWC Jetski Ride Beach Accessories,pwc-dock-line-2-
 ,pwc-dock-line-2-piece-set-pwc-jetski-ride-beach-accessories,Color,White,,,,,JTA 19344WH,3.25,113,lb,2,6,5,in
 Kawasaki Jetski Cover | 300/440/550SX/550 | Premium Stealth Series,kawasaki-jetski-cover-300-440-550sx-550-premium-stealth-series,Title,Default Title,,,,,KWS 05002-SS,166.99,1814,lb,4,19,24,in
 Kawasaki Jetski Cover | 750SX/SXI/SXI PRO | Premium Stealth Series,kawasaki-jetski-cover-750sx-sxi-sxi-pro-premium-stealth-series,Title,Default Title,,,,,KWS 05003-SS,166.99,1814,lb,4,19,24,in
-Display Clearance - Triangle Towable | 2 Person | Spike Orange | PWC Jetski Inflatable,display-clearance-triangle-towable-2-person-spike-orange-pwc-jetski-inflatable,Title,Default Title,,,,,JTA 17333-OR,157.49,5443,lb,,,,
 Triangle Towable | 2 Person | Hyper Red | PWC Jetski Inflatable,triangle-towable-2-person-hyper-red-pwc-jetski-inflatable,Title,Default Title,,,,,JTA 19352RD,83.99,5443,lb,4,19,22,in
 Display Clearance - Donut Towable | 1 Person | Spike Orange | Inflatable Tube PWC Jetski,display-clearance-donut-towable-1-person-spike-orange-inflatable-tube-pwc-jetski,Title,Default Title,,,,,JTA 16351-OR,146.99,4536,lb,6,8,4,in
 *Factory Second* Ladies Tour Coat Newport Pink | Neoprene Jacket | PWC Jetski Ride & Race,factory-second-ladies-tour-coat-newport-pink-neoprene-jacket-pwc-jetski-ride-race,Size,Large,,,,,JTL 18461PK-F2-L,136.49,1361,lb,3,18,20,in
@@ -3217,9 +3148,6 @@ Display Model - Kids John & Jacket Wetsuit | Purple / Green | Size 6 | PWC Jetsk
 Display Model - Team Travel 24K Duffel Bag | Silver / Black | PWC Jetski Ride & Race Gear,display-model-team-travel-24k-duffel-bag-silver-black-pwc-jetski-ride-race-gear,Title,Default Title,,,,,JTA 19491SL,83.99,1814,lb,5,28,14,in
 Team Travel Duffel Bag | Stealth Series | Black | Wet / Dry Storage,team-travel-duffel-bag-stealth-series-black-wet-dry-storage,Title,Default Title,,,,,JTA 19490,97.99,1814,lb,5,28,14,in
 *Factory Second* Spike Wetsuit - Black | Size Medium | PWC Jet Ski Ride & Race,factory-second-spike-wetsuit-black-size-medium-pwc-jet-ski-ride-race,Title,Default Title,,,,,JTG 17450-BK-F2,251.99,2268,lb,3,22,22,in
-Test for Klarna,cover-test-for-klarna,Size,Small,,,,,SKU-07961C2C,36.79,,,,,,
-,cover-test-for-klarna,Size,Medium,,,,,SKU-E7D3D758,36.79,,,,,,
-,cover-test-for-klarna,Size,Large,,,,,SKU-63B4DEB5,36.79,,,,,,
 Candy Triangle Bikini Pink 2pc Set - PWC Jetski Swimwear,candy-triangle-bikini-pink-2pc-set-pwc-jetski-swimwear,Size,Large,,,,,JTL 18166PK-L,52.49,91,lb,1,1,1,in
 ,candy-triangle-bikini-pink-2pc-set-pwc-jetski-swimwear,Size,Medium,,,,,JTL 18166PK-M,52.49,91,lb,1,1,1,in
 ,candy-triangle-bikini-pink-2pc-set-pwc-jetski-swimwear,Size,Small,,,,,JTL 18166PK-S,52.49,91,lb,1,1,1,in
@@ -3247,12 +3175,6 @@ Neo Triangle Bikini 2pc Set | Gold Neoprene | PWC Jetski Swimwear,neo-triangle-b
 ,neo-triangle-bikini-2pc-set-gold-neoprene-pwc-jetski-swimwear,Size,Medium,,,,,JTL 19176GD-M,52.49,91,lb,1,1,1,in
 ,neo-triangle-bikini-2pc-set-gold-neoprene-pwc-jetski-swimwear,Size,Small,,,,,JTL 19176GD-S,52.49,91,lb,1,1,1,in
 ,neo-triangle-bikini-2pc-set-gold-neoprene-pwc-jetski-swimwear,Size,X Large,,,,,JTL 19176GD-XL,52.49,91,lb,1,1,1,in
-Corporate Level Sponsorship - Sulphur Springs Watercraft Series,corporate-level-sponsorship-sulphur-springs-watercraft-series,Title,Default Title,,,,,JTG 2020C,500.00,45,lb,,,,
-Executive Level Sponsorship - Sulphur Springs Watercraft Series,executive-level-sponsorship-sulphur-springs-watercraft-series,Title,Default Title,,,,,JTG 2020EX,262.59,45,lb,,,,
-Entrepreneur Level Sponsorship - Sulphur Springs Watercraft Series,entrepreneur-level-sponsorship-sulphur-springs-watercraft-series,Title,Default Title,,,,,JTG 2020EN,157.59,45,lb,,,,
-Vendor Booth Only - Sulphur Springs Watercraft Series,vendor-booth-only-sulphur-springs-watercraft-series,Title,Default Title,,,,,JTG 2020VB,26.29,45,lb,,,,
-Global Level Sponsorship - Sulphur Springs Watercraft Series,global-level-sponsorship-sulphur-springs-watercraft-series,Title,Default Title,,,,,JTG 2020GL,262.59,45,lb,,,,
-Rider Registration - Sulphur Springs Watercraft Series,rider-registration-sulphur-springs-watercraft-series,Title,Default Title,,,,,JTG 2020RR,26.29,45,lb,,,,
 Sharpened Men's Board Shorts - Red | Online Limited Edition | Closeout Size 28 & 30,men-s-shorts-sharpened-red-online-limited-edition,Size,28,,,,,JTM 18242RD-28,41.99,227,lb,1,1,1,in
 ,men-s-shorts-sharpened-red-online-limited-edition,Size,30,,,,,JTM 18242RD-30,41.99,227,lb,1,1,1,in
 ,men-s-shorts-sharpened-red-online-limited-edition,Size,32,,,,,JTM 18242RD-32,41.99,227,lb,1,1,1,in
@@ -3394,8 +3316,6 @@ Flex Ride L-Comp Ride Boots | PWC Ride & Jet Ski Race Shoes,flex-ride-l-comp-rid
 ,flex-ride-l-comp-ride-boots-pwc-ride-jet-ski-race-shoes,Size,11,,,,,JTG 20497-11,50.00,907,lb,5,12,13,in
 ,flex-ride-l-comp-ride-boots-pwc-ride-jet-ski-race-shoes,Size,12,,,,,JTG 20497-12,50.00,907,lb,5,12,13,in
 ,flex-ride-l-comp-ride-boots-pwc-ride-jet-ski-race-shoes,Size,13,,,,,JTG 20497-13,50.00,907,lb,5,12,13,in
-$10 Promo Card (*Restrictions Apply),10-promo-card-restrictions-apply,Title,Default Title,,,,,JTA 20100,10.59,,,,,,
-$15 Promo Card (*Restrictions Apply),15-promo-card-restrictions-apply,Title,Default Title,,,,,JTA 20101,15.79,,,,,,
 Seadoo Jetski Cover | Suspension GTX GTX-S GTX-Ltd iS RXT Is/X aS | Premium Stealth Series,seadoo-jetski-cover-suspension-gtx-gtx-s-gtx-ltd-is-rxt-is-x-as-premium-stealth-series,Title,Default Title,,,,,SDO 03021-SS,244.69,2722,lb,3,19,18,in
 USCG Hyper Vest | Blue / Red | Coast Guard Approved CGA Type 3 | Side-Entry Jet Ski Vest,uscg-hyper-vest-blue-red-coast-guard-approved-cga-type-3-side-entry-jet-ski-vest,Size,S/M,,,,,JTG 19485BL-SM,97.49,1588,lb,3,20,21,in
 ,uscg-hyper-vest-blue-red-coast-guard-approved-cga-type-3-side-entry-jet-ski-vest,Size,L/XL,,,,,JTG 19485BL-LXL,97.49,1588,lb,3,20,21,in
@@ -3455,14 +3375,11 @@ Replacement Vent Cap | VP Racing Fuels Motorsport Container,replacement-vent-cap
 10 x 20 Jettribe Racing Pop-Up Canopy Tent | Steel Frame,10-x-20-jettribe-racing-pop-up-canopy-tent-steel-frame,Title,Default Title,,,,,JTA 20320,1049.99,41730,lb,17,10,60,in
 Beach Mat | Dual Layer Waterproof Mat | Corner Pockets | 8 Feet Wide,beach-mat-dual-layer-waterproof-mat-corner-pockets-8-feet-wide,Title,Default Title,,,,,JTA 18388,31.49,1361,lb,2,12,3,in
 Line Float Attachment | Ski Tow Ropes & Anchor Lines | Jet Ski Accessories,line-float-attachment-ski-tow-ropes-anchor-lines-jet-ski-accessories,Title,Default Title,,,,,JTA 20341,6.29,181,lb,2,15,2,in
-4 Place | JTR Personal Watercraft PWC Trailer | Sitdown / Stand-Up | American Steel,4-place-jtr-personal-watercraft-pwc-trailer-sitdown-stand-up-american-steel,Title,Default Title,,,,,JTA 20344,6799.00,2268,lb,,,,
-3 Place | JTR Personal Watercraft PWC Trailer | Sitdown / Stand-Up | American Steel,3-place-trailer,Title,Default Title,,,,,JTA 20343,6850.00,2268,lb,,,,
 Fuel Jug Gas Collar | Mix & Non-Mix | PWC Jet Ski Race Accessories,fuel-jug-gas-collar-mix-non-mix-pwc-jet-ski-race-accessories,Size,Mix,,,,,JTA 20380,6.29,23,lb,0.2,3,4,in
 ,fuel-jug-gas-collar-mix-non-mix-pwc-jet-ski-race-accessories,Size,Non-Mix,,,,,JTA 20381,6.29,23,lb,0.2,3,4,in
 10 x 10 Jettribe Racing Pop-Up Canopy Tent | Aluminum Frame,10-x-10-jettribe-racing-pop-up-canopy-tent-aluminum-frame,Title,Default Title,,,,,JTA 20310,629.99,17237,lb,10,10,60,in
 PWC Clean and Shine | Jettribe Care Collection | Wax Detail Spray,pwc-clean-and-shine-jettribe-care-collection-wax-detail-spray,Title,Default Title,,,,,JTA 20361,15.79,227,lb,1.5,1.5,8,in
 Wetsuit Wash | Jettribe Care Collection | Cleaner & Conditioner,wetsuit-wash-jettribe-care-collection-cleaner-conditioner,Title,Default Title,,,,,JTA 20362,10.00,227,lb,1.5,1.5,8,in
-Trailer Gas Jug Rack | PWC Trailer Accessory | 4 Container Holder,trailer-gas-jug-rack-pwc-trailer-accessory-4-container-holder,Title,Default Title,,,,,JTA 20345,173.29,2268,lb,,,,
 Kawasaki Jet Ski Cover | X2 650 (86-95) Vintage | Premium Stealth Series,kawasaki-jet-ski-cover-x2-650-86-95-vintage-premium-stealth-series,Title,Default Title,,,,,KWS 05012-SS,166.99,2268,lb,1,1,1,in
 I Heart PWC Hooded Longsleeve Tee | Turquoise | Ladies Jet Ski Riding Apparel,i-heart-pwc-hooded-longsleeve-tee-turquoise-ladies-jet-ski-riding-apparel,Size,XX Large,,,,,JTL 20121-2XL,12.00,227,lb,1,5,1,in
 ,i-heart-pwc-hooded-longsleeve-tee-turquoise-ladies-jet-ski-riding-apparel,Size,Large,,,,,JTL 20121-L,12.00,227,lb,1,5,1,in
@@ -3499,7 +3416,6 @@ Neoprene Loop Lanyard Wrist Band | Floating Key Cord Attachment,neoprene-loop-la
 ,neoprene-loop-lanyard-wrist-band-floating-key-cord-attachment,Color,Grey,,,,,JTA 20325GY,8.00,91,lb,1,3,1,in
 ,neoprene-loop-lanyard-wrist-band-floating-key-cord-attachment,Color,Red,,,,,JTA 20325RD,8.00,91,lb,1,3,1,in
 ,neoprene-loop-lanyard-wrist-band-floating-key-cord-attachment,Color,Teal,,,,,JTA 20325TL,8.00,91,lb,1,3,1,in
-Free $25 Jettribe.com eGift Card,free-25-jettribe-com-egift-card,Title,Default Title,,,,,JTA 18025FS,26.29,5,lb,,,,
 Water Spot Remover | Jettribe Care Collection,water-spot-remover-jettribe-care-collection,Title,Default Title,,,,,JTA 20363,10.00,227,lb,1.5,1.5,8,in
 Kawasaki 1500 SXR Stand-Up Cover (2016-21) | Charcoal Grey | BSX Series (Best for indoor use),kawasaki-1500-sxr-stand-up-cover-2016-21-charcoal-grey-bsx-series-best-for-indoor-use,Title,Default Title,,,,,BSX 05019,40.00,1814,lb,3,22,18,in
 Team Rider Hybrid Wetsuit Jacket | Black / Grey | Hooded Jacket (Size Small Only),team-rider-hybrid-wetsuit-jacket-black-grey,Size,Small,,,,,JTG 20452BK-S,139.99,907,lb,2,16,20,in
@@ -3560,7 +3476,6 @@ Ladies Team Rider Wetsuit John Only | Pink / Grey | Sleeveless One Piece,ladies-
 ,ladies-team-rider-wetsuit-john-pink-grey-sleeveless-one-piece,Size,Medium,,,,,JTL 20462PK-M,75.00,1247,lb,2,16,21,in
 ,ladies-team-rider-wetsuit-john-pink-grey-sleeveless-one-piece,Size,Small,,,,,JTL 20462PK-S,75.00,1247,lb,2,16,21,in
 ,ladies-team-rider-wetsuit-john-pink-grey-sleeveless-one-piece,Size,X Large,,,,,JTL 20462PK-XL,75.00,1247,lb,2,16,21,in
-2 Place | JTR Personal Watercraft PWC Trailer | Sitdown / Stand-Up | American Steel,2-place-jtr-personal-watercraft-trailer,Title,Default Title,,,,,JTA 20342,5850.00,226796,lb,,,,
 USCG Black Out Vest | Custom Options | Coast Guard Approved Type 3,uscg-black-out-vest,Size,S/M,,,,,JTG 20420-SM,105.89,1588,lb,3,20,21,in
 ,uscg-black-out-vest,Size,L/XL,,,,,JTG 20420-LXL,105.89,1588,lb,3,20,21,in
 "Custom Color Kit - USCG Black Out Vest | Includes Name Plate, Logos, and Lanyard Loop",custom-color-kit-uscg-black-out-vest-includes-name-plate-logos-and-lanyard-loop,Title,Default Title,,,,,JTG 20421,36.79,454,lb,1,6,5,in
@@ -3877,8 +3792,6 @@ Jettribe Water X Texas Championship Series T-Shirt | Stand-Up Racer | Limited St
 ,jettribe-water-x-championship-series-t-shirt-stand-up-racer-2021-texas-mid-ameri,Size,XL,,,,,JTM 21221-XL,24.99,227,lb,1,5,1,in
 ,jettribe-water-x-championship-series-t-shirt-stand-up-racer-2021-texas-mid-ameri,Size,2XL,,,,,JTM 21221-2XL,24.99,227,lb,1,5,1,in
 ,jettribe-water-x-championship-series-t-shirt-stand-up-racer-2021-texas-mid-ameri,Size,3XL,,,,,JTM 21221-3XL,24.99,227,lb,1,5,1,in
-Customization for 2021+ Vest Name Plate - Moto Font,customization-for-2021-vest-name-plate-moto-font,Title,Default Title,,,,,JTG 20444MO,31.59,,,,,,
-Customization for 2021+ Vest Name Plate - Standard Font,customization-for-2021-vest-name-plate-standard-font,Title,Default Title,,,,,JTG 20444,31.59,,,,,,
 "Seadoo Sitdown Jetski Cover | GTX, 4-Tec. RXT, RXTX, GTX Wake | G4 Stealth Series",seadoo-sitdown-jetski-cover-gtx-4-tec-rxt-rxtx-gtx-wake-g4-stealth-series,Title,Default Title,,,,,SDO 03018-G4,202.69,2268,lb,5,20,14,in
 Sample Size Large - Team Rider Hybrid Jacket | Green | Hooded Jacket Only,sample-size-large-team-rider-hybrid-jacket-green-hooded-jacket-only,Title,Default Title,,,,,JTGS 20452GN,112.49,907,lb,2,16,20,in
 Sample Size 3XL- Team Rider Hybrid Jacket | Blue/Grey | Hooded Jacket Only,sample-size-3xl-team-rider-hybrid-wetsuit-jacket-blue-grey-hooded-jacket,Title,Default Title,,,,,JTGS 20452BG-3XL,139.99,907,lb,2,16,20,in
@@ -3902,7 +3815,6 @@ Kawasaki Jetski Cover | 750SX/SXI/SXI PRO | G4 Stealth Series,kawasaki-jetski-co
 Kawasaki 1500 SXR Stand-Up Cover (2016-23) | G4 Stealth Series,kawasaki-1500-sxr-stand-up-cover-2016-23-g4-stealth-series,Title,Default Title,,,,,KWS 05019-G4,174.29,1814,lb,3,22,18,in
 A4 Race Course Buoy | Extra Large Size | PWC Jet Ski Race Accessories,accessory-a4-race-course-buoy-extra-large-size-color-red,Color,Red,,,,,JTA 20307O,86.09,3969,lb,4,19,25,in
 ,accessory-a4-race-course-buoy-extra-large-size-color-red,Color,Yellow,,,,,JTA 20307Y,86.09,3969,lb,4,19,25,in
-"4 Place JTR ""Heavy Hauler"" | Personal Watercraft PWC Trailer | Sitdown / Stand-Up | American Steel",4-place-heavy-hauler,Title,Default Title,,,,,JTA 20348,11950.00,2268,lb,,,,
 Neoprene Jet Ski Ride Shorts | 2mm Fitted Stretch | Storage Pocket,neoprene-ride-shorts,Size,Small,,,,,JTG 21445-S,55.99,408,lb,2,11,12,in
 ,neoprene-ride-shorts,Size,Medium,,,,,JTG 21445-M,55.99,408,lb,2,11,12,in
 ,neoprene-ride-shorts,Size,Large,,,,,JTG 21445-L,55.99,408,lb,2,11,12,in
@@ -3929,7 +3841,6 @@ UR-20 Hyper Vest | Blue / Red | Comfort EVA Foam | Comp PFD Life Vest (Size: 2XL
 ,ur-20-hyper-vest-blue-red-comfort-eva-foam-comp-pfd-life-vest-size-2xl-3xl,Size,S/M,,,,,JTG 20414BR-SM,50.00,1361,lb,3,20,21,in
 ,ur-20-hyper-vest-blue-red-comfort-eva-foam-comp-pfd-life-vest-size-2xl-3xl,Size,L/XL,,,,,JTG 20414BR-LXL,50.00,1361,lb,3,20,21,in
 ,ur-20-hyper-vest-blue-red-comfort-eva-foam-comp-pfd-life-vest-size-2xl-3xl,Size,XXL/XXXL,,,,,JTG 20414BR-2XL,50.00,1361,lb,3,20,21,in
-Single Place | Aluminum Watercraft PWC Trailer | Sitdown / Stand-Up | Wholesale Available,aluminum-trailer,Title,Default Title,,,,,JTA 21341,2350.00,454,lb,,,,
 Team Rider Wetsuit - Red | 2 Piece Set | Hooded Jacket & John (Size: XL),team-rider-wetsuit-red-2-piece-set-hooded-jacket-john-size-xl,Size,XX Large,,,,,JTG 20455RD-2XL,234.48,1814,lb,2,16,21,in
 ,team-rider-wetsuit-red-2-piece-set-hooded-jacket-john-size-xl,Size,X Large,,,,,JTG 20455RD-XL,234.48,1814,lb,2,16,21,in
 ,team-rider-wetsuit-red-2-piece-set-hooded-jacket-john-size-xl,Size,Large,,,,,JTG 20455RD-L,234.48,1814,lb,2,16,21,in
@@ -4008,7 +3919,6 @@ Sleeveless John Only - Hyper Red Wetsuit | John Only,sleeveless-john-only-hyper-
 1st Generation Newport Ladies Wetsuit Pink | 2 Piece Set | Closeout,1st-generation-newport-ladies-wetsuit-pink-2-piece-set-closeout,Title,Default Title,,,,,OLT 18460PK,287.99,1588,lb,3,22,22,in
 1st Generation Newport Ladies Wetsuit Teal | 2 Piece Set | Closeout Size M,1st-generation-newport-ladies-wetsuit-teal-2-piece-set-closeout-size-m,Title,Default Title,,,,,OLT 18460TL,287.99,1588,lb,3,22,22,in
 *Factory Second* Yamaha Waverunner Cover | FX-HO/FX-SHO/SVHO (12-21) | Closeout,factory-second-yamaha-waverunner-cover-fx-ho-fx-sho-svho-12-21-closeout,Title,Default Title,,,,,OLT 04024-G4,244.69,2268,lb,4,19,24,in
-E-Gift $25 Jettribe.com Electronic Gift Card,e-gift-25-jettribe-com-electronic-gift-card,Title,Default Title,,,,,JTA 21025FS,25.00,5,lb,,,,
 1st Generation Pink Newport Ladies Wetsuit Jacket | Jacket Only | Closeout,1st-generation-pink-newport-ladies-wetsuit-jacket-jacket-only-closeout,Size,Large,,,,,OLT 18460PK-JK-L,124.99,680,lb,3,22,22,in
 ,1st-generation-pink-newport-ladies-wetsuit-jacket-jacket-only-closeout,Size,XS,,,,,OLT 18460PK-JK-XS,124.99,680,lb,3,22,22,in
 ,1st-generation-pink-newport-ladies-wetsuit-jacket-jacket-only-closeout,Size,Small,,,,,OLT 18460PK-JK S,124.99,680,lb,3,22,22,in
@@ -4442,8 +4352,6 @@ Ladies Pull Over Hoodie - Grey | Micro Mesh Heat Circulation | Sweatshirt,ladies
 ,ladies-pull-over-hoodie-grey,Size,Small,,,,,JTL 17236GY-S,20.00,907,lb,1,6,4,in
 ,ladies-pull-over-hoodie-grey,Size,X Large,,,,,JTL 17236GY-XL,20.00,907,lb,1,6,4,in
 Kawasaki Jetski Cover | 650SX (87-93) | G4 Stealth Series,kawasaki-jetski-cover-650sx,Title,Default Title,,,,,KWS 05004-G4,166.99,1814,lb,4,19,24,in
-**In Stock** 3 Place | Black Paint | JTR Personal Watercraft PWC Trailer | American Steel,in-stock-3-place-black-paint,Title,Default Title,,,,,JTA 20343-S,8220.00,2268,lb,,,,
-**In Stock** 2 Place | JTR Personal Watercraft PWC Trailer | Sitdown / Stand-Up | American Steel,in-stock-2-place-trailer,Title,Default Title,,,,,JTA 20342-S,6900.00,226796,lb,,,,
 Circuit Free Ride Wake Vest | Black | Front Entry Neoprene,circuit-free-ride-wake-vest-black,Size,XX Large,,,,,JTG 22489BK-2XL,94.49,1588,lb,3,20,21,in
 ,circuit-free-ride-wake-vest-black,Size,Large,,,,,JTG 22489BK-L,94.49,1588,lb,3,20,21,in
 ,circuit-free-ride-wake-vest-black,Size,Medium,,,,,JTG 22489BK-M,94.49,1588,lb,3,20,21,in
@@ -4567,7 +4475,6 @@ Compact Day Pack | Water Resistant Duffel | Jet Ski Ride Accessories,compact-day
 Yamaha Waverunner Cover | SUV 1200 (99-04) | G4 Stealth Series,yamaha-cover-suv-1200-stealth,Title,Default Title,,,,,YMH 04008-G4,226.79,2722,lb,1,1,1,in
 Hydrospace Jetski Cover | S4/Pro Edition/S-Pro/Race (05-12) | G4 Stealth Series,hydrospace-jetski-cover-s4-stealth,Title,Default Title,,,,,HSR 07001-G4,99.00,1361,lb,5,20,20,in
 EXTO-Plate - Replacement for USCG | UR-20P | RS-25P | Color: Black,exto-plate-replacement-for-uscg-ur-20p-rs-25p-color-black,Title,Default Title,,,,,JTG 20451BK,26.00,454,lb,1,10,10,in
-Build to Order -2 Place | JTR Personal Watercraft PWC Trailer | Sitdown / Stand-Up | American Steel.,copy-of-2-place-jtr-personal-watercraft-pwc-trailer-sitdown-stand-up-american-steel,Title,Default Title,,,,,JTA 20342BK,5850.00,226796,lb,,,,
 Outlaw Men's T-Shirt | Grey | PWC Jetski Ride & Race Apparel,outlaw-mens-t-shirt-grey-pwc-jetski-ride-race-apparel,Size,Large,,,,,JTM 23228-L,19.99,227,lb,1,5,4,in
 ,outlaw-mens-t-shirt-grey-pwc-jetski-ride-race-apparel,Size,Medium,,,,,JTM 23228-M,19.99,227,lb,1,5,4,in
 ,outlaw-mens-t-shirt-grey-pwc-jetski-ride-race-apparel,Size,XL,,,,,JTM 23228-XL,19.99,227,lb,1,5,4,in
@@ -4624,8 +4531,6 @@ Raceway Men's T-Shirt | Burgundy Red | PWC Jetski Ride & Race Apparel,raceway-me
 ,raceway-mens-t-shirt-burgundy-red-pwc-jetski-ride-race-apparel,Size,Large,,,,,JTM 23237-L,19.99,227,lb,1,5,4,in
 ,raceway-mens-t-shirt-burgundy-red-pwc-jetski-ride-race-apparel,Size,XL,,,,,JTM 23237-XL,19.99,227,lb,1,5,4,in
 ,raceway-mens-t-shirt-burgundy-red-pwc-jetski-ride-race-apparel,Size,2XL,,,,,JTM 23237-XXL,19.99,227,lb,1,5,4,in
-Jettribe Logo Tank Black PWC Ride Race Accessories,jettribe-logo-tank-black-pwc-ride-race-accessories-m,Size,Medium,,,,,JTL 17151 TK-M,9.99,227,lb,,,,
-,jettribe-logo-tank-black-pwc-ride-race-accessories-m,Size,Large,,,,,JTL 17151 TK-L,9.99,227,lb,,,,
 "Green | Custom Color Kit - USCG Black Out Vest | Includes Name Plate, Logos, and Lanyard Loop.2",green-custom-color-kit-uscg-black-out-vest-includes-name-plate-logos-and-lanyard-loop-2,Title,Default Title,,,,,JTG 20421K-GN,36.79,454,lb,1,6,5,in
 PWC Trailer 4 -Piece Wheel Stopper Kit - Case & Straps Included,pwc-trailer-4-piece-wheel-stopper-kit-case-straps-included,Title,Default Title,,,,,JTA 23348,15.00,953,lb,4,16,6,in
 Pivot Rashguard Long Sleeve Shirt| Neon Yellow/ Green| Scratch and Dent| 2XL Only,pivot-rashguard-long-sleeve-shirt-neon-yellow-green-scratch-and-dent-2xl-only,Title,Default Title,,,,,OLT 21433GN 2XL,29.39,227,lb,1,5,1,in
@@ -4825,7 +4730,6 @@ Neoprene Side Entry Vest | Black/ Grey | Size: XL,side-entry-neoprene-black-grey
 CE Pivot Vest | Red | Europe CE Certified | Side-Entry Jet Ski Vest,ce-pivot-vest-red-europe-ce-certified-side-entry-jet-ski-vest,Title,Default Title,,,,,JTG 21486RD-SM,97.49,1588,lb,3,20,21,in
 CE Pivot Vest | Blue | Europe CE Certified | Side-Entry Jet Ski Vest,ce-pivot-vest-blue-europe-ce-certified-side-entry-jet-ski-vest,Title,Default Title,,,,,JTG 21486BL-SM,97.49,1588,lb,3,20,21,in
 CE Pivot Vest | Neon Green | Europe CE Certified | Side-Entry Jet Ski Vest,ce-pivot-vest-neon-green-europe-ce-certified-side-entry-jet-ski-vest,Title,Default Title,,,,,JTG 21486NG-SM,97.49,1588,lb,3,20,21,in
-*In Stock* - 3 Place White | JTR Personal Watercraft PWC Trailer | Sitdown / Stand-Up | American Steel,in-stock-3-place-white-jtr-personal-watercraft-pwc-trailer-sitdown-stand-up-american-steel,Title,Default Title,,,,,JTA 20343W-S,8150.00,2268,lb,,,,
 Neoprene Vest | Recoil | Pink | Medium (Photography Sample),wake-vest-pink-recall-sample-comp-neoprene-closeout-size-medium-photography-sample,Title,Default Title,,,,,OLT 23921-PK-M,119.69,1588,lb,3,20,21,in
 Neoprene Side Entry Vest | Black/ Grey/ White | Size: M,side-entry-neoprene-black-grey-white-size-m,Title,Default Title,,,,,OLT 23948BW-M,125.99,1588,lb,3,20,21,in
 Circuit Neoprene Front-Entry Vest | Red,circuit-neoprene-front-entry-vest-red,Title,Default Title,,,,,JTG 22491RD-L,125.99,1588,lb,3,20,21,in
@@ -4945,11 +4849,9 @@ Icon Men's T-Shirt | Lite Grey | (Minor-Scratch and Dent),icon-mens-t-shirt-lite
 "Circuit Men's Board Shorts, Grey (SIZE: 34)(Photography Sample)",circuit-mens-board-shorts-grey-size-34-photography-sample,Title,Default Title,,,,,OLT 22242GY-34,43.46,227,lb,1,1,1,in
 RS-25P Side Entry Impact Vest | Black | Customization Option | PWC Jet Ski Ride & Race (Size: S/M)(Photography Sample),rs-25p-side-entry-impact-vest-black-customization-option-pwc-jet-ski-ride-race-size-s-m-photography-sample,Title,Default Title,,,,,OLT 20450BK-SM,97.75,1588,lb,3,20,21,in
 UR-20 Circuit Vest | Grey | Comfort EVA Foam | Comp PFD Life Vest (Size: S/M),ur-20-circuit-vest-grey-comfort-eva-foam-comp-pfd-life-vest-size-s-m,Title,Default Title,,,,,OLT 22414GY-SM,97.49,1588,lb,3,20,21,in
-2024 DECEMBER FLASH SALE-FREE TEE (ADD SIZE AND SHIRT STYLE IN THE ORDER NOTES),2024-december-flash-sale-free-tee-add-size-and-shirt-style-in-the-order-notes,Title,Default Title,,,,,JTA 21025TF,22.00,227,lb,,,,
 Pivot Wetsuit Jacket Only | Blue / Red (Size: Large only),pivot-wetsuit-jacket-only-blue-red-size-large-only,Size,Large,,,,,JTG 21452BR-JK-L,105.00,907,lb,3,12,12,in
 ,pivot-wetsuit-jacket-only-blue-red-size-large-only,Size,X Large,,,,,JTG 21452BR-JK-XL,105.00,907,lb,3,12,12,in
 Wetsuit-John Only | Spike | Color: Neon Orange (Size: Medium),wetsuit-john-only-spike-color-neon-orange-size-medium,Title,Default Title,,,,,JTG 17450-NO-JN-M,100.00,1134,lb,2,20,20,in
-In Stock - 3 Place Red | JTR Personal Watercraft PWC Trailer | Sitdown / Stand-Up | American Steel,in-stock-3-place-red-jtr-personal-watercraft-pwc-trailer-sitdown-stand-up-american-steel,Title,Default Title,,,,,JTA 20343RD-S,7700.00,2268,lb,,,,
 Circuit 2 Piece Wetsuit Set | Green/Aqua | John & Jacket (2XL Only),circuit-2-piece-wetsuit-set-green-aqua-john-jacket-2xl-only,Size,Small,,,,,JTG 22452GA-S,244.79,1588,lb,2,20,20,in
 ,circuit-2-piece-wetsuit-set-green-aqua-john-jacket-2xl-only,Size,Medium,,,,,JTG 22452GA-M,244.79,1588,lb,2,20,20,in
 ,circuit-2-piece-wetsuit-set-green-aqua-john-jacket-2xl-only,Size,Large,,,,,JTG 22452GA-L,244.79,1588,lb,2,20,20,in
@@ -5151,8 +5053,6 @@ JTR Series 2 Piece Wetsuit Set | Black | John & Jacket,jtr-series-2-piece-wetsui
 ,jtr-series-2-piece-wetsuit-set-black-john-jacket,Size,XX Large,,,,,JTG 22456BK-2XL,287.99,1588,lb,2,20,20,in
 Weekend Warrior Series | 1-Place | Watercraft PWC Trailer | Sitdown / Stand-Up | Wholesale Available,weekend-warrior-series-1-place-watercraft-pwc-trailer-sitdown-stand-up-wholesale-available,Title,Default Title,,,,,JTA 25341,1750.00,454,lb,171.6,67,27,in
 Weekend Warrior Series | 2-Place | Watercraft PWC Trailer | Sitdown / Stand-Up | Wholesale Available,weekend-warrior-series-2-place-watercraft-pwc-trailer-sitdown-stand-up-wholesale-available,Title,Default Title,,,,,JTA 25342,2750.00,226796,lb,204,101,27,in
-Weekend Warrior Series | 3-Place | Watercraft PWC Trailer | Sitdown / Stand-Up | Wholesale Available,copy-of-weekend-warrior-series-2-place-watercraft-pwc-trailer-sitdown-stand-up-wholesale-available,Title,Default Title,,,,,JTA 25343,3615.00,454,lb,,,,
-Weekend Warrior Series | 4-Place | Watercraft PWC Trailer | Sitdown / Stand-Up | Wholesale Available,copy-of-weekend-warrior-series-3-place-watercraft-pwc-trailer-sitdown-stand-up-wholesale-available,Title,Default Title,,,,,JTA 25344,5487.00,454,lb,,,,
 UR-20 JTR SERIES VEST (Orange / Blue),ur-20-jtr-series-vest-orange-blue,Size,S/M,,,,,JTG 24415OB-SM,102.89,907,lb,3,20,21,in
 ,ur-20-jtr-series-vest-orange-blue,Size,L/XL,,,,,JTG 24415OB-LXL,102.89,907,lb,3,20,21,in
 ,ur-20-jtr-series-vest-orange-blue,Size,XXS,,,,,JTG 24415OB-XS,102.89,907,lb,3,20,21,in
@@ -5284,7 +5184,6 @@ JTR Series Fitted Unisex Tour Coat (Pink / Black),jtr-series-fitted-unisex-tour-
 ,uscg-jtr-series-black-coast-guard-approved-cga-type-3-side-entry-jet-ski-vest-ne,Size,L/XL,,,,,JTG 24455BK-LXL,97.49,1588,lb,3,20,21,in
 **New Arrival** USCG JTR Series Vest | Orange/Blue | Coast Guard Approved CGA Type 3 | Side-Entry Jet Ski Vest,copy-of-uscg-circuit-vest-black-coast-guard-approved-cga-type-3-side-entry-jet-ski-vest-new-arrival,Size,S/M,,,,,JTG 24455OB-SM,97.49,1588,lb,3,20,21,in
 ,copy-of-uscg-circuit-vest-black-coast-guard-approved-cga-type-3-side-entry-jet-ski-vest-new-arrival,Size,L/XL,,,,,JTG 24455OB-LXL,97.49,1588,lb,3,20,21,in
-**In Stock** 3 Place | White Paint | JTR Personal Watercraft PWC Trailer | American Steel **As-Is**,copy-of-in-stock-3-place-black-paint-jtr-personal-watercraft-pwc-trailer-american-steel,Title,Default Title,,,,,JTA 20343-ASIS1,5400.00,2268,lb,,,,
 JTR Series Hooded Rashguard- Yellow/ Blue [Photo Sample],jtr-series-hooded-rashguard-yellow-blue-photo-sample,Title,Default Title,,,,,JTG 24438YRB-L,32.99,227,lb,1,12,9,in
 Boots GRB 3.0 Race Boot - PWC Jetski Ride & Race Jet Ski Gear **DISCONTINUED** (Size: 8),boots-grb-3-0-race-boot-pwc-jetski-ride-race-jet-ski-gear-discontinued-size-8,Title,Default Title,,,,,JTG 17496DC-8,99.99,1134,lb,13,12,5,in
 Team Rider Wetsuit - Green | 2 Piece Set | Hooded Jacket & Sleeveless John,team-rider-wetsuit-green-2-piece-set-hooded-jacket-sleeveless-john,Size,Small,,,,,JTG 20455GN-S,234.48,1814,lb,2,16,21,in
@@ -5405,7 +5304,6 @@ Test Vest with Plates,test-vest-with-plates,Size,Small,,,,,JTG 16440-YW-S,1.00,4
 Test Vest with Plates (Plate Customization Trigger: No Customization),test-vest-with-plates-plate-customization-trigger-no-customization,Title,Default Title,,,,,JTG 16440-YW-NO Customization,1.00,454,lb,1,11,1,in
 Test Vest with Plates (Plate Details Container: Red),test-vest-with-plates-plate-details-container-red,Title,Default Title,,,,,JTG 16440-YW-Red,1.00,454,lb,1,11,1,in
 Test Vest with Plates (Plate Details Container: Black),test-vest-with-plates-plate-details-container-black,Title,Default Title,,,,,JTG 16440-YW-Black,1.00,454,lb,1,11,1,in
-No Customization,no-customization,Title,Default Title,,,,,JTG-NO CUSTOM,1.00,454,lb,,,,
 Yes Customization,yes-customization,Title,Default Title,,,,,JTG-YES CUSTOM,1.00,454,lb,1,10,10,in
 JTR Series Gloves - Black (Photo Sample),jtr-series-gloves-black-photo-sample,Size,XS,,,,,JTG 24437BK-XS,32.99,227,lb,1,4,5,in
 ,jtr-series-gloves-black-photo-sample,Size,Medium,,,,,JTG 24437BK-M,32.99,227,lb,1,4,5,in
@@ -5594,8 +5492,6 @@ RS-25P Fade Side Entry Impact Vest | White/Black | Customization Option | PWC Je
 12 x 18 Vinyl Sticker Sheet Bundle,12-x-18-vinyl-sticker-sheet-bundle,Title,Default Title,,,,,JTA 26321,32.47,340,lb,4,17,14,in
 "RACE NUMBERS Decals Stickers 2-Pack PWC Watercraft- Custom 6.75"" x 9""",race-numbers-decals-stickers-2-pack-pwc-watercraft-custom-6-75-x-9,Title,Default Title,,,,,JTA 26317,64.99,907,lb,1,11,8,in
 "CIRCUIT GP-30 GLOVES, JTG 22425, COLOR: GREY, SIZE: MEDIUM",circuit-gp-30-gloves-jtg-22425-color-grey-size-medium,Title,Default Title,,,,,JTG 22425GY-M,31.49,181,lb,1,4,5,in
-Blank PVC Custom Vest Name Plate - SQUARE CORNERS,blank-pvc-custom-vest-name-plate-square-corners,Title,Default Title,,,,,JTR 02026-A,0.01,363,lb,,,,
-Blank PVC Custom Vest Name Plate - ROUND CORNERS,blank-pvc-custom-vest-name-plate-round-corners,Title,Default Title,,,,,JTR 02026-B,0.01,363,lb,,,,
 "Custom PVC Vest Plate - JTR 2026 Vest Series - RS-25, UR-20 & JTR USCG",custom-pvc-vest-plate-jtr-2026-vest-series-rs-25-ur-20-jtr-uscg,Title,Default Title,,,,,JTA 25555,60.00,454,lb,1,10,10,in
 Yamaha Waverunner Cover | Wave Blaster II 750 (96-97) | G4 Stealth Series | OEM Bars,copy-of-yamaha-waverunner-cover-wave-blaster-ii-750-96-97-g4-stealth-series,Title,Default Title,,,,,YMH 04015-OEM-G4,178.49,1814,lb,4,22,18,in
 RS-25P Fade Side Entry Impact Vest | Purple / Grey | Customization Option | PWC Jet Ski Ride & Race,rs-25p-fade-side-entry-impact-vest-purple-grey-customization-option-pwc-jet-ski-ride-race,Size,S/M,,,,,JTG 25403PG-SM,102.89,907,lb,3,20,21,in
