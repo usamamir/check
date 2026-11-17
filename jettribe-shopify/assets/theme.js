@@ -398,10 +398,25 @@
     return found;
   }
 
+  function isNameNumberChoice(value) {
+    return /name\s*&\s*(race\s*)?number|custom name\s*&\s*number/i.test(String(value || ""));
+  }
+
+  function productHasNameNumber(prod) {
+    return ((prod && prod.variants) || []).some(function (variant) {
+      return (variant.options || []).some(isNameNumberChoice);
+    });
+  }
+
+  function isCustomAddonName(name) {
+    return /customization/i.test(String(name || "")) && !/size/i.test(String(name || ""));
+  }
+
   function plateOptionIndex(prod) {
     var found = -1;
     (prod && prod.options || []).forEach(function (option, index) {
-      if (/plate|pvc/i.test(optionNameAt(prod, index))) found = index;
+      var name = optionNameAt(prod, index);
+      if (/plate|pvc/i.test(name) || isCustomAddonName(name)) found = index;
     });
     return found;
   }
@@ -670,7 +685,7 @@
           return a.localeCompare(b);
         });
       }
-      var isPlate = /plate|pvc/i.test(String(name));
+      var isPlate = /plate|pvc/i.test(String(name)) || isCustomAddonName(name);
       html += '<div class="option-label">' + escapeHtml(name) + "</div>";
       html += '<div class="option-values' + (isPlate ? " option-values--plate" : "") + '" data-option-index="' + index + '" data-option-name="' + escapeHtml(name) + '"' + (isPlate ? ' data-plate-group="true"' : "") + ">";
       values.forEach(function (value, valueIndex) {
@@ -682,8 +697,10 @@
         else html += '<label class="' + (checked ? "is-selected" : "") + '"><input type="radio" name="' + namePrefix + "-" + index + '" value="' + escapeHtml(value) + '" data-option-input' + (checked ? " checked" : "") + "><span>" + escapeHtml(value) + "</span></label>";
       });
       html += "</div>";
-      if (/plate|pvc/i.test(String(name))) {
-        var note = prod && prod._jtPvc
+      if (/plate|pvc/i.test(String(name)) || isCustomAddonName(name)) {
+        var note = productHasNameNumber(prod)
+          ? "Choose None for the deflector only. Custom Name & Number (+$50) opens the A–V colors plus your name and race number."
+          : prod && prod._jtPvc
           ? "Choose None for the vest only. Custom ($60) unlocks plate designs A–R plus name/number. Blank ($25) adds an unprinted plate."
           : (prod && prod._jtYesAv)
             ? "Choose None for the vest only. Yes Customization (+$40) unlocks Design Confirmation A–V plus name/number. Custom plates take 1–2 weeks and ship separately."
@@ -710,6 +727,7 @@
     if (qs("[data-plate-fields]", form)) return;
     var pvc = !!(prod && prod._jtPvc) || isPvcProduct(prod || {});
     var yesAv = !!(prod && prod._jtYesAv) || isYesAvProduct(prod || {});
+    var nameNumber = productHasNameNumber(prod || {});
     var existing = [];
     qsa(".field", form).forEach(function (field) {
       var input = qs("input[type='text'], textarea", field);
@@ -729,6 +747,12 @@
         '<input class="input" id="CustomName60" type="text" name="properties[Enter Custom Name (Only with $60 Custom Option)]"></div>' +
         '<div class="field"><label for="CustomNumber60">Enter Custom Number (Only with $60 Custom Option)</label>' +
         '<input class="input" id="CustomNumber60" type="text" name="properties[Enter Custom Number (Only with $60 Custom Option)]"></div>';
+    } else if (nameNumber) {
+      box.innerHTML =
+        '<div class="field"><label for="DeflectorName">Customization — Add Name</label>' +
+        '<input class="input" id="DeflectorName" type="text" name="properties[Customization — Add Name]"></div>' +
+        '<div class="field"><label for="DeflectorNumber">Customization — Add Number</label>' +
+        '<input class="input" id="DeflectorNumber" type="text" name="properties[Customization — Add Number]"></div>';
     } else if (yesAv) {
       box.innerHTML =
         '<div class="field"><label for="PlatePersonalizationName">Plate Personalization Name (Only if $40 Option Added)</label>' +
@@ -751,13 +775,16 @@
   function ensureLetterUI(form, prod) {
     var pvc = !!(prod && prod._jtPvc) || isPvcProduct(prod || {});
     var yesAv = !!(prod && prod._jtYesAv) || isYesAvProduct(prod || {});
-    if (!pvc && !yesAv) return;
+    var nameNumber = productHasNameNumber(prod || {});
+    if (!pvc && !yesAv && !nameNumber) return;
     if (qs("[data-pvc-letter-wrap]", form)) return;
-    var range = letterChoiceRange(prod) || (yesAv ? "A-V" : "A-R");
+    var range = letterChoiceRange(prod) || ((nameNumber || yesAv) ? "A-V" : "A-R");
     var letters = lettersForRange(range);
-    var label = range === "A-V"
-      ? "Design Confirmation (Select Letter A–V)"
-      : "Design Confirmation (Select Letter A–R)";
+    var label = nameNumber && !pvc
+      ? "Color Selection (A–V)"
+      : (range === "A-V"
+        ? "Design Confirmation (Select Letter A–V)"
+        : "Design Confirmation (Select Letter A–R)");
     var wrap = document.createElement("div");
     wrap.setAttribute("data-pvc-letter-wrap", "");
     wrap.hidden = true;
@@ -771,7 +798,9 @@
           "<span>" + letter + "</span></label>";
       }).join("") +
       "</div>" +
-      '<p class="addon-note">These are the plate styles on jettribe.com. The main image changes to the style you pick.</p>';
+      '<p class="addon-note">' + (nameNumber && !pvc
+        ? "These are the colors on jettribe.com. The main image changes to the color you pick."
+        : "These are the plate styles on jettribe.com. The main image changes to the style you pick.") + "</p>";
     var plateGroup = qs("[data-plate-group]", form);
     var insertAfter = plateGroup || qs("[data-addon-note]", form) || qs("[data-option-mount]", form);
     if (insertAfter) insertAfter.parentNode.insertBefore(wrap, insertAfter.nextSibling);
@@ -824,7 +853,8 @@
     var plate = selectedPvcPlate(form);
     var isCustomPvc = /custom pvc/i.test(plate);
     var isYes = /yes custom/i.test(plate);
-    var showLetters = (pvc && isCustomPvc) || (yesAv && isYes);
+    var isNameNumber = isNameNumberChoice(plate);
+    var showLetters = (pvc && isCustomPvc) || (yesAv && isYes) || isNameNumber;
     var kind = plateSampleKind(plate);
     var letterWrap = qs("[data-pvc-letter-wrap]", form);
     var fields = qs("[data-plate-fields]", form);
@@ -941,7 +971,7 @@
         if (qty) qty.setAttribute("data-option-anchor", "");
       }
       var needsRebuild = (product.options || []).some(function (name) {
-        return /plate|font/i.test(String(name));
+        return /plate|font/i.test(String(name)) || isCustomAddonName(name);
       }) || (product.variants || []).some(function (variant) {
         return (variant.options || []).some(function (opt) {
           return /\[PI\]|Name Plate=|Font Customization:\d+/i.test(String(opt || ""));
@@ -951,7 +981,7 @@
       else {
         ensurePlateTextFields(form, product);
         qsa("[data-option-index]", form).forEach(function (group) {
-          if (/plate|pvc|yes custom/i.test(group.getAttribute("data-option-name") || "")) {
+          if (/plate|pvc|yes custom|customization/i.test(group.getAttribute("data-option-name") || "")) {
             group.setAttribute("data-plate-group", "true");
           }
         });
@@ -1286,7 +1316,7 @@
         var checkedAt = addon && noneAt !== -1 ? noneAt : 0;
         picked[index] = values[checkedAt];
         var isColor = /colou?r/i.test(label);
-        var isPlate = /plate/i.test(label);
+        var isPlate = /plate/i.test(label) || isCustomAddonName(label);
         optionsHtml += '<div class="option-label">' + escapeHtml(label) + '</div><div class="option-values' + (isColor ? " option-values--color" : "") + (isPlate ? " option-values--plate" : "") + '" data-option-index="' + index + '" data-option-name="' + escapeHtml(label) + '"' + (isPlate ? ' data-plate-group="true"' : "") + ">";
         values.forEach(function (value, valueIndex) {
           var on = valueIndex === checkedAt;

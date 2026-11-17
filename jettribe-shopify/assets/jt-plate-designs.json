@@ -760,5 +760,34 @@
       "U": "https://cdn11.bigcommerce.com/s-09242/images/stencil/1280x1280/attribute_rule_images/1983762_source_1777637216.jpg",
       "V": "https://cdn11.bigcommerce.com/s-09242/images/stencil/1280x1280/attribute_rule_images/1983763_source_1777637429.jpg"
     }
+  },
+  "back-deflector-custom-factory-production-art-included": {
+    "productId": "2404",
+    "mode": "name-number-av",
+    "letterRange": "A-V",
+    "sku": "25453",
+    "designs": {
+      "A": "https://cdn11.bigcommerce.com/s-09242/images/stencil/1280x1280/attribute_rule_images/1984454_source_1789480147.png",
+      "B": "https://cdn11.bigcommerce.com/s-09242/images/stencil/1280x1280/attribute_rule_images/1984455_source_1789480590.png",
+      "C": "https://cdn11.bigcommerce.com/s-09242/images/stencil/1280x1280/attribute_rule_images/1984456_source_1789485177.png",
+      "D": "https://cdn11.bigcommerce.com/s-09242/images/stencil/1280x1280/attribute_rule_images/1984457_source_1789485835.png",
+      "E": "https://cdn11.bigcommerce.com/s-09242/images/stencil/1280x1280/attribute_rule_images/1984458_source_1789486514.png",
+      "F": "https://cdn11.bigcommerce.com/s-09242/images/stencil/1280x1280/attribute_rule_images/1984459_source_1789490401.png",
+      "G": "https://cdn11.bigcommerce.com/s-09242/images/stencil/1280x1280/attribute_rule_images/1984460_source_1789490899.png",
+      "H": "https://cdn11.bigcommerce.com/s-09242/images/stencil/1280x1280/attribute_rule_images/1984461_source_1789491520.png",
+      "I": "https://cdn11.bigcommerce.com/s-09242/images/stencil/1280x1280/attribute_rule_images/1984462_source_1789491924.png",
+      "J": "https://cdn11.bigcommerce.com/s-09242/images/stencil/1280x1280/attribute_rule_images/1984463_source_1789492737.png",
+      "K": "https://cdn11.bigcommerce.com/s-09242/images/stencil/1280x1280/attribute_rule_images/1984464_source_1789493843.png",
+      "L": "https://cdn11.bigcommerce.com/s-09242/images/stencil/1280x1280/attribute_rule_images/1984466_source_1789494383.png",
+      "M": "https://cdn11.bigcommerce.com/s-09242/images/stencil/1280x1280/attribute_rule_images/1984467_source_1789494906.png",
+      "N": "https://cdn11.bigcommerce.com/s-09242/images/stencil/1280x1280/attribute_rule_images/1984468_source_1789495137.png",
+      "O": "https://cdn11.bigcommerce.com/s-09242/images/stencil/1280x1280/attribute_rule_images/1984469_source_1789495451.png",
+      "P": "https://cdn11.bigcommerce.com/s-09242/images/stencil/1280x1280/attribute_rule_images/1984470_source_1789495863.png",
+      "Q": "https://cdn11.bigcommerce.com/s-09242/images/stencil/1280x1280/attribute_rule_images/1984471_source_1789496277.png",
+      "S": "https://cdn11.bigcommerce.com/s-09242/images/stencil/1280x1280/attribute_rule_images/1984472_source_1789496624.png",
+      "T": "https://cdn11.bigcommerce.com/s-09242/images/stencil/1280x1280/attribute_rule_images/1984473_source_1789496874.png",
+      "U": "https://cdn11.bigcommerce.com/s-09242/images/stencil/1280x1280/attribute_rule_images/1984474_source_1789497187.png",
+      "V": "https://cdn11.bigcommerce.com/s-09242/images/stencil/1280x1280/attribute_rule_images/1984477_source_1789497767.png"
+    }
   }
 }

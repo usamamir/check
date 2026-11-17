@@ -116,11 +116,15 @@
               {%- endif -%}
               {%- assign option_is_color = false -%}
               {%- assign option_is_plate = false -%}
+              {%- assign option_is_name_number = false -%}
               {%- if option_key contains 'color' or option_key contains 'colour' -%}
                 {%- assign option_is_color = true -%}
               {%- endif -%}
               {%- if option_key contains 'plate' or option_key contains 'font' or option_key contains 'pvc' -%}
                 {%- assign option_is_plate = true -%}
+              {%- endif -%}
+              {%- if option_key contains 'customization' -%}
+                {%- assign option_is_name_number = true -%}
               {%- endif -%}
               {%- assign option_is_pvc = false -%}
               {%- if option_key contains 'pvc' -%}
@@ -131,6 +135,9 @@
                 {%- if vdown contains 'custom pvc' or vdown contains 'blank pvc' -%}
                   {%- assign option_is_pvc = true -%}
                   {%- assign option_is_plate = true -%}
+                {%- endif -%}
+                {%- if vdown contains 'name & number' or vdown contains 'name and number' -%}
+                  {%- assign option_is_name_number = true -%}
                 {%- endif -%}
               {%- endfor -%}
               {%- capture option_title -%}
@@ -145,7 +152,7 @@
                 {%- endif -%}
               {%- endcapture -%}
               <div class="option-label">{{ option_title | strip }}</div>
-              <div class="option-values{% if option_is_color %} option-values--color{% endif %}{% if option_is_plate %} option-values--plate{% endif %}" data-option-index="{{ forloop.index0 }}" data-option-name="{{ option_title | strip | escape }}"{% if option_is_plate %} data-plate-group="true"{% endif %}>
+              <div class="option-values{% if option_is_color %} option-values--color{% endif %}{% if option_is_plate or option_is_name_number %} option-values--plate{% endif %}" data-option-index="{{ forloop.index0 }}" data-option-name="{{ option_title | strip | escape }}"{% if option_is_plate or option_is_name_number %} data-plate-group="true"{% endif %}>
                 {%- for value in option.values -%}
                   {%- assign value_label = value -%}
                   {%- assign value_l = value | downcase -%}
@@ -205,7 +212,9 @@
                   </label>
                 {%- endfor -%}
               </div>
-              {%- if option_is_plate -%}
+              {%- if option_is_name_number -%}
+                <p class="addon-note" data-addon-note>Choose None for the deflector only. Custom Name &amp; Number (+$50) opens the A–V colors plus your name and race number.</p>
+              {%- elsif option_is_plate -%}
                 <p class="addon-note" data-addon-note>Choose None if you do not want a customized name plate. Custom plates take an extra 1–2 weeks and ship separately.</p>
               {%- endif -%}
             {%- endfor -%}
