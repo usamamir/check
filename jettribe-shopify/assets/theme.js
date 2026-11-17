@@ -197,6 +197,7 @@
           var doc = new DOMParser().parseFromString(html, "text/html");
           var inner = doc.querySelector(".predictive") || doc.body;
           box.innerHTML = inner.innerHTML;
+          if (window.JettribeSku) JettribeSku.fillPredictive(box, term);
           box.hidden = !box.innerHTML.trim();
         }).catch(function () { box.hidden = true; });
       }, 220);

@@ -14,7 +14,7 @@
     </form>
 
     {%- if search.performed -%}
-      <div class="collection-layout">
+      <div class="collection-layout" data-sku-search data-sku-term="{{ search.terms | escape }}">
         <aside>
           {% render 'filter-list', filters: search.filters, form_action: routes.search_url, terms: search.terms, show_shop_fallback: false %}
         </aside>

@@ -112,6 +112,7 @@
       catalogUrl: {{ 'jt-categories.json' | asset_url | json }},
       reviewsUrl: {{ 'jt-reviews.json' | asset_url | json }},
       plateDesignsUrl: {{ 'jt-plate-designs.json' | asset_url | json }},
+      skuIndexUrl: {{ 'jt-sku-index.json' | asset_url | json }},
       routes: {
         root: {{ routes.root_url | json }},
         cart: {{ routes.cart_url | json }},
@@ -141,6 +142,7 @@
   {% render 'wishlist-drawer' %}
   {% render 'compare-bar' %}
 
+  <script src="{{ 'sku-search.js' | asset_url }}" defer="defer"></script>
   <script src="{{ 'theme.js' | asset_url }}" defer="defer"></script>
   <script src="{{ 'catalog-route.js' | asset_url }}" defer="defer"></script>
   {% if settings.show_paypal_message and settings.paypal_client_id != blank and settings.paypal_merchant_id != blank %}
