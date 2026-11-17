@@ -1,25 +1,27 @@
 SKU LABS STOCK INTO SHOPIFY
 
 Stock numbers are the SKU Labs Default Warehouse On Hand column.
-Listing details stay as they are. These files do not contain titles, descriptions, photos, prices, weights, or dimensions, so an overwrite import will not wipe them.
+The Title column is the product name already on Shopify, so the name does not change.
+Descriptions, photos, prices, weights, and dimensions are not in these files.
 
 Shopify only runs one product import at a time.
 Products → Import
 Check: Overwrite products with matching handles
 Do not open the files in Excel.
 
-On the column screen, Product Title must map to Title.
-Published must map to Published on online store.
-If Product Title is also set to Published on online store, uncheck Product Title.
-That column can only be used once. Leaving it on Product Title renames every product to "true".
+Cancel the column screen if it is open. Download the file below again. Do not reuse the file already on your computer, and do not open it in Excel.
+
+On the column screen the Product Title dropdown must include Title.
+Choose Title. The preview must be Malibu Ringer Tee, not the web address and not the word true.
+Handle stays URL handle. Published stays Published on online store.
 
 1. Quantities for every item with at least one unit, and publish those products:
 
-https://raw.githubusercontent.com/usamamir/check/cursor/jettribe-shopify-theme-86d6/jettribe-skulabs-inventory.csv
+https://raw.githubusercontent.com/usamamir/check/cursor/jettribe-shopify-theme-86d6/jettribe-inventory-qty.csv
 
 2. After that job finishes, set the remaining matched SKUs to the SKU Labs count (zero on hand):
 
-https://raw.githubusercontent.com/usamamir/check/cursor/jettribe-shopify-theme-86d6/jettribe-skulabs-zero.csv
+https://raw.githubusercontent.com/usamamir/check/cursor/jettribe-shopify-theme-86d6/jettribe-inventory-zero-qty.csv
 
 3. After that job finishes, file the Hyper tour coats into Tour Coats:
 
