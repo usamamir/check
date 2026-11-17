@@ -692,48 +692,6 @@
     else form.appendChild(box);
   }
 
-  var FONT_STYLES = [
-    { id: "white", label: "White block", fill: "#ffffff", stroke: "#1a1a1a", strokeWidth: 0.055 },
-    { id: "black", label: "Black block", fill: "#111111", stroke: "#ffffff", strokeWidth: 0.05 },
-    { id: "red", label: "Red", fill: "#e10600", stroke: "#111111", strokeWidth: 0.05 },
-    { id: "yellow", label: "Yellow", fill: "#ffe14a", stroke: "#111111", strokeWidth: 0.05 },
-    { id: "outline", label: "White outline", fill: "transparent", stroke: "#ffffff", strokeWidth: 0.09 },
-    { id: "neon", label: "Neon outline", fill: "#39ff14", stroke: "#111111", strokeWidth: 0.06 }
-  ];
-
-  var LETTER_STYLES = {
-    A: { fill: "#ffffff", stroke: "#111111", strokeWidth: 0.055 },
-    B: { fill: "#e10600", stroke: "#ffffff", strokeWidth: 0.05 },
-    C: { fill: "#1d4ed8", stroke: "#ffffff", strokeWidth: 0.05 },
-    D: { fill: "#ffe14a", stroke: "#111111", strokeWidth: 0.05 },
-    E: { fill: "#22c55e", stroke: "#111111", strokeWidth: 0.05 },
-    F: { fill: "#d1d5db", stroke: "#111111", strokeWidth: 0.05 },
-    G: { fill: "#f97316", stroke: "#111111", strokeWidth: 0.05 },
-    H: { fill: "#ec4899", stroke: "#111111", strokeWidth: 0.05 },
-    I: { fill: "#22d3ee", stroke: "#111111", strokeWidth: 0.05 },
-    J: { fill: "#fbbf24", stroke: "#111111", strokeWidth: 0.05 },
-    K: { fill: "#7c3aed", stroke: "#ffffff", strokeWidth: 0.05 },
-    L: { fill: "#84cc16", stroke: "#111111", strokeWidth: 0.05 },
-    M: { fill: "#1e3a8a", stroke: "#ffffff", strokeWidth: 0.05 },
-    N: { fill: "#db2777", stroke: "#ffffff", strokeWidth: 0.05 },
-    O: { fill: "transparent", stroke: "#ffffff", strokeWidth: 0.09 },
-    P: { fill: "#111111", stroke: "#ffffff", strokeWidth: 0.05 },
-    Q: { fill: "transparent", stroke: "#e10600", strokeWidth: 0.09 },
-    R: { fill: "#b91c1c", stroke: "#ffffff", strokeWidth: 0.05 },
-    S: { fill: "transparent", stroke: "#ffe14a", strokeWidth: 0.09 },
-    T: { fill: "#39ff14", stroke: "#111111", strokeWidth: 0.06 },
-    U: { fill: "#38bdf8", stroke: "#111111", strokeWidth: 0.05 },
-    V: { fill: "#fb7185", stroke: "#111111", strokeWidth: 0.05 }
-  };
-
-  function fontStyleById(id) {
-    var found = FONT_STYLES[0];
-    FONT_STYLES.forEach(function (style) {
-      if (style.id === id) found = style;
-    });
-    return found;
-  }
-
   function ensureLetterUI(form, prod) {
     var pvc = !!(prod && prod._jtPvc) || isPvcProduct(prod || {});
     var yesAv = !!(prod && prod._jtYesAv) || isYesAvProduct(prod || {});
@@ -742,146 +700,26 @@
     var range = letterChoiceRange(prod) || (yesAv ? "A-V" : "A-R");
     var letters = lettersForRange(range);
     var label = range === "A-V"
-      ? "Plate style (A–V)"
-      : "Plate style (A–R)";
+      ? "Design Confirmation (Select Letter A–V)"
+      : "Design Confirmation (Select Letter A–R)";
     var wrap = document.createElement("div");
-    wrap.className = "field";
     wrap.setAttribute("data-pvc-letter-wrap", "");
     wrap.hidden = true;
     wrap.innerHTML =
-      "<label>" + label + "</label>" +
-      '<select class="input" name="properties[Design Confirmation]" data-pvc-letter>' +
-      letters.map(function (letter) {
-        return '<option value="' + letter + '">' + letter + "</option>";
+      '<div class="option-label">' + label + "</div>" +
+      '<div class="plate-style-grid" data-pvc-letters>' +
+      letters.map(function (letter, index) {
+        return '<label class="' + (!index ? "is-selected" : "") + '">' +
+          '<input type="radio" name="properties[Design Confirmation]" value="' + letter + '" data-pvc-letter' + (!index ? " checked" : "") + ">" +
+          '<img alt="' + letter + '" data-letter-image="' + letter + '">' +
+          "<span>" + letter + "</span></label>";
       }).join("") +
-      "</select>" +
-      '<p class="addon-note">Each style updates the plate. The name and number you type are written on it.</p>';
+      "</div>" +
+      '<p class="addon-note">These are the plate styles on jettribe.com. The main image changes to the style you pick.</p>';
     var plateGroup = qs("[data-plate-group]", form);
     var insertAfter = plateGroup || qs("[data-addon-note]", form) || qs("[data-option-mount]", form);
     if (insertAfter) insertAfter.parentNode.insertBefore(wrap, insertAfter.nextSibling);
     else form.appendChild(wrap);
-  }
-
-  function ensureFontStyleUI(form) {
-    if (qs("[data-plate-style]", form)) return;
-    var wrap = document.createElement("div");
-    wrap.className = "field";
-    wrap.setAttribute("data-plate-style-wrap", "");
-    wrap.hidden = true;
-    wrap.innerHTML =
-      "<label>Plate style</label>" +
-      '<select class="input" name="properties[Plate style]" data-plate-style>' +
-      FONT_STYLES.map(function (style) {
-        return '<option value="' + style.id + '">' + escapeHtml(style.label) + "</option>";
-      }).join("") +
-      "</select>" +
-      '<p class="addon-note">Each style updates the plate. The name and number you type are written in the font you picked.</p>';
-    var fields = qs("[data-plate-fields]", form);
-    var note = qs("[data-addon-note]", form);
-    var anchor = fields || note || qs("[data-plate-group]", form);
-    if (anchor && anchor.parentNode) anchor.parentNode.insertBefore(wrap, fields ? fields : anchor.nextSibling);
-    else form.appendChild(wrap);
-  }
-
-  function bindPlatePreview(form) {
-    if (form._jtPlatePreviewBound) return;
-    form._jtPlatePreviewBound = true;
-    function refresh(event) {
-      if (event.target.closest("[data-plate-fields]") || event.target.matches("[data-plate-style], [data-pvc-letter]")) {
-        syncPlateCustomization(form, form._jtPlateProd || null);
-      }
-    }
-    form.addEventListener("input", refresh);
-    form.addEventListener("change", refresh);
-  }
-
-  function plateTypedText(form) {
-    var fields = qs("[data-plate-fields]", form);
-    var name = "";
-    var number = "";
-    if (!fields) return { name: name, number: number };
-    qsa("input, textarea", fields).forEach(function (input) {
-      if (input.disabled) return;
-      var label = input.parentElement ? (qs("label", input.parentElement) || {}).textContent || "" : "";
-      var blob = (input.name || "") + " " + (input.id || "") + " " + label;
-      if (/number/i.test(blob)) number = input.value || "";
-      else if (/name/i.test(blob)) name = input.value || "";
-    });
-    return { name: name.trim(), number: number.trim() };
-  }
-
-  var plateImageCache = {};
-  function loadPlateImage(url) {
-    if (!url) return Promise.resolve(null);
-    if (plateImageCache[url]) return Promise.resolve(plateImageCache[url]);
-    return new Promise(function (resolve) {
-      var img = new Image();
-      img.onload = function () {
-        plateImageCache[url] = img;
-        resolve(img);
-      };
-      img.onerror = function () { resolve(null); };
-      img.src = url;
-    });
-  }
-
-  function paintPlatePreview(main, img, kind, style, name, number) {
-    var canvas = document.createElement("canvas");
-    var size = 1000;
-    canvas.width = size;
-    canvas.height = size;
-    var ctx = canvas.getContext("2d");
-    ctx.drawImage(img, 0, 0, size, size);
-    var onVest = kind === "moto" || kind === "standard";
-    var box = onVest
-      ? { x: 0.25, y: 0.355, w: 0.51, h: 0.50 }
-      : { x: 0.18, y: 0.22, w: 0.64, h: 0.52 };
-    if (onVest) {
-      ctx.fillStyle = "#3a4a5c";
-      ctx.fillRect(size * box.x, size * box.y, size * box.w, size * box.h);
-    }
-    var label = (name || (kind === "moto" ? "MOTO" : "NAME")).toUpperCase();
-    var num = number || (kind === "moto" ? "25" : "16");
-    var cx = size * (box.x + box.w / 2);
-    function drawLine(text, y, start) {
-      ctx.save();
-      ctx.translate(cx, y);
-      if (kind === "moto") ctx.transform(1, 0, -0.34, 1, 0, 0);
-      var fontSize = start;
-      var maxW = size * box.w * (kind === "moto" ? 0.78 : 0.9);
-      do {
-        ctx.font = "700 " + fontSize + "px Gobold, Impact, Arial Black, sans-serif";
-        if (ctx.measureText(text).width <= maxW) break;
-        fontSize -= 2;
-      } while (fontSize > 26);
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
-      ctx.lineJoin = "round";
-      if (style.stroke && style.strokeWidth) {
-        ctx.lineWidth = Math.max(3, fontSize * style.strokeWidth);
-        ctx.strokeStyle = style.stroke;
-        ctx.strokeText(text, 0, 0);
-      }
-      if (style.fill && style.fill !== "transparent") {
-        ctx.fillStyle = style.fill;
-        ctx.fillText(text, 0, 0);
-      }
-      ctx.restore();
-    }
-    var fonts = (document.fonts && document.fonts.load)
-      ? document.fonts.load("700 80px Gobold").catch(function () {})
-      : Promise.resolve();
-    return fonts.then(function () {
-      drawLine(label, size * (box.y + box.h * 0.30), Math.floor(size * (onVest ? 0.09 : 0.1)));
-      drawLine(num, size * (box.y + box.h * 0.68), Math.floor(size * (onVest ? 0.22 : 0.24)));
-      main.setAttribute("data-preview-text", label + "|" + num + "|" + (style.fill || "outline"));
-      try {
-        main.src = canvas.toDataURL("image/jpeg", 0.86);
-      } catch (err) {
-        main.setAttribute("data-preview-error", "tainted");
-      }
-      main.setAttribute("data-plate-sample", "1");
-    });
   }
 
   function ensurePvcLetterUI(form, prod) {
@@ -939,11 +777,12 @@
       ensureLetterUI(form, prod);
       letterWrap = qs("[data-pvc-letter-wrap]", form);
     }
-    ensureFontStyleUI(form);
-    bindPlatePreview(form);
-    var fontStyleWrap = qs("[data-plate-style-wrap]", form);
-    var showFontStyle = kind === "moto" || kind === "standard";
-    if (fontStyleWrap) fontStyleWrap.hidden = !showFontStyle;
+    if (letterWrap) {
+      qsa("label", letterWrap).forEach(function (label) {
+        var input = qs("input", label);
+        label.classList.toggle("is-selected", !!(input && input.checked));
+      });
+    }
     if (letterWrap) {
       letterWrap.hidden = !showLetters;
       qsa("[data-pvc-letter]", letterWrap).forEach(function (input) {
@@ -971,41 +810,55 @@
       main.src = url;
       main.setAttribute("data-plate-sample", "1");
     }
-    var live = kind === "moto" || kind === "standard" || (kind === "yes" && showLetters);
-    if (kind === "blank") {
+    if (kind === "moto" || kind === "standard" || kind === "blank") {
       showSample(sample || fallback);
       return;
     }
-    if (!live) {
+    if (!showLetters) {
       if (main.getAttribute("data-plate-sample") === "1" && fallback) {
         main.src = fallback;
         main.removeAttribute("data-plate-sample");
       }
       return;
     }
-    var typed = plateTypedText(form);
-    var style = FONT_STYLES[0];
-    var paintKind = kind;
-    if (kind === "moto" || kind === "standard") {
-      var styleEl = qs("[data-plate-style]", form);
-      style = fontStyleById(styleEl ? styleEl.value : "");
-    } else {
-      var letter = selectedPvcLetter(form) || "A";
-      style = LETTER_STYLES[letter] || LETTER_STYLES.A;
-      paintKind = "plate";
-    }
-    var bgKind = paintKind === "moto" || paintKind === "standard" ? paintKind : "blank";
-    var bgUrl = plateSampleUrl(bgKind) || sample;
-    var stamp = [kind, (style && style.fill), (style && style.stroke), typed.name, typed.number, bgUrl].join("|");
+    var letter = selectedPvcLetter(form) || "A";
+    var stamp = plate + "|" + letter + "|" + ((prod && prod.handle) || "");
     form._jtPlateStamp = stamp;
-    loadPlateImage(bgUrl).then(function (img) {
+    showSample(sample || fallback);
+    loadPlateDesigns().then(function (map) {
       if (form._jtPlateStamp !== stamp) return;
-      if (!img) {
-        showSample(sample || fallback);
-        return;
+      var row = designsForProduct(map, prod);
+      var designs = (row && row.designs) || {};
+      if (letterWrap) {
+        qsa("[data-letter-image]", letterWrap).forEach(function (img) {
+          var key = img.getAttribute("data-letter-image");
+          var full = designs[key] || "";
+          if (full) img.src = full.replace("/1280x1280/", "/320x320/");
+        });
       }
-      return paintPlatePreview(main, img, paintKind === "plate" ? "plate" : kind, style, typed.name, typed.number);
+      if (designs[letter]) showSample(designs[letter]);
     });
+  }
+
+  function designsForProduct(map, prod) {
+    if (!map) return null;
+    var handle = prod && prod.handle;
+    if (handle && map[handle]) return map[handle];
+    var sku = "";
+    ((prod && prod.variants) || []).some(function (variant) {
+      var match = String(variant.sku || "").match(/JTG\s*(\d{5}[A-Z]{2})/i);
+      if (match) {
+        sku = match[1].toUpperCase();
+        return true;
+      }
+      return false;
+    });
+    if (!sku) return null;
+    var found = null;
+    Object.keys(map).forEach(function (key) {
+      if (String(map[key].sku || "").toUpperCase() === sku) found = map[key];
+    });
+    return found;
   }
 
   function syncPvcCustomization(form, prod) {
