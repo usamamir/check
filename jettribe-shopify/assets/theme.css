@@ -238,7 +238,7 @@ button.linkish { background: none; border: 0; padding: 0; font: inherit; cursor:
   gap: 8px;
 }
 .call-link:hover { color: #fff; }
-.search-form { position: relative; flex: 1; max-width: 720px; width: 100%; }
+.search-form { position: relative; z-index: 10080; flex: 1; max-width: 720px; width: 100%; }
 .search-form--split {
   display: flex;
   align-items: center;
@@ -613,7 +613,8 @@ button.linkish { background: none; border: 0; padding: 0; font: inherit; cursor:
   background: #fff;
   color: #333;
   border: 1px solid #e5e5e5;
-  z-index: 50;
+  /* Above the dark menu (10050) and the red banner. Stays pinned to the search field. */
+  z-index: 10080;
   max-height: 420px;
   overflow: auto;
   text-align: left;
