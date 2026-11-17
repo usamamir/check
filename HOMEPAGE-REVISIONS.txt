@@ -13,6 +13,4 @@ What changed
 6. Red banner, one line on desktop: JETTRIBE IS A TRUE CORE WATERCRAFT PREMIUM BRAND. BORN IN SOUTHERN CALIFORNIA
 7. Payment marks: PayPal, Visa, Mastercard, and Buy now, pay later. Discover and American Express removed. Buy now, pay later is a label for Shop Pay at checkout. It does not turn a provider on in Shopify admin.
 8. Category titles: PWC Ride Suit, PWC Vests, PWC Watercraft Boots, PWC Watercraft Gloves, PWC Watercraft Goggles, Watercraft Covers.
-9. Photos from jettribe.com: new Circuit wetsuit, USCG vest on the beach, JTR gloves, Pro goggles, catalog stealth cover, men’s and ladies rash guards, Andrew racing slide on the hero.
-
-The Texas “girl in front of the house with the cover” photo and a goggles-on-her-head lifestyle shot are not on the public site. Those tiles use the closest Jettribe photos that are.
+Banner slides and category photos are the ones already on https://jettribe.co.nz/ (the files your friend uploaded). The banner still advances the same way: one slide at a time, every 4 seconds, with the same arrows and dots. No extra slide was added.

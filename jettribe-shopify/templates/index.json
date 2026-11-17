@@ -38,13 +38,6 @@
             "asset": "slide-5.jpg",
             "alt": "Jettribe slide 5"
           }
-        },
-        "slide-6": {
-          "type": "slide",
-          "settings": {
-            "asset": "slide-6.jpg",
-            "alt": "Andrew Vo, Jettribe racing"
-          }
         }
       },
       "block_order": [
@@ -52,8 +45,7 @@
         "slide-2",
         "slide-3",
         "slide-4",
-        "slide-5",
-        "slide-6"
+        "slide-5"
       ]
     },
     "pay-later": {
@@ -71,7 +63,7 @@
         "cat-1": {
           "type": "category",
           "settings": {
-            "title": "PWC Ride Suit",
+            "title": "PWC Ride Wetsuits",
             "link": "/search?jtcat=wetsuits",
             "asset": "cat-wetsuits.jpg",
             "alt": "Wetsuits"
@@ -98,7 +90,7 @@
         "cat-4": {
           "type": "category",
           "settings": {
-            "title": "PWC Watercraft Boots",
+            "title": "PWC Boots",
             "link": "/search?jtcat=boots-shoes",
             "asset": "cat-boots.jpg",
             "alt": "Boots and shoes"
@@ -107,7 +99,7 @@
         "cat-5": {
           "type": "category",
           "settings": {
-            "title": "PWC Watercraft Gloves",
+            "title": "PWC Gloves",
             "link": "/search?jtcat=gloves",
             "asset": "cat-gloves.jpg",
             "alt": "Gloves"
@@ -116,7 +108,7 @@
         "cat-6": {
           "type": "category",
           "settings": {
-            "title": "PWC Watercraft Goggles",
+            "title": "PWC Goggles",
             "link": "/search?jtcat=goggles",
             "asset": "cat-goggles.jpg",
             "alt": "Goggles"
@@ -161,7 +153,7 @@
         "cat-11": {
           "type": "category",
           "settings": {
-            "title": "Protection",
+            "title": "PWC Protection",
             "link": "/search?jtcat=protective-gear",
             "asset": "cat-protection.jpg",
             "alt": "Protection"
@@ -206,7 +198,7 @@
         "cat-16": {
           "type": "category",
           "settings": {
-            "title": "Racing Parts",
+            "title": "RACING PART",
             "link": "/search?jtcat=racing",
             "asset": "cat-racing.jpg",
             "alt": "Andrew Vo racing"
