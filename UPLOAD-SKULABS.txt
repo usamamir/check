@@ -1,0 +1,31 @@
+SKU LABS STOCK INTO SHOPIFY
+
+Stock numbers are the SKU Labs Default Warehouse On Hand column.
+Listing details stay as they are. These files do not contain titles, descriptions, photos, prices, weights, or dimensions, so an overwrite import will not wipe them.
+
+Shopify only runs one product import at a time.
+Products → Import
+Check: Overwrite products with matching handles
+Do not open the files in Excel.
+
+1. Quantities for every item with at least one unit, and publish those products:
+
+https://raw.githubusercontent.com/usamamir/check/cursor/jettribe-shopify-theme-86d6/jettribe-skulabs-inventory.csv
+
+2. After that job finishes, set the remaining matched SKUs to the SKU Labs count (zero on hand):
+
+https://raw.githubusercontent.com/usamamir/check/cursor/jettribe-shopify-theme-86d6/jettribe-skulabs-zero.csv
+
+3. After that job finishes, file the Hyper tour coats into Tour Coats:
+
+https://raw.githubusercontent.com/usamamir/check/cursor/jettribe-shopify-theme-86d6/jettribe-tour-coat-category-tags.csv
+
+4. Upload the theme so the Tour Coats menu includes the Hyper tour coats:
+
+https://raw.githubusercontent.com/usamamir/check/cursor/jettribe-shopify-theme-86d6/jettribe-theme-nov17-skulabs.zip
+
+Online Store → Themes → Import theme, or upload the zip.
+
+JTG 24410 after import:
+Black: S 4, M 6, L 0, XL 3, 2XL 5
+Pink: S 6, M 7, L 10, XL 8, 2XL 4
