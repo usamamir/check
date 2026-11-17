@@ -527,12 +527,21 @@
         variant.options = (variant.options || []).map(function (opt, index) {
           var name = String(prod.options[index] || "");
           if (/size/i.test(name)) return canonicalSize(opt) || String(opt || "").replace(/\s*\/\s*/g, "/");
+          if (/^title$/i.test(name)) {
+            var sized = canonicalSize(opt);
+            if (sized) return sized;
+            if (/LXL|L\/XL/i.test(variant.sku || "")) return "L/XL";
+            return "One Size";
+          }
           if (/plate|pvc/i.test(name)) return displayPlateLabel(opt);
           return opt;
         });
         variant.option1 = variant.options[0];
         variant.option2 = variant.options[1];
         variant.option3 = variant.options[2];
+      });
+      prod.options = prod.options.map(function (name) {
+        return /^title$/i.test(String(name || "")) ? "Size" : name;
       });
       prod._jtPvc = pvc;
       prod._jtYesAv = !pvc && yesAv;
@@ -543,6 +552,36 @@
     prod._jtYesAv = !pvc && yesAv;
     prod._jtForty = !pvc && forty;
     return prod;
+  }
+
+  function plateSampleKind(value) {
+    var v = String(value || "");
+    if (/moto font/i.test(v)) return "moto";
+    if (/standard font/i.test(v)) return "standard";
+    if (/blank pvc/i.test(v)) return "blank";
+    if (/yes custom/i.test(v) || /custom pvc/i.test(v)) return "yes";
+    return "";
+  }
+
+  function plateSampleUrl(kind) {
+    var samples = (window.Jettribe && Jettribe.plateSamples) || {};
+    return samples[kind] || "";
+  }
+
+  function plateChoiceHtml(value, radioName, checked) {
+    var kind = plateSampleKind(value);
+    var src = plateSampleUrl(kind);
+    var img = src
+      ? '<img class="plate-sample" src="' + escapeHtml(src) + '" alt="' + escapeHtml(value) + '">'
+      : "";
+    return '<label class="' + (checked ? "is-selected" : "") + '">' + img +
+      '<input type="radio" name="' + radioName + '" value="' + escapeHtml(value) + '" data-option-input' +
+      (checked ? " checked" : "") + "><span>" + escapeHtml(value) + "</span></label>";
+  }
+
+  function galleryFor(form) {
+    var scope = form && (form.closest("[data-quick-body]") || form.closest(".product") || document);
+    return qs("[data-gallery-main]", scope);
   }
 
   function renderOptionGroups(form, prod, namePrefix) {
@@ -575,14 +614,16 @@
           return a.localeCompare(b);
         });
       }
+      var isPlate = /plate|pvc/i.test(String(name));
       html += '<div class="option-label">' + escapeHtml(name) + "</div>";
-      html += '<div class="option-values" data-option-index="' + index + '" data-option-name="' + escapeHtml(name) + '"' + (/plate|pvc/i.test(String(name)) ? ' data-plate-group="true"' : "") + ">";
+      html += '<div class="option-values' + (isPlate ? " option-values--plate" : "") + '" data-option-index="' + index + '" data-option-name="' + escapeHtml(name) + '"' + (isPlate ? ' data-plate-group="true"' : "") + ">";
       values.forEach(function (value, valueIndex) {
         var checked = false;
-        if (/plate|pvc/i.test(String(name))) checked = /^none$/i.test(value);
+        if (isPlate) checked = /^none$/i.test(value);
         else checked = !valueIndex && !values.some(function (item) { return /^none$/i.test(item); });
-        if (/plate|pvc/i.test(String(name)) && !values.some(function (item) { return /^none$/i.test(item); })) checked = !valueIndex;
-        html += '<label class="' + (checked ? "is-selected" : "") + '"><input type="radio" name="' + namePrefix + "-" + index + '" value="' + escapeHtml(value) + '" data-option-input' + (checked ? " checked" : "") + "><span>" + escapeHtml(value) + "</span></label>";
+        if (isPlate && !values.some(function (item) { return /^none$/i.test(item); })) checked = !valueIndex;
+        if (isPlate) html += plateChoiceHtml(value, namePrefix + "-" + index, checked);
+        else html += '<label class="' + (checked ? "is-selected" : "") + '"><input type="radio" name="' + namePrefix + "-" + index + '" value="' + escapeHtml(value) + '" data-option-input' + (checked ? " checked" : "") + "><span>" + escapeHtml(value) + "</span></label>";
       });
       html += "</div>";
       if (/plate|pvc/i.test(String(name))) {
@@ -741,20 +782,41 @@
         if (!on) input.value = "";
       });
     }
-    var main = qs("[data-gallery-main]");
+    var main = galleryFor(form);
     if (!main) return;
-    if (!form._jtDefaultImage) form._jtDefaultImage = main.getAttribute("src") || "";
-    if (!showLetters) {
-      if (form._jtDefaultImage) main.src = form._jtDefaultImage;
+    if (!main.getAttribute("data-default-src")) {
+      main.setAttribute("data-default-src", main.getAttribute("src") || "");
+    }
+    var fallback = main.getAttribute("data-default-src") || "";
+    var kind = plateSampleKind(plate);
+    var sample = plateSampleUrl(kind);
+    function showSample(url) {
+      if (!url) return;
+      main.src = url;
+      main.setAttribute("data-plate-sample", "1");
+    }
+    if (kind === "moto" || kind === "standard" || kind === "blank") {
+      showSample(sample || fallback);
       return;
     }
+    if (!showLetters) {
+      if (main.getAttribute("data-plate-sample") === "1" && fallback) {
+        main.src = fallback;
+        main.removeAttribute("data-plate-sample");
+      }
+      return;
+    }
+    showSample(sample || fallback);
     var letter = selectedPvcLetter(form);
     if (!letter) return;
+    var stamp = plate + "|" + letter;
+    form._jtPlateStamp = stamp;
     loadPlateDesigns().then(function (map) {
+      if (form._jtPlateStamp !== stamp) return;
       var handle = (prod && prod.handle) || "";
       var row = map[handle] || {};
       var url = (row.designs && row.designs[letter]) || "";
-      if (url) main.src = url;
+      if (url) showSample(url);
     });
   }
 
@@ -1123,11 +1185,15 @@
         picked[index] = values[checkedAt];
         var isColor = /colou?r/i.test(label);
         var isPlate = /plate/i.test(label);
-        optionsHtml += '<div class="option-label">' + escapeHtml(label) + '</div><div class="option-values' + (isColor ? " option-values--color" : "") + '" data-option-index="' + index + '" data-option-name="' + escapeHtml(label) + '"' + (isPlate ? ' data-plate-group="true"' : "") + ">";
+        optionsHtml += '<div class="option-label">' + escapeHtml(label) + '</div><div class="option-values' + (isColor ? " option-values--color" : "") + (isPlate ? " option-values--plate" : "") + '" data-option-index="' + index + '" data-option-name="' + escapeHtml(label) + '"' + (isPlate ? ' data-plate-group="true"' : "") + ">";
         values.forEach(function (value, valueIndex) {
-          var swatch = isColor ? '<i style="--swatch: ' + swatchBackground(value) + '"></i>' : "";
           var on = valueIndex === checkedAt;
           var shown = isPlate ? displayPlateLabel(value) : (/size/i.test(label) ? (canonicalSize(value) || value) : value);
+          if (isPlate) {
+            optionsHtml += plateChoiceHtml(shown, "quick-option-" + index, on);
+            return;
+          }
+          var swatch = isColor ? '<i style="--swatch: ' + swatchBackground(value) + '"></i>' : "";
           optionsHtml += '<label class="' + (isColor ? "swatch " : "") + (on ? "is-selected" : "") + '"><input type="radio" name="quick-option-' + index + '" value="' + escapeHtml(value) + '"' + (on ? " checked" : "") + ' data-option-input>' + swatch + '<span>' + escapeHtml(shown) + "</span></label>";
         });
         optionsHtml += "</div>";
@@ -1163,7 +1229,7 @@
       var image = prod.featured_image || "";
       if (image && typeof image === "object") image = image.src || image.url || "";
       body.innerHTML =
-        '<div class="quick-grid"><div><img src="' + escapeHtml(image) + '" alt=""></div><div>' +
+        '<div class="quick-grid"><div><img data-gallery-main data-default-src="' + escapeHtml(image) + '" src="' + escapeHtml(image) + '" alt=""></div><div>' +
         "<h3>" + escapeHtml(prod.title) + "</h3>" +
         '<div class="price" data-product-price>Now: ' + formatMoney(variant.price) + "</div>" +
         (sku ? '<p class="sku" data-sku>SKU: ' + escapeHtml(sku) + "</p>" : '<p class="sku" data-sku></p>') +
@@ -1191,7 +1257,6 @@
             label.classList.toggle("is-selected", !!(input && input.checked));
           });
         });
-        syncPlateTextFields(qForm);
         var matches = (prod.variants || []).filter(function (item) {
           return (item.options || []).every(function (opt, i) { return options[i] == null || options[i] === "" || opt === options[i]; });
         }).sort(function (a, b) { return a.price - b.price; });
@@ -1205,7 +1270,11 @@
         var btn = qs("[data-add-button]", qForm);
         btn.disabled = !match.available;
         btn.textContent = match.available ? "Add to Cart" : "Out of Stock";
-        if (match.featured_image && match.featured_image.src) qs("img", body).src = match.featured_image.src;
+        var img = qs("[data-gallery-main]", body);
+        if (img && img.getAttribute("data-plate-sample") !== "1" && match.featured_image && match.featured_image.src) {
+          img.src = match.featured_image.src;
+        }
+        syncPlateCustomization(qForm, prod);
       }
       qForm.addEventListener("change", sync);
     }).catch(function () { window.location.href = "/products/" + handle; });

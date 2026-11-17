@@ -145,7 +145,7 @@
                 {%- endif -%}
               {%- endcapture -%}
               <div class="option-label">{{ option_title | strip }}</div>
-              <div class="option-values{% if option_is_color %} option-values--color{% endif %}" data-option-index="{{ forloop.index0 }}" data-option-name="{{ option_title | strip | escape }}"{% if option_is_plate %} data-plate-group="true"{% endif %}>
+              <div class="option-values{% if option_is_color %} option-values--color{% endif %}{% if option_is_plate %} option-values--plate{% endif %}" data-option-index="{{ forloop.index0 }}" data-option-name="{{ option_title | strip | escape }}"{% if option_is_plate %} data-plate-group="true"{% endif %}>
                 {%- for value in option.values -%}
                   {%- assign value_label = value -%}
                   {%- assign value_l = value | downcase -%}
@@ -179,6 +179,17 @@
                     {%- endif -%}
                   {%- endif -%}
                   <label class="{% if option_is_color %}swatch {% endif %}{% if option.selected_value == value %}is-selected{% endif %}">
+                    {%- if option_is_plate -%}
+                      {%- if value_l contains 'moto' -%}
+                        <img class="plate-sample" src="{{ 'jt-font-moto.png' | asset_url }}" alt="Moto font sample">
+                      {%- elsif value_l contains 'standard' -%}
+                        <img class="plate-sample" src="{{ 'jt-font-standard.jpg' | asset_url }}" alt="Standard font sample">
+                      {%- elsif value_l contains 'blank pvc' -%}
+                        <img class="plate-sample" src="{{ 'jt-plate-blank.jpg' | asset_url }}" alt="Blank plate sample">
+                      {%- elsif value_l contains 'yes custom' or value_l contains 'custom pvc' -%}
+                        <img class="plate-sample" src="{{ 'jt-plate-yes.jpg' | asset_url }}" alt="Custom plate sample">
+                      {%- endif -%}
+                    {%- endif -%}
                     <input
                       type="radio"
                       name="option-{{ option.position }}"

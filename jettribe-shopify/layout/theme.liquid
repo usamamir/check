@@ -113,6 +113,12 @@
       reviewsUrl: {{ 'jt-reviews.json' | asset_url | json }},
       plateDesignsUrl: {{ 'jt-plate-designs.json' | asset_url | json }},
       skuIndexUrl: {{ 'jt-sku-index.json' | asset_url | json }},
+      plateSamples: {
+        moto: {{ 'jt-font-moto.png' | asset_url | json }},
+        standard: {{ 'jt-font-standard.jpg' | asset_url | json }},
+        yes: {{ 'jt-plate-yes.jpg' | asset_url | json }},
+        blank: {{ 'jt-plate-blank.jpg' | asset_url | json }}
+      },
       routes: {
         root: {{ routes.root_url | json }},
         cart: {{ routes.cart_url | json }},
