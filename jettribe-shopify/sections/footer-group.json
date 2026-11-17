@@ -6,10 +6,11 @@
       "type": "footer",
       "settings": {
         "phone": "951.246.3147",
-        "hours": "Mon - Fri, 9am - 4pm PST",
+        "hours": "Mon - Fri, 9am - 5pm Texas Time (Central Standard Time)",
         "email": "ridersupport@jettribe.com",
         "shipping_address": "1120 Como Street South\nSulphur Springs, Texas 75482",
-        "corporate_address": "(No Products at this Location)\nTemecula, California\nOffice By Appointment Only"
+        "corporate_address": "(No Products at this Location)\nTemecula, California\nOffice By Appointment Only",
+        "asia_address": "76/28/9 Le Van Phan Street\nPhu Tho Hoa Ward, Tan Phu District\nHo Chi Minh City (Saigon), Vietnam"
       }
     }
   },

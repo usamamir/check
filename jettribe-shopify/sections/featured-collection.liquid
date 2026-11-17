@@ -3,15 +3,78 @@
   if source == blank
     assign source = collections.all
   endif
+  assign show_count = section.settings.products_to_show
 -%}
 <section class="product-band{% if section.settings.style == 'dark' %} product-band--dark{% endif %}">
   <div class="container">
     <h2 class="page-heading"><span>{{ section.settings.heading }}</span></h2>
     <div class="product-scroll" tabindex="0">
       {%- if source != blank and source.products_count > 0 -%}
-        {%- for product in source.products limit: section.settings.products_to_show -%}
-          {% render 'product-card', product: product %}
-        {%- endfor -%}
+        {%- if section.settings.mix_types -%}
+          {%- liquid
+            assign picked = ''
+            assign seen_kinds = '|'
+            assign picked_count = 0
+            for product in source.products limit: 80
+              if product.available == false
+                continue
+              endif
+              assign blob = product.title | downcase | append: ' ' | append: product.type | downcase
+              if blob contains 'glove'
+                assign kind = 'glove'
+              elsif blob contains 'wetsuit' or blob contains 'ride suit' or blob contains 'john'
+                assign kind = 'wetsuit'
+              elsif blob contains 'vest'
+                assign kind = 'vest'
+              elsif blob contains 'goggle'
+                assign kind = 'goggle'
+              elsif blob contains 'boot' or blob contains 'shoe'
+                assign kind = 'boot'
+              elsif blob contains 'cover'
+                assign kind = 'cover'
+              elsif blob contains 'rash'
+                assign kind = 'rash'
+              else
+                assign kind = product.type | default: 'other' | handle
+              endif
+              assign marker = '|' | append: kind | append: '|'
+              if seen_kinds contains marker
+                continue
+              endif
+              assign seen_kinds = seen_kinds | append: kind | append: '|'
+              assign picked = picked | append: '||' | append: product.handle | append: '||'
+              assign picked_count = picked_count | plus: 1
+              if picked_count >= show_count
+                break
+              endif
+            endfor
+            if picked_count < show_count
+              for product in source.products limit: 80
+                assign key = '||' | append: product.handle | append: '||'
+                if picked contains key
+                  continue
+                endif
+                assign picked = picked | append: key
+                assign picked_count = picked_count | plus: 1
+                if picked_count >= show_count
+                  break
+                endif
+              endfor
+            endif
+          -%}
+          {%- assign handle_list = picked | split: '||' -%}
+          {%- for handle in handle_list -%}
+            {%- if handle == blank -%}{%- continue -%}{%- endif -%}
+            {%- assign card_product = all_products[handle] -%}
+            {%- if card_product != blank -%}
+              {% render 'product-card', product: card_product %}
+            {%- endif -%}
+          {%- endfor -%}
+        {%- else -%}
+          {%- for product in source.products limit: show_count -%}
+            {% render 'product-card', product: product %}
+          {%- endfor -%}
+        {%- endif -%}
       {%- else -%}
         <div class="empty-products">
           <p>Products show here after the Jettribe catalog is imported into Shopify. Assign a collection in this section, or products from the All collection will fill it automatically.</p>
@@ -35,6 +98,13 @@
       "max": 24,
       "step": 1,
       "default": 16
+    },
+    {
+      "type": "checkbox",
+      "id": "mix_types",
+      "label": "Mix product types",
+      "info": "For New Products. Shows one of each type (vest, wetsuit, gloves, and so on) before repeating a type.",
+      "default": false
     },
     {
       "type": "select",

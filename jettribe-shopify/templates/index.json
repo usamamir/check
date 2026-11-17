@@ -38,6 +38,13 @@
             "asset": "slide-5.jpg",
             "alt": "Jettribe slide 5"
           }
+        },
+        "slide-6": {
+          "type": "slide",
+          "settings": {
+            "asset": "slide-6.jpg",
+            "alt": "Andrew Vo, Jettribe racing"
+          }
         }
       },
       "block_order": [
@@ -45,13 +52,14 @@
         "slide-2",
         "slide-3",
         "slide-4",
-        "slide-5"
+        "slide-5",
+        "slide-6"
       ]
     },
     "pay-later": {
       "type": "pay-later",
       "settings": {
-        "text": "Pay with PayPal, Visa, Mastercard, American Express, or Discover.",
+        "text": "Pay with PayPal, Visa, Mastercard, or buy now, pay later.",
         "link_label": "See financing",
         "link": "/search?jtpage=financing"
       }
@@ -63,7 +71,7 @@
         "cat-1": {
           "type": "category",
           "settings": {
-            "title": "Wetsuits",
+            "title": "PWC Ride Suit",
             "link": "/search?jtcat=wetsuits",
             "asset": "cat-wetsuits.jpg",
             "alt": "Wetsuits"
@@ -72,7 +80,7 @@
         "cat-2": {
           "type": "category",
           "settings": {
-            "title": "Vests",
+            "title": "PWC Vests",
             "link": "/search?jtcat=jettribe-vests",
             "asset": "cat-vests.jpg",
             "alt": "Vests"
@@ -90,7 +98,7 @@
         "cat-4": {
           "type": "category",
           "settings": {
-            "title": "Boots & Shoes",
+            "title": "PWC Watercraft Boots",
             "link": "/search?jtcat=boots-shoes",
             "asset": "cat-boots.jpg",
             "alt": "Boots and shoes"
@@ -99,7 +107,7 @@
         "cat-5": {
           "type": "category",
           "settings": {
-            "title": "Gloves",
+            "title": "PWC Watercraft Gloves",
             "link": "/search?jtcat=gloves",
             "asset": "cat-gloves.jpg",
             "alt": "Gloves"
@@ -108,7 +116,7 @@
         "cat-6": {
           "type": "category",
           "settings": {
-            "title": "Goggles",
+            "title": "PWC Watercraft Goggles",
             "link": "/search?jtcat=goggles",
             "asset": "cat-goggles.jpg",
             "alt": "Goggles"
@@ -117,7 +125,7 @@
         "cat-7": {
           "type": "category",
           "settings": {
-            "title": "Covers",
+            "title": "Watercraft Covers",
             "link": "/search?jtcat=pwc-covers",
             "asset": "cat-covers.jpg",
             "alt": "PWC covers"
@@ -194,6 +202,15 @@
             "asset": "cat-hardgoods.jpg",
             "alt": "Hard goods"
           }
+        },
+        "cat-16": {
+          "type": "category",
+          "settings": {
+            "title": "Racing Parts",
+            "link": "/search?jtcat=racing",
+            "asset": "cat-racing.jpg",
+            "alt": "Andrew Vo racing"
+          }
         }
       },
       "block_order": [
@@ -211,7 +228,8 @@
         "cat-12",
         "cat-13",
         "cat-14",
-        "cat-15"
+        "cat-15",
+        "cat-16"
       ]
     },
     "featured": {
@@ -226,7 +244,8 @@
       "type": "featured-collection",
       "settings": {
         "heading": "New Products",
-        "products_to_show": 16,
+        "products_to_show": 10,
+        "mix_types": true,
         "style": "dark"
       }
     },
