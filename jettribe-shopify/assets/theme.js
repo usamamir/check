@@ -374,6 +374,62 @@
     return { size: value.replace(/\s*\/\s*/g, "/"), plate: "", mangled: false };
   }
 
+  function plateAddonCents(value) {
+    var text = String(value || "");
+    if (/^none$/i.test(text.trim())) return 0;
+    var priced = text.match(/\$\s*(\d+(?:\.\d{1,2})?)/);
+    if (priced) return Math.round(parseFloat(priced[1]) * 100);
+    if (/custom pvc/i.test(text)) return 6000;
+    if (/blank pvc/i.test(text)) return 2500;
+    if (/yes custom|moto font|standard font/i.test(text)) return 4000;
+    return 0;
+  }
+
+  function optionNameAt(prod, index) {
+    var option = prod && prod.options ? prod.options[index] : "";
+    return optionLabel(option);
+  }
+
+  function sizeOptionIndex(prod) {
+    var found = 0;
+    (prod && prod.options || []).forEach(function (option, index) {
+      if (/size/i.test(optionNameAt(prod, index))) found = index;
+    });
+    return found;
+  }
+
+  function plateOptionIndex(prod) {
+    var found = -1;
+    (prod && prod.options || []).forEach(function (option, index) {
+      if (/plate|pvc/i.test(optionNameAt(prod, index))) found = index;
+    });
+    return found;
+  }
+
+  function sizeInStock(prod, options) {
+    var sizeIndex = sizeOptionIndex(prod);
+    var size = options ? options[sizeIndex] : "";
+    return (prod.variants || []).some(function (variant) {
+      return variant.available && (!size || variant.options[sizeIndex] === size);
+    });
+  }
+
+  function selectionPrice(prod, variant, options) {
+    var plateIndex = plateOptionIndex(prod);
+    var extra = plateIndex >= 0 ? plateAddonCents(options[plateIndex]) : 0;
+    var sizeIndex = sizeOptionIndex(prod);
+    var bases = (prod.variants || []).filter(function (item) {
+      if (!(item.price > 0)) return false;
+      if (options[sizeIndex] && item.options[sizeIndex] !== options[sizeIndex]) return false;
+      if (plateIndex >= 0 && !/^none$/i.test(String(item.options[plateIndex] || ""))) return false;
+      return true;
+    }).sort(function (a, b) { return a.price - b.price; });
+    var base = bases.length ? bases[0].price : 0;
+    if (variant && variant.price > 0 && (!extra || variant.price > base)) return variant.price;
+    if (base) return base + extra;
+    return (variant && variant.price) || 0;
+  }
+
   function displayPlateLabel(value) {
     var v = String(value || "").trim();
     if (!v || /^(none|default)$/i.test(v)) return "None";
@@ -1010,15 +1066,27 @@
     function refreshAvailability() {
       var options = selectedOptions();
       qsa("[data-option-index]", form).forEach(function (group, index) {
+        var plate = group.hasAttribute("data-plate-group");
+        var sizeGroup = /size/i.test(group.getAttribute("data-option-name") || "");
         qsa("input", group).forEach(function (input) {
-          var trial = options.slice();
-          trial[index] = input.value;
-          var match = product.variants.some(function (variant) {
-            return variant.available && variant.options.every(function (opt, i) {
-              return trial[i] === "" || opt === trial[i];
+          var available = true;
+          if (plate) {
+            available = true;
+          } else if (sizeGroup) {
+            available = product.variants.some(function (variant) {
+              return variant.available && variant.options[index] === input.value;
             });
-          });
-          input.parentElement.classList.toggle("is-unavailable", !match);
+          } else {
+            var trial = options.slice();
+            trial[index] = input.value;
+            available = product.variants.some(function (variant) {
+              return variant.available && variant.options.every(function (opt, i) {
+                return trial[i] == null || trial[i] === "" || opt === trial[i];
+              });
+            });
+          }
+          input.disabled = plate ? false : !available;
+          if (input.parentElement) input.parentElement.classList.toggle("is-unavailable", plate ? false : !available);
         });
       });
     }
@@ -1032,17 +1100,10 @@
         return;
       }
       idInput.value = variant.id;
+      var chosen = selectedOptions();
+      var showPrice = selectionPrice(product, variant, chosen);
+      var canBuy = sizeInStock(product, chosen);
       if (priceEl) {
-        var showPrice = variant.price;
-        if (!showPrice) {
-          var availablePriced = product.variants.filter(function (item) {
-            return item.available && item.price > 0;
-          }).sort(function (a, b) { return a.price - b.price; })[0];
-          var priced = availablePriced || product.variants.filter(function (item) {
-            return item.price > 0;
-          }).sort(function (a, b) { return a.price - b.price; })[0];
-          if (priced) showPrice = priced.price;
-        }
         var html = "";
         if (variant.compare_at_price && variant.compare_at_price > showPrice) {
           html += "<s>" + formatMoney(variant.compare_at_price) + "</s> ";
@@ -1052,7 +1113,7 @@
       }
       var paypalNote = qs("[data-pp-message]");
       if (paypalNote) {
-        paypalNote.setAttribute("data-pp-amount", (variant.price / 100).toFixed(2));
+        paypalNote.setAttribute("data-pp-amount", (showPrice / 100).toFixed(2));
         paypalNote.removeAttribute("data-pp-mounted");
         mountPayPalMessages();
       }
@@ -1061,8 +1122,8 @@
         skuEl.textContent = sku ? "SKU: " + sku : "";
       }
       if (button) {
-        button.disabled = !variant.available;
-        button.textContent = variant.available ? "Add to Cart" : "Out of Stock";
+        button.disabled = !canBuy;
+        button.textContent = canBuy ? "Add to Cart" : "Out of Stock";
       }
       if (variant.featured_image) {
         var main = qs("[data-gallery-main]");
@@ -1298,19 +1359,35 @@
             label.classList.toggle("is-selected", !!(input && input.checked));
           });
         });
+        qsa("[data-option-index]", qForm).forEach(function (group, index) {
+          var plate = group.hasAttribute("data-plate-group");
+          var sizeGroup = /size/i.test(group.getAttribute("data-option-name") || "");
+          qsa("input", group).forEach(function (input) {
+            var available = true;
+            if (!plate && sizeGroup) {
+              available = (prod.variants || []).some(function (variant) {
+                return variant.available && variant.options[index] === input.value;
+              });
+            }
+            input.disabled = plate ? false : !available;
+            if (input.parentElement) input.parentElement.classList.toggle("is-unavailable", plate ? false : !available);
+          });
+        });
         var matches = (prod.variants || []).filter(function (item) {
           return (item.options || []).every(function (opt, i) { return options[i] == null || options[i] === "" || opt === options[i]; });
         }).sort(function (a, b) { return a.price - b.price; });
         var match = matches[0];
         if (!match) return;
         qs("[data-variant-id]", qForm).value = match.id;
-        qs("[data-product-price]", body).textContent = "Now: " + formatMoney(match.price);
+        var showPrice = selectionPrice(prod, match, options);
+        qs("[data-product-price]", body).textContent = "Now: " + formatMoney(showPrice);
         var skuEl = qs("[data-sku]", body);
         var nextSku = productSku(prod, match);
         if (skuEl) skuEl.textContent = nextSku ? "SKU: " + nextSku : "";
         var btn = qs("[data-add-button]", qForm);
-        btn.disabled = !match.available;
-        btn.textContent = match.available ? "Add to Cart" : "Out of Stock";
+        var canBuy = sizeInStock(prod, options);
+        btn.disabled = !canBuy;
+        btn.textContent = canBuy ? "Add to Cart" : "Out of Stock";
         var img = qs("[data-gallery-main]", body);
         if (img && img.getAttribute("data-plate-sample") !== "1" && match.featured_image && match.featured_image.src) {
           img.src = match.featured_image.src;
