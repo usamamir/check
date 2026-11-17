@@ -3,8 +3,14 @@
   <div class="rte">{% render 'copy-size-chart' %}</div>
 </article>
 <article data-jt-page="jettribe-customization-form" data-jt-title="Customization" hidden>
-  <h1 class="page-heading" style="justify-content:flex-start;"><span>Customization</span></h1>
-  <div class="rte">{% render 'copy-jettribe-customization-form' %}</div>
+  <h1 class="page-heading" style="justify-content:flex-start;"><span>{{ pages['jettribe-customization-form'].title | default: 'Customization' }}</span></h1>
+  <div class="rte">
+    {%- if pages['jettribe-customization-form'].content != blank -%}
+      {{ pages['jettribe-customization-form'].content }}
+    {%- else -%}
+      {% render 'copy-jettribe-customization-form' %}
+    {%- endif -%}
+  </div>
 </article>
 <article data-jt-page="return-policy" data-jt-title="Returns" hidden>
   <h1 class="page-heading" style="justify-content:flex-start;"><span>Returns</span></h1>
