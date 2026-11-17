@@ -1,3 +1,9 @@
+Do not use this file for photos. It has one photo per product, and importing it replaces the whole gallery with that one photo.
+
+Use UPLOAD-ALL-IMAGES.txt and jettribe-all-images.csv instead. That file has every photo from the live jettribe.com pages.
+
+The notes below are only for the earlier un-archive import.
+
 Put photos from jettribe.com onto the Shopify products, and un-archive them.
 
 Products → Import. Check Overwrite products with matching handles. Do not open this in Excel.

@@ -1,0 +1,13 @@
+Every photo from the live jettribe.com product pages, in gallery order.
+
+Products → Import. Check Overwrite products with matching handles. Do not open this in Excel.
+
+https://raw.githubusercontent.com/usamamir/check/cursor/jettribe-shopify-theme-86d6/jettribe-all-images.csv
+
+550 products, 3,456 photos. The grey vest (JTG 20450GY) has all 11 photos. A product that has 8, 10, or more on jettribe.com has that same set here.
+
+This file only sets the product photos. It does not change titles, prices, sizes, inventory, weight, or whether a product is published.
+
+Do not import jettribe-live-images.csv again. That file has one photo per product, and importing it replaces the whole gallery with that one photo.
+
+Do not import jettribe-archive-no-image.csv.
