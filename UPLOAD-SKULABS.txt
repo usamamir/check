@@ -25,7 +25,7 @@ https://raw.githubusercontent.com/usamamir/check/cursor/jettribe-shopify-theme-8
 
 3. After that job finishes, file the Hyper tour coats into Tour Coats:
 
-https://raw.githubusercontent.com/usamamir/check/cursor/jettribe-shopify-theme-86d6/jettribe-tour-coat-category-tags.csv
+https://raw.githubusercontent.com/usamamir/check/cursor/jettribe-shopify-theme-86d6/jettribe-hyper-tour-coat-tags.csv
 
 4. Upload the theme so the Tour Coats menu includes the Hyper tour coats:
 
