@@ -46,7 +46,7 @@
           {%- liquid
             assign show_price = current.price
             assign show_compare = current.compare_at_price
-            if show_price == 0 or current.available == false
+            if show_price == 0
               assign show_price = 0
               assign show_compare = 0
               assign found_available = false
