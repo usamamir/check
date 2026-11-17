@@ -8,6 +8,11 @@ Products → Import
 Check: Overwrite products with matching handles
 Do not open the files in Excel.
 
+On the column screen, Product Title must map to Title.
+Published must map to Published on online store.
+If Product Title is also set to Published on online store, uncheck Product Title.
+That column can only be used once. Leaving it on Product Title renames every product to "true".
+
 1. Quantities for every item with at least one unit, and publish those products:
 
 https://raw.githubusercontent.com/usamamir/check/cursor/jettribe-shopify-theme-86d6/jettribe-skulabs-inventory.csv
