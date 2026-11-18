@@ -53,7 +53,7 @@
           <p><strong>Contact Jettribe Rider Support</strong><br>
             <a href="mailto:{{ section.settings.email }}">{{ section.settings.email }}</a><br>
             <a href="tel:9512463147">{{ section.settings.phone }}</a><br>
-            {{ section.settings.hours }}
+            Mon-Fri, 9am - 5pm CMT
           </p>
           <p><strong>Jettribe Shipping Distribution</strong><br>{{ section.settings.shipping_address | newline_to_br }}</p>
           <p><strong>Jettribe Corporate California</strong><br>{{ section.settings.corporate_address | newline_to_br }}</p>
@@ -118,7 +118,7 @@
   "name": "Footer",
   "settings": [
     { "type": "text", "id": "phone", "label": "Phone", "default": "951.246.3147" },
-    { "type": "text", "id": "hours", "label": "Hours", "default": "Mon - Fri, 9am - 5pm Texas Time (Central Standard Time)" },
+    { "type": "text", "id": "hours", "label": "Hours", "default": "Mon-Fri, 9am - 5pm CMT" },
     { "type": "text", "id": "email", "label": "Email", "default": "ridersupport@jettribe.com" },
     { "type": "textarea", "id": "shipping_address", "label": "Shipping address", "default": "1120 Como Street South\nSulphur Springs, Texas 75482" },
     { "type": "textarea", "id": "corporate_address", "label": "Corporate address", "default": "(No Products at this Location)\nTemecula, California\nOffice By Appointment Only" },

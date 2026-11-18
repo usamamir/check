@@ -716,6 +716,7 @@ button.linkish { background: none; border: 0; padding: 0; font: inherit; cursor:
 .product-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
+  align-items: stretch;
   gap: 16px;
   text-align: left;
 }
@@ -753,6 +754,7 @@ button.linkish { background: none; border: 0; padding: 0; font: inherit; cursor:
   display: flex;
   flex-direction: column;
   min-width: 0;
+  height: 100%;
   position: relative;
 }
 .card-media { position: relative; display: block; background: #fff; }
@@ -760,7 +762,7 @@ button.linkish { background: none; border: 0; padding: 0; font: inherit; cursor:
 .card-media img, .card-media svg { width: 100%; height: 240px; object-fit: contain; display: block; }
 .card-hover {
   position: absolute;
-  left: 20px; right: 20px; top: 42%;
+  left: 20px; right: 20px; top: 108px;
   opacity: 0;
   transition: opacity 0.2s ease;
   z-index: 2;
@@ -776,6 +778,7 @@ button.linkish { background: none; border: 0; padding: 0; font: inherit; cursor:
   color: var(--text);
 }
 .card-title a { color: var(--text); }
+.card-body { display: flex; flex-direction: column; flex: 1 1 auto; min-height: 0; }
 .price { color: var(--blue); font-weight: 700; font-size: 16px; }
 .price s { color: #989898; font-weight: 400; margin-right: 8px; }
 .card-actions { margin-top: auto; padding-top: 8px; }

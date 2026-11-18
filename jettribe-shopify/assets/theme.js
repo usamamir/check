@@ -129,13 +129,28 @@
   bindMenuIntent(siteNav);
 
   qsa(".search-form--split").forEach(function (form) {
+    var dept = qs("[data-search-dept]", form);
+    var field = qs("input[name='q']", form);
+    var here = new URLSearchParams(window.location.search);
+    if (dept && here.get("jtcat")) {
+      var current = "/search?jtcat=" + here.get("jtcat");
+      qsa("option", dept).forEach(function (option) {
+        if (option.value === current) dept.value = option.value;
+      });
+    }
+    if (field && here.get("q") && !field.value) field.value = here.get("q");
     form.addEventListener("submit", function (event) {
-      var dept = qs("[data-search-dept]", form);
-      var field = qs("input[name='q']", form);
-      if (!dept || !dept.value) return;
-      if (field && field.value.trim()) return;
+      var chosen = dept && dept.value;
+      var query = field ? field.value.trim() : "";
+      if (!chosen) return;
       event.preventDefault();
-      window.location.href = dept.value;
+      if (!query) {
+        window.location.href = chosen;
+        return;
+      }
+      var url = new URL(chosen, window.location.origin);
+      url.searchParams.set("q", query);
+      window.location.href = url.pathname + url.search;
     });
   });
 

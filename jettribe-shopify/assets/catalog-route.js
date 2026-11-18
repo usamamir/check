@@ -448,6 +448,20 @@
     var selectedSizes = canonicalSizes((params.get("size") || "").split(","));
     var min = params.get("min") === null || params.get("min") === "" ? null : Number(params.get("min"));
     var max = params.get("max") === null || params.get("max") === "" ? null : Number(params.get("max"));
+    var queryRaw = (params.get("q") || "").trim();
+    var query = queryRaw.toLowerCase();
+    function matchesQuery(meta) {
+      if (!query) return true;
+      var hay = ((meta.title || "") + " " + (meta.handle || "")).toLowerCase();
+      if (hay.indexOf(query) !== -1) return true;
+      var live = meta.live;
+      if (!live) return false;
+      var skuBlob = ((live.variants || []).map(function (variant) { return variant.sku || ""; }).join(" ") + " " + (live.title || "")).toLowerCase();
+      if (skuBlob.indexOf(query) !== -1) return true;
+      var compact = skuBlob.toUpperCase().replace(/[^A-Z0-9]/g, "");
+      var needle = query.toUpperCase().replace(/[^A-Z0-9]/g, "");
+      return !!(needle && compact.indexOf(needle) !== -1);
+    }
     var page = 1;
     var per = 10000;
     var metas = [];
@@ -483,6 +497,7 @@
       metas.push(saved);
     });
     function passes(meta, ignore) {
+      if (!matchesQuery(meta)) return false;
       if (ignore !== "color" && selectedColors.length) {
         var colors = titleColors(meta.title);
         if (!selectedColors.some(function (color) { return colors.indexOf(color) !== -1; })) return false;
@@ -510,6 +525,7 @@
         size: selectedSizes.join(","),
         min: min != null && !isNaN(min) ? String(min) : "",
         max: max != null && !isNaN(max) ? String(max) : "",
+        q: queryRaw,
         page: page > 1 ? String(page) : ""
       };
       Object.keys(changes || {}).forEach(function (key) {
@@ -518,7 +534,7 @@
       if (!changes || !("page" in changes)) state.page = "";
       var next = new URLSearchParams();
       next.set("jtcat", nextHandle || handle);
-      ["sort", "color", "size", "min", "max", "page"].forEach(function (key) {
+      ["sort", "color", "size", "min", "max", "q", "page"].forEach(function (key) {
         if (state[key]) next.set(key, state[key]);
       });
       return searchBase() + "?" + next.toString();

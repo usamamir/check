@@ -184,7 +184,14 @@
         var viewAll = box.querySelector(".view-all");
         if (!viewAll) {
           var search = (window.Jettribe && Jettribe.routes && Jettribe.routes.search) || "/search";
-          html += '<a class="view-all" href="' + esc(search) + "?q=" + encodeURIComponent(term) + '&type=product">View all results</a>';
+          var viewHref = search + "?q=" + encodeURIComponent(term) + "&type=product";
+          var dept = document.querySelector("[data-search-dept]");
+          if (dept && dept.value) {
+            var deptUrl = new URL(dept.value, window.location.origin);
+            deptUrl.searchParams.set("q", term);
+            viewHref = deptUrl.pathname + deptUrl.search;
+          }
+          html += '<a class="view-all" href="' + esc(viewHref) + '">View all results</a>';
           box.insertAdjacentHTML("beforeend", html);
         } else {
           viewAll.insertAdjacentHTML("beforebegin", html);
