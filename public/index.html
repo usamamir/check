@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Daybook</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="stripe" aria-hidden="true"></div>
+  <header class="mast">
+    <div>
+      <p class="eyebrow">One local desk</p>
+      <h1>Daybook</h1>
+    </div>
+    <p id="today" class="today"></p>
+  </header>
+  <p class="lede">Reads a resume on this machine, searches open job feeds, and writes cover-letter drafts. Nothing is emailed.</p>
+  <p id="banner" class="banner" hidden></p>
+  <p id="runmeta" class="runmeta">No pass yet.</p>
+  <p id="notice" class="notice" role="status"></p>
+  <main class="layout">
+    <section class="panel" aria-labelledby="resume-heading">
+      <h2 id="resume-heading">Resume</h2>
+      <div id="profile"></div>
+      <label class="field">Also search for
+        <input id="extra" name="extra" autocomplete="off" placeholder="klaviyo, retention">
+      </label>
+      <button id="save-extra" class="secondary" type="button">Update the search string</button>
+      <details class="replace">
+        <summary>Replace the resume</summary>
+        <label class="field">Resume text
+          <textarea id="resume-text" rows="10"></textarea>
+        </label>
+        <div class="button-row">
+          <button id="use-text" type="button">Use this text</button>
+          <label class="file">
+            Upload PDF or text
+            <input id="resume-file" type="file" accept=".pdf,.txt,application/pdf,text/plain">
+          </label>
+        </div>
+      </details>
+      <button id="run" type="button">Run today's pass</button>
+      <p class="quiet">Searches the open feeds and writes drafts for the strongest new matches from the last 3 days.</p>
+    </section>
+    <div class="column">
+      <section class="panel" aria-labelledby="sheet-heading">
+        <div class="panel-head">
+          <h2 id="sheet-heading">Sheet</h2>
+          <a href="/api/sheet.csv">Download CSV</a>
+        </div>
+        <div id="sheet"></div>
+      </section>
+      <section class="panel" id="letter-panel" aria-labelledby="letter-heading" hidden>
+        <h2 id="letter-heading">Letter</h2>
+        <div id="letter"></div>
+      </section>
+      <section class="panel" aria-labelledby="paste-heading">
+        <h2 id="paste-heading">Add a posting</h2>
+        <p class="quiet">The feeds miss private boards. Paste a role and it joins the same sheet.</p>
+        <form id="paste-form">
+          <div class="split">
+            <label class="field">Role title
+              <input name="title" required autocomplete="off">
+            </label>
+            <label class="field">Company
+              <input name="company" autocomplete="off">
+            </label>
+          </div>
+          <div class="split">
+            <label class="field">Location
+              <input name="location" autocomplete="off">
+            </label>
+            <label class="field">Posting URL
+              <input name="url" type="url" placeholder="https://" autocomplete="off">
+            </label>
+          </div>
+          <label class="field">Posting text
+            <textarea name="description" rows="6" required placeholder="Paste the description, including a contact line if one is listed."></textarea>
+          </label>
+          <button type="submit">Add and write a letter</button>
+        </form>
+      </section>
+    </div>
+  </main>
+  <footer>
+    <p>Listings come from <a href="https://remotive.com">Remotive</a>, <a href="https://remoteok.com">Remote OK</a>, <a href="https://www.arbeitnow.com">Arbeitnow</a>, and <a href="https://jobicy.com">Jobicy</a>. Daybook does not sign in to Google, LinkedIn, or Indeed.</p>
+  </footer>
+  <script src="/app.js"></script>
+</body>
+</html>
