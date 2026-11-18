@@ -106,7 +106,9 @@ export function createServer({
   return { server, store };
 }
 
-const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
+const invoked = process.argv[1] ? path.resolve(process.argv[1]) : "";
+const selfPath = fileURLToPath(import.meta.url);
+const isMain = invoked === selfPath && path.basename(selfPath) === "server.js";
 if (isMain) {
   const port = Number(process.env.PORT || 4173);
   const host = process.env.HOST || "127.0.0.1";

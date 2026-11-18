@@ -6,7 +6,7 @@ It does not use Google Drive, Gmail, Sheets, Gemini, SerpAPI, or n8n. It does no
 
 ## Windows
 
-Double-click `Daybook.exe`. It opens Daybook in your browser. Click **Quit Daybook** at the bottom when you are done. If Windows says it protected your PC, click **More info**, then **Run anyway**.
+Open `Daybook-windows.zip`, then double-click `Daybook.exe`. Leave the black window open. Daybook opens in your browser. Click **Quit Daybook** at the bottom when you are done. If Windows says it protected your PC, click **More info**, then **Run anyway**.
 
 ## Run
 
