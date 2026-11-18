@@ -51,16 +51,16 @@ export function mergeJobs(existing, incoming, now = new Date().toISOString()) {
   return { jobs: sortJobs([...byId.values()]), added };
 }
 
-function ensureResumeFile(store, state) {
-  if (state.profile.resumeFile && store.readResume(state.profile.resumeFile)) return;
+async function ensureResumeFile(store, state) {
+  if (state.profile.resumeFile && (await store.readResume(state.profile.resumeFile))) return;
   const text = state.profile.rawText || "";
   if (!text.trim()) return;
-  state.profile.resumeFile = store.saveResume(Buffer.from(text, "utf8"), "txt");
+  state.profile.resumeFile = await store.saveResume(Buffer.from(text, "utf8"), "txt");
 }
 
-export function writeDrafts(state, store, { limit = 8, minimumScore = 25 } = {}) {
-  ensureResumeFile(store, state);
-  const attachment = store.readResume(state.profile.resumeFile);
+export async function writeDrafts(state, store, { limit = 8, minimumScore = 25 } = {}) {
+  await ensureResumeFile(store, state);
+  const attachment = await store.readResume(state.profile.resumeFile);
   const targets = state.jobs
     .filter((job) => job.status === "new" && !job.coverLetter && job.matchScore >= minimumScore)
     .slice(0, limit);
@@ -70,7 +70,7 @@ export function writeDrafts(state, store, { limit = 8, minimumScore = 25 } = {})
       job,
       hasResume: Boolean(attachment),
     });
-    job.draftFile = store.saveDraft(
+    job.draftFile = await store.saveDraft(
       job.id,
       buildEml({
         fromName: state.profile.name,
@@ -86,15 +86,15 @@ export function writeDrafts(state, store, { limit = 8, minimumScore = 25 } = {})
   return targets.length;
 }
 
-export function rewriteLetter(state, store, job) {
-  ensureResumeFile(store, state);
-  const attachment = store.readResume(state.profile.resumeFile);
+export async function rewriteLetter(state, store, job) {
+  await ensureResumeFile(store, state);
+  const attachment = await store.readResume(state.profile.resumeFile);
   job.coverLetter = coverLetter({
     profile: state.profile,
     job,
     hasResume: Boolean(attachment),
   });
-  job.draftFile = store.saveDraft(
+  job.draftFile = await store.saveDraft(
     job.id,
     buildEml({
       fromName: state.profile.name,
@@ -110,7 +110,7 @@ export function rewriteLetter(state, store, job) {
 }
 
 export async function runPass(store, { draft = true, searchImpl = searchJobs } = {}) {
-  const state = store.load();
+  const state = await store.load();
   if (!state.profile?.rawText) {
     const error = new Error("Add a resume first.");
     error.status = 400;
@@ -119,7 +119,7 @@ export async function runPass(store, { draft = true, searchImpl = searchJobs } =
   const result = await searchImpl(state.profile);
   const merged = mergeJobs(state.jobs, result.jobs);
   state.jobs = merged.jobs;
-  const drafted = draft ? writeDrafts(state, store) : 0;
+  const drafted = draft ? await writeDrafts(state, store) : 0;
   state.jobs = sortJobs(state.jobs);
   state.lastRun = {
     at: new Date().toISOString(),
@@ -131,6 +131,6 @@ export async function runPass(store, { draft = true, searchImpl = searchJobs } =
     errors: result.errors,
     sources: result.sources,
   };
-  store.save(state);
+  await store.save(state);
   return state;
 }

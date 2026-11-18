@@ -1,4 +1,5 @@
 node_modules/
+.next/
 data/state.json
 data/resume.*
 data/drafts/

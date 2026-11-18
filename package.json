@@ -7,8 +7,18 @@
     "node": ">=20"
   },
   "scripts": {
-    "start": "node src/server.js",
+    "dev": "next dev",
+    "build": "next build && node scripts/migrate.mjs",
+    "start": "next start",
+    "local": "node src/server.js",
     "daily": "node src/daily.js",
     "test": "node --test"
+  },
+  "dependencies": {
+    "@electric-sql/pglite": "^0.3.0",
+    "next": "^15.5.0",
+    "pg": "^8.16.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
   }
 }

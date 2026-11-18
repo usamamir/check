@@ -24,6 +24,8 @@ The search string on the resume panel is there to paste into Google yourself. Da
 
 A resume, the sheet, and drafts stay in `data/`, which is gitignored.
 
+The hosted app stores each signed-in person's sheet in its own database row. Publish it as private or team so the resume is not on a public link.
+
 ## Daily run
 
 ```bash
