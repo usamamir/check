@@ -1,4 +1,5 @@
-/* Partial SKU search. Shopify matches a whole SKU token (25454rw) and misses the shared number (25454). */
+/* Partial SKU search. Shopify matches a whole SKU token (25454rw) and misses the shared number (25454).
+   Spaces and hyphens in a query are optional, so RS25, rs25, RS-25, and RS 25 match the same names. */
 (function () {
   var MAX_PAGE = 48;
   var MAX_SUGGEST = 8;
@@ -6,6 +7,13 @@
 
   function norm(value) {
     return String(value || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
+  }
+  function fold(value) {
+    return String(value || "").toLowerCase().replace(/[\s\-]+/g, "");
+  }
+  function modelCode(term) {
+    var folded = fold(term);
+    return folded.length >= 4 && /^[a-z]+\d/.test(folded);
   }
   function esc(value) {
     return String(value == null ? "" : value).replace(/[&<>"']/g, function (ch) {
@@ -34,18 +42,93 @@
     }
     return loadIndex.promise;
   }
+  function loadCatalog() {
+    if (!window.Jettribe || !Jettribe.catalogUrl) return Promise.resolve({ titles: {}, categories: {} });
+    if (!loadCatalog.promise) {
+      loadCatalog.promise = fetch(Jettribe.catalogUrl, { headers: { Accept: "application/json" } })
+        .then(function (res) { return res.ok ? res.json() : {}; })
+        .then(function (data) {
+          var titles = {};
+          var products = (data && data.products) || {};
+          Object.keys(products).forEach(function (handle) {
+            titles[handle] = (products[handle] && products[handle].title) || "";
+          });
+          return { titles: titles, categories: (data && data.categories) || {} };
+        })
+        .catch(function () { return { titles: {}, categories: {} }; });
+    }
+    return loadCatalog.promise;
+  }
+  function selectedCategory() {
+    var dept = document.querySelector("[data-search-dept]");
+    if (dept && dept.value) {
+      try {
+        var chosen = new URL(dept.value, window.location.origin).searchParams.get("jtcat");
+        if (chosen) return chosen;
+      } catch (err) {}
+    }
+    return new URLSearchParams(window.location.search).get("jtcat") || "";
+  }
+  function categoryAllow(catalog, cat) {
+    if (!cat || !catalog) return null;
+    var row = catalog.categories && catalog.categories[cat];
+    var products = row && row.products;
+    if (!products || !products.length) return null;
+    var allow = {};
+    products.forEach(function (handle) { allow[handle] = true; });
+    return allow;
+  }
+  function handleFromLink(link) {
+    var match = String(link.getAttribute("href") || "").match(/\/products\/([^/?#]+)/);
+    return match ? decodeURIComponent(match[1]) : "";
+  }
+  function dropOutside(rootEl, allow) {
+    if (!allow || !rootEl) return;
+    rootEl.querySelectorAll("a[href*='/products/']").forEach(function (link) {
+      var handle = handleFromLink(link);
+      if (!handle || allow[handle]) return;
+      var card = link.closest("article.card");
+      if (card) card.remove();
+      else if (!link.classList.contains("view-all")) link.remove();
+    });
+  }
   function matchHandles(term) {
     var query = norm(term);
+    var folded = fold(term);
     if (query.length < 4) return Promise.resolve([]);
-    return loadIndex().then(function (rows) {
+    return Promise.all([loadIndex(), loadCatalog()]).then(function (loaded) {
+      var rows = loaded[0] || [];
+      var catalog = loaded[1] || { titles: {}, categories: {} };
+      var titles = catalog.titles || {};
+      var seen = {};
       var handles = [];
-      (rows || []).forEach(function (row) {
-        if (!row || !row[0] || !row[1]) return;
-        if (row[1].indexOf(query) !== -1) handles.push(row[0]);
+      function add(handle) {
+        if (!handle || seen[handle]) return;
+        seen[handle] = true;
+        handles.push(handle);
+      }
+      function nameHit(handle, title) {
+        if (folded.length < 4) return false;
+        return fold(handle).indexOf(folded) !== -1 || fold(title).indexOf(folded) !== -1;
+      }
+      rows.forEach(function (row) {
+        if (!row || !row[0]) return;
+        var handle = String(row[0]);
+        var skus = String(row[1] || "");
+        if ((skus && skus.indexOf(query) !== -1) || nameHit(handle, titles[handle] || "")) add(handle);
       });
+      Object.keys(titles).forEach(function (handle) {
+        if (nameHit(handle, titles[handle])) add(handle);
+      });
+      var allow = categoryAllow(catalog, selectedCategory());
+      if (allow) handles = handles.filter(function (handle) { return allow[handle]; });
       handles.sort();
       return handles;
     });
+  }
+  function looseHit(term, text) {
+    var folded = fold(term);
+    return folded.length >= 4 && fold(text).indexOf(folded) !== -1;
   }
   function blocked(prod) {
     var title = String(prod.title || "").toLowerCase();
@@ -137,43 +220,96 @@
     });
     return found;
   }
+  function paintCount(mount, grid, term, matched) {
+    var count = grid.querySelectorAll("article.card").length;
+    var label = mount.querySelector("[data-result-count]");
+    if (!label) return;
+    var more = matched > count ? " Showing " + count + " of " + matched + "." : "";
+    label.textContent = count + " results for “" + term + "”" + more;
+  }
+  function dropLooseCards(grid, term) {
+    if (!modelCode(term)) return;
+    grid.querySelectorAll("article.card").forEach(function (card) {
+      if (card.hasAttribute("data-sku-match")) return;
+      var link = card.querySelector("a[href*='/products/']");
+      var blob = (card.textContent || "") + " " + (link ? link.getAttribute("href") || "" : "");
+      if (!looseHit(term, blob)) card.remove();
+    });
+    var empty = grid.querySelector(".empty-products");
+    if (empty && grid.querySelector("article.card")) empty.remove();
+  }
   function fillPage() {
     var mount = document.querySelector("[data-sku-search]");
     if (!mount) return;
     var term = mount.getAttribute("data-sku-term") || "";
     if (norm(term).length < 4) return;
     matchHandles(term).then(function (handles) {
-      if (!handles.length) return;
       var grid = mount.querySelector(".product-grid");
       if (!grid) return;
+      return loadCatalog().then(function (catalog) {
+        dropOutside(grid, categoryAllow(catalog, selectedCategory()));
+        return handles;
+      }).then(function () {
+      dropLooseCards(grid, term);
+      if (!handles.length) {
+        paintCount(mount, grid, term, grid.querySelectorAll("article.card").length);
+        return;
+      }
       var have = knownHandles(grid);
       var pending = handles.filter(function (handle) { return !have[handle]; }).slice(0, MAX_PAGE);
-      if (!pending.length) return;
+      if (!pending.length) {
+        paintCount(mount, grid, term, handles.length);
+        return;
+      }
       return Promise.all(pending.map(fetchProduct)).then(function (products) {
         var cards = products.filter(Boolean);
         cards.sort(function (a, b) { return String(a.title).localeCompare(String(b.title)); });
-        if (!cards.length) return;
-        var empty = grid.querySelector(".empty-products");
-        if (empty) empty.remove();
-        grid.insertAdjacentHTML("beforeend", cards.map(cardHtml).join(""));
-        var count = grid.querySelectorAll("article.card").length;
-        var label = mount.querySelector("[data-result-count]");
-        if (label) {
-          var more = handles.length > cards.length + Object.keys(have).length
-            ? " Showing " + count + " of " + handles.length + "."
-            : "";
-          label.textContent = count + " results for “" + term + "”" + more;
+        if (cards.length) {
+          var empty = grid.querySelector(".empty-products");
+          if (empty) empty.remove();
+          grid.insertAdjacentHTML("beforeend", cards.map(cardHtml).join(""));
+        } else if (!grid.querySelector("article.card") && !grid.querySelector(".empty-products")) {
+          grid.insertAdjacentHTML("beforeend", '<div class="empty-products"><p>No results. Try a product name, vest, wetsuit, or cover.</p></div>');
         }
+        paintCount(mount, grid, term, handles.length);
+      });
       });
     }).catch(function () {});
+  }
+  function dropLooseSuggestions(box, term) {
+    if (!modelCode(term)) return;
+    box.querySelectorAll("a:not(.view-all)").forEach(function (link) {
+      if (link.hasAttribute("data-sku-match")) return;
+      var blob = (link.textContent || "") + " " + (link.getAttribute("href") || "");
+      if (!looseHit(term, blob)) link.remove();
+    });
+  }
+  function limitCategory(box) {
+    return loadCatalog().then(function (catalog) {
+      dropOutside(box, categoryAllow(catalog, selectedCategory()));
+      box.hidden = !box.innerHTML.trim();
+    });
   }
   function fillPredictive(box, term) {
     if (!box) return;
     var mine = ++suggestStamp;
     var query = norm(term);
-    if (query.length < 4) return;
+    if (query.length < 4) {
+      limitCategory(box);
+      return;
+    }
     matchHandles(term).then(function (handles) {
-      if (mine !== suggestStamp || !handles.length) return;
+      if (mine !== suggestStamp) return;
+      return loadCatalog().then(function (catalog) {
+        if (mine !== suggestStamp) return handles;
+        dropOutside(box, categoryAllow(catalog, selectedCategory()));
+        return handles;
+      });
+    }).then(function (handles) {
+      if (mine !== suggestStamp || !handles) return;
+      dropLooseSuggestions(box, term);
+      box.hidden = !box.innerHTML.trim();
+      if (!handles.length) return;
       var have = knownHandles(box);
       var pending = handles.filter(function (handle) { return !have[handle]; }).slice(0, MAX_SUGGEST);
       if (!pending.length) return;

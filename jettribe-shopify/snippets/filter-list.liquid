@@ -12,7 +12,9 @@
   {%- endif -%}
 {%- endfor -%}
 
+{%- assign facet_kinds = "size,color,price" | split: "," -%}
 {%- if facet_filters != blank and facet_filters.size > 0 -%}
+  {%- for kind in facet_kinds -%}
   {%- for filter in facet_filters -%}
     {%- assign facet_label = filter.label | downcase -%}
     {%- assign facet_param = filter.param_name | downcase -%}
@@ -28,9 +30,13 @@
     {%- if facet_label contains 'size' or facet_param contains 'size' -%}
       {%- assign is_size = true -%}
     {%- endif -%}
+    {%- assign show_facet = false -%}
+    {%- if kind == "size" and is_size -%}{%- assign show_facet = true -%}{%- endif -%}
+    {%- if kind == "color" and is_color -%}{%- assign show_facet = true -%}{%- endif -%}
+    {%- if kind == "price" and is_price -%}{%- assign show_facet = true -%}{%- endif -%}
 
-    {%- comment -%} Only keep Size, Color, and Price facets on category pages. {%- endcomment -%}
-    {%- unless is_size or is_color or is_price -%}
+    {%- comment -%} Only keep Size, Color, and Price, in that order. {%- endcomment -%}
+    {%- unless show_facet -%}
       {%- continue -%}
     {%- endunless -%}
 
@@ -133,6 +139,18 @@
       {%- endif -%}
     </details>
   {%- endfor -%}
+  {%- if kind == "size" and has_size_filter == false -%}
+    <details class="facet" open data-client-sizes hidden>
+      <summary>Size</summary>
+      <div class="size-chips" data-client-size-list></div>
+    </details>
+  {%- elsif kind == "color" and has_color_filter == false -%}
+    <details class="facet" open data-client-colors hidden>
+      <summary>Color</summary>
+      <div class="color-swatches" data-client-color-list></div>
+    </details>
+  {%- endif -%}
+  {%- endfor -%}
 {%- elsif show_shop_fallback -%}
   <div class="facet">
     <div class="side-heading">Shop</div>
@@ -146,15 +164,13 @@
   </div>
 {%- endif -%}
 
-{%- unless has_color_filter -%}
-  <details class="facet" open data-client-colors hidden>
-    <summary>Color</summary>
-    <div class="color-swatches" data-client-color-list></div>
-  </details>
-{%- endunless -%}
-{%- unless has_size_filter -%}
+{%- if facet_filters == blank or facet_filters.size == 0 -%}
   <details class="facet" open data-client-sizes hidden>
     <summary>Size</summary>
     <div class="size-chips" data-client-size-list></div>
   </details>
-{%- endunless -%}
+  <details class="facet" open data-client-colors hidden>
+    <summary>Color</summary>
+    <div class="color-swatches" data-client-color-list></div>
+  </details>
+{%- endif -%}

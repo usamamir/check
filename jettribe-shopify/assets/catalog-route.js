@@ -440,7 +440,24 @@
     }
     return collect(1, []).catch(function () { return null; });
   }
-  function renderCategory(mount, data, handle, live, tagged) {
+    function loadSkuMap() {
+      var url = window.Jettribe && Jettribe.skuIndexUrl;
+      if (!url) return Promise.resolve({});
+      if (!loadSkuMap.promise) {
+        loadSkuMap.promise = fetch(url, { headers: { Accept: "application/json" } })
+          .then(function (res) { return res.ok ? res.json() : []; })
+          .then(function (rows) {
+            var map = {};
+            (rows || []).forEach(function (row) {
+              if (row && row[0]) map[row[0]] = row[1] || "";
+            });
+            return map;
+          })
+          .catch(function () { return {}; });
+      }
+      return loadSkuMap.promise;
+    }
+    function renderCategory(mount, data, handle, live, tagged, skuMap) {
     var cat = data.categories[handle];
     var params = new URLSearchParams(window.location.search);
     var sort = params.get("sort") || "featured";
@@ -450,17 +467,28 @@
     var max = params.get("max") === null || params.get("max") === "" ? null : Number(params.get("max"));
     var queryRaw = (params.get("q") || "").trim();
     var query = queryRaw.toLowerCase();
+    function foldQuery(value) {
+      return String(value || "").toLowerCase().replace(/[\s\-]+/g, "");
+    }
     function matchesQuery(meta) {
       if (!query) return true;
       var hay = ((meta.title || "") + " " + (meta.handle || "")).toLowerCase();
       if (hay.indexOf(query) !== -1) return true;
       var live = meta.live;
-      if (!live) return false;
-      var skuBlob = ((live.variants || []).map(function (variant) { return variant.sku || ""; }).join(" ") + " " + (live.title || "")).toLowerCase();
-      if (skuBlob.indexOf(query) !== -1) return true;
-      var compact = skuBlob.toUpperCase().replace(/[^A-Z0-9]/g, "");
+      var skuBlob = String(meta.skus || "");
+      if (live) {
+        skuBlob = ((live.variants || []).map(function (variant) { return variant.sku || ""; }).join(" ") + " " + (live.title || "") + " " + skuBlob).toLowerCase();
+        if (skuBlob.indexOf(query) !== -1) return true;
+      } else {
+        skuBlob = skuBlob.toLowerCase();
+        if (skuBlob && skuBlob.indexOf(query) !== -1) return true;
+      }
+      var folded = foldQuery(query);
+      if (folded && foldQuery(hay + " " + skuBlob).indexOf(folded) !== -1) return true;
       var needle = query.toUpperCase().replace(/[^A-Z0-9]/g, "");
-      return !!(needle && compact.indexOf(needle) !== -1);
+      if (!needle || needle.length < 4) return false;
+      var compact = (hay + " " + skuBlob).toUpperCase().replace(/[^A-Z0-9]/g, "");
+      return compact.indexOf(needle) !== -1;
     }
     var page = 1;
     var per = 10000;
@@ -468,11 +496,16 @@
     var seenHandles = {};
     var handleKey = String(handle || "").toLowerCase();
     var keys = categoryKeys(data);
+    skuMap = skuMap || {};
+    var allowed = {};
+    (cat.products || []).forEach(function (productHandle) { allowed[productHandle] = true; });
+    var restrict = (cat.products || []).length > 0;
     function addLive(prod) {
       var meta = metaFromLive(prod);
-      if (!meta.handle || seenHandles[meta.handle] || !showOnSite(meta.live, meta)) return;
+      if (!meta.handle || seenHandles[meta.handle] || (restrict && !allowed[meta.handle]) || !showOnSite(meta.live, meta)) return;
       seenHandles[meta.handle] = true;
       meta.locked = true;
+      meta.skus = skuMap[meta.handle] || "";
       metas.push(meta);
     }
     (live || []).forEach(addLive);
@@ -490,7 +523,8 @@
         sizes: canonicalSizes(row.sizes),
         available: row.available !== false,
         image: row.image || "",
-        saved: true
+        saved: true,
+        skus: skuMap[productHandle] || ""
       };
       if (!showOnSite(null, saved)) return;
       seenHandles[productHandle] = true;
@@ -780,8 +814,8 @@
     .then(function (data) {
       var key = resolveCategory(data, handle);
       if (key) {
-        loadCategoryLists(data, key).then(function (lists) {
-          renderCategory(mount, data, key, lists[0], lists[1]);
+        Promise.all([loadCategoryLists(data, key), loadSkuMap()]).then(function (parts) {
+          renderCategory(mount, data, key, parts[0][0], parts[0][1], parts[1]);
         });
         return;
       }

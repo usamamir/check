@@ -164,6 +164,7 @@ button.linkish { background: none; border: 0; padding: 0; font: inherit; cursor:
 .tx-time { font-weight: 600; white-space: nowrap; }
 .util-bar .sep { opacity: 0.45; }
 
+.header { position: relative; z-index: 10090; }
 .header-main, .site-nav { background: #292f36; color: #fff; }
 .header-main { border-bottom: 0; }
 .header-main-inner {
