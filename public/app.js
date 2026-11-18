@@ -39,8 +39,10 @@ function shortDate(value) {
   return date.toLocaleDateString(undefined, { month: "short", day: "numeric" });
 }
 
-async function api(path, options) {
-  const response = await fetch(path, options);
+async function api(path, options = {}) {
+  const headers = new Headers(options.headers || {});
+  headers.set("x-daybook-request", "1");
+  const response = await fetch(path, { ...options, headers });
   const type = response.headers.get("content-type") || "";
   const data = type.includes("json") ? await response.json() : null;
   if (!response.ok) throw new Error(data?.error || `Request failed (${response.status})`);

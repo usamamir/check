@@ -8,6 +8,11 @@ import { createServer } from "../src/server.js";
 import { prepareJob } from "../src/search.js";
 import { analyzeResume, STARTER_TEXT } from "../src/analyze.js";
 
+function write(url, options = {}) {
+  const headers = { "x-daybook-request": "1", ...(options.headers || {}) };
+  return fetch(url, { ...options, headers });
+}
+
 async function withServer(searchImpl, fn) {
   const dir = await mkdtemp(path.join(tmpdir(), "daybook-"));
   const { server } = createServer({ dataDir: dir, searchImpl });
@@ -62,7 +67,7 @@ test("a pass writes drafts without inventing an address", async () => {
     assert.equal(first.profile.sample, true);
     assert.equal(first.profile.name, "Steph John");
 
-    const passed = await fetch(`${base}/api/pass`, { method: "POST" }).then((response) => response.json());
+    const passed = await write(`${base}/api/pass`, { method: "POST" }).then((response) => response.json());
     assert.equal(passed.lastRun.added, 2);
     assert.equal(passed.lastRun.drafted, 2);
     const north = passed.jobs.find((job) => job.company === "Northwind");
@@ -80,7 +85,7 @@ test("a pass writes drafts without inventing an address", async () => {
     assert.match(northMail, /filename="resume.txt"/);
     assert.doesNotMatch(contosoMail, /hr@|careers@/i);
 
-    const again = await fetch(`${base}/api/pass`, { method: "POST" }).then((response) => response.json());
+    const again = await write(`${base}/api/pass`, { method: "POST" }).then((response) => response.json());
     assert.equal(again.lastRun.added, 0);
     assert.equal(again.lastRun.drafted, 0);
     assert.equal(again.jobs.find((job) => job.id === north.id).coverLetter, north.coverLetter);
@@ -90,7 +95,10 @@ test("a pass writes drafts without inventing an address", async () => {
     assert.match(csv, /Contoso/);
     assert.match(csv, /recruiter@northwind.test/);
 
-    const empty = await fetch(`${base}/api/resume`, {
+    const blockedWrite = await fetch(`${base}/api/pass`, { method: "POST" });
+    assert.equal(blockedWrite.status, 403);
+
+    const empty = await write(`${base}/api/resume`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ text: "too short" }),
@@ -109,7 +117,7 @@ test("pdf upload replaces the starter profile", async () => {
     Buffer.from("\nendstream\n%%EOF\n"),
   ]);
   await withServer(async () => ({ jobs: [], windowDays: 3, considered: 0, errors: [], sources: [] }), async (base) => {
-    const response = await fetch(`${base}/api/resume/file`, {
+    const response = await write(`${base}/api/resume/file`, {
       method: "POST",
       headers: { "Content-Type": "application/pdf" },
       body: pdf,
@@ -126,7 +134,7 @@ test("pdf upload replaces the starter profile", async () => {
 
 test("pasted posting gets a letter and keeps an edited status", async () => {
   await withServer(async () => ({ jobs: [], windowDays: 3, considered: 0, errors: [], sources: [] }), async (base) => {
-    const created = await fetch(`${base}/api/jobs`, {
+    const created = await write(`${base}/api/jobs`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -139,7 +147,7 @@ test("pasted posting gets a letter and keeps an edited status", async () => {
     const job = created.jobs.find((item) => item.company === "Fabrikam");
     assert.match(job.coverLetter, /Fabrikam is hiring an Ecommerce Manager/);
     assert.equal(job.contactEmail, "");
-    const updated = await fetch(`${base}/api/jobs/${job.id}`, {
+    const updated = await write(`${base}/api/jobs/${job.id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ status: "skipped", coverLetter: "Edited letter for Fabrikam." }),
@@ -155,4 +163,15 @@ test("pasted posting gets a letter and keeps an edited status", async () => {
 
 test("analyzer fixture stays free of the starter email", () => {
   assert.equal(analyzeResume(STARTER_TEXT).email, "");
+});
+
+test("a search pass cannot be repeated immediately", async () => {
+  const { passAllowed } = await import("../src/http.js");
+  const now = Date.parse("2026-11-18T12:00:00Z");
+  const first = passAllowed({ passLog: [] }, now);
+  assert.equal(first.ok, true);
+  const second = passAllowed({ passLog: first.log }, now + 10_000);
+  assert.equal(second.ok, false);
+  const later = passAllowed({ passLog: first.log }, now + 70_000);
+  assert.equal(later.ok, true);
 });

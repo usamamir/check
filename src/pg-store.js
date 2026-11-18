@@ -27,7 +27,12 @@ export function openPgStore(ownerKey) {
       return asState(rows[0].state);
     },
     async save(state) {
-      const clean = { profile: state.profile, jobs: state.jobs, lastRun: state.lastRun };
+      const clean = {
+        profile: state.profile,
+        jobs: state.jobs,
+        lastRun: state.lastRun,
+        passLog: state.passLog || [],
+      };
       await sql(
         `insert into daybook_state (owner, state)
          values ($1, $2::jsonb)

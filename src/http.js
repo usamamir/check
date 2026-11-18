@@ -70,17 +70,48 @@ function parseJson(buffer) {
   }
 }
 
-function assertSameSite(request) {
+function assertBrowserWrite(request) {
+  if (request.headers.get("x-daybook-request") !== "1") {
+    fail(403, "Open Daybook and use the buttons on the page.");
+  }
   const site = request.headers.get("sec-fetch-site");
   if (site && site !== "same-origin" && site !== "same-site" && site !== "none") {
     fail(403, "That request came from another site.");
   }
+  const origin = request.headers.get("origin");
+  if (!origin) return;
+  let originHost = "";
+  try {
+    originHost = new URL(origin).host;
+  } catch {
+    fail(403, "That request came from another site.");
+  }
+  const hosts = [request.headers.get("x-forwarded-host"), request.headers.get("host")]
+    .flatMap((value) => String(value || "").split(","))
+    .map((value) => value.trim())
+    .filter(Boolean);
+  if (hosts.length && !hosts.includes(originHost)) fail(403, "That request came from another site.");
+}
+
+const MINUTE = 60 * 1000;
+const DAY = 24 * 60 * MINUTE;
+
+export function passAllowed(state, now = Date.now()) {
+  const log = (state.passLog || []).filter((stamp) => now - Date.parse(stamp) < DAY);
+  const last = log.length ? Date.parse(log[log.length - 1]) : 0;
+  if (last && now - last < MINUTE) {
+    return { ok: false, error: "Wait a minute before searching again.", log };
+  }
+  if (log.length >= 24) {
+    return { ok: false, error: "Search limit reached for today. Try again tomorrow.", log };
+  }
+  return { ok: true, log: [...log, new Date(now).toISOString()] };
 }
 
 export async function handleApi(request, store, searchImpl) {
   const url = new URL(request.url);
   const method = request.method;
-  if (method === "POST" || method === "PATCH") assertSameSite(request);
+  if (method === "POST" || method === "PATCH") assertBrowserWrite(request);
 
   if (method === "GET" && url.pathname === "/api/state") {
     return json(await store.load());

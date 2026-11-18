@@ -1,5 +1,5 @@
 import { getIdentity } from "../../../cursor/identity.js";
-import { handleWeb } from "../../../src/http.js";
+import { handleWeb, passAllowed } from "../../../src/http.js";
 import { openStore } from "../../../src/store.js";
 import { openPgStore } from "../../../src/pg-store.js";
 import path from "node:path";
@@ -18,9 +18,30 @@ async function respond(request) {
     );
   }
   const database = process.env.DATABASE_URL?.trim() ?? "";
-  const store = !identity.simulated && database !== ""
-    ? openPgStore(`${identity.stage === "preview" ? "preview" : "production"}:${identity.sub}`)
-    : openStore(dataDir);
+  let store;
+  if (identity.simulated) {
+    store = openStore(dataDir);
+  } else if (database === "") {
+    return Response.json(
+      { error: "Daybook is not ready until its database is connected." },
+      { status: 503, headers: { "cache-control": "private, no-store" } },
+    );
+  } else {
+    const stage = identity.stage === "preview" ? "preview" : "production";
+    store = openPgStore(`${stage}:${identity.sub}`);
+  }
+  if (request.method === "POST" && new URL(request.url).pathname === "/api/pass") {
+    const state = await store.load();
+    const decision = passAllowed(state);
+    if (!decision.ok) {
+      return Response.json(
+        { error: decision.error },
+        { status: 429, headers: { "cache-control": "private, no-store" } },
+      );
+    }
+    state.passLog = decision.log;
+    await store.save(state);
+  }
   return handleWeb(request, { store });
 }
 
