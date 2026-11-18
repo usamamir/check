@@ -4,6 +4,10 @@ One local job desk. It reads a resume, builds a search string, checks open job f
 
 It does not use Google Drive, Gmail, Sheets, Gemini, SerpAPI, or n8n. It does not sign in to LinkedIn, Indeed, or Google, and it does not send email.
 
+## Windows
+
+Double-click `Daybook.exe`. It opens Daybook in your browser. Click **Quit Daybook** at the bottom when you are done. If Windows says it protected your PC, click **More info**, then **Run anyway**.
+
 ## Run
 
 ```bash

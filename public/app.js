@@ -308,3 +308,21 @@ document.querySelector("#paste-form").addEventListener("submit", async (event) =
 });
 
 api("/api/state").then((next) => refresh(next)).catch((error) => say(error.message));
+
+fetch("/api/desktop").then(async (response) => {
+  if (!response.ok) return;
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = "secondary";
+  button.textContent = "Quit Daybook";
+  button.addEventListener("click", async () => {
+    await fetch("/api/quit", { method: "POST", headers: { "x-daybook-request": "1" } });
+    document.body.replaceChildren();
+    const note = document.createElement("p");
+    note.textContent = "Daybook is closed. You can close this window.";
+    note.style.padding = "40px";
+    note.style.fontSize = "20px";
+    document.body.append(note);
+  });
+  document.querySelector("footer")?.prepend(button);
+}).catch(() => {});

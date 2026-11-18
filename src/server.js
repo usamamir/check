@@ -14,20 +14,6 @@ const TYPES = {
   ".js": "text/javascript; charset=utf-8",
 };
 
-function publicFile(urlPath) {
-  if (urlPath === "/" || urlPath === "/index.html") return PAGE;
-  let requested = "";
-  try {
-    requested = decodeURIComponent(urlPath).replace(/^\/+/, "");
-  } catch {
-    return null;
-  }
-  if (!requested || requested.includes("\0")) return null;
-  const full = path.resolve(PUBLIC_DIR, requested);
-  if (full !== PUBLIC_DIR && !full.startsWith(`${PUBLIC_DIR}${path.sep}`)) return null;
-  return full;
-}
-
 async function toWebRequest(req) {
   const host = req.headers.host || "127.0.0.1";
   const url = new URL(req.url || "/", `http://${host}`);
@@ -42,11 +28,44 @@ async function toWebRequest(req) {
   return new Request(url, { method: req.method, headers, body: Buffer.concat(chunks) });
 }
 
-export function createServer({ dataDir = path.join(root, "data"), searchImpl } = {}) {
+export function createServer({
+  dataDir = path.join(root, "data"),
+  searchImpl,
+  pagePath = PAGE,
+  publicDir = PUBLIC_DIR,
+  allowQuit = false,
+} = {}) {
   const store = openStore(dataDir);
+  const publicRoot = path.resolve(publicDir);
+  function resolveFile(urlPath) {
+    if (urlPath === "/" || urlPath === "/index.html") return pagePath;
+    let requested = "";
+    try {
+      requested = decodeURIComponent(urlPath).replace(/^\/+/, "");
+    } catch {
+      return null;
+    }
+    if (!requested || requested.includes("\0")) return null;
+    const full = path.resolve(publicRoot, requested);
+    if (full !== publicRoot && !full.startsWith(`${publicRoot}${path.sep}`)) return null;
+    return full;
+  }
   const server = createHttpServer(async (req, res) => {
     try {
       const url = new URL(req.url || "/", "http://127.0.0.1");
+      const remote = req.socket.remoteAddress || "";
+      const local = remote === "127.0.0.1" || remote === "::1" || remote === "::ffff:127.0.0.1";
+      if (allowQuit && local && req.method === "GET" && url.pathname === "/api/desktop") {
+        res.writeHead(200, { "content-type": "application/json", "cache-control": "no-store" });
+        res.end(JSON.stringify({ desktop: true }));
+        return;
+      }
+      if (allowQuit && local && req.method === "POST" && url.pathname === "/api/quit") {
+        res.writeHead(200, { "content-type": "application/json", "cache-control": "no-store" });
+        res.end(JSON.stringify({ ok: true }));
+        setTimeout(() => process.exit(0), 150);
+        return;
+      }
       if (url.pathname.startsWith("/api/")) {
         const response = await handleWeb(await toWebRequest(req), { store, searchImpl });
         const headers = {};
@@ -62,7 +81,7 @@ export function createServer({ dataDir = path.join(root, "data"), searchImpl } =
         res.end(JSON.stringify({ error: "Not found." }));
         return;
       }
-      const file = publicFile(url.pathname);
+      const file = resolveFile(url.pathname);
       let stat;
       try {
         stat = statSync(file || "");
