@@ -30,9 +30,13 @@ export function extractContact(description, ignoreEmail = "") {
   );
   let contactName = named ? named[1].trim() : "";
   if (/^(Hiring|The|Our|Team|Manager)\b/.test(contactName)) contactName = "";
+  const phoneMatch = plain.match(/(?:\+\d{1,3}[\s.-]?)?(?:\(?\d{3}\)?[\s.-])\d{3}[\s.-]\d{4}/);
+  const linkedinMatch = plain.match(/https?:\/\/(?:[\w.-]+\.)?linkedin\.com\/[^\s<>"')]+/i);
   return {
     contactEmail: emails[0] || "",
     contactName,
+    contactPhone: phoneMatch ? phoneMatch[0].trim() : "",
+    contactLinkedin: linkedinMatch ? linkedinMatch[0].replace(/[.,;]+$/, "") : "",
   };
 }
 
@@ -107,6 +111,8 @@ export function prepareJob(raw, profile, now = Date.now()) {
     summary: "",
     contactName: contact.contactName,
     contactEmail: contact.contactEmail,
+    contactPhone: contact.contactPhone,
+    contactLinkedin: contact.contactLinkedin,
     matchScore: scored.matchScore,
     matchedTerms: scored.matchedTerms,
     relevant: scored.relevant,
@@ -132,13 +138,8 @@ export function selectJobs(rawJobs, profile, { now = Date.now(), minimum = 5 } =
     prepared
       .filter((job) => withinDays(job.postedAt, now, days))
       .sort((a, b) => b.matchScore - a.matchScore || String(b.postedAt).localeCompare(String(a.postedAt)));
-  let windowDays = 3;
-  let jobs = pick(3);
-  if (jobs.length < minimum) {
-    windowDays = 14;
-    jobs = pick(14);
-  }
-  return { jobs: jobs.slice(0, 40), windowDays, considered: prepared.length };
+  const jobs = pick(3).slice(0, 150);
+  return { jobs, windowDays: 3, considered: prepared.length, minimum };
 }
 
 async function getJson(url, fetchImpl) {
@@ -209,8 +210,22 @@ async function loadArbeitnow(fetchImpl) {
   }));
 }
 
+async function loadMuse(page, fetchImpl) {
+  const url = `https://www.themuse.com/api/public/jobs?page=${page}&descending=true`;
+  const data = await getJson(url, fetchImpl);
+  return (data.results || []).map((job) => ({
+    source: "The Muse",
+    title: job.name,
+    company: job.company?.name,
+    location: (job.locations || []).map((item) => item.name).filter(Boolean).join(", ") || "Remote",
+    url: job.refs?.landing_page || "",
+    postedAt: asIso(job.publication_date),
+    description: `${job.contents || ""}\n${(job.categories || []).map((item) => item.name).join(" ")}`,
+  }));
+}
+
 async function loadJobicy(tag, fetchImpl) {
-  const url = `https://jobicy.com/api/v2/remote-jobs?count=20&tag=${encodeURIComponent(tag)}`;
+  const url = `https://jobicy.com/api/v2/remote-jobs?count=50&tag=${encodeURIComponent(tag)}`;
   const data = await getJson(url, fetchImpl);
   return (data.jobs || []).map((job) => ({
     source: "Jobicy",
@@ -238,12 +253,14 @@ const JOBICY_TAGS = new Map([
 export async function searchJobs(profile, { fetchImpl = fetch, now = Date.now() } = {}) {
   const terms = feedTerms(profile);
   const requests = [];
-  const remotiveTerms = (terms.length ? terms : ["ecommerce"]).slice(0, 2);
+  const remotiveTerms = (terms.length ? terms : ["ecommerce"]).slice(0, 4);
   for (const term of remotiveTerms) {
     requests.push({ name: "Remotive", run: () => loadRemotive(term, fetchImpl) });
   }
   requests.push({ name: "Remote OK", run: () => loadRemoteOk(fetchImpl) });
   requests.push({ name: "Arbeitnow", run: () => loadArbeitnow(fetchImpl) });
+  requests.push({ name: "The Muse", run: () => loadMuse(0, fetchImpl) });
+  requests.push({ name: "The Muse", run: () => loadMuse(1, fetchImpl) });
   const jobicyTags = [];
   for (const term of terms) {
     const tag = JOBICY_TAGS.get(term.toLowerCase());

@@ -219,6 +219,16 @@ export function parseExtraTerms(value) {
     .slice(0, 8);
 }
 
+export function resumeBrief({ name, years, skills, searchTitles }) {
+  const who = name || "This resume";
+  const yearText = years ? `${years} years of experience` : "the experience on the page";
+  const skillText = (skills || []).slice(0, 6).join(", ");
+  const titleText = (searchTitles || []).slice(0, 4).join(", ");
+  const skillSentence = skillText ? ` Tools and skills that stand out: ${skillText}.` : "";
+  const titleSentence = titleText ? ` Job search words: ${titleText}.` : "";
+  return `${who} shows ${yearText}.${skillSentence}${titleSentence}`.replace(/\s+/g, " ").trim();
+}
+
 export function analyzeResume(text, extraTerms = []) {
   const rawText = String(text || "").replace(/\r\n/g, "\n").trim();
   const skills = detectSkills(rawText);
@@ -227,17 +237,21 @@ export function analyzeResume(text, extraTerms = []) {
   const extras = parseExtraTerms(Array.isArray(extraTerms) ? extraTerms.join(", ") : extraTerms);
   const sharpSkills = skills.filter((skill) => DISTINCTIVE.has(skill));
   const querySkills = (sharpSkills.length ? sharpSkills : skills).slice(0, 6);
+  const name = detectName(rawText);
+  const years = detectYears(rawText);
   return {
-    name: detectName(rawText),
+    name,
     email: detectEmail(rawText),
     phone: detectPhone(rawText),
-    years: detectYears(rawText),
+    years,
     skills,
     titles,
     searchTitles,
     extraTerms: extras,
     highlights: detectHighlights(rawText),
     query: buildQuery(searchTitles, querySkills, extras),
+    keywords: [...searchTitles, ...querySkills, ...extras],
+    brief: resumeBrief({ name, years, skills, searchTitles }),
     rawText,
     resumeFile: "",
     sample: false,

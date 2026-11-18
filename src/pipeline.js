@@ -44,6 +44,8 @@ export function mergeJobs(existing, incoming, now = new Date().toISOString()) {
       summary: summary || previous.summary,
       contactName: job.contactName || previous.contactName,
       contactEmail: job.contactEmail || previous.contactEmail,
+      contactPhone: job.contactPhone || previous.contactPhone,
+      contactLinkedin: job.contactLinkedin || previous.contactLinkedin,
       matchScore: job.matchScore,
       matchedTerms: job.matchedTerms,
     });

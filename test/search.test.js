@@ -26,17 +26,14 @@ test("keeps a 3-day window when there are enough matches", () => {
   assert.ok(selected.jobs.every((job) => !job.url.endsWith("/old")));
 });
 
-test("widens to 14 days when the recent window is thin", () => {
+test("keeps only postings from the last 3 days", () => {
   const selected = selectJobs(
     [listing("Ecommerce Manager", 1, { url: "https://example.com/jobs/new" }), listing("Shopify Manager", 10, { url: "https://example.com/jobs/older" }), listing("Ecommerce Manager", 20, { url: "https://example.com/jobs/ancient" })],
     profile,
-    { now, minimum: 5 },
+    { now },
   );
-  assert.equal(selected.windowDays, 14);
-  assert.deepEqual(selected.jobs.map((job) => job.url).sort(), [
-    "https://example.com/jobs/new",
-    "https://example.com/jobs/older",
-  ]);
+  assert.equal(selected.windowDays, 3);
+  assert.deepEqual(selected.jobs.map((job) => job.url), ["https://example.com/jobs/new"]);
 });
 
 test("hyphenated commerce titles count, analyst titles do not", () => {
@@ -84,9 +81,11 @@ test("drops unrelated roles and undated roles", () => {
 });
 
 test("contact comes only from the posting", () => {
-  const found = extractContact("Recruiter: Jane Doe. Write recruiter@northwind.test or noreply@northwind.test.", "steph.john@mailbox.test");
+  const found = extractContact("Recruiter: Jane Doe. Write recruiter@northwind.test or noreply@northwind.test. Call 415-555-0199. https://www.linkedin.com/in/jane-doe", "steph.john@mailbox.test");
   assert.equal(found.contactName, "Jane Doe");
   assert.equal(found.contactEmail, "recruiter@northwind.test");
+  assert.equal(found.contactPhone, "415-555-0199");
+  assert.equal(found.contactLinkedin, "https://www.linkedin.com/in/jane-doe");
   const none = extractContact("Contact the Hiring Manager. Email steph.john@mailbox.test and noreply@northwind.test.", "steph.john@mailbox.test");
   assert.equal(none.contactName, "");
   assert.equal(none.contactEmail, "");

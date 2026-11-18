@@ -61,7 +61,8 @@ function renderProfile() {
   profileEl.innerHTML = `
     <p class="who">${esc(profile.name || "Name not found")}</p>
     <p class="years">${esc(years)}${contact ? ` · ${esc(contact)}` : ""}</p>
-    <ul class="chips">${skills.map((skill) => `<li>${esc(skill)}</li>`).join("") || "<li>No skills picked out yet</li>"}</ul>
+    <p>${esc(profile.brief || "")}</p>
+    <ul class="chips">${(profile.keywords || skills).map((skill) => `<li>${esc(skill)}</li>`).join("") || "<li>No search words yet</li>"}</ul>
     <p class="quiet">Search string. Paste it into Google and set the date to the past 3 days if you want to look there yourself.</p>
     <pre class="query" id="query">${esc(profile.query || "Paste a resume to build a search string.")}</pre>
     <button class="secondary" type="button" id="copy-query">Copy search string</button>
@@ -107,7 +108,7 @@ function renderSheet() {
         <button class="title-button" type="button" data-action="open" data-id="${esc(job.id)}">${esc(job.title)}</button>
         <p class="meta">${esc(job.company)} · ${esc(job.location || "Location not listed")} · ${esc(shortDate(job.postedAt))} · ${esc(job.source)}</p>
         <p class="summary">${esc(job.summary || "")}</p>
-        <p class="meta">${job.contactEmail ? esc(job.contactEmail) : "No email on the posting"}${job.contactName ? ` · ${esc(job.contactName)}` : ""} · ${esc(statusLabel(job.status))}</p>
+        <p class="meta">${job.contactEmail ? esc(job.contactEmail) : "No email on the posting"}${job.contactPhone ? ` · ${esc(job.contactPhone)}` : ""}${job.contactLinkedin ? " · LinkedIn listed" : ""}${job.contactName ? ` · ${esc(job.contactName)}` : ""} · ${esc(statusLabel(job.status))}</p>
       </div>
     </article>
   `).join("");

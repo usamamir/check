@@ -94,6 +94,11 @@ test("a pass writes drafts without inventing an address", async () => {
     assert.match(csv, /Northwind/);
     assert.match(csv, /Contoso/);
     assert.match(csv, /recruiter@northwind.test/);
+    const xlsx = Buffer.from(await fetch(`${base}/api/sheet.xlsx`).then((response) => response.arrayBuffer()));
+    assert.equal(xlsx.readUInt32LE(0), 0x04034b50);
+    assert.match(xlsx.toString("utf8"), /Northwind/);
+    assert.match(xlsx.toString("utf8"), /Job link/);
+    assert.match(xlsx.toString("utf8"), /recruiter@northwind.test/);
 
     const blockedWrite = await fetch(`${base}/api/pass`, { method: "POST" });
     assert.equal(blockedWrite.status, 403);

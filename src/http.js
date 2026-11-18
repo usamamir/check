@@ -4,6 +4,7 @@ import { pdfToText } from "./pdf.js";
 import { mergeJobs, rewriteLetter, runPass, sortJobs } from "./pipeline.js";
 import { buildEml, subjectFor } from "./draft.js";
 import { csvField } from "./text.js";
+import { workbook } from "./xlsx.js";
 
 const STATUSES = new Set(["new", "saved", "draft", "applied", "skipped"]);
 
@@ -36,7 +37,7 @@ async function readLimited(request, limit) {
 }
 
 function sheetCsv(state) {
-  const header = ["Found", "Title", "Company", "Location", "URL", "Posted", "Match", "Contact", "Email", "Status", "Summary", "Source"];
+  const header = ["Found", "Title", "Company", "Location", "URL", "Posted", "Match", "Contact", "Email", "Phone", "LinkedIn", "Status", "Summary", "Source"];
   const rows = state.jobs.map((job) => [
     job.firstSeenAt,
     job.title,
@@ -47,6 +48,8 @@ function sheetCsv(state) {
     job.matchScore,
     job.contactName,
     job.contactEmail,
+    job.contactPhone,
+    job.contactLinkedin,
     job.status,
     job.summary,
     job.source,
@@ -115,6 +118,15 @@ export async function handleApi(request, store, searchImpl) {
 
   if (method === "GET" && url.pathname === "/api/state") {
     return json(await store.load());
+  }
+  if (method === "GET" && url.pathname === "/api/sheet.xlsx") {
+    return new Response(workbook(await store.load()), {
+      headers: {
+        "content-type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        "content-disposition": "attachment; filename=\"daybook-jobs.xlsx\"",
+        "cache-control": "private, no-store",
+      },
+    });
   }
   if (method === "GET" && url.pathname === "/api/sheet.csv") {
     return new Response(sheetCsv(await store.load()), {
