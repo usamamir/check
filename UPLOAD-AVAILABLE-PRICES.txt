@@ -1,0 +1,13 @@
+Show available variant prices on listings (not $0 OOS defaults)
+
+Universal theme rule: category/search cards use the lowest price among in-stock variants with a real price. Example: Vest Strap Replacement shows Now: $5.00 from available White, instead of $0.00 from an out-of-stock default.
+
+1) Themes → Upload + Preview (required for the listing fix):
+
+https://raw.githubusercontent.com/usamamir/check/cursor/jettribe-shopify-theme-86d6/jettribe-theme-FIXED.zip
+
+2) Optional — restore real prices on Vest Strap SKUs still at $0 in Admin (White is already $5; Black/Blue/Grey/Red should be $7.39):
+
+https://raw.githubusercontent.com/usamamir/check/cursor/jettribe-shopify-theme-86d6/jettribe-fix-available-prices.csv
+
+Products → Import → Overwrite matching handles. Do not open in Excel.

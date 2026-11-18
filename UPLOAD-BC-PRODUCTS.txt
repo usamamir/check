@@ -1,0 +1,12 @@
+Shopify admin → Products → Import
+File: jettribe-bc-products.csv
+Check Overwrite products with matching handles.
+Do not open the file in Excel.
+
+This file is the BigCommerce catalog. Each product is the parent. The rows under it are the child SKUs. Inventory quantity is the BigCommerce stock count.
+
+549 products that are visible in BigCommerce come in as active. 1,673 hidden BigCommerce products come in as drafts, so their SKUs exist for inventory and do not show on the site.
+
+Tracked items are set to stop selling at quantity 0. After this import, import the weight file again so any new products get their SKU Labs weight.
+
+If the store uses more than one inventory location, Shopify ignores the quantity column. In that case the products and SKUs still load, and the counts are entered under Products → Inventory.

@@ -1,0 +1,14 @@
+Fix $0.00 prices (full BigCommerce sheet)
+
+Products → Import. Check Overwrite products with matching handles. Do not open in Excel.
+
+Use the new full-catalog file built from your Drive sheet:
+
+https://raw.githubusercontent.com/usamamir/check/cursor/jettribe-shopify-theme-86d6/jettribe-bc-prices.csv
+
+Steps: https://raw.githubusercontent.com/usamamir/check/cursor/jettribe-shopify-theme-86d6/UPLOAD-BC-PRICES.txt
+
+Do not use jettribe-fix-prices-and-sizes.csv anymore — it only fixed ~1048 products.
+
+Theme (size filters + product page):
+https://raw.githubusercontent.com/usamamir/check/cursor/jettribe-shopify-theme-86d6/jettribe-theme-nov14-20261114-0845.zip

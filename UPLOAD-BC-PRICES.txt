@@ -1,0 +1,19 @@
+Shopify prices from the BigCommerce product sheet
+
+Products → Import. Check Overwrite products with matching handles. Do not open in Excel.
+
+Use this file (full catalog from your Drive sheet — 2203 products, every variant priced):
+
+https://raw.githubusercontent.com/usamamir/check/cursor/jettribe-shopify-theme-86d6/jettribe-bc-prices.csv
+
+Rule used (matches BigCommerce storefront):
+- Sell price = Sale Price when Sale > 0, otherwise Price
+- Name-plate / PVC add-ons add $40 / $25 / $60 on top of the base when the SKU has no own sale price
+- Compare-at = Retail or Price when higher than sell price
+- No $0.00 rows (free/warranty/promo SKUs with no BC price are omitted)
+
+SKU-only price update (same numbers, leaner columns):
+
+https://raw.githubusercontent.com/usamamir/check/cursor/jettribe-shopify-theme-86d6/jettribe-bc-price-update.csv
+
+Do not use the older jettribe-fix-prices-and-sizes.csv — it only covered ~1048 products and left the rest at $0.

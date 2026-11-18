@@ -1,0 +1,9 @@
+Put archived products back on the store.
+
+Products → Import. Check Overwrite products with matching handles. Do not open this in Excel.
+
+https://raw.githubusercontent.com/usamamir/check/cursor/jettribe-shopify-theme-86d6/jettribe-restore-active.csv
+
+This file only sets Status to active and Published on online store to true. It does not change titles, prices, photos, or inventory.
+
+Do not import jettribe-archive-no-image.csv. That file hid 1,028 products.

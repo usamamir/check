@@ -1,0 +1,45 @@
+<section class="page-wrap">
+  <div class="container">
+    {% render 'route-boot' %}
+    <div data-jt-default>
+    {% render 'breadcrumbs' %}
+    <h1 class="page-heading" style="justify-content:flex-start;"><span>Search</span></h1>
+
+    {%- if search.performed -%}
+      <div class="collection-layout" data-sku-search data-sku-term="{{ search.terms | escape }}">
+        <aside>
+          {% render 'filter-list', filters: search.filters, form_action: routes.search_url, terms: search.terms, show_shop_fallback: false %}
+        </aside>
+        <div>
+          <div class="toolbar">
+            <p style="margin:0;" data-result-count>{{ search.results_count }} results for “{{ search.terms }}”</p>
+          </div>
+          {% paginate search.results by 50 %}
+            <div class="product-grid">
+              {%- for item in search.results -%}
+                {%- if item.object_type == 'product' -%}
+                  {% render 'product-card', product: item %}
+                {%- else -%}
+                  <article class="card">
+                    <div class="card-body">
+                      <h3 class="card-title"><a href="{{ item.url }}">{{ item.title }}</a></h3>
+                      <p>{{ item.object_type | capitalize }}</p>
+                    </div>
+                  </article>
+                {%- endif -%}
+              {%- else -%}
+                <div class="empty-products"><p>No results. Try a product name, vest, wetsuit, or cover.</p></div>
+              {%- endfor -%}
+            </div>
+            {% render 'pagination', paginate: paginate %}
+          {% endpaginate %}
+        </div>
+      </div>
+    {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{ "name": "Search", "settings": [] }
+{% endschema %}

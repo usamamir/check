@@ -1,0 +1,32 @@
+<section class="page-wrap">
+  <div class="container">
+    {% render 'breadcrumbs' %}
+    <h1 class="page-heading" style="justify-content:flex-start;"><span>{{ blog.title }}</span></h1>
+    {% paginate blog.articles by 8 %}
+      <div class="blog-list">
+        {%- for article in blog.articles -%}
+          <article class="blog-card">
+            <a href="{{ article.url }}">
+              {%- if article.image -%}
+                <img src="{{ article.image | image_url: width: 480 }}" alt="{{ article.image.alt | escape }}" width="180" height="135">
+              {%- endif -%}
+            </a>
+            <div>
+              <h2><a href="{{ article.url }}">{{ article.title }}</a></h2>
+              <p>{{ article.published_at | date: "%B %d, %Y" }}{% if article.author %} · {{ article.author }}{% endif %}</p>
+              <div class="rte">{{ article.excerpt_or_content | strip_html | truncate: 220 }}</div>
+              <a href="{{ article.url }}">Read</a>
+            </div>
+          </article>
+        {%- else -%}
+          <p>No posts yet.</p>
+        {%- endfor -%}
+      </div>
+      {% render 'pagination', paginate: paginate %}
+    {% endpaginate %}
+  </div>
+</section>
+
+{% schema %}
+{ "name": "Blog", "settings": [] }
+{% endschema %}

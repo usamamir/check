@@ -1,0 +1,225 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Jettribe",
+    "theme_version": "1.0.0",
+    "theme_author": "Jettribe",
+    "theme_documentation_url": "https://www.jettribe.com/",
+    "theme_support_url": "https://www.jettribe.com/"
+  },
+  {
+    "name": "Colors",
+    "settings": [
+      {
+        "type": "color",
+        "id": "color_red",
+        "label": "Accent red",
+        "default": "#e53d42"
+      },
+      {
+        "type": "color",
+        "id": "color_black",
+        "label": "Black",
+        "default": "#161616"
+      },
+      {
+        "type": "color",
+        "id": "color_blue",
+        "label": "Link and price blue",
+        "default": "#4153eb"
+      },
+      {
+        "type": "color",
+        "id": "color_text",
+        "label": "Body text",
+        "default": "#505050"
+      },
+      {
+        "type": "color",
+        "id": "color_heading",
+        "label": "Headings",
+        "default": "#161616"
+      },
+      {
+        "type": "image_picker",
+        "id": "logo",
+        "label": "Logo"
+      },
+      {
+        "type": "image_picker",
+        "id": "favicon",
+        "label": "Favicon"
+      }
+    ]
+  },
+  {
+    "name": "Navigation",
+    "settings": [
+      {
+        "type": "select",
+        "id": "menu_source",
+        "label": "Main menu source",
+        "info": "Every menu category uses the same rule for every product. The page lists products in the Shopify collection with that name, plus products tagged with that name or collection:that-name, plus products whose product type is that name. A tag that does not name a category leaves the product where it already appears.",
+        "default": "jettribe",
+        "options": [
+          {
+            "value": "jettribe",
+            "label": "Jettribe menu built into the theme"
+          },
+          {
+            "value": "shopify",
+            "label": "A Shopify navigation menu"
+          }
+        ]
+      },
+      {
+        "type": "link_list",
+        "id": "menu",
+        "label": "Shopify menu",
+        "default": "main-menu"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_translate",
+        "label": "Show Google Translate",
+        "info": "Leave this off. Google Translate can hide the menu. Use Shopify Translate and Adapt for country languages.",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "show_vip_deals",
+        "label": "Show VIP Deals in the menu",
+        "info": "Leave this off. Turn it on only while a VIP promotion is running.",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "show_empty_menu_items",
+        "label": "Show menu categories that have no products",
+        "info": "Keep this on so Home through More stay on the bar even while a category is still filling.",
+        "default": true
+      }
+    ]
+  },
+  {
+    "name": "Cart and shipping",
+    "settings": [
+      {
+        "type": "select",
+        "id": "cart_type",
+        "label": "Cart style",
+        "default": "drawer",
+        "options": [
+          {
+            "value": "drawer",
+            "label": "Slide-out cart"
+          },
+          {
+            "value": "page",
+            "label": "Cart page"
+          }
+        ]
+      },
+      {
+        "type": "number",
+        "id": "free_shipping_threshold",
+        "label": "Free USA shipping threshold (dollars)",
+        "default": 400
+      }
+    ]
+  },
+  {
+    "name": "Payments",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "The marks are PayPal, Visa, Discover, Mastercard, and American Express. They do not turn processing on. In Settings, Payments, enable Shopify Payments and PayPal."
+      },
+      {
+        "type": "checkbox",
+        "id": "show_payment_image",
+        "label": "Show PayPal and card icons",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "show_shop_pay_badge",
+        "label": "Show Shop Pay badge",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "show_paypal_message",
+        "label": "Show PayPal Pay Later message",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "paypal_client_id",
+        "label": "PayPal messages client id",
+        "info": "Messages only. This is the client id already used on jettribe.com product pages. It does not charge a card.",
+        "default": "AQ3RkiNHQ53oodRlTz7z-9ETC9xQNUgOLHjVDII9sgnF19qLXJzOwShAxcFW7OT7pVEF5B9bwjIArOvE"
+      },
+      {
+        "type": "text",
+        "id": "paypal_merchant_id",
+        "label": "PayPal merchant id",
+        "info": "Merchant id already used with PayPal Pay Later on jettribe.com.",
+        "default": "99LDK244KQWAA"
+      }
+    ]
+  },
+  {
+    "name": "Links",
+    "settings": [
+      {
+        "type": "text",
+        "id": "returns_url",
+        "label": "Returns URL",
+        "default": "https://jettribe.returnscenter.com"
+      },
+      {
+        "type": "text",
+        "id": "gift_card_link",
+        "label": "Gift card link",
+        "default": "/products/gift-card"
+      },
+      {
+        "type": "text",
+        "id": "social_facebook",
+        "label": "Facebook",
+        "default": "https://www.facebook.com/JettribeRacing"
+      },
+      {
+        "type": "text",
+        "id": "social_instagram",
+        "label": "Instagram",
+        "default": "https://www.instagram.com/jettribe/"
+      },
+      {
+        "type": "text",
+        "id": "social_youtube",
+        "label": "YouTube",
+        "default": "https://www.youtube.com/user/Jettribe1"
+      }
+    ]
+  },
+  {
+    "name": "SEO",
+    "settings": [
+      {
+        "type": "textarea",
+        "id": "default_meta_description",
+        "label": "Default meta description",
+        "info": "Used when a page does not have its own description.",
+        "default": "Jettribe personal watercraft gear: Coast Guard vests, wetsuits, goggles, gloves, boots, and PWC covers. Free USA shipping on orders of $400 or more."
+      },
+      {
+        "type": "text",
+        "id": "google_site_verification",
+        "label": "Google Search Console verification code",
+        "info": "Paste only the content value from the Search Console HTML tag. Leave this blank until Google gives you the code."
+      }
+    ]
+  }
+]

@@ -1,0 +1,14 @@
+# Jettribe storefront. Shopify publishes the XML sitemap.
+{%- for group in robots.default_groups -%}
+  {{- group.user_agent }}
+
+Allow: /search?jtcat=
+Allow: /search?jtpage=
+  {%- for rule in group.rules -%}
+    {{- rule }}
+  {%- endfor -%}
+
+  {%- if group.sitemap != blank -%}
+    {{ group.sitemap }}
+  {%- endif -%}
+{% endfor %}

@@ -1,0 +1,41 @@
+<section class="cate-sec">
+  <div class="container">
+    <ul class="cate-grid">
+      {%- for block in section.blocks -%}
+        {%- liquid
+          if block.settings.image != blank
+            assign cat_src = block.settings.image | image_url: width: 900
+          else
+            assign cat_src = block.settings.asset | asset_url
+          endif
+        -%}
+        <li {{ block.shopify_attributes }}>
+          <a class="cate-box" href="{{ block.settings.link }}">
+            <img src="{{ cat_src }}" alt="{{ block.settings.alt | escape }}" width="900" height="900" loading="lazy">
+            <span class="cate-title">{{ block.settings.title }}</span>
+          </a>
+        </li>
+      {%- endfor -%}
+    </ul>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Category grid",
+  "blocks": [
+    {
+      "type": "category",
+      "name": "Category",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Title", "default": "Wetsuits" },
+        { "type": "url", "id": "link", "label": "Link" },
+        { "type": "text", "id": "asset", "label": "Theme image filename" },
+        { "type": "image_picker", "id": "image", "label": "Replacement image" },
+        { "type": "text", "id": "alt", "label": "Alt text" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Category grid" }]
+}
+{% endschema %}

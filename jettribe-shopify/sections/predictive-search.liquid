@@ -1,0 +1,61 @@
+{%- if predictive_search.performed -%}
+  <div class="predictive">
+    {%- for product in predictive_search.resources.products -%}
+      {%- liquid
+        assign block_card = false
+        assign title_l = product.title | downcase
+        assign handle_l = product.handle | downcase
+        if title_l contains 'promo card' or title_l contains 'promotional' or title_l contains 'gift card' or title_l contains 'gift certificate' or title_l contains 'restrictions apply'
+          assign block_card = true
+        endif
+        if handle_l contains 'promo-card' or handle_l contains 'promotional' or handle_l contains 'gift-card' or handle_l contains 'egift' or handle_l contains 'e-gift'
+          assign block_card = true
+        endif
+      -%}
+      {%- unless block_card -%}
+        {%- if product.available and product.featured_image -%}
+          <a href="{{ product.url }}">
+            <img src="{{ product.featured_image | image_url: width: 120 }}" alt="{{ product.title | escape }}" width="54" height="54">
+            <span>{{ product.title }}</span>
+            {%- liquid
+              assign jt_suggest_price = 0
+              assign jt_suggest_found = false
+              for variant in product.variants
+                if variant.available and variant.price > 0
+                  if jt_suggest_price == 0 or variant.price < jt_suggest_price
+                    assign jt_suggest_price = variant.price
+                  endif
+                  assign jt_suggest_found = true
+                endif
+              endfor
+              unless jt_suggest_found
+                for variant in product.variants
+                  if variant.price > 0
+                    if jt_suggest_price == 0 or variant.price < jt_suggest_price
+                      assign jt_suggest_price = variant.price
+                    endif
+                  endif
+                endfor
+              endunless
+              if jt_suggest_price == 0
+                assign jt_suggest_price = product.price
+              endif
+            -%}
+            <span>{{ jt_suggest_price | money }}</span>
+          </a>
+        {%- endif -%}
+      {%- endunless -%}
+    {%- endfor -%}
+    {%- for page in predictive_search.resources.pages -%}
+      <a href="{{ page.url }}"><span></span><span>{{ page.title }}</span><span>Page</span></a>
+    {%- endfor -%}
+    <a class="view-all" href="{{ routes.search_url }}?q={{ predictive_search.terms | url_encode }}&type=product">View all results</a>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Predictive search",
+  "settings": []
+}
+{% endschema %}

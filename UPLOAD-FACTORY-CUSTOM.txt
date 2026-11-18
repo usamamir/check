@@ -1,0 +1,21 @@
+Factory custom products were missing from Customized Gear - Factory. Only the back deflector was on Shopify. These two files put the others back and add the deflector customization from jettribe.com.
+
+Do not open either file in Excel.
+
+1. Products → Import. Overwrite products with matching handles.
+
+https://raw.githubusercontent.com/usamamir/check/cursor/jettribe-shopify-theme-86d6/jettribe-factory-custom-products.csv
+
+This creates the 15 factory products that are on jettribe.com and were not on Shopify: the custom hoodies, rashguards, shorts, vests, and john-only wetsuits. Photos, sizes, and prices come with them.
+
+2. Products → Import. Overwrite products with matching handles.
+
+https://raw.githubusercontent.com/usamamir/check/cursor/jettribe-shopify-theme-86d6/jettribe-fix-deflector-custom.csv
+
+JTG 25453-AS and JTG 25453-AL gain Customization: None stays $141.74. Custom Name & Number is +$50 ($191.74). It does not change photos, weight, or inventory counts. Adult Large stays unavailable. Adult Small can be ordered with None or with Custom Name & Number.
+
+3. Online Store → Themes → Add theme → Upload zip → Preview.
+
+https://raw.githubusercontent.com/usamamir/check/cursor/jettribe-shopify-theme-86d6/jettribe-theme-FIXED.zip
+
+The Factory category then lists every factory product. On the back deflector, Custom Name & Number opens the A–V colors from jettribe.com, plus Add Name and Add Number. The main image changes to the color you pick.

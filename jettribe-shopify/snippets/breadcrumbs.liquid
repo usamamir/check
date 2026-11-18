@@ -1,0 +1,112 @@
+<nav class="breadcrumbs" aria-label="Breadcrumb">
+  <a href="{{ routes.root_url }}">Home</a>
+  {%- case request.page_type -%}
+    {%- when 'product' -%}
+      {%- if collection -%}
+        <span aria-hidden="true"> / </span>
+        <a href="{{ collection.url }}">{{ collection.title }}</a>
+      {%- endif -%}
+      <span aria-hidden="true"> / </span>
+      <span>{{ product.title }}</span>
+    {%- when 'collection' -%}
+      <span aria-hidden="true"> / </span>
+      <span>{{ collection.title }}</span>
+    {%- when 'page' -%}
+      <span aria-hidden="true"> / </span>
+      <span>{{ page.title }}</span>
+    {%- when 'blog' -%}
+      <span aria-hidden="true"> / </span>
+      <span>{{ blog.title }}</span>
+    {%- when 'article' -%}
+      <span aria-hidden="true"> / </span>
+      <a href="{{ blog.url }}">{{ blog.title }}</a>
+      <span aria-hidden="true"> / </span>
+      <span>{{ article.title }}</span>
+    {%- when 'search' -%}
+      <span aria-hidden="true"> / </span>
+      <span>Search</span>
+    {%- when 'cart' -%}
+      <span aria-hidden="true"> / </span>
+      <span>Cart</span>
+    {%- when 'list-collections' -%}
+      <span aria-hidden="true"> / </span>
+      <span>Collections</span>
+  {%- endcase -%}
+</nav>
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": {{ shop.url | json }}
+      }
+      {%- case request.page_type -%}
+        {%- when 'product' -%}
+          {%- if collection -%}
+          ,{
+            "@type": "ListItem",
+            "position": 2,
+            "name": {{ collection.title | json }},
+            "item": {{ shop.url | append: collection.url | json }}
+          },{
+            "@type": "ListItem",
+            "position": 3,
+            "name": {{ product.title | json }},
+            "item": {{ canonical_url | json }}
+          }
+          {%- else -%}
+          ,{
+            "@type": "ListItem",
+            "position": 2,
+            "name": {{ product.title | json }},
+            "item": {{ canonical_url | json }}
+          }
+          {%- endif -%}
+        {%- when 'collection' -%}
+          ,{
+            "@type": "ListItem",
+            "position": 2,
+            "name": {{ collection.title | json }},
+            "item": {{ canonical_url | json }}
+          }
+        {%- when 'page' -%}
+          ,{
+            "@type": "ListItem",
+            "position": 2,
+            "name": {{ page.title | json }},
+            "item": {{ canonical_url | json }}
+          }
+        {%- when 'article' -%}
+          ,{
+            "@type": "ListItem",
+            "position": 2,
+            "name": {{ blog.title | json }},
+            "item": {{ shop.url | append: blog.url | json }}
+          },{
+            "@type": "ListItem",
+            "position": 3,
+            "name": {{ article.title | json }},
+            "item": {{ canonical_url | json }}
+          }
+        {%- when 'search' -%}
+          ,{
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Search",
+            "item": {{ canonical_url | json }}
+          }
+        {%- when 'cart' -%}
+          ,{
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Cart",
+            "item": {{ canonical_url | json }}
+          }
+      {%- endcase -%}
+    ]
+  }
+</script>

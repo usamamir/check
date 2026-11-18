@@ -1,0 +1,17 @@
+<div class="drawer-backdrop" data-cart-backdrop data-close-cart hidden></div>
+<aside class="drawer" data-cart-drawer hidden aria-label="Cart">
+  <header>
+    <h2>Cart</h2>
+    <button class="icon-btn" type="button" data-close-cart aria-label="Close cart">&times;</button>
+  </header>
+  <div class="body" data-cart-body>
+    <p>Your cart is empty.</p>
+  </div>
+  <div class="drawer-foot" data-cart-foot hidden>
+    <div class="summary-line"><strong>Subtotal</strong> <strong data-cart-total></strong></div>
+    <a class="btn btn--dark btn--full" href="/checkout">Checkout</a>
+    <a class="btn btn--full" href="{{ routes.cart_url }}">View cart</a>
+    <p data-ship-message></p>
+    {% render 'payment-icons' %}
+  </div>
+</aside>

@@ -1,0 +1,26 @@
+IMPORT BIGCOMMERCE INVENTORY INTO SHOPIFY
+
+IMPORTANT: Shopify only allows one product import at a time.
+If you see "Import job already in progress", wait until the current
+import finishes (Products page → import progress), then start the next file.
+
+RECOMMENDED (one file — quantities, variants, publish, menu tags):
+
+Products → Import
+Check: Overwrite products with matching handles
+Do not open in Excel
+
+https://raw.githubusercontent.com/usamamir/check/cursor/jettribe-shopify-theme-86d6/jettribe-inventory-and-tags.csv
+
+THEN unpublish out-of-stock (after the job above finishes):
+
+https://raw.githubusercontent.com/usamamir/check/cursor/jettribe-shopify-theme-86d6/jettribe-unpublish-oos.csv
+
+If you already imported jettribe-inventory-from-bc.csv and only need tags,
+wait for that job to finish, then import:
+
+https://raw.githubusercontent.com/usamamir/check/cursor/jettribe-shopify-theme-86d6/jettribe-publish-instock.csv
+
+Theme (hides OOS on grids):
+
+https://raw.githubusercontent.com/usamamir/check/cursor/jettribe-shopify-theme-86d6/jettribe-theme-nov14-20261114-0845.zip

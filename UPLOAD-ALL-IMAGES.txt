@@ -1,0 +1,15 @@
+Every photo from the live jettribe.com product pages, in gallery order.
+
+The file now includes the real product name in the Title column. If Shopify asks you to match columns, match Title to Title and URL handle to URL handle. Never match the URL handle to Title. That is what replaced the product names with the URL.
+
+If the names are already the URL handles, do not import this photo file again. Import jettribe-restore-titles.csv instead. See UPLOAD-RESTORE-TITLES.txt.
+
+Products → Import. Check Overwrite products with matching handles. Do not open this in Excel.
+
+https://raw.githubusercontent.com/usamamir/check/cursor/jettribe-shopify-theme-86d6/jettribe-all-images.csv
+
+550 products, 3,456 photos. The grey vest (JTG 20450GY) has all 11 photos.
+
+Do not import jettribe-live-images.csv again. That file has one photo per product, and importing it replaces the whole gallery with that one photo.
+
+Do not import jettribe-archive-no-image.csv.

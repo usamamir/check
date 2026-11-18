@@ -1,0 +1,34 @@
+{
+  "current": {
+    "color_red": "#e53d42",
+    "color_black": "#161616",
+    "color_blue": "#4153eb",
+    "color_text": "#505050",
+    "color_heading": "#161616",
+    "menu_source": "jettribe",
+    "menu": "main-menu",
+    "show_translate": false,
+    "show_vip_deals": false,
+    "show_empty_menu_items": true,
+    "cart_type": "drawer",
+    "free_shipping_threshold": 400,
+    "show_payment_image": true,
+    "show_shop_pay_badge": false,
+    "show_paypal_message": true,
+    "paypal_client_id": "AQ3RkiNHQ53oodRlTz7z-9ETC9xQNUgOLHjVDII9sgnF19qLXJzOwShAxcFW7OT7pVEF5B9bwjIArOvE",
+    "paypal_merchant_id": "99LDK244KQWAA",
+    "returns_url": "https://jettribe.returnscenter.com",
+    "gift_card_link": "/products/gift-card",
+    "social_facebook": "https://www.facebook.com/JettribeRacing",
+    "social_instagram": "https://www.instagram.com/jettribe/",
+    "social_youtube": "https://www.youtube.com/user/Jettribe1",
+    "sections": {
+      "header": {
+        "type": "header",
+        "settings": {
+          "phone": "951 246 3147"
+        }
+      }
+    }
+  }
+}

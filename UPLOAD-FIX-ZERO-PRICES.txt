@@ -1,0 +1,18 @@
+Fix remaining Now: $0.00 listing prices
+
+Not a category bug — some products still have $0.00 variant prices in Shopify (compare-at shows the real number). Re-import prices by SKU, then refresh the theme so cards never prefer a $0 variant.
+
+1) Products → Import. Check Overwrite products with matching handles. Do not open in Excel:
+
+https://raw.githubusercontent.com/usamamir/check/cursor/jettribe-shopify-theme-86d6/jettribe-fix-zero-prices.csv
+
+Same numbers as the BigCommerce sheet (Sale when Sale > 0, else Price). Example from your screenshot:
+- UR-20P Team Rider Red → $75.00 (compare $102.89)
+- UR-20 Pivot Aqua Blue → $75.00 (compare $97.49)
+- Interchangeable Lanyard Loop → $10.49
+- UR-20 Hyper Green → $50.00 (compare $97.49)
+- UR-20 JTR Fade Green/White → $102.89
+
+2) Themes → Upload + Preview (card price fallback if any $0 variants remain):
+
+https://raw.githubusercontent.com/usamamir/check/cursor/jettribe-shopify-theme-86d6/jettribe-theme-FIXED.zip

@@ -1,0 +1,16 @@
+Homepage revisions from the website video
+
+Upload this theme zip in Shopify: Online Store → Themes → Add theme → Upload zip → Preview.
+
+https://raw.githubusercontent.com/usamamir/check/cursor/jettribe-shopify-theme-86d6/jettribe-theme-FIXED.zip
+
+What changed
+1. Footer: WhatsApp above Rider Support. Hours Mon–Fri 9am–5pm Texas Time (Central). Jettribe Asia address from the Vosh International contact page (Jettribe’s Vietnam office): 76/28/9 Le Van Phan Street, Phu Tho Hoa Ward, Tan Phu District, Ho Chi Minh City.
+2. Featured category row: labels centered. New Racing Parts tile uses the Andrew Vo podium photo from the Jettribe blog and links to the Racing category.
+3. New Products: mixes types (vest, wetsuit, gloves, and so on) instead of a row of only gloves. Shows up to 10.
+4. Top bar: duplicate Rider Support phone removed. Free USA shipping and Hassle-free returns sit in that bar.
+5. Contact strip order: email, then WhatsApp, then phone with Texas Time (Central).
+6. Red banner, one line on desktop: JETTRIBE IS A TRUE CORE WATERCRAFT PREMIUM BRAND. BORN IN SOUTHERN CALIFORNIA
+7. Payment marks: PayPal, Visa, Mastercard, and Buy now, pay later. Discover and American Express removed. Buy now, pay later is a label for Shop Pay at checkout. It does not turn a provider on in Shopify admin.
+8. Category titles: PWC Ride Suit, PWC Vests, PWC Watercraft Boots, PWC Watercraft Gloves, PWC Watercraft Goggles, Watercraft Covers.
+Banner slides and category photos are the ones already on https://jettribe.co.nz/ (the files your friend uploaded). The banner still advances the same way: one slide at a time, every 4 seconds, with the same arrows and dots. No extra slide was added.

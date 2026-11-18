@@ -1,0 +1,4 @@
+Shopify admin → Products → Import
+File: jettribe-weights.csv
+Check Overwrite products with matching handles.
+Do not open the file in Excel.

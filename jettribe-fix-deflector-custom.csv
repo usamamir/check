@@ -1,0 +1,5 @@
+Title,URL handle,Option1 name,Option1 value,Option2 name,Option2 value,SKU,Price,Continue selling when out of stock
+Back Deflector - Custom Production - Art Included,back-deflector-custom-factory-production-art-included,Size,Adult Large (23'L x 9.5'W x 1.25'D) {58cm x 24cm x 3cm},Customization,None,JTG 25453-AL,141.74,deny
+,back-deflector-custom-factory-production-art-included,Size,Adult Large (23'L x 9.5'W x 1.25'D) {58cm x 24cm x 3cm},Customization,Custom Name & Number (+$50),JTG 25453-AL-CU,191.74,deny
+,back-deflector-custom-factory-production-art-included,Size,Adult Small (20.5'L x 9.5'W x 1.25'D) {52cm x 24cm x 3cm},Customization,None,JTG 25453-AS,141.74,deny
+,back-deflector-custom-factory-production-art-included,Size,Adult Small (20.5'L x 9.5'W x 1.25'D) {52cm x 24cm x 3cm},Customization,Custom Name & Number (+$50),JTG 25453-AS-CU,191.74,continue

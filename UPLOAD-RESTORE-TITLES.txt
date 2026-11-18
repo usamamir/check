@@ -1,0 +1,15 @@
+Put the product names back. The photo import saved the URL handle into Title, so names now look like rs-25p-side-entry-impact-vest-grey-customization-option-pwc-jet-ski-ride-race.
+
+Products → Import. Check Overwrite products with matching handles. Do not open this in Excel.
+
+https://raw.githubusercontent.com/usamamir/check/cursor/jettribe-shopify-theme-86d6/jettribe-restore-titles.csv
+
+On the column match screen:
+- Title → Title
+- URL handle → URL handle
+
+Leave every other column as not imported. Do not match URL handle to Title.
+
+This file has one row per product and only those two columns. The grey vest goes back to "RS-25P Side Entry Impact Vest | Grey | Customization Option | PWC Jet Ski Ride & Race". Photos, prices, sizes, inventory, and weight stay as they are.
+
+Do not import the photo file again.

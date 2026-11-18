@@ -1,0 +1,28 @@
+{% layout none %}
+<!doctype html>
+<html lang="{{ request.locale.iso_code }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Gift card · {{ shop.name }}</title>
+  {{ content_for_header }}
+  {{ 'theme.css' | asset_url | stylesheet_tag }}
+</head>
+<body>
+  <div class="gift-card-page">
+    <div class="gift-card">
+      <img src="{{ 'footer-logo.png' | asset_url }}" alt="{{ shop.name }}" width="220" height="44">
+      <h1 style="color:#fff;">{{ gift_card.balance | money }}</h1>
+      <p>Gift card balance</p>
+      <code>{{ gift_card.code | format_code }}</code>
+      {%- if gift_card.pass_url -%}
+        <p><a class="btn" href="{{ gift_card.pass_url }}">Add to Apple Wallet</a></p>
+      {%- endif -%}
+      <p><a href="{{ shop.url }}" style="color:#fff;">Shop Jettribe</a></p>
+      {%- if gift_card.enabled == false -%}
+        <p>This gift card is disabled.</p>
+      {%- endif -%}
+    </div>
+  </div>
+</body>
+</html>

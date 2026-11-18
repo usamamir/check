@@ -1,0 +1,24 @@
+UPLOAD THIS THEME NOW
+
+1. Online Store → Themes → Add theme → Upload zip file
+2. Upload this NEW zip (unique name — do not reuse an older file):
+
+https://raw.githubusercontent.com/usamamir/check/cursor/jettribe-shopify-theme-86d6/jettribe-theme-nov14-20261114-0845.zip
+
+Mirror copy (same bytes):
+https://raw.githubusercontent.com/usamamir/check/cursor/jettribe-shopify-theme-86d6/jettribe-theme-FIXED.zip
+
+3. On the NEW theme row, click Preview (or Publish).
+   Do not open an older theme such as jettribe-shopify-theme-18.
+
+4. Hide promo / gift-card / no-image products from the admin catalog:
+   Products → Import → this file
+   Check: Overwrite products with matching handles
+   Do not open it in Excel
+
+https://raw.githubusercontent.com/usamamir/check/cursor/jettribe-shopify-theme-86d6/jettribe-hide-junk.csv
+
+What this fixes
+- Red Liquid error is gone (announcement-bar section deleted; red bar is plain HTML in the layout)
+- Menu dropdowns work on hover and on tap
+- Promo cards, gift cards, and products without photos stay off product grids and search
